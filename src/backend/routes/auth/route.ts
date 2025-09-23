@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import controller from './../../controller/auth/controller'
+import controller from '../../backend/controller/auth/controller'
 
 const router = Router()
 

@@ -20,11 +20,11 @@ export function verifyEmail (email: string): boolean {
   return true
 }
 
-export function generateCode (): number {
-  return Number((Math.floor(Math.random() * 10000).toString().padEnd(6, '0')))
+export function generateCode (): string {
+  return (Math.floor(Math.random() * 10000).toString().padEnd(6, '0'))
 }
 
-export async function sendEmail (email: string, code: number, msg?: string): Promise<boolean> {
+export async function sendEmail (email: string, code: string, msg?: string): Promise<boolean> {
   try {
     await transporter.sendMail({
       from: EMAIL_ENV as string,

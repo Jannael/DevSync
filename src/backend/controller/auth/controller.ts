@@ -1,12 +1,7 @@
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-
-dotenv.config({ quiet: true })
-
-
 const controller = {
   request: {
-    code: async function () {},
+    code: async function (req: Request, res: Response) {
+    },
     accessToken: async function () {}
   },
   verify: {

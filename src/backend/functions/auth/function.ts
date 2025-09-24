@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode, sendEmail } from '../../utils/utils'
+import { generateCode, sendEmail } from './../../utils/utils'
 import dotenv from 'dotenv'
-import model from '../../model/auth/model'
+import model from './../../model/auth/model'
+import config from './../../config/config'
 
 dotenv.config({ quiet: true })
 const { JWT_ENV } = process.env
@@ -14,24 +15,26 @@ const functions = {
         const code = generateCode()
         await sendEmail(req.body.email, code)
 
-        const codeHash = jwt.sign({ code }, JWT_ENV as string, { expiresIn: '5m' })
-        res.cookie('code', codeHash, { httpOnly: true, maxAge: 60 * 5 })
+        const codeHash = jwt.sign({ code }, JWT_ENV as string, config.jwt.code as SignOptions)
+        res.cookie('code', codeHash, config.cookies.code)
         return { complete: true }
       } catch (error) {
         if (error instanceof Error) return { complete: false, error }
         return { complete: false }
       }
     },
-    accessToken: async function (req: Request, res: Response): Promise<void> {
+    accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       try {
         const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken)
         if (dbValidation) {
           const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV as string)
-          const accessToken = jwt.sign(refreshToken, JWT_ENV as string, { expiresIn: '15m' })
-          res.cookie('accessToken', accessToken, {})
+          const accessToken = jwt.sign(refreshToken, JWT_ENV as string, config.jwt.accessToken as SignOptions)
+          res.cookie('accessToken', accessToken, config.cookies.accessToken)
+          return { complete: true }
         }
+        return { complete: false }
       } catch (e) {
-
+        return { complete: false }
       }
     }
   }

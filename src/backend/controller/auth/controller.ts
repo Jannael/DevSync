@@ -8,8 +8,10 @@ const controller = {
       if (result.complete) res.json({ complete: true })
       res.status(400).json({ complete: false, error: 'something went wrong' })
     },
-    accessToken: async function () {
-
+    accessToken: async function (req: Request, res: Response) {
+      const result = await fn.request.accessToken(req, res)
+      if (result.complete) res.json({ complete: true })
+      res.status(405).json({ complete: false })
     }
   },
   verify: {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode } from '../../utils/utils'
+import { generateCode, sendEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 
 dotenv.config({ quiet: true })
@@ -11,6 +11,8 @@ const functions = {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean, error?: Error }> {
       try {
         const code = generateCode()
+        await sendEmail(req.body.email, code)
+
         const codeHash = jwt.sign({ code }, JWT_ENV as string, { expiresIn: '5m' })
         res.cookie('code', codeHash, { httpOnly: true, maxAge: 60 * 5 })
         return { complete: true }

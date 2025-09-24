@@ -8,7 +8,9 @@ const controller = {
       if (result.complete) res.json({ complete: true })
       res.status(400).json({ complete: false, error: 'something went wrong' })
     },
-    accessToken: async function () {}
+    accessToken: async function () {
+
+    }
   },
   verify: {
     code: async function () {},

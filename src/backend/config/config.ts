@@ -8,5 +8,14 @@ export default {
     code: { expiresIn: '5m' },
     accessToken: { expiresIn: '15m' },
     refreshToken: { expiresIn: '365d' }
+  },
+  database: {
+    mongodb: {
+      schemaOptions: {
+        versionKey: false as const,
+        strict: true,
+        minimize: false
+      }
+    }
   }
 }

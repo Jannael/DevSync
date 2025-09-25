@@ -19,8 +19,7 @@ const controller = {
       const result = await fn.verify.code(req, res)
       if (result.complete) res.json({ complete: true })
       res.json({ complete: false })
-    },
-    refreshToken: async function () {}
+    }
   }
 }
 

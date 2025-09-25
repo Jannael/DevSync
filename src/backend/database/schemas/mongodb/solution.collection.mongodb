@@ -6,10 +6,6 @@ db.createCollection('solution', {
       additionalProperties: false,
       properties: {
         _id: { bsonType: 'objectId' },
-        description: {
-          bsonType: 'string',
-          description: 'description of the solution'
-        },
         userId: {
           bsonType: 'objectId',
           description: 'user that solve the task'
@@ -18,6 +14,10 @@ db.createCollection('solution', {
           bsonType: 'objectId',
           description: 'group where the solution it belongs'
         },
+        taskId: {
+          bsonType: objectId,
+          description: 'task the solution belongs to'
+        }
         feature: {
           bsonType: 'array',
           items: {
@@ -33,7 +33,11 @@ db.createCollection('solution', {
             language: { bsonType: 'string' },
             content: { bsonType: 'string' }
           }
-        },      
+        },
+        description: {
+          bsonType: 'string',
+          description: 'description of the solution'
+        }
       }
     }
   }

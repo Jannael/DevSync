@@ -1,6 +1,5 @@
-import mongoose from 'mongoose'
+import { Schema } from 'mongoose'
 import config from './../../../config/config'
-const { Schema } = mongoose
 
 const techLeadSchema = new Schema({
   fullName: { type: String, require: true },
@@ -16,7 +15,7 @@ const schema = new Schema({
   name: { type: String, require: true },
   repository: { type: String },
   member: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'user'
   }]
 }, {

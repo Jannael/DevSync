@@ -1,21 +1,23 @@
 import { Schema } from 'mongoose'
 import config from './../../../config/config'
 
+const { ObjectId } = Schema.Types
+
 const techLeadSchema = new Schema({
   fullName: { type: String, require: true },
-  _id: { type: Schema.Types.ObjectId, require: true }
+  _id: { type: ObjectId, require: true }
 }, {
   ...config.database.mongodb.schemaOptions,
   _id: false
 })
 
 const schema = new Schema({
-  _id: { type: Schema.Types.ObjectId },
+  _id: { type: ObjectId },
   techLead: { type: techLeadSchema, require: true },
   name: { type: String, require: true },
   repository: { type: String },
   member: [{
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'user'
   }]
 }, {

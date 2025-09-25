@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import { model, Schema } from 'mongoose'
 import config from './../../../config/config'
 
 const { ObjectId } = Schema.Types
@@ -25,4 +25,4 @@ const schema = new Schema({
   collection: 'group'
 })
 
-export default schema
+export default model('group', schema)

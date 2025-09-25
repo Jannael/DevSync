@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import { model, Schema } from 'mongoose'
 import config from '../../../config/config'
 
 const { ObjectId } = Schema.Types
@@ -7,7 +7,8 @@ const codeSchema = new Schema({
   language: { type: String, require: true },
   content: { type: String, require: true }
 }, {
-  ...config.database.mongodb.schemaOptions
+  ...config.database.mongodb.schemaOptions,
+  _id: false
 })
 
 const schema = new Schema({
@@ -24,4 +25,4 @@ const schema = new Schema({
   collection: 'task'
 })
 
-export default schema
+export default model('task', schema)

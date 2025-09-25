@@ -22,6 +22,7 @@ db.createCollection('user', {
         },
         role: {
           bsonType: 'array',
+          uniqueItems: true,
           items: {
             bsonType: 'string'
           },

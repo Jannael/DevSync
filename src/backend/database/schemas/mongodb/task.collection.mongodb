@@ -10,6 +10,13 @@ db.createCollection('task', {
           bsonType: 'objectId',
           description: 'id of the group where it belongs'
         },
+        user: {
+          bsonType: 'array',
+          items: {
+            bsonType: 'objectId'
+          },
+          description: 'array of users with the task'
+        },
         name: {
           bsonType: 'string',
           description: 'task name'
@@ -33,13 +40,6 @@ db.createCollection('task', {
         description: {
           bsonType: 'string',
           description: 'description for the task'
-        },
-        user: {
-          bsonType: 'array',
-          items: {
-            bsonType: 'objectId'
-          },
-          description: 'array of users with the task'
         },
         isComplete: {
           bsonType: 'bool',

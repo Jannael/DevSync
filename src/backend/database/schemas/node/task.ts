@@ -12,17 +12,16 @@ const codeSchema = new Schema({
 
 const schema = new Schema({
   _id: { type: ObjectId },
-  userId: { type: ObjectId },
   groupId: { type: ObjectId },
-  taskId: { type: ObjectId },
-  feature: [{
-    type: String
-  }],
+  user: [{ type: ObjectId, ref: 'user' }],
+  name: { type: String, require: true },
   code: codeSchema,
-  description: { type: String, require: true }
+  feature: [{ type: String }],
+  description: { type: String },
+  isComplete: { type: Boolean }
 }, {
   ...config.database.mongodb.schemaOptions,
-  collection: 'solution'
+  collection: 'task'
 })
 
 export default schema

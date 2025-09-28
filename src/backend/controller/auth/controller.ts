@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import fn from '../../functions/auth/function'
+import fn from '../../function/auth/function'
 
 const controller = {
   request: {

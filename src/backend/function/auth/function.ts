@@ -1,9 +1,9 @@
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode, sendEmail } from './../../utils/utils'
+import { generateCode, sendEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
-import model from './../../model/auth/model'
-import config from './../../config/config'
+import model from '../../model/auth/model'
+import config from '../../config/config'
 import { IrefreshToken } from '../../interface/user'
 
 dotenv.config({ quiet: true })

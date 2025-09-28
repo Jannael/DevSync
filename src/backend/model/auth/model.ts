@@ -16,16 +16,21 @@ const model = {
       }
     }
   },
-  save: {
-    refreshToken: async function (token: string, userId: string) {
-      try {
-        await dbModel.updateOne(
-          { _id: userId },
-          { $push: { refreshToken: token } }
-        )
-        return true
-      } catch {
-        return false
+  auth: {
+    refreshToken: {
+      save: async function (token: string, userId: string) {
+        try {
+          await dbModel.updateOne(
+            { _id: userId },
+            { $push: { refreshToken: token } }
+          )
+          return true
+        } catch {
+          return false
+        }
+      },
+      remove: async function (token: string, userId: string) {
+
       }
     }
   }

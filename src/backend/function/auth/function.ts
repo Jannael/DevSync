@@ -43,7 +43,6 @@ const functions = {
       }
     },
     refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
-      
       return { complete: true }
     }
   },

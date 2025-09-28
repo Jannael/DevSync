@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import functions from '../../function/user/function'
+import fn from '../../function/user/function'
 import ErrorHandler from '../../error/handler'
 
 const controller = {
@@ -9,7 +9,7 @@ const controller = {
     },
     create: async function (req: Request, res: Response) {
       try {
-        const result = await functions.create.user(req, res)
+        const result = await fn.user.create(req, res)
 
         if (result instanceof Error) { throw result }
 

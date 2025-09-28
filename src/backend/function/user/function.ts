@@ -11,8 +11,8 @@ dotenv.config({ quiet: true })
 const { JWT_ENV } = process.env as { JWT_ENV: string }
 
 const functions = {
-  create: {
-    user: async function (req: Request, res: Response): Promise<IUser | Error> {
+  user: {
+    create: async function (req: Request, res: Response): Promise<IUser | Error> {
       const data = req.body
 
       const validData = validator.user.create(data)
@@ -24,6 +24,7 @@ const functions = {
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       return result
     }
+
   }
 }
 

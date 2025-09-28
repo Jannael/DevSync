@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose'
 
 const { ObjectId } = Schema.Types
-export interface IrefreshToken {
+export interface IRefreshToken {
   userId: string
 }
 

@@ -3,8 +3,8 @@ import controller from './../../controller/user/controller'
 
 const router = Router()
 
-router.get('/get/:id', controller.user.create)
-router.post('/create/')
+router.get('/get/:id')
+router.post('/create/', controller.user.create)
 router.patch('/update/:id')
 router.delete('/delete/:id')
 

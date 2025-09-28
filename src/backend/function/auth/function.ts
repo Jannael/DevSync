@@ -4,7 +4,7 @@ import { generateCode, sendEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
-import { IrefreshToken } from '../../interface/user'
+import { IRefreshToken } from '../../interface/user'
 
 dotenv.config({ quiet: true })
 const { JWT_ENV } = process.env as { JWT_ENV: string }
@@ -26,11 +26,10 @@ const functions = {
     },
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       try {
-        const { userId } = jwt.verify(req.cookies.refreshToken, JWT_ENV) as IrefreshToken
-        const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, userId)
+        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV) as IRefreshToken
+        const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken.userId)
         if (!dbValidation) { return { complete: false } }
 
-        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV)
         const accessToken = jwt.sign(refreshToken, JWT_ENV, config.jwt.accessToken as SignOptions)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)
         return { complete: true }

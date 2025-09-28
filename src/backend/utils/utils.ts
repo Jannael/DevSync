@@ -1,14 +1,15 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import { IEnv } from '../interface/env'
 
 dotenv.config({ quiet: true })
-const { EMAIL_ENV, PASSWORD_ENV } = process.env
+const { EMAIL_ENV, PASSWORD_ENV } = process.env as Pick<IEnv, 'EMAIL_ENV' | 'PASSWORD_ENV'>
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: EMAIL_ENV as string,
-    pass: PASSWORD_ENV as string
+    user: EMAIL_ENV,
+    pass: PASSWORD_ENV
   }
 })
 
@@ -27,7 +28,7 @@ export function generateCode (): string {
 export async function sendEmail (email: string, code: string, msg?: string): Promise<boolean> {
   try {
     await transporter.sendMail({
-      from: EMAIL_ENV as string,
+      from: EMAIL_ENV,
       to: email,
       subject: 'Verify your email',
       text: msg ?? `Your verification code is ${code}`

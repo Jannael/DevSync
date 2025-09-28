@@ -1,11 +1,12 @@
 import { DatabaseError, DuplicateData } from '../../error/error'
+import { IEnv } from '../../interface/env'
 import dbModel from './../../database/schemas/node/user'
 import { IUser } from './../../interface/user'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 
 dotenv.config({ quiet: true })
-const { BCRYPT_SALT_HASH } = process.env as { BCRYPT_SALT_HASH: string }
+const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
   create: {

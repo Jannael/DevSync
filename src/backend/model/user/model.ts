@@ -3,11 +3,12 @@ import { IUser } from './../../interface/user'
 
 const model = {
   create: {
-    user: async function (data: ) {
+    user: async function (data: IUser): Promise<IUser | null> {
       try {
-        dbModel.insertOne({ ...data })
+        const result = await dbModel.insertOne({ ...data })
+        return result as IUser
       } catch (e) {
-
+        return null
       }
     }
   },

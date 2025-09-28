@@ -18,7 +18,7 @@ const schema = new Schema({
   role: [{ type: String }],
   nickName: { type: String },
   personalization: personalizationSchema,
-  refreshToken: { type: String }
+  refreshToken: [{ type: String }]
 }, {
   ...config.database.mongodb.schemaOptions,
   collection: 'user'

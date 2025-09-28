@@ -41,7 +41,11 @@ db.createCollection('user', {
           }
         },
         refreshToken: {
-          bsonType: 'string',
+          bsonType: 'array',
+          uniqueItems: true,
+          items: {
+            bsonType: 'string'
+          }
           description: 'refreshToken for the user to validate when generating an access token'
         }
       }

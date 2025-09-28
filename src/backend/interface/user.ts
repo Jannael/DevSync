@@ -1,3 +1,6 @@
+import { Schema } from 'mongoose'
+
+const { ObjectId } = Schema.Types
 export interface IrefreshToken {
   userId: string
 }
@@ -6,12 +9,12 @@ export interface IUserPersonalization {
   theme: string
 }
 export interface IUser {
-  _id?: string
+  _id?: typeof ObjectId | null
   fullName: string
   account: string
   pwd: string
   role: Array<'documenter' | 'techlead' | 'developer'>
   nickName?: string
-  personlization: IUserPersonalization
-  refreshToken: string
+  personalization: IUserPersonalization
+  refreshToken: string[]
 }

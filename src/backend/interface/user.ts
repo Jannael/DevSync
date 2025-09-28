@@ -15,6 +15,6 @@ export interface IUser {
   pwd: string
   role: Array<'documenter' | 'techlead' | 'developer'>
   nickName?: string
-  personalization: IUserPersonalization
-  refreshToken: string[]
+  personalization?: IUserPersonalization
+  refreshToken?: string[]
 }

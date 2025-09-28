@@ -9,9 +9,8 @@ const model = {
           { refreshToken: 1, _id: 0 }
         ).lean()
 
-        const { refreshToken } = result ?? {}
-        if (refreshToken !== null && refreshToken === token) { return true }
-        return false
+        const tokens = result?.refreshToken
+        return Array.isArray(tokens) && tokens.includes(token)
       } catch (e) {
         return false
       }

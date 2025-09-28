@@ -10,9 +10,13 @@ import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IRefreshToken } from '../../interface/user'
+import { IEnv } from '../../interface/env'
 
 dotenv.config({ quiet: true })
-const { JWT_ENV } = process.env as { JWT_ENV: string }
+const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+'JWT_ACCESSTOKEN_ENV' |
+'JWT_REFRESHTOKEN_ENV' |
+'JWT_AUTH_ENV'>
 
 const functions = {
   request: {
@@ -21,7 +25,7 @@ const functions = {
         const code = generateCode()
         await sendEmail(req.body.email, code)
 
-        const codeHash = jwt.sign({ code }, JWT_ENV, config.jwt.code as SignOptions)
+        const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         res.cookie('code', codeHash, config.cookies.code)
         return { complete: true }
       } catch (error) {
@@ -31,11 +35,11 @@ const functions = {
     },
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       try {
-        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV) as IRefreshToken
+        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IRefreshToken
         const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken.userId)
         if (!dbValidation) { return { complete: false } }
 
-        const accessToken = jwt.sign(refreshToken, JWT_ENV, config.jwt.accessToken as SignOptions)
+        const accessToken = jwt.sign(refreshToken, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)
         return { complete: true }
       } catch (e) {
@@ -49,10 +53,10 @@ const functions = {
   verify: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       try {
-        const { code } = jwt.verify(req.cookies.code, JWT_ENV) as JwtPayload
+        const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
         if (req.body.code !== code) { return { complete: false } }
 
-        const emailHash = jwt.sign(req.body.email, JWT_ENV, config.jwt.code as SignOptions)
+        const emailHash = jwt.sign(req.body.email, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         res.cookie('email', emailHash, config.cookies.code)
         return { complete: true }
       } catch (e) {

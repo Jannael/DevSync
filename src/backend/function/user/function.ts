@@ -10,9 +10,13 @@ import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
 import { UserBadRequest } from '../../error/error'
+import { IEnv } from '../../interface/env'
 
 dotenv.config({ quiet: true })
-const { JWT_ENV } = process.env as { JWT_ENV: string }
+const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+'JWT_ACCESSTOKEN_ENV' |
+'JWT_REFRESHTOKEN_ENV' |
+'JWT_AUTH_ENV'>
 
 const functions = {
   user: {
@@ -21,7 +25,7 @@ const functions = {
       const token = req.cookies?.email
       if (token === undefined || token === null) throw new UserBadRequest('email not verified')
 
-      const decoded = jwt.verify(token, JWT_ENV) as JwtPayload
+      const decoded = jwt.verify(token, JWT_AUTH_ENV) as JwtPayload
       if (typeof decoded === 'string') throw new UserBadRequest('email not verified')
 
       req.body.email = decoded.email
@@ -31,8 +35,12 @@ const functions = {
 
       const result = await model.create.user(data)
 
-      const refreshToken = jwt.sign(result, JWT_ENV, config.jwt.refreshToken as SignOptions)
+      const refreshToken = jwt.sign(result, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
+      const accessToken = jwt.sign(result, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
+      res.cookie('accessToken', accessToken, config.cookies.accessToken)
+
       return result
     }
 

@@ -8,6 +8,9 @@ const handler = {
     } else if (e instanceof DuplicateData) {
       res.status(409).json({ complete: false, msg: 'User already exists' })
     } else if (e instanceof UserBadRequest) {
+      if (e.message === 'email not verified') {
+        res.status(403).json({ complete: false, msg: 'email not verified' })
+      }
       res.status(400).json({ complete: false, msg: 'invalid or missing data' })
     }
     res.status(500).json({ complete: false })
@@ -18,6 +21,9 @@ const handler = {
     } else if (e instanceof DuplicateData) {
       res.status(409).json({ complete: false, msg: 'User already exists' })
     } else if (e instanceof UserBadRequest) {
+      if (e.message === 'email not verified') {
+        res.status(403).json({ complete: false, msg: 'email not verified' })
+      }
       res.status(400).json({ complete: false, msg: 'invalid or missing data' })
     }
     res.status(500).json({ complete: false })

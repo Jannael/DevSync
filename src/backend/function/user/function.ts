@@ -1,7 +1,11 @@
+/***
+  User's CRUD
+***/
+
 import { IUser } from '../../interface/user'
 import model from './../../model/user/model'
 import validator from '../../validator/validator'
-import jwt, { SignOptions } from 'jsonwebtoken'
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
@@ -14,6 +18,13 @@ const functions = {
   user: {
     create: async function (req: Request, res: Response): Promise<IUser | Error> {
       const data = req.body
+      const token = req.cookies?.email
+      if (token === undefined || token === null) throw new UserBadRequest('email not verified')
+
+      const decoded = jwt.verify(token, JWT_ENV) as JwtPayload
+      if (typeof decoded === 'string') throw new UserBadRequest('email not verified')
+
+      req.body.email = decoded.email
 
       const validData = validator.user.create(data)
       if (validData === null) { throw new UserBadRequest('invalid or missing data') }

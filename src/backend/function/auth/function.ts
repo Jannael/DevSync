@@ -1,3 +1,8 @@
+/***
+  This function its to the auth-flow, first you request a code, then you verified it, with that cookie
+  you are able to create a user, also here we generate the accessTokens you need
+***/
+
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { generateCode, sendEmail } from '../../utils/utils'

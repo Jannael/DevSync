@@ -28,13 +28,12 @@ const functions = {
       try {
         const { userId } = jwt.verify(req.cookies.refreshToken, JWT_ENV) as IrefreshToken
         const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, userId)
-        if (dbValidation) {
-          const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV)
-          const accessToken = jwt.sign(refreshToken, JWT_ENV, config.jwt.accessToken as SignOptions)
-          res.cookie('accessToken', accessToken, config.cookies.accessToken)
-          return { complete: true }
-        }
-        return { complete: false }
+        if (!dbValidation) { return { complete: false } }
+
+        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_ENV)
+        const accessToken = jwt.sign(refreshToken, JWT_ENV, config.jwt.accessToken as SignOptions)
+        res.cookie('accessToken', accessToken, config.cookies.accessToken)
+        return { complete: true }
       } catch (e) {
         return { complete: false }
       }
@@ -44,12 +43,11 @@ const functions = {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       try {
         const { code } = jwt.verify(req.cookies.code, JWT_ENV) as JwtPayload
-        if (req.body.code === code) {
-          const emailHash = jwt.sign(req.body.email, JWT_ENV, config.jwt.code as SignOptions)
-          res.cookie('email', emailHash, config.cookies.code)
-          return { complete: true }
-        }
-        return { complete: false }
+        if (req.body.code !== code) { return { complete: false } }
+
+        const emailHash = jwt.sign(req.body.email, JWT_ENV, config.jwt.code as SignOptions)
+        res.cookie('email', emailHash, config.cookies.code)
+        return { complete: true }
       } catch (e) {
         return { complete: false }
       }

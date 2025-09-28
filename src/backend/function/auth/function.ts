@@ -12,7 +12,7 @@ import config from '../../config/config'
 import { IRefreshToken } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Schema } from 'mongoose'
-import { DatabaseError } from '../../error/error'
+import { DatabaseError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
@@ -66,19 +66,14 @@ const functions = {
   },
   verify: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
-      try {
-        const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
-        if (req.body.code !== code) { return { complete: false } }
+      const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
+      if (req.body.code !== code) throw new UserBadRequest('wrong code')
 
-        const emailHash = jwt.sign(req.body.email, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        res.cookie('email', emailHash, config.cookies.code)
-        return { complete: true }
-      } catch (e) {
-        return { complete: false }
-      }
+      const emailHash = jwt.sign(req.body.email, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      res.cookie('email', emailHash, config.cookies.code)
+      return { complete: true }
     }
   }
-
 }
 
 export default functions

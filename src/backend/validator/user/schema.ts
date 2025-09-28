@@ -1,4 +1,5 @@
 import z from 'zod'
+import { IUser } from '../../interface/user'
 
 const create = z.object({
   fullName: z.string(),
@@ -9,8 +10,15 @@ const create = z.object({
   personalization: z.object({ theme: z.string() }).optional()
 })
 
-const user = {
-  create
+const validator = {
+  create: function (obj: IUser) {
+    try {
+      const result = create.parse(obj)
+      return result
+    } catch {
+      return null
+    }
+  }
 }
 
-export default user
+export default validator

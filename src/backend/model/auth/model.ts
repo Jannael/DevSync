@@ -1,4 +1,7 @@
 import dbModel from './../../database/schemas/node/user'
+import bcrypt from 'bcrypt'
+import { IUser } from '../../interface/user'
+import { NotFound, UserBadRequest } from '../../error/error'
 
 const model = {
   verify: {
@@ -14,11 +17,20 @@ const model = {
       } catch (e) {
         return false
       }
+    },
+    login: async function (account: string, pwd: string): Promise<IUser> {
+      const user = await dbModel.findOne({ account })
+      if (user === null) { throw new NotFound('user not found') }
+
+      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd as string)
+      if (!pwdIsCorrect) { throw new UserBadRequest('incorrect password') }
+
+      return user as IUser
     }
   },
   auth: {
     refreshToken: {
-      save: async function (token: string, userId: string) {
+      save: async function (token: string, userId: string): Promise<boolean> {
         try {
           await dbModel.updateOne(
             { _id: userId },
@@ -29,7 +41,7 @@ const model = {
           return false
         }
       },
-      remove: async function (token: string, userId: string) {
+      remove: async function (token: string, userId: string): Promise<boolean> {
         try {
           await dbModel.updateOne(
             { _id: userId },

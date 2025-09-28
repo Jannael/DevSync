@@ -5,20 +5,20 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
+import { UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ENV } = process.env as { JWT_ENV: string }
 
 const functions = {
   create: {
-    user: async function (req: Request, res: Response): Promise<IUser | null> {
+    user: async function (req: Request, res: Response): Promise<IUser | Error> {
       const data = req.body
 
       const validData = validator.user.create(data)
-      if (validData === null) { return null }
+      if (validData === null) { throw new UserBadRequest('invalid or missing data') }
 
       const result = await model.create.user(data)
-      if (result === null) { return null }
 
       const refreshToken = jwt.sign(result, JWT_ENV, config.jwt.refreshToken as SignOptions)
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)

@@ -8,3 +8,5 @@ function createError (name: string): any {
 }
 
 export const DatabaseError = createError('databaseError')
+export const UserBadRequest = createError('userBadRequest')
+export const DuplicateData = createError('duplicateData')

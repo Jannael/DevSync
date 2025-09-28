@@ -41,6 +41,10 @@ const functions = {
       } catch (e) {
         return { complete: false }
       }
+    },
+    refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+      
+      return { complete: true }
     }
   },
   verify: {

@@ -12,6 +12,9 @@ const controller = {
       const result = await fn.request.accessToken(req, res)
       if (result.complete) res.json({ complete: true })
       res.status(405).json({ complete: false })
+    },
+    refreshToken: async function (req: Request, res: Response) {
+
     }
   },
   verify: {

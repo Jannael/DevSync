@@ -30,7 +30,15 @@ const model = {
         }
       },
       remove: async function (token: string, userId: string) {
-
+        try {
+          await dbModel.updateOne(
+            { _id: userId },
+            { $pull: { refreshToken: token } }
+          )
+          return true
+        } catch {
+          return false
+        }
       }
     }
   }

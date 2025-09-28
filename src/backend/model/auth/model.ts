@@ -2,6 +2,9 @@ import dbModel from './../../database/schemas/node/user'
 import bcrypt from 'bcrypt'
 import { IUser } from '../../interface/user'
 import { NotFound, UserBadRequest } from '../../error/error'
+import { Schema } from 'mongoose'
+
+const { ObjectId } = Schema.Types
 
 const model = {
   verify: {
@@ -30,7 +33,7 @@ const model = {
   },
   auth: {
     refreshToken: {
-      save: async function (token: string, userId: string): Promise<boolean> {
+      save: async function (token: string, userId: typeof ObjectId): Promise<boolean> {
         try {
           await dbModel.updateOne(
             { _id: userId },
@@ -41,7 +44,7 @@ const model = {
           return false
         }
       },
-      remove: async function (token: string, userId: string): Promise<boolean> {
+      remove: async function (token: string, userId: typeof ObjectId): Promise<boolean> {
         try {
           await dbModel.updateOne(
             { _id: userId },

@@ -11,12 +11,15 @@ import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IRefreshToken } from '../../interface/user'
 import { IEnv } from '../../interface/env'
+import { Schema } from 'mongoose'
+import { DatabaseError } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
 'JWT_ACCESSTOKEN_ENV' |
 'JWT_REFRESHTOKEN_ENV' |
 'JWT_AUTH_ENV'>
+const { ObjectId } = Schema.Types
 
 const functions = {
   request: {
@@ -47,6 +50,17 @@ const functions = {
       }
     },
     refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+      const user = (await model.verify.login(req.body.account, req.body.pwd))
+
+      const refreshToken = jwt.sign(user, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
+      const acccessToken = jwt.sign(user, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+
+      const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id as typeof ObjectId)
+      if (!saveRefreshToken) { throw new DatabaseError('something went wrong please try again') }
+
+      res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
+      res.cookie('accessToken', acccessToken, config.cookies.accessToken)
+
       return { complete: true }
     }
   },

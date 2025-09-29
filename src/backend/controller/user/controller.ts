@@ -5,7 +5,12 @@ import ErrorHandler from '../../error/handler'
 const controller = {
   user: {
     get: async function (req: Request, res: Response) {
-
+      try {
+        const result = await fn.user.get(req, res)
+        res.json(result)
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     },
     create: async function (req: Request, res: Response) {
       try {

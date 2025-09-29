@@ -21,7 +21,12 @@ const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env 
 const functions = {
   user: {
     get: async function (req: Request, res: Response) {
+      if (req.cookies.accessToken === undefined) throw new UserBadRequest('missing accessToken')
+
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+
+      if (typeof accessToken === 'string') throw new UserBadRequest('invalid accessToken')
+
       return accessToken
     },
     create: async function (req: Request, res: Response): Promise<IUser | Error> {

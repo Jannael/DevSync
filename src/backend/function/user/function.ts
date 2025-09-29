@@ -53,6 +53,7 @@ const functions = {
       return result
     },
     update: async function (req: Request, res: Response) {
+      if (req.body.account !== undefined) throw new UserBadRequest('Not Authorized')
       if (req.cookies.account === undefined) throw new UserBadRequest('account not verified')
       if (req.cookies.acccessToken === undefined) throw new UserBadRequest('account not verified')
       const decoded = jwt.verify(req.cookies.account, JWT_AUTH_ENV)

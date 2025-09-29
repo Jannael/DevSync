@@ -54,6 +54,8 @@ const functions = {
       }
     },
     refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+      if (req.body.account === undefined || req.body.pwd === undefined) throw new UserBadRequest('missing data')
+
       const user = (await model.verify.login(req.body.account, req.body.pwd))
 
       const refreshToken = jwt.sign(user, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
@@ -71,6 +73,7 @@ const functions = {
   verify: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('missing code')
+
       const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (req.body.code !== code) throw new UserBadRequest('wrong code')
 

@@ -1,9 +1,12 @@
-import { DatabaseError, DuplicateData } from '../../error/error'
+import { DatabaseError, DuplicateData, NotFound } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import dbModel from './../../database/schemas/node/user'
 import { IUser } from './../../interface/user'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
+import { Schema } from 'mongoose'
+
+const { ObjectId } = Schema.Types
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -14,7 +17,7 @@ const model = {
       try {
         const hashedPwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
         const payload = { ...data, pwd: hashedPwd }
-        const result = await dbModel.insertOne({ ...payload })
+        const result = await dbModel.create({ ...payload })
         return result as IUser
       } catch (e: any) {
         if (e?.code === 11000) {
@@ -22,6 +25,12 @@ const model = {
         }
         throw new DatabaseError('something went wrong while writing the user')
       }
+    },
+    update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: typeof ObjectId) {
+      const user = await dbModel.updateOne({ _id: userId }, { ...data })
+      if (user.matchedCount === 0) throw new NotFound('user does not exists')
+
+      return user
     }
   }
 }

@@ -53,10 +53,23 @@ const functions = {
       return result
     },
     update: async function (req: Request, res: Response) {
+      if (req.cookies.account === undefined) throw new UserBadRequest('account not verified')
+      if (req.cookies.acccessToken === undefined) throw new UserBadRequest('account not verified')
+      const decoded = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
+      if (typeof decoded === 'string') throw new UserBadRequest('account not verified')
+      const accessToken = jwt.verify(req.cookies.acccessToken, JWT_ACCESSTOKEN_ENV)
+      if (typeof accessToken === 'string') throw new UserBadRequest('account not verified')
 
+      req.body = decoded.account
+
+      const data = validator.user.partial(req.body)
+      if (data === null) throw new UserBadRequest('no data to update')
+
+      const result = await model.user.update(data, accessToken._id)
+      return result
     },
     delete: async function (req: Request, res: Response) {
-      
+
     }
   }
 }

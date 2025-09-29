@@ -74,8 +74,10 @@ const functions = {
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Account not verified')
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
       if (typeof accessToken === 'string') throw new UserBadRequest('Not authorized')
-      const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
+      const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
       if (typeof cookieAccount === 'string') throw new UserBadRequest('Account not verified')
+
+      if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Forbidden')
     }
   }
 }

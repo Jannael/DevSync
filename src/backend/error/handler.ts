@@ -13,7 +13,8 @@ const handler = {
     } else if (e instanceof UserBadRequest) {
       status.code = 400
       if (e.message === 'Account not verified' ||
-        e.message === 'Not authorized') status.code = 403
+        e.message === 'Not authorized') status.code = 401
+      else if (e.message === 'Forbidden') status.code = 403
       status.msg = e.message
     } else if (e instanceof NotFound) {
       status.code = 404

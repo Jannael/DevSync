@@ -26,13 +26,13 @@ const functions = {
     },
     create: async function (req: Request, res: Response): Promise<IUser | Error> {
       const data = req.body
-      const token = req.cookies?.email
-      if (token === undefined || token === null) throw new UserBadRequest('email not verified')
+      const token = req.cookies?.account
+      if (token === undefined || token === null) throw new UserBadRequest('account not verified')
 
       const decoded = jwt.verify(token, JWT_AUTH_ENV) as JwtPayload
-      if (typeof decoded === 'string') throw new UserBadRequest('email not verified')
+      if (typeof decoded === 'string') throw new UserBadRequest('account not verified')
 
-      req.body.email = decoded.email
+      req.body.account = decoded.account
 
       const validData = validator.user.create(data)
       if (validData === null) { throw new UserBadRequest('invalid or missing data') }

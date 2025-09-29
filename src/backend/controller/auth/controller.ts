@@ -7,7 +7,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       const result = await fn.request.code(req, res)
       if (result.complete) res.json({ complete: true })
-      res.status(400).json({ complete: false, error: 'something went wrong' })
+      res.status(400).json({ complete: false, msg: 'something went wrong' })
     },
     accessToken: async function (req: Request, res: Response) {
       try {

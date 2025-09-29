@@ -24,9 +24,11 @@ const { ObjectId } = Schema.Types
 const functions = {
   request: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean, error?: Error }> {
+      if (req.body.account === undefined) throw new UserBadRequest('missing account')
+
       try {
         const code = generateCode()
-        await sendEmail(req.body.email, code)
+        await sendEmail(req.body.account, code)
 
         const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         res.cookie('code', codeHash, config.cookies.code)
@@ -71,8 +73,8 @@ const functions = {
       const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (req.body.code !== code) throw new UserBadRequest('wrong code')
 
-      const emailHash = jwt.sign(req.body.email, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-      res.cookie('email', emailHash, config.cookies.code)
+      const emailHash = jwt.sign(req.body.account, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      res.cookie('account', emailHash, config.cookies.code)
       return { complete: true }
     }
   }

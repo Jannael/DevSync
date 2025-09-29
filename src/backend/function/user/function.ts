@@ -20,6 +20,10 @@ const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env 
 
 const functions = {
   user: {
+    get: async function (req: Request, res: Response) {
+      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+      return accessToken
+    },
     create: async function (req: Request, res: Response): Promise<IUser | Error> {
       const data = req.body
       const token = req.cookies?.email
@@ -33,7 +37,7 @@ const functions = {
       const validData = validator.user.create(data)
       if (validData === null) { throw new UserBadRequest('invalid or missing data') }
 
-      const result = await model.create.user(data)
+      const result = await model.user.create(data)
 
       const refreshToken = jwt.sign(result, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
       const accessToken = jwt.sign(result, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
@@ -43,7 +47,6 @@ const functions = {
 
       return result
     }
-
   }
 }
 

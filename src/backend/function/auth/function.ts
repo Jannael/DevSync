@@ -9,7 +9,7 @@ import { generateCode, sendEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
-import { IRefreshToken } from '../../interface/user'
+import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Schema } from 'mongoose'
 import { DatabaseError, UserBadRequest } from '../../error/error'
@@ -37,9 +37,11 @@ const functions = {
       }
     },
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+      if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
+
       try {
-        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IRefreshToken
-        const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken.userId)
+        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IUser
+        const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as typeof ObjectId)
         if (!dbValidation) { return { complete: false } }
 
         const accessToken = jwt.sign(refreshToken, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)

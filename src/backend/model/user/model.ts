@@ -9,8 +9,8 @@ dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
-  create: {
-    user: async function (data: IUser): Promise<IUser> {
+  user: {
+    create: async function (data: IUser): Promise<IUser> {
       try {
         const hashedPwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
         const payload = { ...data, pwd: hashedPwd }
@@ -23,10 +23,7 @@ const model = {
         throw new DatabaseError('something went wrong while writing the user')
       }
     }
-  },
-  read: {},
-  update: {},
-  delete: {}
+  }
 }
 
 export default model

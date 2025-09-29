@@ -8,7 +8,7 @@ const { ObjectId } = Schema.Types
 
 const model = {
   verify: {
-    refreshToken: async function (token: string, userId: string): Promise<boolean> {
+    refreshToken: async function (token: string, userId: typeof ObjectId): Promise<boolean> {
       try {
         const result = await dbModel.findOne(
           { _id: userId },

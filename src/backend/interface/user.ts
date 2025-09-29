@@ -1,10 +1,6 @@
 import { Schema } from 'mongoose'
 
 const { ObjectId } = Schema.Types
-export interface IRefreshToken {
-  userId: string
-}
-
 export interface IUserPersonalization {
   theme: string
 }

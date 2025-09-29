@@ -4,7 +4,7 @@ import ErrorHandler from '../../error/handler'
 
 const controller = {
   user: {
-    get: {
+    get: async function (req: Request, res: Response) {
 
     },
     create: async function (req: Request, res: Response) {
@@ -19,10 +19,10 @@ const controller = {
         ErrorHandler.user(res, e as Error)
       }
     },
-    update: {
+    update: async function (req: Request, res: Response) {
 
     },
-    delete: {
+    delete: async function (req: Request, res: Response) {
 
     }
 

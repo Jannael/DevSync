@@ -10,9 +10,12 @@ const controller = {
       res.status(400).json({ complete: false, error: 'something went wrong' })
     },
     accessToken: async function (req: Request, res: Response) {
-      const result = await fn.request.accessToken(req, res)
-      if (result.complete) res.json({ complete: true })
-      res.status(405).json({ complete: false })
+      try {
+        const result = await fn.request.accessToken(req, res)
+        if (result.complete) res.json({ complete: true })
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     },
     refreshToken: async function (req: Request, res: Response) {
       try {

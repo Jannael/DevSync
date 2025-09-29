@@ -51,6 +51,12 @@ const functions = {
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
 
       return result
+    },
+    update: async function (req: Request, res: Response) {
+
+    },
+    delete: async function (req: Request, res: Response) {
+      
     }
   }
 }

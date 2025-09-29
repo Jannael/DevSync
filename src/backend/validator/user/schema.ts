@@ -18,6 +18,14 @@ const validator = {
     } catch {
       return null
     }
+  },
+  partial: function (obj: IUser) {
+    try {
+      const result = create.partial().parse(obj)
+      return result
+    } catch {
+      return null
+    }
   }
 }
 

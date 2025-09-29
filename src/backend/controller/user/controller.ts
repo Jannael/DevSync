@@ -25,7 +25,12 @@ const controller = {
       }
     },
     update: async function (req: Request, res: Response) {
-
+      try {
+        const result = await fn.user.update(req, res)
+        if (result) res.json({ complete: true })
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     },
     delete: async function (req: Request, res: Response) {
 

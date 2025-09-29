@@ -70,6 +70,7 @@ const functions = {
   },
   verify: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+      if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('missing code')
       const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (req.body.code !== code) throw new UserBadRequest('wrong code')
 

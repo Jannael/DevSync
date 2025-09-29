@@ -5,9 +5,12 @@ import ErrorHandler from './../../error/handler'
 const controller = {
   request: {
     code: async function (req: Request, res: Response) {
-      const result = await fn.request.code(req, res)
-      if (result.complete) res.json({ complete: true })
-      res.status(400).json({ complete: false, msg: 'something went wrong' })
+      try {
+        const result = await fn.request.code(req, res)
+        if (result.complete) res.json({ complete: true })
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     },
     accessToken: async function (req: Request, res: Response) {
       try {

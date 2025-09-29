@@ -33,7 +33,12 @@ const controller = {
       }
     },
     delete: async function (req: Request, res: Response) {
-
+      try {
+        const result = await fn.user.delete(req, res)
+        if (result) res.json({ complete: true })
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     }
 
   }

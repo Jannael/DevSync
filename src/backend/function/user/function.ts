@@ -29,7 +29,7 @@ const functions = {
 
       return accessToken
     },
-    create: async function (req: Request, res: Response): Promise<IUser | Error> {
+    create: async function (req: Request, res: Response): Promise<Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'> | Error> {
       const data = req.body
       const token = req.cookies?.account
       if (token === undefined || token === null) throw new UserBadRequest('Account not verified')

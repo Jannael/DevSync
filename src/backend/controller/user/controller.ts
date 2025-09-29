@@ -18,8 +18,7 @@ const controller = {
 
         if (result instanceof Error) { throw result }
 
-        const { fullName, account, nickName, role, personalization } = result
-        res.json({ fullName, account, nickName, role, personalization })
+        res.json(result)
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }

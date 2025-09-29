@@ -78,6 +78,8 @@ const functions = {
       if (typeof cookieAccount === 'string') throw new UserBadRequest('Account not verified')
 
       if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Forbidden')
+
+      return await model.user.delete(accessToken._id)
     }
   }
 }

@@ -27,6 +27,11 @@ const model = {
       }
     },
     update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: typeof ObjectId): Promise<boolean> {
+      if (data.pwd !== undefined) {
+        const pwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
+        data.pwd = pwd
+      }
+
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('user does not exist')
 

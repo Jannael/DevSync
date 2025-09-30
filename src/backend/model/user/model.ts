@@ -48,7 +48,11 @@ const model = {
       return false
     },
     account: {
-      update: async function (userId: typeof ObjectId) {
+      update: async function (userId: typeof ObjectId, account: string) {
+        const response = await dbModel.updateOne({ _id: userId }, { account })
+        if (response.matchedCount === 0) throw new NotFound('User does not exist')
+
+        return response.acknowledged
       }
     }
   }

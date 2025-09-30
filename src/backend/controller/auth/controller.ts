@@ -44,7 +44,11 @@ const controller = {
   account: {
     request: {
       code: async function (req: Request, res: Response) {
-
+        try {
+          const result = await fn.account.request.code(req, res)
+          if (result.complete) res.json({ complete: true })
+          res.json({ complete: false })
+        } catch (e) { ErrorHandler.user(res, e as Error) }
       }
     },
     verify: {

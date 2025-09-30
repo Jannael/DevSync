@@ -38,8 +38,12 @@ const controller = {
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }
+    },
+    account: {
+      request: async function (req: Request, res: Response) {},
+      verify: async function (req: Request, res: Response) {},
+      update: async function (req: Request, res: Response) {}
     }
-
   }
 }
 

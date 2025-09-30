@@ -46,6 +46,11 @@ const model = {
 
       if (result.acknowledged && result.deletedCount !== 0) return true
       return false
+    },
+    account: {
+      update: async function (userId: typeof ObjectId) {
+
+      }
     }
   }
 }

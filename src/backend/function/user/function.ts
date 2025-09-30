@@ -21,11 +21,11 @@ const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env 
 const functions = {
   user: {
     get: async function (req: Request, res: Response) {
-      if (req.cookies.accessToken === undefined) throw new UserBadRequest('missing accessToken')
+      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Missing accessToken')
 
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
 
-      if (typeof accessToken === 'string') throw new UserBadRequest('invalid accessToken')
+      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
       return accessToken
     },
@@ -40,7 +40,7 @@ const functions = {
       req.body.account = decoded.account
 
       const validData = validator.user.create(data)
-      if (validData === null) { throw new UserBadRequest('invalid or missing data') }
+      if (validData === null) { throw new UserBadRequest('Invalid or missing data') }
 
       const result = await model.user.create(data)
 
@@ -70,7 +70,7 @@ const functions = {
       if (accessToken.account !== accountCookie.account) throw new UserBadRequest('Forbidden')
 
       const data = validator.user.partial(req.body)
-      if (data === null) throw new UserBadRequest('no data to update or invalid data')
+      if (data === null) throw new UserBadRequest('No data to update or invalid data')
 
       const result = await model.user.update(data, accessToken._id)
       return result

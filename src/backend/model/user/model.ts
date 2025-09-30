@@ -25,9 +25,9 @@ const model = {
         return user as Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'>
       } catch (e: any) {
         if (e?.code === 11000) {
-          throw new DuplicateData('this user already exists')
+          throw new DuplicateData('This user already exists')
         }
-        throw new DatabaseError('something went wrong while writing the user')
+        throw new DatabaseError('Something went wrong while writing the user')
       }
     },
     update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: typeof ObjectId): Promise<boolean> {
@@ -37,7 +37,7 @@ const model = {
       }
 
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
-      if (user.matchedCount === 0) throw new NotFound('user does not exist')
+      if (user.matchedCount === 0) throw new NotFound('User does not exist')
 
       return user.acknowledged
     },

@@ -24,7 +24,7 @@ const { ObjectId } = Schema.Types
 const functions = {
   request: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean, error?: Error }> {
-      if (req.body.account === undefined) throw new UserBadRequest('missing account')
+      if (req.body.account === undefined) throw new UserBadRequest('Missing account')
 
       try {
         const code = generateCode()
@@ -54,7 +54,7 @@ const functions = {
       }
     },
     refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
-      if (req.body.account === undefined || req.body.pwd === undefined) throw new UserBadRequest('missing data')
+      if (req.body.account === undefined || req.body.pwd === undefined) throw new UserBadRequest('Missing data')
 
       const user = (await model.verify.login(req.body.account, req.body.pwd))
 
@@ -62,7 +62,7 @@ const functions = {
       const accessToken = jwt.sign(user, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
 
       const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id as typeof ObjectId)
-      if (!saveRefreshToken) { throw new DatabaseError('something went wrong please try again') }
+      if (!saveRefreshToken) { throw new DatabaseError('Something went wrong please try again') }
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
@@ -72,10 +72,10 @@ const functions = {
   },
   verify: {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
-      if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('missing code')
+      if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('Missing code')
 
       const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
-      if (req.body.code !== code) throw new UserBadRequest('wrong code')
+      if (req.body.code !== code) throw new UserBadRequest('Wrong code')
 
       const emailHash = jwt.sign(req.body.account, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('account', emailHash, config.cookies.code)

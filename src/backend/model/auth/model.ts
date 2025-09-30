@@ -23,10 +23,10 @@ const model = {
     },
     login: async function (account: string, pwd: string): Promise<IUser> {
       const user = await dbModel.findOne({ account })
-      if (user === null) { throw new NotFound('user not found') }
+      if (user === null) { throw new NotFound('User not found') }
 
       const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd as string)
-      if (!pwdIsCorrect) { throw new UserBadRequest('incorrect password') }
+      if (!pwdIsCorrect) { throw new UserBadRequest('Incorrect password') }
 
       return user as IUser
     }

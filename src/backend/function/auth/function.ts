@@ -26,32 +26,23 @@ const functions = {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean, error?: Error }> {
       if (req.body.account === undefined) throw new UserBadRequest('Missing account')
 
-      try {
-        const code = generateCode()
-        await sendEmail(req.body.account, code)
+      const code = generateCode()
+      await sendEmail(req.body.account, code)
 
-        const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        res.cookie('code', codeHash, config.cookies.code)
-        return { complete: true }
-      } catch (error) {
-        if (error instanceof Error) return { complete: false, error }
-        return { complete: false }
-      }
+      const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      res.cookie('code', codeHash, config.cookies.code)
+      return { complete: true }
     },
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
 
-      try {
-        const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IUser
-        const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as typeof ObjectId)
-        if (!dbValidation) { return { complete: false } }
+      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IUser
+      const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as typeof ObjectId)
+      if (!dbValidation) { return { complete: false } }
 
-        const accessToken = jwt.sign(refreshToken, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
-        res.cookie('accessToken', accessToken, config.cookies.accessToken)
-        return { complete: true }
-      } catch (e) {
-        return { complete: false }
-      }
+      const accessToken = jwt.sign(refreshToken, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+      res.cookie('accessToken', accessToken, config.cookies.accessToken)
+      return { complete: true }
     },
     refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.body.account === undefined || req.body.pwd === undefined) throw new UserBadRequest('Missing data')
@@ -74,8 +65,9 @@ const functions = {
     code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('Missing code')
 
-      const { code } = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
-      if (req.body.code !== code) throw new UserBadRequest('Wrong code')
+      const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
+      if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
+      if (req.body.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
 
       const emailHash = jwt.sign(req.body.account, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('account', emailHash, config.cookies.code)

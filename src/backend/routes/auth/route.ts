@@ -9,4 +9,7 @@ router.post('/verify/code', controller.verify.code)
 router.get('/request/accessToken', controller.request.accessToken)
 router.post('/request/refreshToken', controller.request.refreshToken)
 
+router.patch('/update/account/request/code', controller.account.request.code)
+router.patch('/update/account/verify/code', controller.account.verify.code)
+
 export default { auth: { router } }

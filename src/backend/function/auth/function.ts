@@ -5,7 +5,7 @@
 
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode, sendEmail } from '../../utils/utils'
+import { generateCode, ail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
@@ -80,6 +80,18 @@ const functions = {
       const emailHash = jwt.sign(req.body.account, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('account', emailHash, config.cookies.code)
       return { complete: true }
+    }
+  },
+  account: {
+    request: {
+      code: async function (req: Request, res: Response) {
+
+      }
+    },
+    verify: {
+      code: async function (req: Request, res: Response) {
+
+      }
     }
   }
 }

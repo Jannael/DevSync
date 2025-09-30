@@ -49,7 +49,6 @@ const model = {
     },
     account: {
       update: async function (userId: typeof ObjectId) {
-
       }
     }
   }

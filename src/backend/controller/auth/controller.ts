@@ -40,6 +40,18 @@ const controller = {
         ErrorHandler.user(res, e as Error)
       }
     }
+  },
+  account: {
+    request: {
+      code: async function (req: Request, res: Response) {
+
+      }
+    },
+    verify: {
+      code: async function (req: Request, res: Response) {
+
+      }
+    }
   }
 }
 

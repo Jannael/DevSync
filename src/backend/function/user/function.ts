@@ -92,7 +92,23 @@ const functions = {
       return await model.user.delete(accessToken._id)
     },
     account: {
-      update: async function (req: Request, res: Response) {}
+      update: async function (req: Request, res: Response) {
+        if (req.cookies.accessToken === undefined ||
+          req.cookies.newAccount_account === undefined
+        ) throw new UserBadRequest('Not authorized')
+
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+        const newAccount = jwt.verify(req.cookies.newAccount_account, JWT_AUTH_ENV) as string
+
+        if (typeof accessToken === 'string' ||
+          typeof newAccount === 'string'
+        ) throw new UserBadRequest('Forbidden')
+
+        const response = await model.user.account.update(accessToken._id, newAccount)
+
+        if (response) { return { complete: true } }
+        return { complete: false }
+      }
     }
   }
 }

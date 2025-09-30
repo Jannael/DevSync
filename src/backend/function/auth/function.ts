@@ -127,7 +127,7 @@ const functions = {
 
         const account = jwt.sign(codeNewAccount.account, JWT_AUTH_ENV, config.jwt.code)
 
-        res.cookie('newAccount-account', account, config.cookies.code)
+        res.cookie('newAccount_account', account, config.cookies.code)
         return { complete: true }
       }
     }

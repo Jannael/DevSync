@@ -59,13 +59,13 @@ const functions = {
       const user = (await model.verify.login(req.body.account, req.body.pwd))
 
       const refreshToken = jwt.sign(user, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
-      const acccessToken = jwt.sign(user, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const accessToken = jwt.sign(user, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
 
       const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id as typeof ObjectId)
       if (!saveRefreshToken) { throw new DatabaseError('something went wrong please try again') }
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
-      res.cookie('accessToken', acccessToken, config.cookies.accessToken)
+      res.cookie('accessToken', accessToken, config.cookies.accessToken)
 
       return { complete: true }
     }

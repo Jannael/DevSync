@@ -53,24 +53,30 @@ const functions = {
       return result
     },
     update: async function (req: Request, res: Response) {
-      if (req.body.account !== undefined) throw new UserBadRequest('Not authorized')
-      if (req.cookies.account === undefined) throw new UserBadRequest('Account not verified')
-      if (req.cookies.acccessToken === undefined) throw new UserBadRequest('Account not verified')
-      const decoded = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
-      if (typeof decoded === 'string') throw new UserBadRequest('Account not verified')
-      const accessToken = jwt.verify(req.cookies.acccessToken, JWT_ACCESSTOKEN_ENV)
-      if (typeof accessToken === 'string') throw new UserBadRequest('Account not verified')
+      if (req.body.account !== undefined ||
+        req.body.refreshToken !== undefined ||
+        req.body._id !== undefined ||
+        req.cookies.account === undefined ||
+        req.cookies.accessToken === undefined
+      ) throw new UserBadRequest('Not authorized')
 
-      req.body = decoded.account
+      const accountCookie = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
+      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+
+      if (typeof accountCookie === 'string' ||
+        typeof accessToken === 'string'
+      ) throw new UserBadRequest('Account not verified')
+
+      if (accessToken.account !== accountCookie.account) throw new UserBadRequest('Forbidden')
 
       const data = validator.user.partial(req.body)
-      if (data === null) throw new UserBadRequest('no data to update')
+      if (data === null) throw new UserBadRequest('no data to update or invalid data')
 
       const result = await model.user.update(data, accessToken._id)
       return result
     },
     delete: async function (req: Request, res: Response) {
-      if (req.cookies.account === undefined) throw new UserBadRequest('account not verifed')
+      if (req.cookies.account === undefined) throw new UserBadRequest('Account not verifed')
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Account not verified')
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
       if (typeof accessToken === 'string') throw new UserBadRequest('Not authorized')

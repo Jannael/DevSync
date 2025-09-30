@@ -92,18 +92,43 @@ const functions = {
 
         if (!codeResult || !codeNewAccountResult) throw new ServerError('Something went wrong please try again later')
 
-        const codeEncrypted = jwt.sign(code, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        const codeNewAccountEncrypted = jwt.sign(codeNewAccount, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount as SignOptions)
 
         res.cookie('account', codeEncrypted, config.cookies.code)
-        res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.code)
+        res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)
 
         return { complete: true }
       }
     },
     verify: {
       code: async function (req: Request, res: Response) {
+        if (req.cookies.account === undefined ||
+          req.cookies.newAccount === undefined ||
+          req.cookies.accessToken === undefined ||
+          req.body.codeCurrentAccount === undefined ||
+          req.body.codeNewAccount === undefined
+        ) throw new UserBadRequest('You need to ask for verificaction codes')
 
+        const { code } = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
+        const codeNewAccount = jwt.verify(req.cookies.newAccount, JWT_AUTH_ENV) as JwtPayload
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
+
+        if (typeof code === 'string' ||
+          typeof codeNewAccount === 'string' ||
+          typeof accessToken === 'string'
+        ) throw new UserBadRequest('Forbidden')
+
+        if (code !== req.body.codeCurrentAccount) throw new UserBadRequest('Current account code is wrong')
+        if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('New account code is wrong')
+
+        res.clearCookie('account')
+        res.clearCookie('newAccount')
+
+        const account = jwt.sign(codeNewAccount.account, JWT_AUTH_ENV, config.jwt.code)
+
+        res.cookie('newAccount-account', account, config.cookies.code)
+        return { complete: true }
       }
     }
   }

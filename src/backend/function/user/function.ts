@@ -76,12 +76,16 @@ const functions = {
       return result
     },
     delete: async function (req: Request, res: Response) {
-      if (req.cookies.account === undefined) throw new UserBadRequest('Account not verifed')
-      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Account not verified')
+      if (req.cookies.account === undefined ||
+        req.cookies.accessToken === undefined
+      ) throw new UserBadRequest('Account not verifed')
+
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
-      if (typeof accessToken === 'string') throw new UserBadRequest('Not authorized')
       const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
-      if (typeof cookieAccount === 'string') throw new UserBadRequest('Account not verified')
+
+      if (typeof accessToken === 'string' ||
+        typeof cookieAccount === 'string'
+      ) throw new UserBadRequest('Not authorized')
 
       if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Forbidden')
 

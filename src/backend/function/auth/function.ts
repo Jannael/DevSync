@@ -5,14 +5,14 @@
 
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode, ail } from '../../utils/utils'
+import { generateCode, sendEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Schema } from 'mongoose'
-import { DatabaseError, UserBadRequest } from '../../error/error'
+import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
@@ -85,7 +85,28 @@ const functions = {
   account: {
     request: {
       code: async function (req: Request, res: Response) {
+        if (req.cookies.accessToken === undefined ||
+          req.body.newAccount === undefined
+        ) throw new UserBadRequest('Not authorized')
 
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+        if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
+
+        const code = generateCode()
+        const codeNewAccount = generateCode()
+
+        const codeResult = await sendEmail(accessToken.account, code)
+        const codeNewAccountResult = await sendEmail(req.body.newAccount, codeNewAccount)
+
+        if (!codeResult || !codeNewAccountResult) throw new ServerError('Something went wrong please try again later')
+
+        const codeEncrypted = jwt.sign(code, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        const codeNewAccountEncrypted = jwt.sign(codeNewAccount, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+
+        res.cookie('account', codeEncrypted, config.cookies.code)
+        res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.code)
+
+        return { complete: true }
       }
     },
     verify: {

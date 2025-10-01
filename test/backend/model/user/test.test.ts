@@ -1,5 +1,6 @@
-import { DuplicateData } from '../../../../src/backend/error/error'
+import { DatabaseError, DuplicateData } from '../../../../src/backend/error/error'
 import { IEnv } from '../../../../src/backend/interface/env'
+import { IUser } from '../../../../src/backend/interface/user'
 import model from './../../../../src/backend/model/user/model'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
@@ -50,6 +51,18 @@ describe('user model', () => {
           })
         },
         error: new DuplicateData('This user already exists')
+      },
+      {
+        fn: async function () {
+          await model.user.create({
+            account: 'test1',
+            pwd: 'test1',
+            role: [ 'documenter' ],
+            nickName: 'test1',
+            personalization: { theme: 'test1' }
+          } as IUser)
+        },
+        error: new DatabaseError('Something went wrong while writing the user')
       }
     ]
     

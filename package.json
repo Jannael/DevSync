@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "pnpm jest --verbose"
+    "test": "pnpm jest --verbose --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

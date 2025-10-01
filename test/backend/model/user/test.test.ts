@@ -1,3 +1,4 @@
+import { DuplicateData } from '../../../../src/backend/error/error'
 import { IEnv } from '../../../../src/backend/interface/env'
 import model from './../../../../src/backend/model/user/model'
 import dotenv from 'dotenv'
@@ -33,5 +34,27 @@ describe('user model', () => {
         nickName: 'test',
         personalization: { theme: 'test' }  
     })
+  })
+
+  test('create user errors', async () => {
+    const func = [
+      {
+        fn: async function () {
+          await model.user.create({
+            fullName: 'test',
+            account: 'test',
+            pwd: 'test',
+            role: [ 'documenter' ],
+            nickName: 'test',
+            personalization: { theme: 'test' }
+          })
+        },
+        error: new DuplicateData('This user already exists')
+      }
+    ]
+    
+    for(const { fn, error } of func) {
+      await expect(fn()).rejects.toThrow(error)
+    }
   })
 })

@@ -30,7 +30,6 @@ const model = {
         if (e?.code === 11000) {
           throw new DuplicateData('This user already exists')
         }
-        console.log(e)
         throw new DatabaseError('Something went wrong while writing the user')
       }
     },

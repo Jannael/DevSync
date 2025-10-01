@@ -1,16 +1,15 @@
-import { Schema } from 'mongoose'
+import { Types } from 'mongoose'
 
-const { ObjectId } = Schema.Types
 export interface IUserPersonalization {
-  theme: string
+  theme?: string | null
 }
 export interface IUser {
-  _id?: typeof ObjectId | null
+  _id?: Types.ObjectId
   fullName: string
   account: string
   pwd: string
-  role: Array<'documenter' | 'techlead' | 'developer'>
-  nickName?: string
-  personalization?: IUserPersonalization
-  refreshToken?: string[]
+  role: string[]
+  nickName?: string | null
+  personalization?: IUserPersonalization | null
+  refreshToken?: string[] | null
 }

@@ -1,5 +1,6 @@
 export interface IEnv {
   DBURL_ENV: string
+  DBURL_ENV_TEST: string
   JWT_ACCESSTOKEN_ENV: string
   JWT_REFRESHTOKEN_ENV: string
   JWT_DATABASE_ENV: string

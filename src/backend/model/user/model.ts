@@ -13,20 +13,24 @@ const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
   user: {
-    create: async function (data: IUser): Promise<Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'>> {
+    create: async function (data: IUser): Promise<IUser> {
       try {
-        const hashedPwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
+        const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
+        const hashedPwd = await bcrypt.hash(data.pwd, salt)
         const payload = { ...data, pwd: hashedPwd }
-        const result = await dbModel.create({ ...payload })
+        const result = await dbModel.insertOne({ ...payload })
         const user = await dbModel.findOne(
           { _id: result._id },
-          { _id: 0, fullName: 1, account: 1, nickName: 1, role: 1, personalization: 1 })
+          { _id: 0, fullName: 1, account: 1, nickName: 1, role: 1, personalization: 1 }).lean()
 
-        return user as Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'>
+        if (user === null) throw new NotFound('User dont exist')
+
+        return user
       } catch (e: any) {
         if (e?.code === 11000) {
           throw new DuplicateData('This user already exists')
         }
+        console.log(e)
         throw new DatabaseError('Something went wrong while writing the user')
       }
     },

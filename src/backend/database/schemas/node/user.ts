@@ -1,8 +1,6 @@
 import { model, Schema } from 'mongoose'
 import config from '../../../config/config'
 
-const { ObjectId } = Schema.Types
-
 const personalizationSchema = new Schema({
   theme: { type: String }
 }, {
@@ -11,10 +9,9 @@ const personalizationSchema = new Schema({
 })
 
 const schema = new Schema({
-  _id: { type: ObjectId },
-  fullName: { type: String, require: true },
-  account: { type: String, require: true, unique: true },
-  pwd: { type: String, require: true },
+  fullName: { type: String, required: true },
+  account: { type: String, required: true, unique: true },
+  pwd: { type: String, required: true },
   role: [{ type: String }],
   nickName: { type: String },
   personalization: personalizationSchema,

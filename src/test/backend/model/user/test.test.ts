@@ -127,16 +127,14 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            return await model.user.delete(notExistUser)
+            await model.user.delete(notExistUser)
           },
-          error: false
+          error: new NotFound('User may not exist or the id is incorrect')
         }
       ]
 
       for (const { fn, error } of func) {
-        const res = await fn()
-
-        expect(res).toBe(error)
+        await expect(fn()).rejects.toThrow(error)
       }
     })
   })

@@ -53,7 +53,7 @@ const model = {
       const result = await dbModel.deleteOne({ _id: userId })
 
       if (result.acknowledged && result.deletedCount === 1) { return true }
-      return false
+      throw new NotFound('User may not exist or the id is incorrect')
     },
     account: {
       update: async function (userId: Types.ObjectId, account: string) {

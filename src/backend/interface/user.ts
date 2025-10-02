@@ -13,3 +13,11 @@ export interface IUser {
   personalization?: IUserPersonalization | null
   refreshToken?: string[] | null
 }
+export interface IRefreshToken {
+  _id?: Types.ObjectId
+  fullName: string
+  account: string
+  role: string[]
+  nickName?: string | null
+  personalization?: IUserPersonalization | null
+}

@@ -1,7 +1,7 @@
 import { DatabaseError, DuplicateData, NotFound } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import dbModel from './../../database/schemas/node/user'
-import { IUser } from './../../interface/user'
+import { IRefreshToken, IUser } from './../../interface/user'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { Types } from 'mongoose'
@@ -11,7 +11,7 @@ const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
   user: {
-    create: async function (data: IUser): Promise<IUser> {
+    create: async function (data: IUser): Promise<IRefreshToken> {
       try {
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
         const hashedPwd = await bcrypt.hash(data.pwd, salt)

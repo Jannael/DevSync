@@ -73,6 +73,39 @@ describe('user model', () => {
             await model.user.create(obj)
           },
           error: new DatabaseError('Something went wrong while writing the user')
+        },
+        {
+          fn: async function () {
+            const obj = {
+              _id: '' as unknown as Types.ObjectId,
+              refreshToken: ['hello Dexter Morgan'],
+              fullName: 'test',
+              account: 'test',
+              pwd: 'test',
+              role: ['documenter'],
+              nickName: 'test',
+              personalization: { theme: 'test' }
+            }
+
+            await model.user.create(obj)
+          },
+          error: new UserBadRequest('You cant put the _id yourself')
+        },
+        {
+          fn: async function () {
+            const obj = {
+              refreshToken: ['hello Dexter Morgan'],
+              fullName: 'test',
+              account: 'test',
+              pwd: 'test',
+              role: ['documenter'],
+              nickName: 'test',
+              personalization: { theme: 'test' }
+            }
+
+            await model.user.create(obj)
+          },
+          error: new UserBadRequest('You cant put the refreshToken yourself')
         }
       ]
 

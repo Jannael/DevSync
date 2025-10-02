@@ -13,6 +13,9 @@ const model = {
   user: {
     create: async function (data: IUser): Promise<IRefreshToken> {
       try {
+        if (data._id !== undefined) throw new UserBadRequest('You cant put the _id yourself')
+        if (data.refreshToken !== undefined) throw new UserBadRequest('You cant put the refreshToken yourself')
+
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
         const hashedPwd = await bcrypt.hash(data.pwd, salt)
         const payload = { ...data, pwd: hashedPwd }
@@ -25,9 +28,10 @@ const model = {
 
         return user
       } catch (e: any) {
-        if (e?.code === 11000) {
-          throw new DuplicateData('This user already exists')
-        }
+        if (e?.code === 11000) throw new DuplicateData('This user already exists')
+        else if (e instanceof UserBadRequest) throw e
+        else if (e instanceof NotFound) throw e
+
         throw new DatabaseError('Something went wrong while writing the user')
       }
     },

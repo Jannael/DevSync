@@ -35,11 +35,12 @@ const model = {
     refreshToken: {
       save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
         try {
-          const user = await dbModel.findOne({ _id: userId }, {
-            fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
-          }).lean()
+          if (!Types.ObjectId.isValid(userId)) {
+            throw new UserBadRequest('Invalid user ID')
+          }
 
-          if (user === null) throw new UserBadRequest('User does not exist')
+          const exists = await dbModel.exists({ _id: userId })
+          if (exists == null) throw new UserBadRequest('User does not exist')
 
           const result = await dbModel.updateOne(
             { _id: userId },
@@ -54,11 +55,12 @@ const model = {
       },
       remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
         try {
-          const user = await dbModel.findOne({ _id: userId }, {
-            fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
-          }).lean()
+          if (!Types.ObjectId.isValid(userId)) {
+            throw new UserBadRequest('Invalid user ID')
+          }
 
-          if (user === null) throw new UserBadRequest('User does not exist')
+          const exists = await dbModel.exists({ _id: userId })
+          if (exists == null) throw new UserBadRequest('User does not exist')
 
           const result = await dbModel.updateOne(
             { _id: userId },

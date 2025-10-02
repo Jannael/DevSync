@@ -70,6 +70,12 @@ describe('auth model', () => {
               await model.auth.refreshToken.remove('', notExistUser)
             },
             error: new UserBadRequest('User does not exist')
+          },
+          {
+            fn: async function () {
+              await model.auth.refreshToken.remove('', '' as unknown as Types.ObjectId)
+            },
+            error: new UserBadRequest('Invalid user ID')
           }
         ]
 

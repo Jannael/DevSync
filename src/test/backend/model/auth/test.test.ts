@@ -62,6 +62,21 @@ describe('auth model', () => {
         const res = await model.auth.refreshToken.remove('token', user._id)
         expect(res).toBe(true)
       })
+
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.auth.refreshToken.remove('', notExistUser)
+            },
+            error: new UserBadRequest('User does not exist')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          await expect(fn()).rejects.toThrow(error)
+        }
+      })
     })
   })
 })

@@ -30,7 +30,7 @@ describe('user model', () => {
 
       userId = res._id as Types.ObjectId
 
-      expect(res).toEqual({
+      expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
         fullName: 'test',
         account: 'test',
@@ -83,7 +83,14 @@ describe('user model', () => {
         fullName: 'test1'
       }, userId)
 
-      expect(res).toBe(true)
+      expect(res).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        account: 'test',
+        fullName: 'test1',
+        nickName: 'test',
+        personalization: { theme: 'test' },
+        role: ['documenter']
+      })
     })
   })
 })

@@ -41,7 +41,7 @@ const model = {
       if (user.matchedCount === 0) throw new NotFound('User does not exist')
 
       if (user.acknowledged) {
-        return await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 })
+        return await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 }).lean()
       }
 
       return null

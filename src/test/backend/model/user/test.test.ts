@@ -121,6 +121,21 @@ describe('user model', () => {
       const res = await model.user.account.update(userId, 'test2')
       expect(res).toBe(true)
     })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.user.account.update(notExistUser, 'test')
+          },
+          error: new NotFound('User does not exist')
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        await expect(fn()).rejects.toThrow(error)
+      }
+    })
   })
 
   describe('delete user', () => {

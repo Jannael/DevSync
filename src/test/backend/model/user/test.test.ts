@@ -17,6 +17,7 @@ afterAll(async () => {
 
 describe('user model', () => {
   let userId: Types.ObjectId
+  const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
   describe('create user', () => {
     test('', async () => {
       const res = await model.user.create({
@@ -97,7 +98,7 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.update({ }, '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId)
+            await model.user.update({ }, notExistUser)
           },
           error: new NotFound('User does not exist')
         },
@@ -116,10 +117,27 @@ describe('user model', () => {
   })
 
   describe('delete user', () => {
-    test('delete user', async () => {
+    test('', async () => {
       const res = await model.user.delete(userId)
 
       expect(res).toBe(true)
+    })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await model.user.delete(notExistUser)
+          },
+          error: false
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res).toBe(error)
+      }
     })
   })
 })

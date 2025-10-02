@@ -52,7 +52,7 @@ const model = {
     delete: async function (userId: Types.ObjectId) {
       const result = await dbModel.deleteOne({ _id: userId })
 
-      if (result.acknowledged && result.deletedCount !== 0) return true
+      if (result.acknowledged && result.deletedCount === 1) { return true }
       return false
     },
     account: {

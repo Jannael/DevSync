@@ -135,7 +135,15 @@ describe('user model', () => {
   describe('update user account', () => {
     test('', async () => {
       const res = await model.user.account.update(userId, 'test2')
-      expect(res).toBe(true)
+
+      expect(res).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        fullName: 'test1',
+        account: 'test2',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
     })
 
     test('error', async () => {

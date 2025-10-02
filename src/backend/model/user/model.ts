@@ -51,18 +51,20 @@ const model = {
 
       throw new NotFound('User does not exist')
     },
-    delete: async function (userId: Types.ObjectId) {
+    delete: async function (userId: Types.ObjectId): Promise<boolean> {
       const result = await dbModel.deleteOne({ _id: userId })
 
       if (result.acknowledged && result.deletedCount === 1) { return true }
       throw new NotFound('User may not exist or the id is incorrect')
     },
     account: {
-      update: async function (userId: Types.ObjectId, account: string) {
+      update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
         const response = await dbModel.updateOne({ _id: userId }, { account })
         if (response.matchedCount === 0) throw new NotFound('User does not exist')
 
-        return response.acknowledged
+        const user = await dbModel.findOne({ _id: userId }, { refreshToken: 0, pwd: 0 }).lean()
+        if (user === null) throw new NotFound('User does not exist')
+        return user
       }
     }
   }

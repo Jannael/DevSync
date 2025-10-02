@@ -116,8 +116,10 @@ describe('user model', () => {
   })
 
   describe('delete user', () => {
-    test('delete user', () => {
-      expect(true).toBe(true)
+    test('delete user', async () => {
+      const res = await model.user.delete(userId)
+
+      expect(res).toBe(true)
     })
   })
 })

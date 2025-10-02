@@ -14,7 +14,7 @@ export interface IUser {
   refreshToken?: string[] | null
 }
 export interface IRefreshToken {
-  _id?: Types.ObjectId
+  _id?: Types.ObjectId | null
   fullName: string
   account: string
   role: string[]

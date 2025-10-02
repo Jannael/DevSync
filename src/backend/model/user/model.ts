@@ -39,9 +39,10 @@ const model = {
 
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('User does not exist')
+      const refreshToken = await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 }).lean()
 
-      if (user.acknowledged) {
-        return await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 }).lean()
+      if (user.acknowledged && refreshToken !== null) {
+        return refreshToken
       }
 
       throw new NotFound('User does not exist')

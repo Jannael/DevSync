@@ -2,7 +2,7 @@ import { DatabaseError, DuplicateData } from '../../../../backend/error/error'
 import { IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
 import dotenv from 'dotenv'
-import mongoose from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 
 dotenv.config({ quiet: true })
 
@@ -16,6 +16,7 @@ afterAll(async () => {
 })
 
 describe('user model', () => {
+  let userId: Types.ObjectId
   describe('create user', () => {
     test('', async () => {
       const res = await model.user.create({
@@ -27,7 +28,10 @@ describe('user model', () => {
         personalization: { theme: 'test' }
       })
 
+      userId = res._id as Types.ObjectId
+
       expect(res).toEqual({
+        _id: expect.any(Types.ObjectId),
         fullName: 'test',
         account: 'test',
         role: ['documenter'],
@@ -70,6 +74,16 @@ describe('user model', () => {
       for (const { fn, error } of func) {
         await expect(fn()).rejects.toThrow(error)
       }
+    })
+  })
+
+  describe('update user', () => {
+    test('', async () => {
+      const res = await model.user.update({
+        fullName: 'test1'
+      }, userId)
+
+      expect(res).toBe(true)
     })
   })
 })

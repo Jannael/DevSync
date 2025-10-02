@@ -1,13 +1,15 @@
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
+import { IEnv } from '../../../../backend/interface/env'
 import { IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
 import dotenv from 'dotenv'
 import mongoose, { Types } from 'mongoose'
 
 dotenv.config({ quiet: true })
+const { DBURL_ENV_TEST } = process.env as Pick<IEnv, 'DBURL_ENV_TEST'>
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/testDB')
+  await mongoose.connect(DBURL_ENV_TEST)
 })
 
 afterAll(async () => {
@@ -18,6 +20,7 @@ afterAll(async () => {
 describe('user model', () => {
   let userId: Types.ObjectId
   const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
+
   describe('create user', () => {
     test('', async () => {
       const res = await model.user.create({

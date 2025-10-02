@@ -2,6 +2,7 @@ import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../..
 import { IEnv } from '../../../../backend/interface/env'
 import { IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
+import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
 import mongoose, { Types } from 'mongoose'
 
@@ -13,7 +14,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await mongoose.connection.dropDatabase()
+  await dbModel.deleteMany({})
   await mongoose.connection.close()
 })
 

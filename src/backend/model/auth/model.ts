@@ -1,7 +1,7 @@
 import dbModel from './../../database/schemas/node/user'
 import bcrypt from 'bcrypt'
 import { IRefreshToken } from '../../interface/user'
-import { NotFound, UserBadRequest } from '../../error/error'
+import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
 
 const model = {
@@ -34,32 +34,42 @@ const model = {
   auth: {
     refreshToken: {
       save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
-        const user = await dbModel.findOne({ _id: userId }, {
-          fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
-        }).lean()
+        try {
+          const user = await dbModel.findOne({ _id: userId }, {
+            fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
+          }).lean()
 
-        if (user === null) throw new UserBadRequest('User does not exist')
+          if (user === null) throw new UserBadRequest('User does not exist')
 
-        const result = await dbModel.updateOne(
-          { _id: userId },
-          { $push: { refreshToken: token } }
-        )
+          const result = await dbModel.updateOne(
+            { _id: userId },
+            { $push: { refreshToken: token } }
+          )
 
-        return result.matchedCount === 1 && result.modifiedCount === 1
+          return result.matchedCount === 1 && result.modifiedCount === 1
+        } catch (e) {
+          if (e instanceof UserBadRequest) throw e
+          throw new DatabaseError('something went wrong please try again')
+        }
       },
       remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
-        const user = await dbModel.findOne({ _id: userId }, {
-          fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
-        }).lean()
+        try {
+          const user = await dbModel.findOne({ _id: userId }, {
+            fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
+          }).lean()
 
-        if (user === null) throw new UserBadRequest('User does not exist')
+          if (user === null) throw new UserBadRequest('User does not exist')
 
-        const result = await dbModel.updateOne(
-          { _id: userId },
-          { $pull: { refreshToken: token } }
-        )
+          const result = await dbModel.updateOne(
+            { _id: userId },
+            { $pull: { refreshToken: token } }
+          )
 
-        return result.matchedCount === 1 && result.modifiedCount === 1
+          return result.matchedCount === 1 && result.modifiedCount === 1
+        } catch (e) {
+          if (e instanceof UserBadRequest) throw e
+          throw new DatabaseError('something went wrong please try again')
+        }
       }
     }
   }

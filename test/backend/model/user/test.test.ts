@@ -18,56 +18,58 @@ afterAll(async () => {
 })
 
 describe('user model', () => {
-  test('create user', async () => {
-    const res = await model.user.create({
-      fullName: 'test',
-      account: 'test',
-      pwd: 'test',
-      role: [ 'documenter' ],
-      nickName: 'test',
-      personalization: { theme: 'test' }
-    })
-
-    expect(res).toEqual({
+  describe('create user', () => {
+    test('', async () => {
+      const res = await model.user.create({
         fullName: 'test',
         account: 'test',
+        pwd: 'test',
         role: [ 'documenter' ],
         nickName: 'test',
-        personalization: { theme: 'test' }  
+        personalization: { theme: 'test' }
+      })
+  
+      expect(res).toEqual({
+          fullName: 'test',
+          account: 'test',
+          role: [ 'documenter' ],
+          nickName: 'test',
+          personalization: { theme: 'test' }  
+      })
     })
-  })
-
-  test('create user errors', async () => {
-    const func = [
-      {
-        fn: async function () {
-          await model.user.create({
-            fullName: 'test',
-            account: 'test',
-            pwd: 'test',
-            role: [ 'documenter' ],
-            nickName: 'test',
-            personalization: { theme: 'test' }
-          })
+  
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.user.create({
+              fullName: 'test',
+              account: 'test',
+              pwd: 'test',
+              role: [ 'documenter' ],
+              nickName: 'test',
+              personalization: { theme: 'test' }
+            })
+          },
+          error: new DuplicateData('This user already exists')
         },
-        error: new DuplicateData('This user already exists')
-      },
-      {
-        fn: async function () {
-          await model.user.create({
-            account: 'test1',
-            pwd: 'test1',
-            role: [ 'documenter' ],
-            nickName: 'test1',
-            personalization: { theme: 'test1' }
-          } as IUser)
-        },
-        error: new DatabaseError('Something went wrong while writing the user')
+        {
+          fn: async function () {
+            await model.user.create({
+              account: 'test1',
+              pwd: 'test1',
+              role: [ 'documenter' ],
+              nickName: 'test1',
+              personalization: { theme: 'test1' }
+            } as IUser)
+          },
+          error: new DatabaseError('Something went wrong while writing the user')
+        }
+      ]
+      
+      for(const { fn, error } of func) {
+        await expect(fn()).rejects.toThrow(error)
       }
-    ]
-    
-    for(const { fn, error } of func) {
-      await expect(fn()).rejects.toThrow(error)
-    }
+    })
   })
 })

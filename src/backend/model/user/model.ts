@@ -21,7 +21,7 @@ const model = {
           { pwd: 0, refreshToken: 0 }
         ).lean()
 
-        if (user === null) throw new NotFound('User dont exist')
+        if (user === null) throw new NotFound('User do not exist')
 
         return user
       } catch (e: any) {
@@ -31,13 +31,15 @@ const model = {
         throw new DatabaseError('Something went wrong while writing the user')
       }
     },
-    update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: Types.ObjectId): Promise<IRefreshToken> {
+    update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
       if (data.pwd !== undefined) {
         const pwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
         data.pwd = pwd
       }
 
       if (data.account !== undefined) throw new UserBadRequest('You need to use the endpoint for account change')
+      if (data._id !== undefined) throw new UserBadRequest('You cant change the _id field')
+      if (data.refreshToken !== undefined) throw new UserBadRequest('You cant change the refreshToken field')
 
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('User does not exist')

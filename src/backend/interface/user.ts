@@ -13,11 +13,7 @@ export interface IUser {
   personalization?: IUserPersonalization | null
   refreshToken?: string[] | null
 }
-export interface IRefreshToken {
-  _id?: Types.ObjectId | null
-  fullName: string
-  account: string
-  role: string[]
-  nickName?: string | null
-  personalization?: IUserPersonalization | null
+
+export interface IRefreshToken extends Omit<IUser, 'refreshToken' | 'pwd'> {
+  _id: Types.ObjectId
 }

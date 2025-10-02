@@ -33,7 +33,7 @@ describe('user model', () => {
         personalization: { theme: 'test' }
       })
 
-      userId = res._id as Types.ObjectId
+      userId = res._id
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
@@ -111,6 +111,18 @@ describe('user model', () => {
             await model.user.update({ account: 'test' }, userId)
           },
           error: new UserBadRequest('You need to use the endpoint for account change')
+        },
+        {
+          fn: async function () {
+            await model.user.update({ _id: notExistUser }, userId)
+          },
+          error: new UserBadRequest('You cant change the _id field')
+        },
+        {
+          fn: async function () {
+            await model.user.update({ refreshToken: ['hello Dexter Morgan'] }, userId)
+          },
+          error: new UserBadRequest('You cant change the refreshToken field')
         }
       ]
 

@@ -1,6 +1,6 @@
 import dbModel from './../../database/schemas/node/user'
 import bcrypt from 'bcrypt'
-import { IUser } from '../../interface/user'
+import { IRefreshToken } from '../../interface/user'
 import { NotFound, UserBadRequest } from '../../error/error'
 import { Schema } from 'mongoose'
 
@@ -21,14 +21,18 @@ const model = {
         return false
       }
     },
-    login: async function (account: string, pwd: string): Promise<IUser> {
-      const user = await dbModel.findOne({ account })
+    login: async function (account: string, pwd: string): Promise<IRefreshToken> {
+      const user = await dbModel.findOne(
+        { account },
+        { refreshToken: 0, pwd: 0 }
+      ).lean()
+
       if (user === null) { throw new NotFound('User not found') }
 
-      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd as string)
+      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
       if (!pwdIsCorrect) { throw new UserBadRequest('Incorrect password') }
 
-      return user as IUser
+      return user
     }
   },
   auth: {

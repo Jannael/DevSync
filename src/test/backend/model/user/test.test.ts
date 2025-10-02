@@ -116,6 +116,13 @@ describe('user model', () => {
     })
   })
 
+  describe('update user account', () => {
+    test('', async () => {
+      const res = await model.user.account.update(userId, 'test2')
+      expect(res).toBe(true)
+    })
+  })
+
   describe('delete user', () => {
     test('', async () => {
       const res = await model.user.delete(userId)

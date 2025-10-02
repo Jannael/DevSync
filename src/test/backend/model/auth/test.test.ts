@@ -40,6 +40,7 @@ describe('auth model', () => {
         const res = await model.auth.refreshToken.save('token', user._id)
         expect(res).toBe(true)
       })
+
       test('error', async () => {
         const func = [
           {
@@ -57,7 +58,10 @@ describe('auth model', () => {
     })
 
     describe('remove refreshToken', () => {
-
+      test('', async () => {
+        const res = await model.auth.refreshToken.remove('token', user._id)
+        expect(res).toBe(true)
+      })
     })
   })
 })

@@ -44,18 +44,22 @@ const model = {
           { _id: userId },
           { $push: { refreshToken: token } }
         )
+
         return result.matchedCount === 1 && result.modifiedCount === 1
       },
       remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
-        try {
-          await dbModel.updateOne(
-            { _id: userId },
-            { $pull: { refreshToken: token } }
-          )
-          return true
-        } catch {
-          return false
-        }
+        const user = await dbModel.findOne({ _id: userId }, {
+          fullName: 0, account: 0, pwd: 0, role: 0, nickName: 0, personalization: 0, refreshToken: 0
+        }).lean()
+
+        if (user === null) throw new UserBadRequest('User does not exist')
+
+        const result = await dbModel.updateOne(
+          { _id: userId },
+          { $pull: { refreshToken: token } }
+        )
+
+        return result.matchedCount === 1 && result.modifiedCount === 1
       }
     }
   }

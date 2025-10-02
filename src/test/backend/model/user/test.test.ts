@@ -1,4 +1,4 @@
-import { DatabaseError, DuplicateData } from '../../../../backend/error/error'
+import { DatabaseError, DuplicateData, NotFound } from '../../../../backend/error/error'
 import { IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
 import dotenv from 'dotenv'
@@ -91,6 +91,21 @@ describe('user model', () => {
         personalization: { theme: 'test' },
         role: ['documenter']
       })
+    })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.user.update({ }, '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId)
+          },
+          error: new NotFound('User does not exist')
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        await expect(fn()).rejects.toThrow(error)
+      }
     })
   })
 })

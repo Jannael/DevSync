@@ -1,4 +1,4 @@
-import { DatabaseError, DuplicateData, NotFound } from '../../../../backend/error/error'
+import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
 import { IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
 import dotenv from 'dotenv'
@@ -100,12 +100,24 @@ describe('user model', () => {
             await model.user.update({ }, '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId)
           },
           error: new NotFound('User does not exist')
+        },
+        {
+          fn: async function () {
+            await model.user.update({ account: 'test' }, userId)
+          },
+          error: new UserBadRequest('You need to use the endpoint for account change')
         }
       ]
 
       for (const { fn, error } of func) {
         await expect(fn()).rejects.toThrow(error)
       }
+    })
+  })
+
+  describe('delete user', () => {
+    test('delete user', () => {
+      expect(true).toBe(true)
     })
   })
 })

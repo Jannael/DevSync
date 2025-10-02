@@ -1,4 +1,4 @@
-import { DatabaseError, DuplicateData, NotFound } from '../../error/error'
+import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import dbModel from './../../database/schemas/node/user'
 import { IRefreshToken, IUser } from './../../interface/user'
@@ -36,6 +36,8 @@ const model = {
         const pwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
         data.pwd = pwd
       }
+
+      if (data.account !== undefined) throw new UserBadRequest('You need to use the endpoint for account change')
 
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('User does not exist')

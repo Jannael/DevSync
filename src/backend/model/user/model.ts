@@ -31,7 +31,7 @@ const model = {
         throw new DatabaseError('Something went wrong while writing the user')
       }
     },
-    update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: Types.ObjectId): Promise<boolean> {
+    update: async function (data: Partial<Omit<IUser, '_id' | 'refreshToken'>>, userId: Types.ObjectId): Promise<IRefreshToken | null> {
       if (data.pwd !== undefined) {
         const pwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
         data.pwd = pwd
@@ -40,7 +40,11 @@ const model = {
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('User does not exist')
 
-      return user.acknowledged
+      if (user.acknowledged) {
+        return await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 })
+      }
+
+      return null
     },
     delete: async function (userId: Types.ObjectId) {
       const result = await dbModel.deleteOne({ _id: userId })

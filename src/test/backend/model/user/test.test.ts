@@ -1,12 +1,10 @@
-import { DatabaseError, DuplicateData } from '../../../../src/backend/error/error'
-import { IEnv } from '../../../../src/backend/interface/env'
-import { IUser } from '../../../../src/backend/interface/user'
-import model from './../../../../src/backend/model/user/model'
+import { DatabaseError, DuplicateData } from '../../../../backend/error/error'
+import { IUser } from '../../../../backend/interface/user'
+import model from '../../../../backend/model/user/model'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 dotenv.config({ quiet: true })
-const { DBURL_ENV_TEST } = process.env as Pick<IEnv, 'DBURL_ENV_TEST'>
 
 beforeAll(async () => {
   await mongoose.connect('mongodb://127.0.0.1:27017/testDB')
@@ -24,20 +22,20 @@ describe('user model', () => {
         fullName: 'test',
         account: 'test',
         pwd: 'test',
-        role: [ 'documenter' ],
+        role: ['documenter'],
         nickName: 'test',
         personalization: { theme: 'test' }
       })
-  
+
       expect(res).toEqual({
-          fullName: 'test',
-          account: 'test',
-          role: [ 'documenter' ],
-          nickName: 'test',
-          personalization: { theme: 'test' }  
+        fullName: 'test',
+        account: 'test',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
       })
     })
-  
+
     test('error', async () => {
       const func = [
         {
@@ -46,7 +44,7 @@ describe('user model', () => {
               fullName: 'test',
               account: 'test',
               pwd: 'test',
-              role: [ 'documenter' ],
+              role: ['documenter'],
               nickName: 'test',
               personalization: { theme: 'test' }
             })
@@ -55,19 +53,21 @@ describe('user model', () => {
         },
         {
           fn: async function () {
-            await model.user.create({
+            const obj = {
               account: 'test1',
               pwd: 'test1',
-              role: [ 'documenter' ],
+              role: ['documenter'],
               nickName: 'test1',
               personalization: { theme: 'test1' }
-            } as IUser)
+            } as unknown as IUser
+
+            await model.user.create(obj)
           },
           error: new DatabaseError('Something went wrong while writing the user')
         }
       ]
-      
-      for(const { fn, error } of func) {
+
+      for (const { fn, error } of func) {
         await expect(fn()).rejects.toThrow(error)
       }
     })

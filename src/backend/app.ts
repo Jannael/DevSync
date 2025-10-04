@@ -23,8 +23,8 @@ export async function createApp (): Promise<express.Express> {
   app.use(cookieParser())
   app.use(middleware.Header)
 
-  app.use('auth/v1/', router.auth)
-  app.use('user/v1/', router.user)
+  app.use('/auth/v1/', router.auth)
+  app.use('/user/v1/', router.user)
   app.use('/utils/v1/', router.utils)
 
   return app

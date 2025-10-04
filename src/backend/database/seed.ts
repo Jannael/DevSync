@@ -3,10 +3,10 @@ import dotenv from 'dotenv'
 import { IEnv } from '../interface/env'
 
 dotenv.config({ quiet: true })
-const { DBURL_ENV } = process.env as Pick<IEnv, 'DBURL_ENV'>
+const { DB_URL_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV'>
 
 async function seed (): Promise<void> {
-  await mongoose.connect(DBURL_ENV)
+  await mongoose.connect(DB_URL_ENV)
 }
 
 seed()

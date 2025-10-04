@@ -15,9 +15,9 @@ import { Schema } from 'mongoose'
 import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
-'JWT_ACCESSTOKEN_ENV' |
-'JWT_REFRESHTOKEN_ENV' |
+const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+'JWT_ACCESS_TOKEN_ENV' |
+'JWT_REFRESH_TOKEN_ENV' |
 'JWT_AUTH_ENV'>
 const { ObjectId } = Schema.Types
 
@@ -36,11 +36,11 @@ const functions = {
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
 
-      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESHTOKEN_ENV) as IUser
+      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV) as IUser
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as typeof ObjectId)
       if (!dbValidation) { return { complete: false } }
 
-      const accessToken = jwt.sign(refreshToken, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return { complete: true }
     },
@@ -49,8 +49,8 @@ const functions = {
 
       const user = (await model.verify.login(req.body.account, req.body.pwd))
 
-      const refreshToken = jwt.sign(user, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
-      const accessToken = jwt.sign(user, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
+      const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
 
       const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id as typeof ObjectId)
       if (!saveRefreshToken) { throw new DatabaseError('Something went wrong please try again') }
@@ -81,7 +81,7 @@ const functions = {
           req.body.newAccount === undefined
         ) throw new UserBadRequest('Not authorized')
 
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
         if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
         const code = generateCode()
@@ -108,11 +108,11 @@ const functions = {
           req.cookies.accessToken === undefined ||
           req.body.codeCurrentAccount === undefined ||
           req.body.codeNewAccount === undefined
-        ) throw new UserBadRequest('You need to ask for verificaction codes')
+        ) throw new UserBadRequest('You need to ask for verification codes')
 
         const { code } = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
         const codeNewAccount = jwt.verify(req.cookies.newAccount, JWT_AUTH_ENV) as JwtPayload
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
 
         if (typeof code === 'string' ||
           typeof codeNewAccount === 'string' ||

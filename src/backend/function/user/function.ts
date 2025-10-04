@@ -13,9 +13,9 @@ import { UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESSTOKEN_ENV, JWT_REFRESHTOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
-'JWT_ACCESSTOKEN_ENV' |
-'JWT_REFRESHTOKEN_ENV' |
+const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+'JWT_ACCESS_TOKEN_ENV' |
+'JWT_REFRESH_TOKEN_ENV' |
 'JWT_AUTH_ENV'>
 
 const functions = {
@@ -23,7 +23,7 @@ const functions = {
     get: async function (req: Request, res: Response) {
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Missing accessToken')
 
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
 
       if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
@@ -44,8 +44,8 @@ const functions = {
 
       const result = await model.user.create(data)
 
-      const refreshToken = jwt.sign(result, JWT_REFRESHTOKEN_ENV, config.jwt.refreshToken as SignOptions)
-      const accessToken = jwt.sign(result, JWT_ACCESSTOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const refreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
+      const accessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
@@ -61,7 +61,7 @@ const functions = {
       ) throw new UserBadRequest('Not authorized')
 
       const accountCookie = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
 
       if (typeof accountCookie === 'string' ||
         typeof accessToken === 'string'
@@ -80,7 +80,7 @@ const functions = {
         req.cookies.accessToken === undefined
       ) throw new UserBadRequest('Account not verifed')
 
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV) as JwtPayload
+      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
       const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
 
       if (typeof accessToken === 'string' ||
@@ -97,7 +97,7 @@ const functions = {
           req.cookies.newAccount_account === undefined
         ) throw new UserBadRequest('Not authorized')
 
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESSTOKEN_ENV)
+        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
         const newAccount = jwt.verify(req.cookies.newAccount_account, JWT_AUTH_ENV) as string
 
         if (typeof accessToken === 'string' ||

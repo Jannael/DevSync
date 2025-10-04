@@ -7,10 +7,10 @@ import dotenv from 'dotenv'
 import mongoose, { Types } from 'mongoose'
 
 dotenv.config({ quiet: true })
-const { DBURL_ENV_TEST } = process.env as Pick<IEnv, 'DBURL_ENV_TEST'>
+const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
 
 beforeAll(async () => {
-  await mongoose.connect(DBURL_ENV_TEST)
+  await mongoose.connect(DB_URL_ENV_TEST)
 })
 
 afterAll(async () => {

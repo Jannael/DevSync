@@ -182,12 +182,12 @@ describe('user model', () => {
 
   describe('update user account', () => {
     test('', async () => {
-      const res = await model.user.account.update(userId, 'test2')
+      const res = await model.user.account.update(userId, 'test2@gmail.com')
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
         fullName: 'test1',
-        account: 'test2',
+        account: 'test2@gmail.com',
         role: ['documenter'],
         nickName: 'test',
         personalization: { theme: 'test' }
@@ -198,9 +198,15 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.account.update(notExistUser, 'test')
+            await model.user.account.update(notExistUser, 'test@gmail.com')
           },
           error: new NotFound('User does not exist')
+        },
+        {
+          fn: async function () {
+            await model.user.account.update(userId, 'test')
+          },
+          error: new UserBadRequest('Invalid account it must match example@service.ext')
         }
       ]
 

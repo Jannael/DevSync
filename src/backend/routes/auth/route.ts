@@ -12,4 +12,4 @@ router.post('/request/refreshToken', controller.request.refreshToken)
 router.patch('/account/request/code', controller.account.request.code)
 router.patch('/account/verify/code', controller.account.verify.code)
 
-export default { auth: { router } }
+export default router

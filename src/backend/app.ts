@@ -1,10 +1,27 @@
 import express from 'express'
-import cookiePaser from 'cookie-parser'
+import cookieParser from 'cookie-parser'
+import router from './../backend/routes/merge'
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import { IEnv } from './interface/env'
+
+dotenv.config({ quiet: true })
+
+const { DB_URL_ENV } = process.env as Pick<IEnv,
+'DB_URL_ENV'
+>
 
 export async function createApp (): Promise<express.Express> {
+  await mongoose.connect(DB_URL_ENV)
+    .then(() => console.log('connected to mongoose'))
+    .catch(e => console.error('something went wrong connecting to mongoose', e))
+
   const app = express()
   app.use(express.json())
-  app.use(cookiePaser())
+  app.use(cookieParser())
+
+  app.use('auth/v1/', router.auth)
+  app.use('user/v1/', router.user)
 
   return app
 }

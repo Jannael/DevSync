@@ -4,6 +4,7 @@ import router from './../backend/routes/merge'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import { IEnv } from './interface/env'
+import middleware from './middleware/merge'
 
 dotenv.config({ quiet: true })
 
@@ -20,6 +21,7 @@ export async function createApp (): Promise<express.Express> {
 
   app.use(express.json())
   app.use(cookieParser())
+  app.use(middleware.Header)
 
   app.use('auth/v1/', router.auth)
   app.use('user/v1/', router.user)

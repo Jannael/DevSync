@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import dbModel from '../../../../backend/database/schemas/node/user'
 import { IEnv } from '../../../../backend/interface/env'
 import { IRefreshToken } from '../../../../backend/interface/user'
-import { UserBadRequest } from '../../../../backend/error/error'
+import { NotFound, UserBadRequest } from '../../../../backend/error/error'
 
 dotenv.config({ quiet: true })
 const { DBURL_ENV_TEST } = process.env as Pick<IEnv, 'DBURL_ENV_TEST'>
@@ -99,7 +99,24 @@ describe('auth model', () => {
     })
 
     test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.verify.refreshToken('token', notExistUser)
+          },
+          error: new NotFound('User do not found check the _id')
+        },
+        {
+          fn: async function () {
+            await model.verify.refreshToken('token', 'invalid' as unknown as Types.ObjectId)
+          },
+          error: new UserBadRequest('Invalid user ID')
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        await expect(fn()).rejects.toThrow(error)
+      }
     })
   })
 

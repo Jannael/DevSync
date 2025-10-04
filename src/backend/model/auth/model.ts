@@ -7,6 +7,10 @@ import { Types } from 'mongoose'
 const model = {
   verify: {
     refreshToken: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid user ID')
+      }
+
       const result = await dbModel.findOne(
         { _id: userId },
         { refreshToken: 1, _id: 0 }

@@ -85,4 +85,31 @@ describe('auth model', () => {
       })
     })
   })
+
+  describe('verify refreshToken', () => {
+    test('', async () => {
+      // first we save the token to verify it
+      const save = await model.auth.refreshToken.save('token', user._id)
+      expect(save).toBe(true)
+
+      const res = await model.verify.refreshToken('token', user._id)
+      expect(res).toBe(true)
+
+      await model.auth.refreshToken.remove('token', user._id)
+    })
+
+    test('error', async () => {
+
+    })
+  })
+
+  describe('verify login', () => {
+    test('', async () => {
+
+    })
+
+    test('error', async () => {
+
+    })
+  })
 })

@@ -12,7 +12,7 @@ const model = {
         { refreshToken: 1, _id: 0 }
       ).lean()
 
-      console.log(result)
+      if (result === null) throw new NotFound('User do not found check the _id')
 
       const tokens = result?.refreshToken
       return Array.isArray(tokens) && tokens.includes(token)

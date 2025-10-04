@@ -22,7 +22,7 @@ const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.en
 
 const functions = {
   request: {
-    code: async function (req: Request, res: Response): Promise<{ complete: boolean, error?: Error }> {
+    code: async function (req: Request, res: Response): Promise<boolean> {
       if (req.body.account === undefined) throw new UserBadRequest('Missing account')
 
       const code = generateCode()
@@ -30,7 +30,7 @@ const functions = {
 
       const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('code', codeHash, config.cookies.code)
-      return { complete: true }
+      return true
     },
     accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')

@@ -1,5 +1,5 @@
-import Header from './header'
+import header from './header'
 
 export default {
-  Header
+  header
 }

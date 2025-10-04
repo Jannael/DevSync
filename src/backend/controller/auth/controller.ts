@@ -7,8 +7,9 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await fn.request.code(req, res)
-        if (result.complete) res.json({ complete: true })
+        if (result) res.json({ complete: true })
       } catch (e) {
+        console.log('error', e)
         ErrorHandler.user(res, e as Error)
       }
     },

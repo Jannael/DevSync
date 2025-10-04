@@ -21,7 +21,7 @@ export async function createApp (): Promise<express.Express> {
 
   app.use(express.json())
   app.use(cookieParser())
-  app.use(middleware.Header)
+  app.use(middleware.header)
 
   app.use('/auth/v1/', router.auth)
   app.use('/user/v1/', router.user)

@@ -2,6 +2,11 @@ import { createApp } from '../../../../backend/app'
 import { Express } from 'express'
 import request from 'supertest'
 import { Server } from 'node:http'
+import mongoose from 'mongoose'
+
+afterAll(async () => {
+  await mongoose.connection.close()
+})
 
 describe('auth router', () => {
   let app: Express

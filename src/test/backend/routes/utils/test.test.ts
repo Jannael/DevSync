@@ -21,13 +21,10 @@ describe('auth router', () => {
     server.close()
   })
 
-  describe('request/code', () => {
-    test('', async () => {
-
-    })
-
-    test('error', async () => {
-
+  describe('utils', () => {
+    test('health checker', async () => {
+      const res = await request(server).get('/utils/v1/healthChecker/')
+      expect(res.body).toStrictEqual({ ok: 1 })
     })
   })
 })

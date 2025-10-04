@@ -67,6 +67,9 @@ const model = {
     },
     account: {
       update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
+        const isValidAccount = verifyEmail(account)
+        if (!isValidAccount) throw new UserBadRequest('Invalid account it must match example@service.ext')
+
         const response = await dbModel.updateOne({ _id: userId }, { account })
         if (response.matchedCount === 0) throw new NotFound('User does not exist')
 

@@ -11,7 +11,7 @@ import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
-import { Schema } from 'mongoose'
+import { Types } from 'mongoose'
 import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
@@ -19,7 +19,6 @@ const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.en
 'JWT_ACCESS_TOKEN_ENV' |
 'JWT_REFRESH_TOKEN_ENV' |
 'JWT_AUTH_ENV'>
-const { ObjectId } = Schema.Types
 
 const functions = {
   request: {
@@ -37,7 +36,7 @@ const functions = {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
 
       const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV) as IUser
-      const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as typeof ObjectId)
+      const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
       if (!dbValidation) { return { complete: false } }
 
       const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
@@ -52,7 +51,7 @@ const functions = {
       const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
       const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
 
-      const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id as typeof ObjectId)
+      const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id)
       if (!saveRefreshToken) { throw new DatabaseError('Something went wrong please try again') }
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)

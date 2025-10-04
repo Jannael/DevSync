@@ -29,14 +29,14 @@ const model = {
       const user = await dbModel.findOne(
         { account },
         { refreshToken: 0 }
-      ).lean() as Partial<IUser>
+      ).lean()
 
       if (user === null) { throw new NotFound('User not found') }
 
-      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd as string)
+      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
       if (!pwdIsCorrect) { throw new UserBadRequest('Incorrect password') }
 
-      delete user.pwd
+      delete (user as Partial<IUser>).pwd
 
       return user as IRefreshToken
     }

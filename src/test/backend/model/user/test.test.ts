@@ -26,7 +26,7 @@ describe('user model', () => {
     test('', async () => {
       const res = await model.user.create({
         fullName: 'test',
-        account: 'test',
+        account: 'test@gmail.com',
         pwd: 'test',
         role: ['documenter'],
         nickName: 'test',
@@ -38,7 +38,7 @@ describe('user model', () => {
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
         fullName: 'test',
-        account: 'test',
+        account: 'test@gmail.com',
         role: ['documenter'],
         nickName: 'test',
         personalization: { theme: 'test' }
@@ -51,7 +51,7 @@ describe('user model', () => {
           fn: async function () {
             await model.user.create({
               fullName: 'test',
-              account: 'test',
+              account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
               nickName: 'test',
@@ -63,7 +63,7 @@ describe('user model', () => {
         {
           fn: async function () {
             const obj = {
-              account: 'test1',
+              account: 'test1@gmail.com',
               pwd: 'test1',
               role: ['documenter'],
               nickName: 'test1',
@@ -80,7 +80,7 @@ describe('user model', () => {
               _id: '' as unknown as Types.ObjectId,
               refreshToken: ['hello Dexter Morgan'],
               fullName: 'test',
-              account: 'test',
+              account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
               nickName: 'test',
@@ -96,7 +96,7 @@ describe('user model', () => {
             const obj = {
               refreshToken: ['hello Dexter Morgan'],
               fullName: 'test',
-              account: 'test',
+              account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
               nickName: 'test',
@@ -123,7 +123,7 @@ describe('user model', () => {
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
-        account: 'test',
+        account: 'test@gmail.com',
         fullName: 'test1',
         nickName: 'test',
         personalization: { theme: 'test' },

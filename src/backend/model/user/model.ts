@@ -1,5 +1,6 @@
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
+import { verifyEmail } from '../../utils/utils'
 import dbModel from './../../database/schemas/node/user'
 import { IRefreshToken, IUser } from './../../interface/user'
 import bcrypt from 'bcrypt'
@@ -15,6 +16,9 @@ const model = {
       try {
         if (data._id !== undefined) throw new UserBadRequest('You cant put the _id yourself')
         if (data.refreshToken !== undefined) throw new UserBadRequest('You cant put the refreshToken yourself')
+
+        const isValidAccount = verifyEmail(data.account)
+        if (!isValidAccount) throw new UserBadRequest('Invalid account it must match example@service.ext')
 
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
         const hashedPwd = await bcrypt.hash(data.pwd, salt)

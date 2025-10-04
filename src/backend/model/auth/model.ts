@@ -31,10 +31,10 @@ const model = {
         { refreshToken: 0 }
       ).lean()
 
-      if (user === null) { throw new NotFound('User not found') }
+      if (user === null) throw new NotFound('User not found')
 
       const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
-      if (!pwdIsCorrect) { throw new UserBadRequest('Incorrect password') }
+      if (!pwdIsCorrect) throw new UserBadRequest('Incorrect password')
 
       delete (user as Partial<IUser>).pwd
 

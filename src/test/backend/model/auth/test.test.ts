@@ -135,7 +135,30 @@ describe('auth model', () => {
     })
 
     test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.verify.login('account', 'pwd')
+          },
+          error: new UserBadRequest('Invalid account it must match example@service.ext')
+        },
+        {
+          fn: async function () {
+            await model.verify.login('account@gmail.com', 'pwd')
+          },
+          error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            await model.verify.login('test@email.com', 'pwd')
+          },
+          error: new UserBadRequest('Incorrect password')
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        await expect(fn()).rejects.toThrow(error)
+      }
     })
   })
 })

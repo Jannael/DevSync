@@ -17,11 +17,13 @@ export async function createApp (): Promise<express.Express> {
     .catch(e => console.error('something went wrong connecting to mongoose', e))
 
   const app = express()
+
   app.use(express.json())
   app.use(cookieParser())
 
   app.use('auth/v1/', router.auth)
   app.use('user/v1/', router.user)
-  
+  app.use('/utils/v1/', router.utils)
+
   return app
 }

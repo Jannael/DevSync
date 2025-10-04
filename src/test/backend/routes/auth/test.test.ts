@@ -1,14 +1,27 @@
 import { createApp } from '../../../../backend/app'
 import { Express } from 'express'
-
-let app: Express
-
-beforeAll(async () => {
-  app = await createApp()
-})
+import request from 'supertest'
+import { Server } from 'node:http'
 
 describe('auth router', () => {
-  const server = app.listen(3000)
+  let app: Express
+  let server: Server
+
+  beforeAll(async () => {
+    app = await createApp()
+    server = app.listen(3000)
+  })
+
+  afterAll(async () => {
+    server.close()
+  })
+
+  describe('utils', () => {
+    test('health checker', async () => {
+      const res = await request(server).get('/utils/v1/healthChecker/')
+      expect(res.body).toStrictEqual({ ok: 1 })
+    })
+  })
 
   describe('request/code', () => {
     test('', async () => {

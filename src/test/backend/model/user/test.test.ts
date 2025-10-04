@@ -106,6 +106,21 @@ describe('user model', () => {
             await model.user.create(obj)
           },
           error: new UserBadRequest('You cant put the refreshToken yourself')
+        },
+        {
+          fn: async function () {
+            const obj = {
+              fullName: 'test',
+              account: 'test',
+              pwd: 'test',
+              role: ['documenter'],
+              nickName: 'test',
+              personalization: { theme: 'test' }
+            }
+
+            await model.user.create(obj)
+          },
+          error: new UserBadRequest('Invalid account it must match example@service.ext')
         }
       ]
 

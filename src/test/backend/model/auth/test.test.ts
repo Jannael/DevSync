@@ -26,7 +26,7 @@ describe('auth model', () => {
   beforeAll(async () => {
     user = await userModel.user.create({
       fullName: 'test',
-      account: 'test',
+      account: 'test@email.com',
       pwd: 'test',
       role: ['documenter'],
       nickName: 'test',
@@ -122,7 +122,16 @@ describe('auth model', () => {
 
   describe('verify login', () => {
     test('', async () => {
+      const res = await model.verify.login(user.account, 'test')
 
+      expect(res).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        fullName: 'test',
+        account: 'test@email.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
     })
 
     test('error', async () => {

@@ -1,8 +1,9 @@
 import dbModel from './../../database/schemas/node/user'
 import bcrypt from 'bcrypt'
-import { IRefreshToken } from '../../interface/user'
+import { IRefreshToken, IUser } from '../../interface/user'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
+import { verifyEmail } from '../../utils/utils'
 
 const model = {
   verify: {
@@ -22,17 +23,22 @@ const model = {
       return Array.isArray(tokens) && tokens.includes(token)
     },
     login: async function (account: string, pwd: string): Promise<IRefreshToken> {
+      const isValidAccount = verifyEmail(account)
+      if (!isValidAccount) throw new UserBadRequest('Invalid account it must match example@service.ext')
+
       const user = await dbModel.findOne(
         { account },
-        { refreshToken: 0, pwd: 0 }
-      ).lean()
+        { refreshToken: 0 }
+      ).lean() as Partial<IUser>
 
       if (user === null) { throw new NotFound('User not found') }
 
-      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
+      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd as string)
       if (!pwdIsCorrect) { throw new UserBadRequest('Incorrect password') }
 
-      return user
+      delete user.pwd
+
+      return user as IRefreshToken
     }
   },
   auth: {

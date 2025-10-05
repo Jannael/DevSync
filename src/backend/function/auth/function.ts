@@ -33,9 +33,9 @@ const functions = {
         req.body?.TEST_PWD === TEST_PWD_ENV
       ) code = generateCode(req.body.TEST_PWD)
 
-      await sendEmail(req.body.account, code)
+      if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-      const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('code', codeHash, config.cookies.code)
       return true
     },
@@ -68,16 +68,19 @@ const functions = {
     }
   },
   verify: {
-    code: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+    code: async function (req: Request, res: Response): Promise<boolean> {
       if (req.body.code === undefined || req.cookies.code === undefined) throw new UserBadRequest('Missing code')
 
       const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
       if (req.body.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
+      if (req.body.account !== decodedCode.account) throw new UserBadRequest('You tried to change the account now your banned forever')
 
-      const emailHash = jwt.sign(req.body.account, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      res.clearCookie('code')
+
+      const emailHash = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('account', emailHash, config.cookies.code)
-      return { complete: true }
+      return true
     }
   },
   account: {

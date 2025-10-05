@@ -28,7 +28,7 @@ const handler = {
       status.msg = 'invalid token'
     } else if (e.name === 'NotBeforeError') {
       status.code = 403
-      status.msg = 'Token it isnt valid yet'
+      status.msg = 'Token it is not valid yet'
     }
 
     res.status(status.code).json({ complete: false, msg: status.msg })

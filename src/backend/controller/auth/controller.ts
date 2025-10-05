@@ -34,8 +34,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await fn.verify.code(req, res)
-        if (result.complete) res.json({ complete: true })
-        res.json({ complete: false })
+        if (result) res.json({ complete: true })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }

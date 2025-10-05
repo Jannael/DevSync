@@ -13,7 +13,7 @@ let agent: ReturnType<typeof request.agent>
 
 beforeAll(async () => {
   app = await createApp()
-  agent = request.agent(app)
+  agent = await request.agent(app)
 })
 
 afterAll(async () => {
@@ -31,13 +31,14 @@ describe('auth router', () => {
         })
 
       expect(res.headers['set-cookie'][0]).toMatch(/code=.* HttpOnly$/)
+      expect(res.body).toEqual({ complete: true })
     })
 
     test('error', async () => {
       const func = [
         {
           fn: async function () {
-            return await agent.post('/auth/v1/request/code')
+            return await request(app).post('/auth/v1/request/code')
               .send({
                 account: 'test'
               })
@@ -46,7 +47,7 @@ describe('auth router', () => {
         },
         {
           fn: async function () {
-            return await agent.post('/auth/v1/request/code')
+            return await request(app).post('/auth/v1/request/code')
           },
           error: { code: 400, msg: 'Missing or invalid account', complete: false }
         }
@@ -58,6 +59,25 @@ describe('auth router', () => {
         expect(res.body.complete).toEqual(error.complete)
         expect(res.body.msg).toEqual(error.msg)
       }
+    })
+  })
+
+  describe('/verify/code/', () => {
+    test('', async () => {
+      const res = await agent
+        .post('/auth/v1/verify/code')
+        .send({
+          account: 'test@gmail.com',
+          code: '1234'
+        })
+
+      expect(res.headers['set-cookie'][0]).toMatch(/code=.*GMT$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/account=.* HttpOnly$/)
+      expect(res.body).toEqual({ complete: true })
+    })
+
+    test('error', () => {
+
     })
   })
 })

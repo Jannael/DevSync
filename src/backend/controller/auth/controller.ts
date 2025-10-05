@@ -20,12 +20,17 @@ const controller = {
         ErrorHandler.user(res, e as Error)
       }
     },
-    refreshToken: async function (req: Request, res: Response) {
-      try {
-        const result = await fn.request.refreshToken(req, res)
-        if (result) res.json({ complete: true })
-      } catch (e) {
-        ErrorHandler.user(res, e as Error)
+    refreshToken: {
+      code: async function (req: Request, res: Response) {
+        try {
+          const result = await fn.request.refreshToken.code(req, res)
+          if (result) res.json({ complete: true })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
+      },
+      confirm: async function (req: Request, res: Response) {
+
       }
     }
   },

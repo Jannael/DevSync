@@ -12,7 +12,7 @@ import config from '../../config/config'
 import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
-import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
+import { ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -50,24 +50,30 @@ const functions = {
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return { complete: true }
     },
-    refreshToken: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.body?.account === undefined ||
+    refreshToken: {
+      code: async function (req: Request, res: Response): Promise<boolean> {
+        if (req.body?.account === undefined ||
         req.body?.pwd === undefined ||
         !verifyEmail(req.body?.account)
-      ) throw new UserBadRequest('Missing data')
+        ) throw new UserBadRequest('Missing data')
 
-      const user = await model.verify.login(req.body.account, req.body.pwd)
+        let code = generateCode()
+        if (req.body?.TEST_PWD !== undefined &&
+          req.body?.TEST_PWD === TEST_PWD_ENV
+        ) code = generateCode(req.body.TEST_PWD)
 
-      const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
-      const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+        const user = await model.verify.login(req.body.account, req.body.pwd)
 
-      const saveRefreshToken = await model.auth.refreshToken.save(refreshToken, user._id)
-      if (!saveRefreshToken) { throw new DatabaseError('Something went wrong please try again') }
+        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-      res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
-      res.cookie('accessToken', accessToken, config.cookies.accessToken)
+        const token = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.code as SignOptions)
+        res.cookie('token', token, config.cookies.refreshToken)
 
-      return true
+        return true
+      },
+      confirm: async function (req: Request, res: Response): Promise<boolean> {
+        return true
+      }
     }
   },
   verify: {

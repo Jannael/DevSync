@@ -7,7 +7,7 @@ router.post('/request/code/', controller.request.code)
 router.post('/verify/code/', controller.verify.code)
 
 router.get('/request/accessToken/', controller.request.accessToken)
-router.post('/request/refreshToken/code', controller.request.refreshToken.code)
+router.post('/request/refreshToken/code/', controller.request.refreshToken.code)
 router.post('/request/refreshToken/', controller.request.refreshToken.confirm)
 
 router.patch('/account/request/code/', controller.account.request.code)

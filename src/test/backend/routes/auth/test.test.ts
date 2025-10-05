@@ -182,11 +182,14 @@ describe('auth router', () => {
         .post(endpoint)
         .send({
           account: user.account,
-          pwd: 'test'
+          pwd: 'test',
+          TEST_PWD: TEST_PWD_ENV
         })
+      console.log(res.statusCode)
 
+      console.log('code', res.headers['set-cookie'])
       expect(res.headers['set-cookie'][0]).toMatch(/token=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][0]).toMatch(/code=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/code=.*HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
     })
 
@@ -253,6 +256,29 @@ describe('auth router', () => {
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
       }
+    })
+  })
+
+  describe('/request/refreshToken/', () => {
+    const endpoint = path + '/request/refreshToken'
+
+    test('', async () => {
+      const res = await agent
+        .post(endpoint)
+        .send({
+          code: '1234'
+        })
+
+      console.log(res.headers['set-cookie'])
+      expect(res.headers['set-cookie'][0]).toMatch(/token=/)
+      expect(res.headers['set-cookie'][1]).toMatch(/code=/)
+      expect(res.headers['set-cookie'][2]).toMatch(/refreshToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][3]).toMatch(/accessToken=.*HttpOnly$/)
+      expect(res.body).toEqual({ complete: true })
+    })
+
+    test('error', () => {
+
     })
   })
 

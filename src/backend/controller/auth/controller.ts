@@ -26,6 +26,7 @@ const controller = {
           const result = await fn.request.refreshToken.code(req, res)
           if (result) res.json({ complete: true })
         } catch (e) {
+          console.log('error', e)
           ErrorHandler.user(res, e as Error)
         }
       },

@@ -58,6 +58,7 @@ const functions = {
         ) throw new UserBadRequest('Missing data')
 
         let code = generateCode()
+
         if (req.body?.TEST_PWD !== undefined &&
           req.body?.TEST_PWD === TEST_PWD_ENV
         ) code = generateCode(req.body.TEST_PWD)
@@ -67,8 +68,9 @@ const functions = {
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
         const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         res.cookie('token', token, config.cookies.code)
-        res.cookie('code', code, config.cookies.code)
+        res.cookie('code', hashCode, config.cookies.code)
 
         return true
       },
@@ -79,7 +81,8 @@ const functions = {
         ) throw new UserBadRequest('You need to use MFA for login')
 
         const code = jwt.verify(req.cookies.code, JWT_AUTH_ENV)
-        if (code !== req.body.code) throw new UserBadRequest('Wrong code')
+        if (typeof code === 'string') throw new UserBadRequest('Forbidden')
+        if (code.code !== req.body.code) throw new UserBadRequest('Wrong code')
 
         const user = jwt.verify(req.cookies?.token, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Forbidden')

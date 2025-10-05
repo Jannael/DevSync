@@ -176,7 +176,6 @@ describe('auth router', () => {
 
   describe('/request/refreshToken/', () => {
     const endpoint = path + '/request/refreshToken/'
-    console.log(endpoint)
 
     test('', async () => {
       const res = await agent
@@ -185,14 +184,76 @@ describe('auth router', () => {
           account: user.account,
           pwd: 'test'
         })
-      console.log(res.headers['set-cookie'])
 
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
-    }, 10000)
+    })
 
-    test('error', async () => {})
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                account: 'test'
+              })
+          },
+          error: { complete: false, msg: 'Missing data', code: 400 }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                account: 'test@gmail.com'
+              })
+          },
+          error: { complete: false, msg: 'Missing data', code: 400 }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                account: 'test',
+                pwd: ''
+              })
+          },
+          error: { complete: false, msg: 'Missing data', code: 400 }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                account: 'test@example.com',
+                pwd: ''
+              })
+          },
+          error: { complete: false, msg: 'User not found', code: 404 }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                account: user.account,
+                pwd: '1234'
+              })
+          },
+          error: { complete: false, msg: 'Incorrect password', code: 400 }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
   })
 
   describe('/request/accessToken/', () => {

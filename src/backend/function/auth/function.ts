@@ -25,12 +25,12 @@ const functions = {
   request: {
     code: async function (req: Request, res: Response): Promise<boolean> {
       let code = generateCode()
-      if (req.body.account === undefined ||
-        !verifyEmail(req.body.account)
+      if (req.body?.account === undefined ||
+        !verifyEmail(req.body?.account)
       ) throw new UserBadRequest('Missing or invalid account')
 
-      if (req.body.TEST_PWD !== undefined &&
-        req.body.TEST_PWD === TEST_PWD_ENV
+      if (req.body?.TEST_PWD !== undefined &&
+        req.body?.TEST_PWD === TEST_PWD_ENV
       ) code = generateCode(req.body.TEST_PWD)
 
       await sendEmail(req.body.account, code)

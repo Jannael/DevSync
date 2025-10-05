@@ -43,6 +43,12 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Missing or invalid account', complete: false }
+        },
+        {
+          fn: async function () {
+            return await agent.post('/auth/v1/request/code')
+          },
+          error: { code: 400, msg: 'Missing or invalid account', complete: false }
         }
       ]
 

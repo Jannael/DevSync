@@ -174,8 +174,8 @@ describe('auth router', () => {
     })
   })
 
-  describe('/request/refreshToken/', () => {
-    const endpoint = path + '/request/refreshToken/code'
+  describe('/request/refreshToken/code', () => {
+    const endpoint = path + '/request/refreshToken/code/'
 
     test('', async () => {
       const res = await agent
@@ -186,6 +186,7 @@ describe('auth router', () => {
         })
 
       expect(res.headers['set-cookie'][0]).toMatch(/token=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/code=.*HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
     })
 

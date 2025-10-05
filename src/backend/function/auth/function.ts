@@ -66,12 +66,30 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-        const token = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.code as SignOptions)
-        res.cookie('token', token, config.cookies.refreshToken)
+        const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        res.cookie('token', token, config.cookies.code)
+        res.cookie('code', code, config.cookies.code)
 
         return true
       },
       confirm: async function (req: Request, res: Response): Promise<boolean> {
+        if (req.cookies?.token === undefined ||
+          req.cookies?.code === undefined ||
+          req.body?.code === undefined
+        ) throw new UserBadRequest('You need to use MFA for login')
+
+        const code = jwt.verify(req.cookies.code, JWT_AUTH_ENV)
+        if (code !== req.body.code) throw new UserBadRequest('Wrong code')
+
+        const user = jwt.verify(req.cookies?.token, JWT_AUTH_ENV)
+        if (typeof user === 'string') throw new UserBadRequest('Forbidden')
+
+        const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
+        const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+
+        res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
+        res.cookie('accessToken', accessToken, config.cookies.accessToken)
+
         return true
       }
     }

@@ -89,6 +89,8 @@ const functions = {
 
         res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)
+        res.clearCookie('token')
+        res.clearCookie('code')
 
         return true
       }

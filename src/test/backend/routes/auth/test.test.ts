@@ -185,9 +185,7 @@ describe('auth router', () => {
           pwd: 'test',
           TEST_PWD: TEST_PWD_ENV
         })
-      console.log(res.statusCode)
 
-      console.log('code', res.headers['set-cookie'])
       expect(res.headers['set-cookie'][0]).toMatch(/token=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/code=.*HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
@@ -269,11 +267,10 @@ describe('auth router', () => {
           code: '1234'
         })
 
-      console.log(res.headers['set-cookie'])
-      expect(res.headers['set-cookie'][0]).toMatch(/token=/)
-      expect(res.headers['set-cookie'][1]).toMatch(/code=/)
-      expect(res.headers['set-cookie'][2]).toMatch(/refreshToken=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][3]).toMatch(/accessToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/token=.*GMT$/)
+      expect(res.headers['set-cookie'][3]).toMatch(/code=.*GMT$/)
       expect(res.body).toEqual({ complete: true })
     })
 

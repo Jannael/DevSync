@@ -87,6 +87,9 @@ const functions = {
         const user = jwt.verify(req.cookies?.token, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Forbidden')
 
+        delete user.iat
+        delete user.exp
+
         const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
         const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
 

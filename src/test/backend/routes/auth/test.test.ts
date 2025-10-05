@@ -106,6 +106,25 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Invalid token', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            // first ask for the code
+            await agent
+              .post('/auth/v1/request/code')
+              .send({
+                account: 'test@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .post(endpoint)
+              .send({
+                code: '123'
+              })
+          },
+          error: { code: 400, msg: 'Wrong code', complete: false }
         }
       ]
 

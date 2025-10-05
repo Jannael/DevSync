@@ -34,7 +34,24 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await agent.post('/auth/v1/request/code')
+              .send({
+                account: 'test'
+              })
+          },
+          error: { code: 400, msg: 'Missing or invalid account', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.msg).toEqual(error.msg)
+      }
     })
   })
 })

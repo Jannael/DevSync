@@ -63,6 +63,7 @@ describe('auth router', () => {
   })
 
   describe('/verify/code/', () => {
+    const endpoint = '/auth/v1/verify/code'
     test('', async () => {
       const res = await agent
         .post('/auth/v1/verify/code')
@@ -76,8 +77,34 @@ describe('auth router', () => {
       expect(res.body).toEqual({ complete: true })
     })
 
-    test('error', () => {
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+          },
+          error: { code: 400, msg: 'Missing code', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                code: '1234'
+              })
+          },
+          error: { code: 400, msg: 'Missing code', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
     })
   })
 })

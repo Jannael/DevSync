@@ -30,7 +30,12 @@ const controller = {
         }
       },
       confirm: async function (req: Request, res: Response) {
-
+        try {
+          const result = await fn.request.refreshToken.confirm(req, res)
+          if (result) res.json({ complete: true })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     }
   },

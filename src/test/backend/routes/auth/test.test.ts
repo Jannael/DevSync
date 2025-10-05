@@ -4,6 +4,8 @@ import request from 'supertest'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import { IEnv } from '../../../../backend/interface/env'
+import userModel from './../../../../backend/model/user/model'
+import { IRefreshToken } from '../../../../backend/interface/user'
 
 dotenv.config({ quiet: true })
 const { TEST_PWD_ENV } = process.env as Pick<IEnv, 'TEST_PWD_ENV'>
@@ -21,6 +23,20 @@ afterAll(async () => {
 })
 
 describe('auth router', () => {
+  const path = '/auth/v1'
+  let user: IRefreshToken
+
+  beforeAll(async () => {
+    user = await userModel.user.create({
+      fullName: 'test',
+      account: 'test@gmail.com',
+      pwd: 'test',
+      role: ['documenter'],
+      nickName: 'test',
+      personalization: { theme: 'test' }
+    })
+  })
+
   describe('/request/code/', () => {
     test('', async () => {
       const res = await agent
@@ -64,6 +80,7 @@ describe('auth router', () => {
 
   describe('/verify/code/', () => {
     const endpoint = '/auth/v1/verify/code'
+
     test('', async () => {
       const res = await agent
         .post('/auth/v1/verify/code')
@@ -156,5 +173,32 @@ describe('auth router', () => {
         expect(res.body.complete).toEqual(error.complete)
       }
     })
+  })
+
+  describe('/request/refreshToken/', () => {
+    const endpoint = path + '/request/refreshToken/'
+
+    test('', async () => {
+      
+    })
+    test('error', async () => {})
+  })
+
+  describe('/request/accessToken/', () => {
+    const endpoint = path + '/request/accessToken/'
+    test('', async () => {})
+    test('error', async () => {})
+  })
+
+  describe('/account/request/code/', () => {
+    const endpoint = path = '/account/request/code/'
+    test('', async () => {})
+    test('error', async () => {})
+  })
+
+  describe('/account/verify/code/', () => {
+    const endpoint = path + '/account/verify/code/'
+    test('', async () => {})
+    test('error', async () => {})
   })
 })

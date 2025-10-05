@@ -25,7 +25,7 @@ const handler = {
       status.msg = 'Expired token'
     } else if (e.name === 'JsonWebTokenError') {
       status.code = 400
-      status.msg = 'invalid token'
+      status.msg = 'Invalid token'
     } else if (e.name === 'NotBeforeError') {
       status.code = 403
       status.msg = 'Token it is not valid yet'

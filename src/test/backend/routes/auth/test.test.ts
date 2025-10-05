@@ -95,6 +95,17 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Missing code', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .set('Cookie', ['code=unknown'])
+              .send({
+                code: '1234'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
         }
       ]
 

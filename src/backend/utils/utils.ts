@@ -3,7 +3,8 @@ import dotenv from 'dotenv'
 import { IEnv } from '../interface/env'
 
 dotenv.config({ quiet: true })
-const { EMAIL_ENV, PASSWORD_ENV } = process.env as Pick<IEnv, 'EMAIL_ENV' | 'PASSWORD_ENV'>
+const { EMAIL_ENV, PASSWORD_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
+'EMAIL_ENV' | 'PASSWORD_ENV' | 'TEST_PWD_ENV'>
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -21,7 +22,8 @@ export function verifyEmail (email: string): boolean {
   return true
 }
 
-export function generateCode (): string {
+export function generateCode (testPwd?: string): string {
+  if (testPwd === TEST_PWD_ENV) { return '1234' }
   return (Math.floor(Math.random() * 10000).toString().padEnd(6, '0'))
 }
 

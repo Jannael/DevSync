@@ -125,6 +125,26 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Wrong code', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            // first ask for the code
+            await agent
+              .post('/auth/v1/request/code')
+              .send({
+                account: 'test@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .post(endpoint)
+              .send({
+                account: 'test',
+                code: '1234'
+              })
+          },
+          error: { code: 400, msg: 'You tried to change the account now your banned forever', complete: false }
         }
       ]
 

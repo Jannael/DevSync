@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "pnpm jest --verbose --detectOpenHandles"
+    "test": "pnpm jest --verbose --detectOpenHandles",
+    "test:working": "pnpm jest --verbose --detectOpenHandles src/test/backend/routes/auth/test.test.ts"
   },
   "keywords": [],
   "author": "",

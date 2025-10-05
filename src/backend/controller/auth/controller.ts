@@ -23,8 +23,7 @@ const controller = {
     refreshToken: async function (req: Request, res: Response) {
       try {
         const result = await fn.request.refreshToken(req, res)
-        if (!result.complete) res.json({ complete: false })
-        res.json(result)
+        if (result) res.json({ complete: true })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }

@@ -50,10 +50,13 @@ const functions = {
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return { complete: true }
     },
-    refreshToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
-      if (req.body.account === undefined || req.body.pwd === undefined) throw new UserBadRequest('Missing data')
+    refreshToken: async function (req: Request, res: Response): Promise<boolean> {
+      if (req.body?.account === undefined ||
+        req.body?.pwd === undefined ||
+        !verifyEmail(req.body?.account)
+      ) throw new UserBadRequest('Missing data')
 
-      const user = (await model.verify.login(req.body.account, req.body.pwd))
+      const user = await model.verify.login(req.body.account, req.body.pwd)
 
       const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
       const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
@@ -64,7 +67,7 @@ const functions = {
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
 
-      return { complete: true }
+      return true
     }
   },
   verify: {

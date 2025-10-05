@@ -15,17 +15,21 @@ import { Types } from 'mongoose'
 import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
 'JWT_ACCESS_TOKEN_ENV' |
 'JWT_REFRESH_TOKEN_ENV' |
-'JWT_AUTH_ENV'>
+'JWT_AUTH_ENV' |
+'TEST_PWD_ENV'>
 
 const functions = {
   request: {
     code: async function (req: Request, res: Response): Promise<boolean> {
+      let code = generateCode()
       if (req.body.account === undefined) throw new UserBadRequest('Missing account')
+      if (req.body.TEST_PWD !== undefined && req.body.TEST_PWD === TEST_PWD_ENV) {
+        code = generateCode(req.body.TEST_PWD)
+      }
 
-      const code = generateCode()
       await sendEmail(req.body.account, code)
 
       const codeHash = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)

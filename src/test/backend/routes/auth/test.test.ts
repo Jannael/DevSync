@@ -2,6 +2,11 @@ import { createApp } from '../../../../backend/app'
 import { Express } from 'express'
 import request from 'supertest'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import { IEnv } from '../../../../backend/interface/env'
+
+dotenv.config({ quiet: true })
+const { TEST_PWD_ENV } = process.env as Pick<IEnv, 'TEST_PWD_ENV'>
 
 let app: Express
 let agent: ReturnType<typeof request.agent>
@@ -21,7 +26,8 @@ describe('auth router', () => {
       const res = await agent
         .post('/auth/v1/request/code')
         .send({
-          account: 'test@gmail.com'
+          account: 'test@gmail.com',
+          TEST_PWD: TEST_PWD_ENV
         })
 
       expect(res.headers['set-cookie'][0]).toMatch(/code=.* HttpOnly$/)

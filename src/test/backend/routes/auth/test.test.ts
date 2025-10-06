@@ -379,7 +379,44 @@ describe('auth router', () => {
       expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*HttpOnly$/)
     })
-    test('error', async () => {})
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['accessToken=token'])
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .send({
+                newAccount: 'account'
+              })
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
   })
 
   describe('/account/verify/code/', () => {

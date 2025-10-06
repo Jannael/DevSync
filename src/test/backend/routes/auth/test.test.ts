@@ -274,8 +274,36 @@ describe('auth router', () => {
       expect(res.body).toEqual({ complete: true })
     })
 
-    test('error', () => {
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                code: '1234'
+              })
+          },
+          error: { code: 400, msg: 'You need to use MFA for login', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .set('Cookie', ['code=unknown'])
+              .set('Cookie', ['token=unknown'])
+          },
+          error: { code: 400, msg: 'You need to use MFA for login', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
     })
   })
 

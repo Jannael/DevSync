@@ -61,7 +61,7 @@ const functions = {
         if (req.body?.account === undefined ||
         req.body?.pwd === undefined ||
         !verifyEmail(req.body?.account)
-        ) throw new UserBadRequest('Missing data')
+        ) throw new UserBadRequest('Missing or invalid data the account must match the following pattern example@service.ext')
 
         let code = generateCode()
 

@@ -117,7 +117,14 @@ describe('auth router', () => {
                 code: '1234'
               })
           },
-          error: { code: 400, msg: 'Missing code', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing code',
+            complete: false,
+            link: [
+              { rel: 'Missing code', href: '/auth/v1/request/code' }
+            ]
+          }
         },
         {
           fn: async function () {
@@ -215,7 +222,7 @@ describe('auth router', () => {
                 account: 'test'
               })
           },
-          error: { complete: false, msg: 'Missing data', code: 400 }
+          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
         },
         {
           fn: async function () {
@@ -225,7 +232,7 @@ describe('auth router', () => {
                 account: 'test@gmail.com'
               })
           },
-          error: { complete: false, msg: 'Missing data', code: 400 }
+          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
         },
         {
           fn: async function () {
@@ -236,7 +243,7 @@ describe('auth router', () => {
                 pwd: ''
               })
           },
-          error: { complete: false, msg: 'Missing data', code: 400 }
+          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
         },
         {
           fn: async function () {

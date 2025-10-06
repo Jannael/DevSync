@@ -34,7 +34,9 @@ const controller = {
           const result = await fn.request.refreshToken.confirm(req, res)
           res.json({ complete: result })
         } catch (e) {
-          ErrorHandler.user(res, e as Error)
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
+          ])
         }
       }
     }

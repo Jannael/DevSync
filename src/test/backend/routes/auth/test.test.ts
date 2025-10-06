@@ -305,7 +305,14 @@ describe('auth router', () => {
                 code: '1234'
               })
           },
-          error: { code: 400, msg: 'You need to use MFA for login', complete: false }
+          error: {
+            code: 400,
+            msg: 'You need to use MFA for login',
+            complete: false,
+            link: [
+              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
+            ]
+          }
         },
         {
           fn: async function () {
@@ -313,7 +320,14 @@ describe('auth router', () => {
               .post(endpoint)
               .set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
           },
-          error: { code: 400, msg: 'You need to use MFA for login', complete: false }
+          error: {
+            code: 400,
+            msg: 'You need to use MFA for login',
+            complete: false,
+            link: [
+              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
+            ]
+          }
         },
         {
           fn: async function () {
@@ -351,6 +365,13 @@ describe('auth router', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        if (error.link !== undefined) {
+          expect(res.body.link).toEqual(
+            expect.arrayContaining([
+              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
+            ])
+          )
+        }
       }
     })
   })

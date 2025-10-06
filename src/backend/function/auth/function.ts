@@ -139,7 +139,8 @@ const functions = {
         let codeNewAccount = generateCode()
 
         if (req.cookies.accessToken === undefined ||
-          req.body?.newAccount === undefined
+          req.body?.newAccount === undefined ||
+          !verifyEmail(req.body?.newAccount)
         ) throw new UserBadRequest('Not authorized')
 
         const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)

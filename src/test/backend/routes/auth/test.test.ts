@@ -406,6 +406,28 @@ describe('auth router', () => {
               })
           },
           error: { code: 401, msg: 'Not authorized', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['accessToken=token'])
+              .send({
+                newAccount: 'account'
+              })
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['accessToken=token'])
+              .send({
+                newAccount: 'account@gmail.com'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
         }
       ]
 

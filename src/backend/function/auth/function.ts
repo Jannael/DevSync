@@ -153,7 +153,7 @@ const functions = {
         }
 
         let emailBool: boolean = false
-        if (req.body?.TEST_PWD === undefined) emailBool = true
+        if (req.body?.TEST_PWD !== undefined) emailBool = true
         if (!emailBool) {
           await sendEmail(accessToken.account, code)
           await sendEmail(req.body.newAccount, code)

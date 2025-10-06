@@ -45,7 +45,9 @@ const controller = {
         const result = await fn.verify.code(req, res)
         res.json({ complete: result })
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'Missing code', href: '/auth/v1/request/code' }
+        ])
       }
     }
   },

@@ -122,7 +122,7 @@ const functions = {
 
       const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
-      if (req.body.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
+      if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
       if (req.body?.account !== decodedCode.account) throw new UserBadRequest('You tried to change the account now your banned forever')
 
       res.clearCookie('code')

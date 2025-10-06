@@ -39,7 +39,7 @@ describe('auth router', () => {
   describe('/request/code/', () => {
     test('', async () => {
       const res = await agent
-        .post('/auth/v1/request/code')
+        .post('/auth/v1/request/code/')
         .send({
           account: 'test@gmail.com',
           TEST_PWD: TEST_PWD_ENV
@@ -100,7 +100,14 @@ describe('auth router', () => {
             return await request(app)
               .post(endpoint)
           },
-          error: { code: 400, msg: 'Missing code', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing code',
+            complete: false,
+            link: [
+              { rel: 'Missing code', href: '/auth/v1/request/code' }
+            ]
+          }
         },
         {
           fn: async function () {
@@ -170,6 +177,13 @@ describe('auth router', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        if (error.link !== undefined) {
+          expect(error.link).toEqual(
+            expect.arrayContaining([
+              { rel: 'Missing code', href: '/auth/v1/request/code' }
+            ])
+          )
+        }
       }
     })
   })

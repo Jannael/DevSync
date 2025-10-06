@@ -12,7 +12,7 @@ import config from '../../config/config'
 import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
-import { ServerError, UserBadRequest } from '../../error/error'
+import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -39,16 +39,16 @@ const functions = {
       res.cookie('code', codeHash, config.cookies.code)
       return true
     },
-    accessToken: async function (req: Request, res: Response): Promise<{ complete: boolean }> {
+    accessToken: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
 
       const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV) as IUser
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
-      if (!dbValidation) { return { complete: false } }
+      if (!dbValidation) throw new DatabaseError('the validation has failed please try again')
 
       const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
-      return { complete: true }
+      return true
     },
     refreshToken: {
       code: async function (req: Request, res: Response): Promise<boolean> {
@@ -92,6 +92,9 @@ const functions = {
 
         const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
         const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+
+        const savedInDB = await model.auth.refreshToken.save(refreshToken, user._id)
+        if (!savedInDB) throw new DatabaseError('something went wrong please try again')
 
         res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)

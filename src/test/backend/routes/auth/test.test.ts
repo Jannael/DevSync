@@ -281,7 +281,13 @@ describe('auth router', () => {
 
   describe('/request/accessToken/', () => {
     const endpoint = path + '/request/accessToken/'
-    test('', async () => {})
+    test('', async () => {
+      const res = await agent
+        .get(endpoint)
+
+      expect(res.body).toEqual({ complete: true })
+    })
+
     test('error', async () => {})
   })
 

@@ -7,7 +7,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await fn.request.code(req, res)
-        if (result) res.json({ complete: true })
+        res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }
@@ -15,8 +15,9 @@ const controller = {
     accessToken: async function (req: Request, res: Response) {
       try {
         const result = await fn.request.accessToken(req, res)
-        if (result.complete) res.json({ complete: true })
+        res.json({ complete: result })
       } catch (e) {
+        console.log(e)
         ErrorHandler.user(res, e as Error)
       }
     },
@@ -24,7 +25,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await fn.request.refreshToken.code(req, res)
-          if (result) res.json({ complete: true })
+          res.json({ complete: result })
         } catch (e) {
           ErrorHandler.user(res, e as Error)
         }
@@ -32,9 +33,8 @@ const controller = {
       confirm: async function (req: Request, res: Response) {
         try {
           const result = await fn.request.refreshToken.confirm(req, res)
-          if (result) res.json({ complete: true })
+          res.json({ complete: result })
         } catch (e) {
-          console.log(e)
           ErrorHandler.user(res, e as Error)
         }
       }
@@ -44,7 +44,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await fn.verify.code(req, res)
-        if (result) res.json({ complete: true })
+        res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }
@@ -55,8 +55,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await fn.account.request.code(req, res)
-          if (result.complete) res.json({ complete: true })
-          res.json({ complete: false })
+          res.json({ complete: result })
         } catch (e) { ErrorHandler.user(res, e as Error) }
       }
     },
@@ -64,8 +63,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await fn.account.verify.code(req, res)
-          if (result.complete) res.json({ complete: true })
-          res.json({ complete: false })
+          res.json({ complete: result })
         } catch (e) { ErrorHandler.user(res, e as Error) }
       }
     }

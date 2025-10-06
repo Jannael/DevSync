@@ -9,7 +9,6 @@ import { generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
-import { IUser } from '../../interface/user'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
 import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
@@ -33,7 +32,9 @@ const functions = {
         req.body?.TEST_PWD === TEST_PWD_ENV
       ) code = generateCode(req.body.TEST_PWD)
 
-      if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
+      let emailBool: boolean = false
+      if (req.body?.TEST_PWD === undefined) emailBool = true
+      if (!emailBool) await sendEmail(req.body.account, code)
 
       const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
       res.cookie('code', codeHash, config.cookies.code)
@@ -70,7 +71,10 @@ const functions = {
 
         const user = await model.verify.login(req.body.account, req.body.pwd)
 
-        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
+        let emailBool: boolean = false
+        if (req.body?.TEST_PWD === undefined) emailBool = true
+        if (!emailBool) emailBool = await sendEmail(req.body.account, code)
+        if (!emailBool) throw new ServerError('Something went wrong please try again')
 
         const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
@@ -128,21 +132,30 @@ const functions = {
   },
   account: {
     request: {
-      code: async function (req: Request, res: Response) {
+      code: async function (req: Request, res: Response): Promise<boolean> {
+        let code = generateCode()
+        let codeNewAccount = generateCode()
+
         if (req.cookies.accessToken === undefined ||
-          req.body.newAccount === undefined
+          req.body?.newAccount === undefined
         ) throw new UserBadRequest('Not authorized')
 
         const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
         if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
-        const code = generateCode()
-        const codeNewAccount = generateCode()
+        if (req.body?.TEST_PWD !== undefined &&
+          req.body?.TEST_PWD === TEST_PWD_ENV
+        ) {
+          code = generateCode(TEST_PWD_ENV)
+          codeNewAccount = generateCode(TEST_PWD_ENV)
+        }
 
-        const codeResult = await sendEmail(accessToken.account, code)
-        const codeNewAccountResult = await sendEmail(req.body.newAccount, codeNewAccount)
-
-        if (!codeResult || !codeNewAccountResult) throw new ServerError('Something went wrong please try again later')
+        let emailBool: boolean = false
+        if (req.body?.TEST_PWD === undefined) emailBool = true
+        if (!emailBool) {
+          await sendEmail(accessToken.account, code)
+          await sendEmail(req.body.newAccount, code)
+        }
 
         const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount as SignOptions)
@@ -150,11 +163,11 @@ const functions = {
         res.cookie('account', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)
 
-        return { complete: true }
+        return true
       }
     },
     verify: {
-      code: async function (req: Request, res: Response) {
+      code: async function (req: Request, res: Response): Promise<boolean> {
         if (req.cookies.account === undefined ||
           req.cookies.newAccount === undefined ||
           req.cookies.accessToken === undefined ||
@@ -180,7 +193,7 @@ const functions = {
         const account = jwt.sign(codeNewAccount.account, JWT_AUTH_ENV, config.jwt.code)
 
         res.cookie('newAccount_account', account, config.cookies.code)
-        return { complete: true }
+        return true
       }
     }
   }

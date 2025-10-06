@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import { IEnv } from '../interface/env'
+import { ServerError } from '../error/error'
 
 dotenv.config({ quiet: true })
 const { EMAIL_ENV, PASSWORD_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -37,6 +38,6 @@ export async function sendEmail (email: string, code: string, msg?: string): Pro
     })
     return true
   } catch (e) {
-    return false
+    throw new ServerError('Something went wrong while sending emails')
   }
 }

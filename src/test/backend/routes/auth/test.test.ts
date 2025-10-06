@@ -288,12 +288,16 @@ describe('auth router', () => {
       expect(res.body).toEqual({ complete: true })
     })
 
-    test('error', async () => {})
+    test('error', async () => {
+
+    })
   })
 
   describe('/account/request/code/', () => {
     const endpoint = path + '/account/request/code/'
-    test('', async () => {})
+    test('', async () => {
+      
+    })
     test('error', async () => {})
   })
 

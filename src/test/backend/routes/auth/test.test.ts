@@ -78,7 +78,7 @@ describe('auth router', () => {
   })
 
   describe('/verify/code/', () => {
-    const endpoint = '/auth/v1/verify/code'
+    const endpoint = '/auth/v1/verify/code/'
 
     test('', async () => {
       const res = await agent
@@ -174,7 +174,7 @@ describe('auth router', () => {
     })
   })
 
-  describe('/request/refreshToken/code', () => {
+  describe('/request/refreshToken/code/', () => {
     const endpoint = path + '/request/refreshToken/code/'
 
     test('', async () => {
@@ -258,7 +258,7 @@ describe('auth router', () => {
   })
 
   describe('/request/refreshToken/', () => {
-    const endpoint = path + '/request/refreshToken'
+    const endpoint = path + '/request/refreshToken/'
 
     test('', async () => {
       const res = await agent
@@ -305,6 +305,23 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Invalid token', complete: false }
+        },
+        {
+          fn: async function () {
+            await agent
+              .post(endpoint + 'code/')
+              .send({
+                account: user.account,
+                pwd: 'test',
+                TEST_PWD: TEST_PWD_ENV
+              })
+            return await agent
+              .post(endpoint)
+              .send({
+                code: '0000'
+              })
+          },
+          error: { code: 400, msg: 'Wrong code', complete: false }
         }
       ]
 

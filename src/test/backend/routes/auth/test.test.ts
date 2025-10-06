@@ -296,7 +296,14 @@ describe('auth router', () => {
   describe('/account/request/code/', () => {
     const endpoint = path + '/account/request/code/'
     test('', async () => {
-      
+      const res = await agent
+        .patch(endpoint)
+        .send({
+          newAccount: 'test1@gmail.com',
+          TEST_PWD: TEST_PWD_ENV
+        })
+      console.log(res.headers['set-cookie'])
+      expect(res.body).toEqual({ complete: true })
     })
     test('error', async () => {})
   })

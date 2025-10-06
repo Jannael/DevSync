@@ -17,7 +17,6 @@ const controller = {
         const result = await fn.request.accessToken(req, res)
         res.json({ complete: result })
       } catch (e) {
-        console.log(e)
         ErrorHandler.user(res, e as Error)
       }
     },
@@ -56,7 +55,9 @@ const controller = {
         try {
           const result = await fn.account.request.code(req, res)
           res.json({ complete: result })
-        } catch (e) { ErrorHandler.user(res, e as Error) }
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     },
     verify: {

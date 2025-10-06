@@ -42,9 +42,14 @@ const functions = {
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
 
-      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV) as IUser
+      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV)
+      if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
+
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
       if (!dbValidation) throw new DatabaseError('the validation has failed please try again')
+
+      delete refreshToken.iat
+      delete refreshToken.exp
 
       const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)

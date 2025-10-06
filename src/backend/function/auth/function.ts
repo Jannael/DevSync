@@ -33,7 +33,7 @@ const functions = {
       ) code = generateCode(req.body.TEST_PWD)
 
       let emailBool: boolean = false
-      if (req.body?.TEST_PWD === undefined) emailBool = true
+      if (req.body?.TEST_PWD !== undefined) emailBool = true
       if (!emailBool) await sendEmail(req.body.account, code)
 
       const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)

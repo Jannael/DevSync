@@ -1,7 +1,7 @@
 import { createApp } from '../../../../backend/app'
 import { Express } from 'express'
 import request from 'supertest'
-import mongoose, { mongo } from 'mongoose'
+import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import { IEnv } from '../../../../backend/interface/env'
 import userModel from './../../../../backend/model/user/model'
@@ -325,6 +325,7 @@ describe('auth router', () => {
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
       expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*HttpOnly$/)
     })
+
     test('error', async () => {})
   })
 })

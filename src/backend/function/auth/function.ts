@@ -26,7 +26,7 @@ const functions = {
       let code = generateCode()
       if (req.body?.account === undefined ||
         !verifyEmail(req.body?.account)
-      ) throw new UserBadRequest('Missing or invalid account')
+      ) throw new UserBadRequest('Missing or invalid account, the account must match the following pattern example@service.ext')
 
       if (req.body?.TEST_PWD !== undefined &&
         req.body?.TEST_PWD === TEST_PWD_ENV

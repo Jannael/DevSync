@@ -58,13 +58,13 @@ describe('auth router', () => {
                 account: 'test'
               })
           },
-          error: { code: 400, msg: 'Missing or invalid account', complete: false }
+          error: { code: 400, msg: 'Missing or invalid account, the account must match the following pattern example@service.ext', complete: false }
         },
         {
           fn: async function () {
             return await request(app).post('/auth/v1/request/code')
           },
-          error: { code: 400, msg: 'Missing or invalid account', complete: false }
+          error: { code: 400, msg: 'Missing or invalid account, the account must match the following pattern example@service.ext', complete: false }
         }
       ]
 

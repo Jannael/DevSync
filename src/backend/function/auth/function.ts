@@ -171,7 +171,6 @@ const functions = {
     },
     verify: {
       code: async function (req: Request, res: Response): Promise<boolean> {
-        console.log(req.cookies)
         if (req.cookies?.currentAccount === undefined ||
           req.cookies?.newAccount === undefined ||
           req.cookies?.accessToken === undefined ||

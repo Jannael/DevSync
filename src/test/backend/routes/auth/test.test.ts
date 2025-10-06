@@ -506,6 +506,24 @@ describe('auth router', () => {
               })
           },
           error: { code: 400, msg: 'Current account code is wrong', complete: false }
+        },
+        {
+          fn: async function () {
+            await agent
+              .patch(path + '/account/request/code/')
+              .send({
+                newAccount: 'test1@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .patch(endpoint)
+              .send({
+                codeCurrentAccount: '1234',
+                codeNewAccount: '0000'
+              })
+          },
+          error: { code: 400, msg: 'New account code is wrong', complete: false }
         }
       ]
 

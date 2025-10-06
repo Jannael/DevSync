@@ -72,7 +72,7 @@ const functions = {
         const user = await model.verify.login(req.body.account, req.body.pwd)
 
         let emailBool: boolean = false
-        if (req.body?.TEST_PWD === undefined) emailBool = true
+        if (req.body?.TEST_PWD !== undefined) emailBool = true
         if (!emailBool) emailBool = await sendEmail(req.body.account, code)
         if (!emailBool) throw new ServerError('Something went wrong please try again')
 

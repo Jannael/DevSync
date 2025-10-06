@@ -9,7 +9,6 @@ const controller = {
         const result = await fn.request.code(req, res)
         res.json({ complete: result })
       } catch (e) {
-        console.log(e)
         ErrorHandler.user(res, e as Error)
       }
     },

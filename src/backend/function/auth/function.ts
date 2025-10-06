@@ -116,7 +116,9 @@ const functions = {
   },
   verify: {
     code: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.body?.code === undefined || req.cookies?.code === undefined) throw new UserBadRequest('Missing code')
+      if (req.body?.code === undefined ||
+        req.cookies?.code === undefined
+      ) throw new UserBadRequest('Missing code')
 
       const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
       if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
@@ -160,7 +162,7 @@ const functions = {
         const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount as SignOptions)
 
-        res.cookie('account', codeEncrypted, config.cookies.code)
+        res.cookie('currentAccount', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)
 
         return true
@@ -168,14 +170,14 @@ const functions = {
     },
     verify: {
       code: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.cookies.account === undefined ||
+        if (req.cookies.currentAccount === undefined ||
           req.cookies.newAccount === undefined ||
           req.cookies.accessToken === undefined ||
           req.body.codeCurrentAccount === undefined ||
           req.body.codeNewAccount === undefined
         ) throw new UserBadRequest('You need to ask for verification codes')
 
-        const code = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
+        const code = jwt.verify(req.cookies.currentAccount, JWT_AUTH_ENV) as JwtPayload
         const codeNewAccount = jwt.verify(req.cookies.newAccount, JWT_AUTH_ENV) as JwtPayload
         const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
 

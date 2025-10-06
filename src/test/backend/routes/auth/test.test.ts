@@ -294,6 +294,17 @@ describe('auth router', () => {
               .set('Cookie', ['token=unknown'])
           },
           error: { code: 400, msg: 'You need to use MFA for login', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .set('Cookie', ['code=unknown', 'token=unknown'])
+              .send({
+                code: '1234'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
         }
       ]
 
@@ -332,7 +343,7 @@ describe('auth router', () => {
         })
 
       expect(res.body).toEqual({ complete: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/account=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*HttpOnly$/)
     })
     test('error', async () => {})

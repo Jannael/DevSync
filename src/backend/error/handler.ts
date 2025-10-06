@@ -2,8 +2,8 @@ import { Response } from 'express'
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from './error'
 
 const handler = {
-  user: function (res: Response, e: Error) {
-    const status = { code: 500, msg: '' }
+  user: function (res: Response, e: Error, link?: Array<{ rel: string, href: string }>) {
+    const status = { code: 500, msg: '', links: [] }
 
     if (e instanceof DatabaseError) {
       status.code = 500
@@ -31,7 +31,7 @@ const handler = {
       status.msg = 'Token it is not valid yet'
     }
 
-    res.status(status.code).json({ complete: false, msg: status.msg })
+    res.status(status.code).json({ complete: false, msg: status.msg, link })
   }
 }
 

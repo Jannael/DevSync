@@ -1,6 +1,6 @@
 function createError (name: string): any {
   return class extends Error {
-    constructor (message: string) {
+    constructor (message: string, link: string[]) {
       super(message)
       this.name = name
     }

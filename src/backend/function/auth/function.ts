@@ -78,22 +78,22 @@ const functions = {
 
         const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code as SignOptions)
         const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        res.cookie('token', token, config.cookies.code)
-        res.cookie('code', hashCode, config.cookies.code)
+        res.cookie('tokenR', token, config.cookies.code)
+        res.cookie('codeR', hashCode, config.cookies.code)
 
         return true
       },
       confirm: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.cookies?.token === undefined ||
-          req.cookies?.code === undefined ||
+        if (req.cookies?.tokenR === undefined ||
+          req.cookies?.codeR === undefined ||
           req.body?.code === undefined
         ) throw new UserBadRequest('You need to use MFA for login')
 
-        const code = jwt.verify(req.cookies.code, JWT_AUTH_ENV)
+        const code = jwt.verify(req.cookies.codeR, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Forbidden')
         if (code.code !== req.body.code) throw new UserBadRequest('Wrong code')
 
-        const user = jwt.verify(req.cookies?.token, JWT_AUTH_ENV)
+        const user = jwt.verify(req.cookies?.tokenR, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Forbidden')
 
         delete user.iat
@@ -107,8 +107,8 @@ const functions = {
 
         res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)
-        res.clearCookie('token')
-        res.clearCookie('code')
+        res.clearCookie('tokenR')
+        res.clearCookie('codeR')
 
         return true
       }
@@ -171,11 +171,12 @@ const functions = {
     },
     verify: {
       code: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.cookies.currentAccount === undefined ||
-          req.cookies.newAccount === undefined ||
-          req.cookies.accessToken === undefined ||
-          req.body.codeCurrentAccount === undefined ||
-          req.body.codeNewAccount === undefined
+        console.log(req.cookies)
+        if (req.cookies?.currentAccount === undefined ||
+          req.cookies?.newAccount === undefined ||
+          req.cookies?.accessToken === undefined ||
+          req.body?.codeCurrentAccount === undefined ||
+          req.body?.codeNewAccount === undefined
         ) throw new UserBadRequest('You need to ask for verification codes')
 
         const code = jwt.verify(req.cookies.currentAccount, JWT_AUTH_ENV) as JwtPayload
@@ -190,7 +191,7 @@ const functions = {
         if (code.code !== req.body.codeCurrentAccount) throw new UserBadRequest('Current account code is wrong')
         if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('New account code is wrong')
 
-        res.clearCookie('account')
+        res.clearCookie('currentAccount')
         res.clearCookie('newAccount')
 
         const account = jwt.sign({ account: codeNewAccount.account }, JWT_AUTH_ENV, config.jwt.code)

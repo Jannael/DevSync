@@ -186,8 +186,8 @@ describe('auth router', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
-      expect(res.headers['set-cookie'][0]).toMatch(/token=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/code=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
     })
 
@@ -269,8 +269,8 @@ describe('auth router', () => {
 
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][2]).toMatch(/token=.*GMT$/)
-      expect(res.headers['set-cookie'][3]).toMatch(/code=.*GMT$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/tokenR=.*GMT$/)
+      expect(res.headers['set-cookie'][3]).toMatch(/codeR=.*GMT$/)
       expect(res.body).toEqual({ complete: true })
     })
 
@@ -290,8 +290,7 @@ describe('auth router', () => {
           fn: async function () {
             return await request(app)
               .post(endpoint)
-              .set('Cookie', ['code=unknown'])
-              .set('Cookie', ['token=unknown'])
+              .set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
           },
           error: { code: 400, msg: 'You need to use MFA for login', complete: false }
         },
@@ -299,7 +298,7 @@ describe('auth router', () => {
           fn: async function () {
             return await request(app)
               .post(endpoint)
-              .set('Cookie', ['code=unknown', 'token=unknown'])
+              .set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
               .send({
                 code: '1234'
               })
@@ -452,11 +451,71 @@ describe('auth router', () => {
         })
 
       expect(res.body).toEqual({ complete: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/account=.*GMT$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
       expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*HttpOnly$/)
     })
 
-    test('error', async () => {})
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['currentAccount=val', 'newAccount=val', 'accessToken=val'])
+          },
+          error: { code: 400, msg: 'You need to ask for verification codes', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .send({
+                codeCurrentAccount: '0000',
+                codeNewAccount: '0000'
+              })
+          },
+          error: { code: 400, msg: 'You need to ask for verification codes', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['currentAccount=val', 'newAccount=val', 'accessToken=val'])
+              .send({
+                codeCurrentAccount: '0000',
+                codeNewAccount: '0000'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
+        },
+        {
+          fn: async function () {
+            await agent
+              .patch(path + '/account/request/code/')
+              .send({
+                newAccount: 'test1@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .patch(endpoint)
+              .send({
+                codeCurrentAccount: '0000',
+                codeNewAccount: '1234'
+              })
+          },
+          error: { code: 400, msg: 'Current account code is wrong', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
   })
 })

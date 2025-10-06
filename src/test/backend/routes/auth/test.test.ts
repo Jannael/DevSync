@@ -392,7 +392,15 @@ describe('auth router', () => {
             return await request(app)
               .get(endpoint)
           },
-          error: { code: 400, msg: 'You need to login', complete: false }
+          error: {
+            code: 400,
+            msg: 'You need to login',
+            complete: false,
+            link: [
+              { rel: 'Code for login', href: '' },
+              { rel: 'Verify code for login', href: '' }
+            ]
+          }
         }
       ]
 
@@ -402,6 +410,14 @@ describe('auth router', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        if (error.link !== undefined) {
+          expect(res.body.link).toEqual(
+            expect.arrayContaining([
+              { rel: 'Code for login', href: '' },
+              { rel: 'Verify code for login', href: '' }
+            ])
+          )
+        }
       }
     })
   })

@@ -17,7 +17,10 @@ const controller = {
         const result = await fn.request.accessToken(req, res)
         res.json({ complete: result })
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'Code for login', href: '' },
+          { rel: 'Verify code for login', href: '' }
+        ])
       }
     },
     refreshToken: {

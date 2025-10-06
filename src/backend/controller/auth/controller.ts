@@ -65,7 +65,9 @@ const controller = {
         try {
           const result = await fn.account.verify.code(req, res)
           res.json({ complete: result })
-        } catch (e) { ErrorHandler.user(res, e as Error) }
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     }
   }

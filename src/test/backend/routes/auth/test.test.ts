@@ -302,15 +302,29 @@ describe('auth router', () => {
           newAccount: 'test1@gmail.com',
           TEST_PWD: TEST_PWD_ENV
         })
-      console.log(res.headers['set-cookie'])
+
       expect(res.body).toEqual({ complete: true })
+      expect(res.headers['set-cookie'][0]).toMatch(/account=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*HttpOnly$/)
     })
     test('error', async () => {})
   })
 
   describe('/account/verify/code/', () => {
     const endpoint = path + '/account/verify/code/'
-    test('', async () => {})
+    test('', async () => {
+      const res = await agent
+        .patch(endpoint)
+        .send({
+          codeCurrentAccount: '1234',
+          codeNewAccount: '1234'
+        })
+
+      expect(res.body).toEqual({ complete: true })
+      expect(res.headers['set-cookie'][0]).toMatch(/account=.*GMT$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*HttpOnly$/)
+    })
     test('error', async () => {})
   })
 })

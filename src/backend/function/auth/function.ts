@@ -175,7 +175,7 @@ const functions = {
           req.body.codeNewAccount === undefined
         ) throw new UserBadRequest('You need to ask for verification codes')
 
-        const { code } = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
+        const code = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
         const codeNewAccount = jwt.verify(req.cookies.newAccount, JWT_AUTH_ENV) as JwtPayload
         const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
 
@@ -184,13 +184,13 @@ const functions = {
           typeof accessToken === 'string'
         ) throw new UserBadRequest('Forbidden')
 
-        if (code !== req.body.codeCurrentAccount) throw new UserBadRequest('Current account code is wrong')
+        if (code.code !== req.body.codeCurrentAccount) throw new UserBadRequest('Current account code is wrong')
         if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('New account code is wrong')
 
         res.clearCookie('account')
         res.clearCookie('newAccount')
 
-        const account = jwt.sign(codeNewAccount.account, JWT_AUTH_ENV, config.jwt.code)
+        const account = jwt.sign({ account: codeNewAccount.account }, JWT_AUTH_ENV, config.jwt.code)
 
         res.cookie('newAccount_account', account, config.cookies.code)
         return true

@@ -345,7 +345,23 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .get(endpoint)
+          },
+          error: { code: 400, msg: 'You need to login', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
     })
   })
 

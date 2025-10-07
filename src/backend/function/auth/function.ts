@@ -11,7 +11,7 @@ import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
-import { DatabaseError, UserBadRequest } from '../../error/error'
+import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -201,7 +201,7 @@ const functions = {
         ) throw new UserBadRequest('Missing or invalid account it must match example@service.ext')
 
         const dbValidation = await model.verify.user(req.body.account)
-        if (!dbValidation) throw new UserBadRequest('This user does not exist')
+        if (!dbValidation) throw new NotFound('This user does not exist')
 
         let code = generateCode()
         if (req.body?.TEST_PWD !== undefined &&

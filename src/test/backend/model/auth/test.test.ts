@@ -174,7 +174,7 @@ describe('auth model', () => {
           fn: async function () {
             await model.verify.user('notExists')
           },
-          error: new UserBadRequest('This user does not exists')
+          error: new NotFound('This user does not exists')
         }
       ]
 

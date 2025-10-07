@@ -593,4 +593,62 @@ describe('/auth/v1/', () => {
       }
     })
   })
+
+  describe('/password/request/code/', () => {
+    const endpoint = path + '/password/request/code/'
+    test('', async () => {
+      const res = await request(app)
+        .patch(endpoint)
+        .send({
+          account: user.account
+        })
+
+      expect(res.body).toEqual({ complete: true })
+      expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*HttpOnly$/)
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .send({
+                account: 'test'
+              })
+          },
+          error: { code: 400, msg: 'Missing or invalid account it must match example@service.ext', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .send({
+                account: 'test@service.ext'
+              })
+          },
+          error: { code: 404, msg: 'This user does not exists', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
+  })
+
+  describe('/password/verify/code/', () => {
+    const endpoint = path + '/password/verify/code/'
+    test('', () => {
+
+    })
+
+    test('error', () => {
+
+    })
+  })
 })

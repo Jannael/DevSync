@@ -210,14 +210,28 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        const hashCode = jwt.sign({ code, account: req.body?.account }, JWT_AUTH_ENV, config.jwt.code)
         res.cookie('pwdChange', hashCode, config.cookies.code)
         return true
       }
     },
     verify: {
-      code: async function (req: Response, res: Response) {
+      code: async function (req: Request, res: Response) {
+        if (req.body?.code === undefined ||
+          req.cookies.pwdChange === undefined ||
+          req.body?.newPwd === undefined ||
+          req.body?.account === undefined
+        ) throw new UserBadRequest('Missing data')
 
+        const code = jwt.verify(req.cookies.pwdChange, JWT_AUTH_ENV)
+        if (typeof code === 'string') throw new UserBadRequest('Invalid token')
+
+        if (code.code !== req.body?.newPwd) throw new UserBadRequest('Wrong code')
+        if (code.account !== req.body?.account) throw new UserBadRequest('You tried to change the account now your banned forever')
+
+        const hash = jwt.sign({ pwd: req.body?.newPwd, account: code.account }, JWT_AUTH_ENV, config.jwt.code)
+        res.cookie('newPwd', hash, config.cookies.code)
+        res.clearCookie('pwdChange')
       }
     }
   }

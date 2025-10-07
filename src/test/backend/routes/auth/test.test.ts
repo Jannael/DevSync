@@ -600,7 +600,8 @@ describe('/auth/v1/', () => {
       const res = await request(app)
         .patch(endpoint)
         .send({
-          account: user.account
+          account: user.account,
+          TEST_PWD: TEST_PWD_ENV
         })
 
       expect(res.body).toEqual({ complete: true })
@@ -643,8 +644,24 @@ describe('/auth/v1/', () => {
 
   describe('/password/verify/code/', () => {
     const endpoint = path + '/password/verify/code/'
-    test('', () => {
+    test('', async () => {
+      const agent = request.agent(app)
+      await agent
+        .patch(path + '/password/request/code/')
+        .send({
+          account: user.account,
+          TEST_PWD: TEST_PWD_ENV
+        })
 
+      const res = await agent
+        .patch(endpoint)
+        .send({
+          code: '1234',
+          account: user.account,
+          newPwd: 'insane pwd'
+        })
+      console.log(res.body)
+      expect(res.body.complete).toEqual(true)
     })
 
     test('error', () => {

@@ -102,9 +102,10 @@ const controller = {
     verify: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.pwd.request.code(req, res)
+          const result = await fn.pwd.verify.code(req, res)
           res.json({ complete: result })
         } catch (e) {
+          console.log(e)
           ErrorHandler.user(res, e as Error, [
             { rel: 'get code', href: '/auth/v1/password/request/code/' }
           ])

@@ -91,12 +91,24 @@ const controller = {
   pwd: {
     request: {
       code: async function (req: Request, res: Response) {
-
+        try {
+          const result = await fn.pwd.request.code(req, res)
+          res.json({ complete: result })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     },
     verify: {
       code: async function (req: Request, res: Response) {
-
+        try {
+          const result = await fn.pwd.request.code(req, res)
+          res.json({ complete: result })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'get code', href: '/auth/v1/password/request/code/' }
+          ])
+        }
       }
     }
   }

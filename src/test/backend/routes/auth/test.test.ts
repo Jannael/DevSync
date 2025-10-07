@@ -660,8 +660,10 @@ describe('/auth/v1/', () => {
           account: user.account,
           newPwd: 'insane pwd'
         })
-      console.log(res.body)
+
       expect(res.body.complete).toEqual(true)
+      expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
     })
 
     test('error', () => {

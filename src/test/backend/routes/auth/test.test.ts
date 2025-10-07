@@ -583,6 +583,13 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
+          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
+          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' },
+          { rel: 'get verification code for account change', href: '/auth/v1/account/request/code/' },
+          { rel: 'validate code', href: '/auth/v1/account/verify/code/' }
+        ])
       }
     })
   })

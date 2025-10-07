@@ -77,7 +77,13 @@ const controller = {
           const result = await fn.account.verify.code(req, res)
           res.json({ complete: result })
         } catch (e) {
-          ErrorHandler.user(res, e as Error)
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
+            { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
+            { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' },
+            { rel: 'get verification code for account change', href: '/auth/v1/account/request/code/' },
+            { rel: 'validate code', href: '/auth/v1/account/verify/code/' }
+          ])
         }
       }
     }

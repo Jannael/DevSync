@@ -39,6 +39,11 @@ const model = {
       delete (user as Partial<IUser>).pwd
 
       return user as IRefreshToken
+    },
+    user: async function (account: string): Promise<boolean> {
+      const exists = dbModel.exists({ account })
+      if (exists === undefined) throw new UserBadRequest('This user does not exists')
+      return true
     }
   },
   auth: {

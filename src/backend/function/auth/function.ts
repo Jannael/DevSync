@@ -3,7 +3,7 @@
   you are able to create a user, also here we generate the accessTokens you need
 ***/
 
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
+import jwt, { JwtPayload, SignOptions, verify } from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
@@ -197,6 +197,22 @@ const functions = {
 
         res.cookie('newAccount_account', account, config.cookies.code)
         return true
+      }
+    }
+  },
+  pwd: {
+    request: {
+      code: async function (req: Request, res: Response) {
+        if (req.body?.account === undefined ||
+          !verifyEmail(req.body?.account)
+        ) throw new UserBadRequest('Missing or invalid account it must match example@service.ext')
+
+        
+      }
+    },
+    verify: {
+      code: async function (req: Response, res: Response) {
+
       }
     }
   }

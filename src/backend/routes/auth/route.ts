@@ -13,4 +13,7 @@ router.post('/request/refreshToken/', controller.request.refreshToken.confirm)
 router.patch('/account/request/code/', controller.account.request.code)
 router.patch('/account/verify/code/', controller.account.verify.code)
 
+router.patch('/password/request/code/', controller.pwd.request.code)
+router.patch('/password/verify/code/', controller.pwd.verify.code)
+
 export default router

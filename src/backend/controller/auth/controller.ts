@@ -87,6 +87,18 @@ const controller = {
         }
       }
     }
+  },
+  pwd: {
+    request: {
+      code: async function (req: Request, res: Response) {
+
+      }
+    },
+    verify: {
+      code: async function (req: Request, res: Response) {
+
+      }
+    }
   }
 }
 

@@ -63,7 +63,11 @@ const controller = {
           const result = await fn.account.request.code(req, res)
           res.json({ complete: result })
         } catch (e) {
-          ErrorHandler.user(res, e as Error)
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
+            { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
+            { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' }
+          ])
         }
       }
     },

@@ -3,7 +3,7 @@
   you are able to create a user, also here we generate the accessTokens you need
 ***/
 
-import jwt, { JwtPayload, SignOptions, verify } from 'jsonwebtoken'
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
@@ -202,12 +202,24 @@ const functions = {
   },
   pwd: {
     request: {
-      code: async function (req: Request, res: Response) {
+      code: async function (req: Request, res: Response): Promise<boolean> {
         if (req.body?.account === undefined ||
           !verifyEmail(req.body?.account)
         ) throw new UserBadRequest('Missing or invalid account it must match example@service.ext')
 
-        
+        const dbValidation = await model.verify.user(req.body.account)
+        if (!dbValidation) throw new UserBadRequest('This user does not exist')
+
+        let code = generateCode()
+        if (req.body?.TEST_PWD !== undefined &&
+          req.body?.TEST_PWD === TEST_PWD_ENV
+        ) code = generateCode(TEST_PWD_ENV)
+
+        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
+
+        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        res.cookie('pwdChange', hashCode, config.cookies.code)
+        return true
       }
     },
     verify: {

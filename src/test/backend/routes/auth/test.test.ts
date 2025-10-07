@@ -33,7 +33,7 @@ afterAll(async () => {
   await mongoose.connection.close()
 })
 
-describe('auth router', () => {
+describe('/auth/v1/', () => {
   const path = '/auth/v1'
 
   describe('/request/code/', () => {
@@ -50,7 +50,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app).post('/auth/v1/request/code')
@@ -68,7 +68,7 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.complete).toEqual(error.complete)
@@ -94,7 +94,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -178,18 +178,14 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
         if (error.link !== undefined) {
-          expect(error.link).toEqual(
-            expect.arrayContaining([
-              { rel: 'Missing code', href: '/auth/v1/request/code' }
-            ])
-          )
+          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
         }
       }
     })
@@ -213,7 +209,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -269,7 +265,7 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
@@ -296,7 +292,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -359,18 +355,14 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
         if (error.link !== undefined) {
-          expect(res.body.link).toEqual(
-            expect.arrayContaining([
-              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
-            ])
-          )
+          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
         }
       }
     })
@@ -386,7 +378,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -404,19 +396,14 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
         if (error.link !== undefined) {
-          expect(res.body.link).toEqual(
-            expect.arrayContaining([
-              { rel: 'Code for login', href: '' },
-              { rel: 'Verify code for login', href: '' }
-            ])
-          )
+          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
         }
       }
     })
@@ -438,7 +425,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -488,7 +475,7 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
 
         expect(res.statusCode).toEqual(error.code)
@@ -515,7 +502,7 @@ describe('auth router', () => {
     })
 
     test('error', async () => {
-      const func = [
+      const cases = [
         {
           fn: async function () {
             return await request(app)
@@ -585,7 +572,7 @@ describe('auth router', () => {
         }
       ]
 
-      for (const { fn, error } of func) {
+      for (const { fn, error } of cases) {
         const res = await fn()
 
         expect(res.statusCode).toEqual(error.code)

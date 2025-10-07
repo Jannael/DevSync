@@ -161,4 +161,26 @@ describe('auth model', () => {
       }
     })
   })
+
+  describe('verify user', () => {
+    test('', async () => {
+      const res = await model.verify.user(user.account)
+      expect(res).toEqual(true)
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.verify.user('notExists')
+          },
+          error: new UserBadRequest('This user does not exists')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        await expect(fn()).rejects.toThrow(error)
+      }
+    })
+  })
 })

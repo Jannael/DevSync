@@ -41,8 +41,8 @@ const model = {
       return user as IRefreshToken
     },
     user: async function (account: string): Promise<boolean> {
-      const exists = dbModel.exists({ account })
-      if (exists === undefined) throw new UserBadRequest('This user does not exists')
+      const exists = await dbModel.exists({ account })
+      if (exists === null) throw new UserBadRequest('This user does not exists')
       return true
     }
   },

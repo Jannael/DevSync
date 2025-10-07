@@ -3,7 +3,7 @@
   you are able to create a user, also here we generate the accessTokens you need
 ***/
 
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
@@ -11,7 +11,7 @@ import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
-import { DatabaseError, ServerError, UserBadRequest } from '../../error/error'
+import { DatabaseError, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -32,11 +32,9 @@ const functions = {
         req.body?.TEST_PWD === TEST_PWD_ENV
       ) code = generateCode(req.body.TEST_PWD)
 
-      let emailBool: boolean = false
-      if (req.body?.TEST_PWD !== undefined) emailBool = true
-      if (!emailBool) await sendEmail(req.body.account, code)
+      if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-      const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('code', codeHash, config.cookies.code)
       return true
     },
@@ -52,7 +50,7 @@ const functions = {
       delete refreshToken.iat
       delete refreshToken.exp
 
-      const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return true
     },
@@ -71,13 +69,10 @@ const functions = {
 
         const user = await model.verify.login(req.body.account, req.body.pwd)
 
-        let emailBool: boolean = false
-        if (req.body?.TEST_PWD !== undefined) emailBool = true
-        if (!emailBool) emailBool = await sendEmail(req.body.account, code)
-        if (!emailBool) throw new ServerError('Something went wrong please try again')
+        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-        const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+        const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code)
+        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
         res.cookie('tokenR', token, config.cookies.code)
         res.cookie('codeR', hashCode, config.cookies.code)
 
@@ -99,8 +94,8 @@ const functions = {
         delete user.iat
         delete user.exp
 
-        const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
-        const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+        const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+        const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
 
         const savedInDB = await model.auth.refreshToken.save(refreshToken, user._id)
         if (!savedInDB) throw new DatabaseError('something went wrong please try again')
@@ -127,7 +122,7 @@ const functions = {
 
       res.clearCookie('code')
 
-      const emailHash = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
+      const emailHash = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('account', emailHash, config.cookies.code)
       return true
     }
@@ -153,15 +148,13 @@ const functions = {
           codeNewAccount = generateCode(TEST_PWD_ENV)
         }
 
-        let emailBool: boolean = false
-        if (req.body?.TEST_PWD !== undefined) emailBool = true
-        if (!emailBool) {
+        if (req.body?.TEST_PWD === undefined) {
           await sendEmail(accessToken.account, code)
           await sendEmail(req.body.newAccount, code)
         }
 
-        const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code as SignOptions)
-        const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount as SignOptions)
+        const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount)
 
         res.cookie('currentAccount', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)

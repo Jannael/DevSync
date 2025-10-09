@@ -263,7 +263,15 @@ describe('/user/v1/', () => {
         })
 
       user.fullName = 'new Name'
-      console.log(res)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.body.user).toStrictEqual({
+        fullName: 'new Name',
+        account: 'test@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
     })
     test('error', async () => {})
   })

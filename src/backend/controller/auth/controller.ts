@@ -105,7 +105,6 @@ const controller = {
           const result = await fn.pwd.verify.code(req, res)
           res.json({ complete: result })
         } catch (e) {
-          console.log(e)
           ErrorHandler.user(res, e as Error, [
             { rel: 'get code', href: '/auth/v1/password/request/code/' }
           ])

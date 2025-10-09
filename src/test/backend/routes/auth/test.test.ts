@@ -666,8 +666,52 @@ describe('/auth/v1/', () => {
       expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
     })
 
-    test('error', () => {
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['pwdChange=value'])
+          },
+          error: { code: 400, msg: 'Missing data', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .send({
+                code: 'test',
+                newPwd: 'test',
+                account: 'test'
+              })
+          },
+          error: { code: 400, msg: 'Missing data', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+              .set('Cookie', ['pwdChange=value'])
+              .send({
+                code: 'test',
+                newPwd: 'test',
+                account: 'test'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of func) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'get code', href: '/auth/v1/password/request/code/' }
+        ])
+      }
     })
   })
 })

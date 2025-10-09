@@ -20,7 +20,10 @@ const controller = {
         const result = await fn.user.create(req, res)
         res.status(201).json({ ...result, complete: true })
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'code for verification', href: '/auth/v1/request/code/' },
+          { rel: 'verify code', href: '/auth/v1/verify/code/' }
+        ])
       }
     },
     update: async function (req: Request, res: Response) {

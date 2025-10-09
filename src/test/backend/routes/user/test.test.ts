@@ -141,7 +141,7 @@ describe('/user/v1/', () => {
               .post(endpoint)
               .set('Cookie', ['account=value'])
           },
-          error: { code: 400, msg: 'Account not verified', complete: false }
+          error: { code: 401, msg: 'Account not verified', complete: false }
         }
       ]
 
@@ -151,7 +151,10 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
-        expect(res.body.link).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'code for verification', href: '/auth/v1/request/code/' },
+          { rel: 'verify code', href: '/auth/v1/verify/code/' }
+        ])
       }
     })
   })

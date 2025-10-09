@@ -26,7 +26,7 @@ const controller = {
     update: async function (req: Request, res: Response) {
       try {
         const result = await fn.user.update(req, res)
-        if (result) res.json({ complete: true })
+        res.json({ complete: true, user: result })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }
@@ -43,9 +43,10 @@ const controller = {
       update: async function (req: Request, res: Response) {
         try {
           const result = await fn.user.account.update(req, res)
-          if (result.complete) res.json({ complete: true })
-          res.json({ complete: false })
-        } catch (e) { ErrorHandler.user(res, e as Error) }
+          res.json({ complete: true, user: result })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     }
   }

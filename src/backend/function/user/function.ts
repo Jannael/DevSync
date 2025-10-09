@@ -2,7 +2,7 @@
   User's CRUD
 ***/
 
-import { IUser } from '../../interface/user'
+import { IRefreshToken, IUser } from '../../interface/user'
 import model from './../../model/user/model'
 import validator from '../../validator/validator'
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
@@ -78,7 +78,7 @@ const functions = {
     delete: async function (req: Request, res: Response) {
       if (req.cookies.account === undefined ||
         req.cookies.accessToken === undefined
-      ) throw new UserBadRequest('Account not verifed')
+      ) throw new UserBadRequest('Account not verified')
 
       const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
       const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
@@ -92,7 +92,7 @@ const functions = {
       return await model.user.delete(accessToken._id)
     },
     account: {
-      update: async function (req: Request, res: Response) {
+      update: async function (req: Request, res: Response): Promise<IRefreshToken> {
         if (req.cookies.accessToken === undefined ||
           req.cookies.newAccount_account === undefined
         ) throw new UserBadRequest('Not authorized')
@@ -106,8 +106,7 @@ const functions = {
 
         const response = await model.user.account.update(accessToken._id, newAccount)
 
-        if (response) { return { complete: true } }
-        return { complete: false }
+        return response
       }
     }
   }

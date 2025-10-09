@@ -193,6 +193,35 @@ describe('/user/v1/', () => {
               })
           },
           error: { code: 400, msg: 'Verified account does not match the sent account', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            await agent
+              .post('/auth/v1/request/code/')
+              .send({
+                account: 'create1@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/verify/code')
+              .send({
+                account: 'create1@gmail.com',
+                code: '1234'
+              })
+
+            return await agent
+              .post(endpoint)
+              .send({
+                account: 'create1@gmail.com',
+                pwd: '123456',
+                role: ['documenter'],
+                nickName: 'test',
+                personalization: { theme: 'test' }
+              })
+          },
+          error: { code: 400, msg: 'Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]', complete: false }
         }
       ]
 

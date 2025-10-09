@@ -272,6 +272,18 @@ describe('/user/v1/', () => {
         nickName: 'test',
         personalization: { theme: 'test' }
       })
+
+      const secure = await agent
+        .get(path + '/get/')
+
+      expect(secure.body).toStrictEqual({
+        fullName: 'new Name',
+        account: 'test@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' },
+        complete: true
+      })
     })
     test('error', async () => {})
   })

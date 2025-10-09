@@ -103,10 +103,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing code',
-            complete: false,
-            link: [
-              { rel: 'Missing code', href: '/auth/v1/request/code' }
-            ]
+            complete: false
           }
         },
         {
@@ -120,10 +117,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing code',
-            complete: false,
-            link: [
-              { rel: 'Missing code', href: '/auth/v1/request/code' }
-            ]
+            complete: false
           }
         },
         {
@@ -184,9 +178,9 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
-        if (error.link !== undefined) {
-          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
-        }
+        expect(res.body.link).toEqual([
+          { rel: 'Missing code', href: '/auth/v1/request/code' }
+        ])
       }
     })
   })
@@ -304,10 +298,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'You need to use MFA for login',
-            complete: false,
-            link: [
-              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
-            ]
+            complete: false
           }
         },
         {
@@ -319,10 +310,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'You need to use MFA for login',
-            complete: false,
-            link: [
-              { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
-            ]
+            complete: false
           }
         },
         {
@@ -361,9 +349,9 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
-        if (error.link !== undefined) {
-          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
-        }
+        expect(res.body.link).toEqual([
+          { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
+        ])
       }
     })
   })

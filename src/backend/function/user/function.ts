@@ -33,7 +33,7 @@ const functions = {
 
       return accessToken
     },
-    create: async function (req: Request, res: Response): Promise<Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'> | Error> {
+    create: async function (req: Request, res: Response): Promise<Partial<IRefreshToken>> {
       if (req.cookies?.account === undefined || req.body === undefined) throw new UserBadRequest('Account not verified')
 
       const decoded = jwt.verify(req.cookies?.account, JWT_AUTH_ENV)

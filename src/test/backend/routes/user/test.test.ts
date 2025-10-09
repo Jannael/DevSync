@@ -62,7 +62,8 @@ describe('/user/v1/', () => {
         account: 'test@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' }
+        personalization: { theme: 'test' },
+        complete: true
       })
     })
 
@@ -125,14 +126,33 @@ describe('/user/v1/', () => {
         account: 'create@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' }
+        personalization: { theme: 'test' },
+        complete: true
       })
 
       expect(res.statusCode).toEqual(201)
     })
 
-    test('error', () => {
-      
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .set('Cookie', ['account=value'])
+          },
+          error: { code: 400, msg: 'Account not verified', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual(error.complete)
+      }
     })
   })
 })

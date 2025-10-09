@@ -7,6 +7,7 @@ const controller = {
     get: async function (req: Request, res: Response) {
       try {
         const result = await fn.user.get(req, res)
+        result.complete = true
         res.json(result)
       } catch (e) {
         ErrorHandler.user(res, e as Error, [
@@ -17,7 +18,7 @@ const controller = {
     create: async function (req: Request, res: Response) {
       try {
         const result = await fn.user.create(req, res)
-        res.status(201).json(result)
+        res.status(201).json({ ...result, complete: true })
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }

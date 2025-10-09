@@ -142,6 +142,57 @@ describe('/user/v1/', () => {
               .set('Cookie', ['account=value'])
           },
           error: { code: 401, msg: 'Account not verified', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .send({
+                user: 'test'
+              })
+          },
+          error: { code: 401, msg: 'Account not verified', complete: false }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+              .set('Cookie', ['account=value'])
+              .send({
+                user: 'test'
+              })
+          },
+          error: { code: 400, msg: 'Invalid token', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            await agent
+              .post('/auth/v1/request/code/')
+              .send({
+                account: 'create1@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/verify/code')
+              .send({
+                account: 'create1@gmail.com',
+                code: '1234'
+              })
+
+            return await agent
+              .post(endpoint)
+              .send({
+                fullName: 'test',
+                account: 'create@gmail.com',
+                pwd: '123456',
+                role: ['documenter'],
+                nickName: 'test',
+                personalization: { theme: 'test' }
+              })
+          },
+          error: { code: 400, msg: 'Verified account does not match the sent account', complete: false }
         }
       ]
 

@@ -27,6 +27,10 @@ const functions = {
 
       if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
+      delete accessToken.iat
+      delete accessToken.exp
+      delete accessToken._id
+
       return accessToken
     },
     create: async function (req: Request, res: Response): Promise<Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'> | Error> {

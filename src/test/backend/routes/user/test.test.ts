@@ -34,6 +34,7 @@ afterAll(async () => {
 })
 
 describe('/user/v1/', () => {
+  const path = '/user/v1'
   beforeAll(async () => {
     await agent
       .post('/auth/v1/request/refreshToken/code/')
@@ -47,5 +48,24 @@ describe('/user/v1/', () => {
       .send({
         code: '1234'
       })
+  })
+
+  describe('/get/', () => {
+    const endpoint = path + '/get/'
+    test('', async () => {
+      const res = await agent
+        .get(endpoint)
+
+      expect(res.body).toStrictEqual({
+        fullName: 'test',
+        account: 'test@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
+    })
+    test('error', async () => {
+
+    })
   })
 })

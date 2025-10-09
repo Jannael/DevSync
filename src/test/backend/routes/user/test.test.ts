@@ -64,8 +64,28 @@ describe('/user/v1/', () => {
         personalization: { theme: 'test' }
       })
     })
-    test('error', async () => {
 
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .get(endpoint)
+          },
+          error: { code: 400, msg: 'Missing accessToken', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
+        ])
+      }
     })
   })
 })

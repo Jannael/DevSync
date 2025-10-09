@@ -9,7 +9,9 @@ const controller = {
         const result = await fn.user.get(req, res)
         res.json(result)
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
+        ])
       }
     },
     create: async function (req: Request, res: Response) {

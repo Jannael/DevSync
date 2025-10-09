@@ -238,4 +238,33 @@ describe('/user/v1/', () => {
       }
     })
   })
+
+  describe('/update/', () => {
+    const endpoint = path + '/update/'
+    test('', async () => {
+      await agent
+        .post('/auth/v1/request/code/')
+        .send({
+          account: user.account,
+          TEST_PWD: TEST_PWD_ENV
+        })
+
+      await agent
+        .post('/auth/v1/verify/code')
+        .send({
+          account: user.account,
+          code: '1234'
+        })
+
+      const res = await agent
+        .put(endpoint)
+        .send({
+          fullName: 'new Name'
+        })
+
+      user.fullName = 'new Name'
+      console.log(res)
+    })
+    test('error', async () => {})
+  })
 })

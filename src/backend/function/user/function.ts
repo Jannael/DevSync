@@ -76,6 +76,13 @@ const functions = {
       if (data === null) throw new UserBadRequest('No data to update or invalid data')
 
       const result = await model.user.update(data, accessToken._id)
+      const newRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+      const newAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+
+      res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
+      res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
+
+      delete (result as IUser)._id
       return result
     },
     delete: async function (req: Request, res: Response) {

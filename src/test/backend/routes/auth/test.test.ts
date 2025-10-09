@@ -700,6 +700,46 @@ describe('/auth/v1/', () => {
               })
           },
           error: { code: 400, msg: 'Invalid token', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            await agent
+              .patch(path + '/password/request/code/')
+              .send({
+                account: user.account,
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .patch(endpoint)
+              .send({
+                code: '0000',
+                newPwd: 'test',
+                account: user.account
+              })
+          },
+          error: { code: 400, msg: 'Wrong code', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+            await agent
+              .patch(path + '/password/request/code/')
+              .send({
+                account: user.account,
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            return await agent
+              .patch(endpoint)
+              .send({
+                code: '1234',
+                newPwd: 'test',
+                account: 'account'
+              })
+          },
+          error: { code: 400, msg: 'You tried to change the account now your banned forever', complete: false }
         }
       ]
 

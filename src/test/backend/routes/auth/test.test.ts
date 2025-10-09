@@ -387,11 +387,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'You need to login',
-            complete: false,
-            link: [
-              { rel: 'Code for login', href: '' },
-              { rel: 'Verify code for login', href: '' }
-            ]
+            complete: false
           }
         }
       ]
@@ -402,9 +398,10 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
-        if (error.link !== undefined) {
-          expect(res.body.link).toEqual(expect.arrayContaining(error.link))
-        }
+        expect(res.body.link).toStrictEqual([
+          { rel: 'Code for login', href: '/auth/v1/request/refreshToken/code/' },
+          { rel: 'Verify code for login', href: '/auth/v1/request/refreshToken/' }
+        ])
       }
     })
   })

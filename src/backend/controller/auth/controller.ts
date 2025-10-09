@@ -18,8 +18,8 @@ const controller = {
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as Error, [
-          { rel: 'Code for login', href: '' },
-          { rel: 'Verify code for login', href: '' }
+          { rel: 'Code for login', href: '/auth/v1/request/refreshToken/code/' },
+          { rel: 'Verify code for login', href: '/auth/v1/request/refreshToken/' }
         ])
       }
     },

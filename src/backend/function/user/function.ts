@@ -44,7 +44,7 @@ const functions = {
       req.body.account = decoded.account
 
       const validData = validator.user.create(data)
-      if (validData === null) { throw new UserBadRequest('Invalid or missing data') }
+      if (validData === null) throw new UserBadRequest('Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
 
       const result = await model.user.create(data)
 
@@ -53,6 +53,8 @@ const functions = {
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
+
+      delete (result as IUser)._id
 
       return result
     },

@@ -17,10 +17,7 @@ const controller = {
     create: async function (req: Request, res: Response) {
       try {
         const result = await fn.user.create(req, res)
-
-        if (result instanceof Error) { throw result }
-
-        res.json(result)
+        res.status(201).json(result)
       } catch (e) {
         ErrorHandler.user(res, e as Error)
       }

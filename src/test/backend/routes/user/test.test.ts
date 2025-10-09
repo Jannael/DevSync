@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { IEnv } from '../../../../backend/interface/env'
 import userModel from './../../../../backend/model/user/model'
 import { IRefreshToken } from '../../../../backend/interface/user'
+import dbModel from './../../../../backend/database/schemas/node/user'
 
 dotenv.config({ quiet: true })
 const { TEST_PWD_ENV } = process.env as unknown as IEnv
@@ -29,7 +30,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await userModel.user.delete(user._id)
+  await dbModel.deleteMany({})
   await mongoose.connection.close()
 })
 
@@ -86,6 +87,47 @@ describe('/user/v1/', () => {
           { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
         ])
       }
+    })
+  })
+
+  describe('/create/', () => {
+    const endpoint = path + '/create/'
+    test('', async () => {
+      const agent = request.agent(app)
+
+      await agent
+        .post('/auth/v1/request/code/')
+        .send({
+          account: 'create@gmail.com',
+          TEST_PWD: TEST_PWD_ENV
+        })
+
+      await agent
+        .post('/auth/v1/verify/code')
+        .send({
+          account: 'create@gmail.com',
+          code: '1234'
+        })
+
+      const res = await agent
+        .post(endpoint)
+        .send({
+          fullName: 'test',
+          account: 'create@gmail.com',
+          pwd: '123456',
+          role: ['documenter'],
+          nickName: 'test',
+          personalization: { theme: 'test' }
+        })
+
+      expect(res.body).toStrictEqual({
+        fullName: 'test',
+        account: 'create@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
+      expect(res.statusCode).toEqual(201)
     })
   })
 })

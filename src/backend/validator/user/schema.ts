@@ -1,5 +1,6 @@
 import z from 'zod'
 import { IUser } from '../../interface/user'
+import { UserBadRequest } from '../../error/error'
 
 const create = z.object({
   fullName: z.string(),
@@ -16,7 +17,7 @@ const validator = {
       const result = create.parse(obj)
       return result
     } catch {
-      return null
+      throw new UserBadRequest('Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
     }
   },
   partial: function (obj: IUser) {

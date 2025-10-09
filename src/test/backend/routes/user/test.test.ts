@@ -127,7 +127,12 @@ describe('/user/v1/', () => {
         nickName: 'test',
         personalization: { theme: 'test' }
       })
+
       expect(res.statusCode).toEqual(201)
+    })
+
+    test('error', () => {
+      
     })
   })
 })

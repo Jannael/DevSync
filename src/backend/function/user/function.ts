@@ -34,19 +34,18 @@ const functions = {
       return accessToken
     },
     create: async function (req: Request, res: Response): Promise<Pick<IUser, 'fullName' | 'account' | 'nickName' | 'role' | 'personalization'> | Error> {
-      const data = req.body
-      const token = req.cookies?.account
-      if (token === undefined || token === null) throw new UserBadRequest('Account not verified')
+      if (req.cookies?.account === undefined || req.body === undefined) throw new UserBadRequest('Account not verified')
 
-      const decoded = jwt.verify(token, JWT_AUTH_ENV) as JwtPayload
+      const decoded = jwt.verify(req.cookies?.account, JWT_AUTH_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Account not verified')
+      if (decoded.account !== req.body.account) throw new UserBadRequest('Verified account does not match the sent account')
 
       req.body.account = decoded.account
 
-      const validData = validator.user.create(data)
+      const validData = validator.user.create(req.body)
       if (validData === null) throw new UserBadRequest('Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
 
-      const result = await model.user.create(data)
+      const result = await model.user.create(validData)
 
       const refreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
       const accessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)

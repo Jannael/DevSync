@@ -225,8 +225,26 @@ describe('user model', () => {
       expect(res).toEqual(true)
     })
 
-    test('error', () => {
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.user.password.update('test', 'test')
+          },
+          error: new UserBadRequest('invalid account')
+        },
+        {
+          fn: async function () {
+            await model.user.password.update('helloDexterMorgan@gmail.com.mx', 'test')
+          },
+          error: new NotFound('User does not exist')
+        }
 
+      ]
+
+      for (const { fn, error } of cases) {
+        await expect(fn()).rejects.toThrow(error)
+      }
     })
   })
 

@@ -450,7 +450,26 @@ describe('/user/v1/', () => {
     })
 
     test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await request(app)
+              .patch(endpoint)
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        }
+      ]
 
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toStrictEqual([
+          { rel: 'code', href: '/auth/v1/password/request/code/' },
+          { rel: 'verify', href: '/auth/v1/password/verify/code/' }
+        ])
+      }
     })
   })
 })

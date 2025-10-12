@@ -56,7 +56,7 @@ const controller = {
       update: async function (req: Request, res: Response) {
         try {
           const result = await fn.user.password.update(req, res)
-          res.json({ complete: true, user: result })
+          res.json({ complete: result })
         } catch (e) {
           ErrorHandler.user(res, e as Error)
         }

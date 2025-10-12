@@ -383,6 +383,8 @@ describe('/user/v1/', () => {
         personalization: { theme: 'test' }
       })
 
+      user = res.body.user
+
       const secure = await agent
         .get('/user/v1/get/')
 
@@ -414,6 +416,36 @@ describe('/user/v1/', () => {
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
       }
+    })
+  })
+
+  describe('/update/password/', () => {
+    const endpoint = path + '/update/password/'
+    test('', async () => {
+      await agent
+        .patch('/auth/v1/password/request/code')
+        .send({
+          account: user.account,
+          TEST_PWD: TEST_PWD_ENV
+        })
+
+      await agent
+        .patch('/auth/v1/password/verify/code/')
+        .send({
+          code: '1234',
+          account: user.account,
+          newPwd: 'insane pwd'
+        })
+
+      const res = await agent
+        .patch(endpoint)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*GMT$/)
+    })
+
+    test('error', async () => {
+
     })
   })
 })

@@ -130,22 +130,14 @@ const functions = {
     },
     password: {
       update: async function (req: Request, res: Response) {
-        if (req.cookies?.pwdChange === undefined) throw new UserBadRequest('Not authorized')
+        if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Not authorized')
 
-        const newPwd = jwt.verify(req.cookies.pwdChange, JWT_AUTH_ENV)
+        const newPwd = jwt.verify(req.cookies.newPwd, JWT_AUTH_ENV)
         if (typeof newPwd === 'string') throw new UserBadRequest('Invalid token')
 
-        const response = await model.user.password.update(newPwd.account, newPwd.pwd)
-        const newRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-        const newAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
-
-        res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
-        res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
-        res.clearCookie('newAccount_account')
-
-        delete (response as any)._id
-
-        return response
+        await model.user.password.update(newPwd.account, newPwd.pwd)
+        res.clearCookie('newPwd')
+        return true
       }
     }
   }

@@ -339,7 +339,7 @@ describe('/user/v1/', () => {
 
             return await agent
               .put(endpoint)
-           },
+          },
           error: { code: 400, msg: 'No data to update or invalid data', complete: false }
         }
       ]
@@ -350,6 +350,54 @@ describe('/user/v1/', () => {
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
       }
+    })
+  })
+
+  describe('/update/account/', () => {
+    const endpoint = path + '/update/account/'
+
+    test('', async () => {
+      await agent
+        .patch('/auth/v1/account/request/code/')
+        .send({
+          newAccount: 'test1@gmail.com',
+          TEST_PWD: TEST_PWD_ENV
+        })
+
+      await agent
+        .patch('/auth/v1/account/verify/code/')
+        .send({
+          codeCurrentAccount: '1234',
+          codeNewAccount: '1234'
+        })
+
+      const res = await agent
+        .patch(endpoint)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.body.user).toStrictEqual({
+        fullName: 'new Name',
+        account: 'test1@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' }
+      })
+
+      const secure = await agent
+        .get('/user/v1/get/')
+
+      expect(secure.body).toStrictEqual({
+        fullName: 'new Name',
+        account: 'test1@gmail.com',
+        role: ['documenter'],
+        nickName: 'test',
+        personalization: { theme: 'test' },
+        complete: true
+      })
+    })
+
+    test('error', () => {
+
     })
   })
 })

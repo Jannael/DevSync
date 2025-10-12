@@ -109,13 +109,21 @@ const functions = {
         ) throw new UserBadRequest('Not authorized')
 
         const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
-        const newAccount = jwt.verify(req.cookies.newAccount_account, JWT_AUTH_ENV) as string
+        const newAccount = jwt.verify(req.cookies.newAccount_account, JWT_AUTH_ENV)
 
         if (typeof accessToken === 'string' ||
           typeof newAccount === 'string'
         ) throw new UserBadRequest('Forbidden')
 
-        const response = await model.user.account.update(accessToken._id, newAccount)
+        const response = await model.user.account.update(accessToken._id, newAccount.account)
+        const newRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+        const newAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+
+        res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
+        res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
+        res.clearCookie('newAccount_account')
+
+        delete (response as any)._id
 
         return response
       }

@@ -320,6 +320,27 @@ describe('/user/v1/', () => {
               })
           },
           error: { code: 403, msg: 'Forbidden', complete: false }
+        },
+        {
+          fn: async function () {
+            await agent
+              .post('/auth/v1/request/code/')
+              .send({
+                account: user.account,
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/verify/code')
+              .send({
+                account: user.account,
+                code: '1234'
+              })
+
+            return await agent
+              .put(endpoint)
+           },
+          error: { code: 400, msg: 'No data to update or invalid data', complete: false }
         }
       ]
 

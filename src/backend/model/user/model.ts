@@ -80,6 +80,8 @@ const model = {
     },
     password: {
       update: async function (account: string, pwd: string): Promise<boolean> {
+        if (!verifyEmail(account)) throw new UserBadRequest('invalid account')
+
         const response = await dbModel.updateOne({ account }, { pwd })
         if (response.matchedCount === 0) throw new NotFound('User does not exist')
 

@@ -1,6 +1,6 @@
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
-import { IUser } from '../../../../backend/interface/user'
+import { IRefreshToken, IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
@@ -20,6 +20,7 @@ afterAll(async () => {
 
 describe('user model', () => {
   let userId: Types.ObjectId
+  let user: IRefreshToken
   const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
 
   describe('create user', () => {
@@ -34,6 +35,7 @@ describe('user model', () => {
       })
 
       userId = res._id
+      user = res
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
@@ -183,6 +185,7 @@ describe('user model', () => {
   describe('update user account', () => {
     test('', async () => {
       const res = await model.user.account.update(userId, 'test2@gmail.com')
+      user = res
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
@@ -213,6 +216,17 @@ describe('user model', () => {
       for (const { fn, error } of func) {
         await expect(fn()).rejects.toThrow(error)
       }
+    })
+  })
+
+  describe('update user password', () => {
+    test('', async () => {
+      const res = await model.user.password.update(user.account, 'newPassword')
+      expect(res).toEqual(true)
+    })
+
+    test('error', () => {
+
     })
   })
 

@@ -382,6 +382,7 @@ describe('/user/v1/', () => {
         nickName: 'test',
         personalization: { theme: 'test' }
       })
+      expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*GMT$/)
 
       user = res.body.user
 
@@ -415,6 +416,10 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toStrictEqual([
+          { rel: 'code', href: '/auth/v1/account/request/code/' },
+          { rel: 'code', href: '/auth/v1/account/verify/code/' }
+        ])
       }
     })
   })

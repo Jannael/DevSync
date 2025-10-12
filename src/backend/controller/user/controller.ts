@@ -48,7 +48,10 @@ const controller = {
           const result = await fn.user.account.update(req, res)
           res.json({ complete: true, user: result })
         } catch (e) {
-          ErrorHandler.user(res, e as Error)
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'code', href: '/auth/v1/account/request/code/' },
+            { rel: 'code', href: '/auth/v1/account/verify/code/' }
+          ])
         }
       }
     },
@@ -58,7 +61,10 @@ const controller = {
           const result = await fn.user.password.update(req, res)
           res.json({ complete: result })
         } catch (e) {
-          ErrorHandler.user(res, e as Error)
+          ErrorHandler.user(res, e as Error, [
+            { rel: 'code', href: '/auth/v1/password/request/code/' },
+            { rel: 'verify', href: '/auth/v1/password/verify/code/' }
+          ])
         }
       }
     }

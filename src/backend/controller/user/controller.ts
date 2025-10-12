@@ -54,7 +54,12 @@ const controller = {
     },
     password: {
       update: async function (req: Request, res: Response) {
-
+        try {
+          const result = await fn.user.password.update(req, res)
+          res.json({ complete: true, user: result })
+        } catch (e) {
+          ErrorHandler.user(res, e as Error)
+        }
       }
     }
   }

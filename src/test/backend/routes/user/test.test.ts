@@ -284,7 +284,51 @@ describe('/user/v1/', () => {
         personalization: { theme: 'test' },
         complete: true
       })
+
+      user = res.body.user
     })
-    test('error', async () => {})
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await request(app)
+              .put(endpoint)
+          },
+          error: { code: 401, msg: 'Not authorized', complete: false }
+        },
+        {
+          fn: async function () {
+            await agent
+              .post('/auth/v1/request/code/')
+              .send({
+                account: 'test0@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/verify/code')
+              .send({
+                account: 'test0@gmail.com',
+                code: '1234'
+              })
+
+            return await agent
+              .put(endpoint)
+              .send({
+                fullName: 'second new names'
+              })
+          },
+          error: { code: 403, msg: 'Forbidden', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
   })
 })

@@ -34,7 +34,8 @@ const functions = {
       return accessToken
     },
     create: async function (req: Request, res: Response): Promise<Partial<IRefreshToken>> {
-      if (req.cookies?.account === undefined || req.body === undefined) throw new UserBadRequest('Account not verified')
+      if (req.cookies?.account === undefined ||
+        req.body === undefined) throw new UserBadRequest('Account not verified')
 
       const decoded = jwt.verify(req.cookies?.account, JWT_AUTH_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Account not verified')
@@ -56,11 +57,11 @@ const functions = {
       return result
     },
     update: async function (req: Request, res: Response) {
-      if (req.body.account !== undefined ||
-        req.body.refreshToken !== undefined ||
-        req.body._id !== undefined ||
-        req.cookies.account === undefined ||
-        req.cookies.accessToken === undefined
+      if (req.body?.account !== undefined ||
+        req.body?.refreshToken !== undefined ||
+        req.body?._id !== undefined ||
+        req.cookies?.account === undefined ||
+        req.cookies?.accessToken === undefined
       ) throw new UserBadRequest('Not authorized')
 
       const accountCookie = jwt.verify(req.cookies.account, JWT_AUTH_ENV)

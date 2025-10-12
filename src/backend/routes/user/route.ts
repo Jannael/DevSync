@@ -9,6 +9,6 @@ router.put('/update/', controller.user.update)
 router.delete('/delete/', controller.user.delete)
 
 router.patch('/update/account/', controller.user.account.update)
-router.patch('/update/password/', controller.user.account.update)
+router.patch('/update/password/', controller.user.password.update)
 
 export default router

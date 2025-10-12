@@ -77,6 +77,16 @@ const model = {
         if (user === null) throw new NotFound('User does not exist')
         return user
       }
+    },
+    password: {
+      update: async function (account: string, pwd: string): Promise<IRefreshToken> {
+        const response = await dbModel.updateOne({ account }, { pwd })
+        if (response.matchedCount === 0) throw new NotFound('User does not exist')
+
+        const user = await dbModel.findOne({ account }, { refreshToken: 0, pwd: 0 }).lean()
+        if (user === null) throw new NotFound('User does not exist')
+        return user
+      }
     }
   }
 }

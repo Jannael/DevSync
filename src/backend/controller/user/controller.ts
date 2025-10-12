@@ -51,6 +51,11 @@ const controller = {
           ErrorHandler.user(res, e as Error)
         }
       }
+    },
+    password: {
+      update: async function (req: Request, res: Response) {
+
+      }
     }
   }
 }

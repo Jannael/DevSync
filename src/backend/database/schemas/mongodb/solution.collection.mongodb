@@ -15,7 +15,7 @@ db.createCollection('solution', {
           description: 'group where the solution it belongs'
         },
         taskId: {
-          bsonType: objectId,
+          bsonType: 'objectId',
           description: 'task the solution belongs to'
         }
         feature: {
@@ -23,7 +23,7 @@ db.createCollection('solution', {
           items: {
             bsonType: 'string'
           },
-          description: 'array of features asociated to the solution'
+          description: 'array of features associated to the solution'
         },
         code: {
           bsonType: 'object',

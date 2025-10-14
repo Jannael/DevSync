@@ -120,7 +120,6 @@ describe('/user/v1/', () => {
           nickName: 'test',
           personalization: { theme: 'test' }
         })
-
       expect(res.body).toStrictEqual({
         fullName: 'test',
         account: 'create@gmail.com',
@@ -129,7 +128,9 @@ describe('/user/v1/', () => {
         personalization: { theme: 'test' },
         complete: true
       })
-
+      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
       expect(res.statusCode).toEqual(201)
     })
 
@@ -502,6 +503,75 @@ describe('/user/v1/', () => {
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
       expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await request(app)
+              .delete(endpoint)
+          },
+          error: { code: 401, msg: 'Account not verified', complete: false }
+        },
+        {
+          fn: async function () {
+            const agent = request.agent(app)
+
+            user = await userModel.user.create({
+              fullName: 'test',
+              account: 'test@gmail.com',
+              pwd: 'test',
+              role: ['documenter'],
+              nickName: 'test',
+              personalization: { theme: 'test' }
+            })
+
+            await agent
+              .post('/auth/v1/request/refreshToken/code/')
+              .send({
+                account: user.account,
+                pwd: 'test',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/request/refreshToken/')
+              .send({
+                code: '1234'
+              })
+
+            await agent
+              .post('/auth/v1/request/code/')
+              .send({
+                account: 'delete@gmail.com',
+                TEST_PWD: TEST_PWD_ENV
+              })
+
+            await agent
+              .post('/auth/v1/verify/code')
+              .send({
+                account: 'delete@gmail.com',
+                code: '1234'
+              })
+
+            return await agent
+              .delete(endpoint)
+          },
+          error: { code: 403, msg: 'Forbidden', complete: false }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
+        ])
+      }
     })
   })
 })

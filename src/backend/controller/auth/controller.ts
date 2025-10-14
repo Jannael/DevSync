@@ -42,6 +42,9 @@ const controller = {
           ])
         }
       }
+    },
+    logout: async function (req: Request, res: Response) {
+
     }
   },
   verify: {

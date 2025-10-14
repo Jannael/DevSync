@@ -16,4 +16,6 @@ router.patch('/account/verify/code/', controller.account.verify.code)
 router.patch('/password/request/code/', controller.pwd.request.code)
 router.patch('/password/verify/code/', controller.pwd.verify.code)
 
+router.post('/request/logout/', controller.request.logout)
+
 export default router

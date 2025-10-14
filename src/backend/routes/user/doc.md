@@ -68,3 +68,42 @@ _Method: POST_
 
 ### Explanation
 this endpoint returns an accessToken and refreshToken, none of them are available for you, but for me
+
+
+## /update/ 
+_Method: PUT_
+### Input
+Here you only can update this fields
+- `fullName`
+- `role`
+- `nickName`
+- `personalization`
+
+### Output
+- `user`:
+  - `fullName`
+  - `account`
+  - `role`
+  - `nickName`
+  - `personalization`
+- `complete`: boolean
+
+`complete` field its to help frontend developer to handle the response its in error output as well
+
+### Error
+`output`
+
+    _body: 
+        msg: '',
+        complete: false,
+        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|401|Not authorized|You are missing one of these, cookie-account, accessToken, or your sending one of these to update, account, refreshToken, _id|
+|403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
+|400|No data yo update or invalid data|The data sent should follow the same schema that /create/ penultimate error|
+|500|Server error|My bad|
+
+### Explanation
+this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again

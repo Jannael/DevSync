@@ -82,6 +82,7 @@ const functions = {
 
       res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
+      res.clearCookie('account')
 
       delete (result as IUser)._id
       return result

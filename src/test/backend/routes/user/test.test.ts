@@ -272,6 +272,7 @@ describe('/user/v1/', () => {
         nickName: 'test',
         personalization: { theme: 'test' }
       })
+      expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
 
       const secure = await agent
         .get(path + '/get/')

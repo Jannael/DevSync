@@ -44,7 +44,12 @@ const controller = {
       }
     },
     logout: async function (req: Request, res: Response) {
-
+      try {
+        const result = await fn.request.logout(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as Error)
+      }
     }
   },
   verify: {

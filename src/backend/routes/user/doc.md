@@ -11,9 +11,9 @@ this endpoint does not actually need an input but accessToken, so make sure to a
 - `role`
 - `personalization`
 - `nickName`
-- `complete`
+- `complete`: boolean
 
-`complete` field its to help frontend developer to handle the response
+`complete` field its to help frontend developer to handle the response its in error output as well
 
 ### Error
 `output`
@@ -46,9 +46,9 @@ _Method: POST_
 - `role`
 - `nickName`
 - `personalization`
-- `complete`
+- `complete`: boolean
 
-`complete` field its to help frontend developer to handle the response
+`complete` field its to help frontend developer to handle the response its in error output as well
 
 ### Error
 `output`

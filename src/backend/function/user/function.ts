@@ -101,6 +101,10 @@ const functions = {
 
       if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Forbidden')
 
+      res.clearCookie('refreshToken')
+      res.clearCookie('accessToken')
+      res.clearCookie('account')
+
       return await model.user.delete(accessToken._id)
     },
     account: {

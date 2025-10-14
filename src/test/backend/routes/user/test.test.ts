@@ -232,8 +232,8 @@ describe('/user/v1/', () => {
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
         expect(res.body.link).toEqual([
-          { rel: 'code for verification', href: '/auth/v1/request/code/' },
-          { rel: 'verify code', href: '/auth/v1/verify/code/' }
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
         ])
       }
     })
@@ -350,6 +350,10 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.link).toEqual([
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
+        ])
       }
     })
   })
@@ -471,6 +475,33 @@ describe('/user/v1/', () => {
           { rel: 'verify', href: '/auth/v1/password/verify/code/' }
         ])
       }
+    })
+  })
+
+  describe('/delete/', () => {
+    const endpoint = path + '/delete/'
+    test('', async () => {
+      await agent
+        .post('/auth/v1/request/code/')
+        .send({
+          account: user.account,
+          TEST_PWD: TEST_PWD_ENV
+        })
+
+      await agent
+        .post('/auth/v1/verify/code')
+        .send({
+          account: user.account,
+          code: '1234'
+        })
+
+      const res = await agent
+        .delete(endpoint)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
     })
   })
 })

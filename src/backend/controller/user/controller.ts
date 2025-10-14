@@ -21,8 +21,8 @@ const controller = {
         res.status(201).json({ ...result, complete: true })
       } catch (e) {
         ErrorHandler.user(res, e as Error, [
-          { rel: 'code for verification', href: '/auth/v1/request/code/' },
-          { rel: 'verify code', href: '/auth/v1/verify/code/' }
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
         ])
       }
     },
@@ -31,7 +31,10 @@ const controller = {
         const result = await fn.user.update(req, res)
         res.json({ complete: true, user: result })
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
+        ])
       }
     },
     delete: async function (req: Request, res: Response) {
@@ -39,7 +42,10 @@ const controller = {
         const result = await fn.user.delete(req, res)
         if (result) res.json({ complete: true })
       } catch (e) {
-        ErrorHandler.user(res, e as Error)
+        ErrorHandler.user(res, e as Error, [
+          { rel: 'code', href: '/auth/v1/request/code/' },
+          { rel: 'code', href: '/auth/v1/verify/code/' }
+        ])
       }
     },
     account: {

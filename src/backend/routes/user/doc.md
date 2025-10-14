@@ -106,4 +106,4 @@ Here you only can update this fields
 |500|Server error|My bad|
 
 ### Explanation
-this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again
+this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again, if you want to ensure the data has been updated, you can use the /get/ route

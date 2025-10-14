@@ -109,21 +109,11 @@ Here you only can update this fields
 this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again, if you want to ensure the data has been updated, you can use the /get/ route
 
 ## /delete/ 
-_Method: PUT_
+_Method: DELETE_
 ### Input
-Here you only can update this fields
-- `fullName`
-- `role`
-- `nickName`
-- `personalization`
+it doesn't need input but the account-cookie, you have the routes to get it, in the link-field, for an error response
 
 ### Output
-- `user`:
-  - `fullName`
-  - `account`
-  - `role`
-  - `nickName`
-  - `personalization`
 - `complete`: boolean
 
 `complete` field its to help frontend developer to handle the response its in error output as well
@@ -138,10 +128,9 @@ Here you only can update this fields
 
 |StatusCode|Message|Issue|
 |:-----------|:-----------|-----------:|
-|401|Not authorized|You are missing one of these, cookie-account, accessToken, or your sending one of these to update, account, refreshToken, _id|
+|401|Account not verified|This happens when you don't verified the account previously|
 |403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
-|400|No data yo update or invalid data|The data sent should follow the same schema that /create/ penultimate error|
 |500|Server error|My bad|
 
 ### Explanation
-this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again, if you want to ensure the data has been updated, you can use the /get/ route
+this endpoint has a simple output, but remember that you need tyo ask for a code, then verify that code, and then you can delete the account, works the same update

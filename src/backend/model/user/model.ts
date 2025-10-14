@@ -41,7 +41,8 @@ const model = {
     },
     update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
       if (data.pwd !== undefined) {
-        const pwd = await bcrypt.hash(data.pwd, BCRYPT_SALT_HASH)
+        const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
+        const pwd = await bcrypt.hash(data.pwd, salt)
         data.pwd = pwd
       }
 

@@ -40,8 +40,21 @@ const functions = {
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
+      let refreshToken
+      const decoded = jwt.decode(req.cookies.refreshToken)
 
-      const refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV)
+      try {
+        refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV)
+      } catch (e) {
+        if ((e as Error).name === 'TokenExpiredError' &&
+          decoded !== null &&
+          typeof decoded !== 'string' &&
+          decoded._id !== undefined) {
+          await model.auth.refreshToken.remove(req.cookies.refreshToken, decoded._id)
+        }
+        throw e
+      }
+
       if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
 
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)

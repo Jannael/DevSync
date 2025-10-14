@@ -122,6 +122,8 @@ const functions = {
       }
     },
     logout: async function (req: Request, res: Response): Promise<boolean> {
+      if (req.cookies.refreshToken === undefined) return true
+
       const decoded = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials')
       await model.auth.refreshToken.remove(req.cookies.refreshToken, decoded._id)

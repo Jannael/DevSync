@@ -579,6 +579,35 @@ describe('/auth/v1/', () => {
     })
   })
 
+  describe('/request/logout/', () => {
+    const endpoint = path + '/request/logout/'
+    test('', async () => {
+      const res = await agent
+        .post(endpoint)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await request(app)
+              .post(endpoint)
+          },
+          error: { complete: true }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.body.complete).toEqual(error.complete)
+      }
+    })
+  })
+
   describe('/password/request/code/', () => {
     const endpoint = path + '/password/request/code/'
     test('', async () => {

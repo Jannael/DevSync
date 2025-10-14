@@ -9,6 +9,6 @@ this endpoint does not actually need an input but accessToken, so make sure to a
 |:-----------|:-----------|-----------:|
 |400|Missing accessToken|you don't have an accessToken|
 
-## Explanation
+### Explanation
 this endpoint returns the public user info containing in the accessToken
 

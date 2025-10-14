@@ -10,5 +10,5 @@ don't need it
 |:-----------|:-----------|-----------:|
 | | | |
 
-## Explanation
+### Explanation
 it only contains one endpoint for now to check the server health

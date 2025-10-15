@@ -183,3 +183,33 @@ verify code: /auth/v1/account/verify/code/
 
 ### Explanation
 this endpoint only executes the update-account fn, does not authorized or authenticates, it only makes the operation
+
+
+## /update/password/ 
+_Method: DELETE_
+### Input
+
+first you need to verify your account,
+get code: /auth/v1/password/request/code/
+verify code: /auth/v1/password/verify/code/
+
+### Output
+- `complete`: boolean
+
+`complete` field its to help frontend developer to handle the response its in error output as well
+
+### Error
+`output`
+
+    _body: 
+        msg: '',
+        complete: false,
+        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|401|Not authorized|this happens when you don't have the require credentials check the input section above|
+|500|Server error|My bad|
+
+### Explanation
+this is the endpoint that will update your password in case you forgot yours

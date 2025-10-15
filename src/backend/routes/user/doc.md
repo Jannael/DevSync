@@ -150,9 +150,20 @@ this endpoint has a simple output, but remember that you need to ask for a code,
 ## /update/account/ 
 _Method: DELETE_
 ### Input
-it doesn't need input but the account-cookie, you have the routes to get it, in the link-field, for an error response
+realize that the only way to change the account its been logged In
+
+first you need to verify your account,
+get code: /auth/v1/account/request/code/
+verify code: /auth/v1/account/verify/code/
+
 
 ### Output
+- `user`
+    - `fullName`
+    - `account`
+    - `role`
+    - `nickName`
+    - `personalization`
 - `complete`: boolean
 
 `complete` field its to help frontend developer to handle the response its in error output as well
@@ -167,9 +178,8 @@ it doesn't need input but the account-cookie, you have the routes to get it, in 
 
 |StatusCode|Message|Issue|
 |:-----------|:-----------|-----------:|
-|401|Account not verified|This happens when you don't verified the account previously|
-|403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
+|401|Not authorized|this happens when you don't have the require credentials check the input section above|
 |500|Server error|My bad|
 
 ### Explanation
-this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same update
+this endpoint only executes the update-account fn, does not authorized or authenticates, it only makes the operation

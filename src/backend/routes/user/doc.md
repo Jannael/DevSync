@@ -3,8 +3,8 @@
 ## /get/ 
 _Method: GET_
 ### Input
-this endpoint does not actually need an input but accessToken, so make sure to ask for one
-if you already have a refreshToken you can get an accessToken from /auth/v1/request/accessToken/
+    this endpoint does not actually need an input but accessToken, so make sure to ask for one
+    if you already have a refreshToken you can get an accessToken from /auth/v1/request/accessToken/
 
 ### Output
 - `fullName`
@@ -34,9 +34,9 @@ this endpoint returns the public user info containing in the accessToken
 ## /create/ 
 _Method: POST_
 ### Input
-first you need to verify your account,
-get code: /auth/v1/request/code/
-verify code: /auth/v1/verify/code/
+    first you need to verify your account,
+    get code: /auth/v1/request/code/
+    verify code: /auth/v1/verify/code/
 
 - `fullName`
 - `account`
@@ -78,9 +78,9 @@ this endpoint returns an accessToken and refreshToken, none of them are availabl
 ## /update/ 
 _Method: PUT_
 ### Input
-first you need to verify your account,
-get code: /auth/v1/request/code/
-verify code: /auth/v1/verify/code/
+    first you need to verify your account,
+    get code: /auth/v1/request/code/
+    verify code: /auth/v1/verify/code/
 
 Here you only can update this fields
 - `fullName`
@@ -120,9 +120,9 @@ this endpoint returns a new accessToken and refreshToken with the new data, and 
 ## /delete/ 
 _Method: DELETE_
 ### Input
-first you need to verify your account,
-get code: /auth/v1/request/code/
-verify code: /auth/v1/verify/code/
+    first you need to verify your account,
+    get code: /auth/v1/request/code/
+    verify code: /auth/v1/verify/code/
 
 ### Output
 - `complete`: boolean
@@ -152,9 +152,9 @@ _Method: DELETE_
 ### Input
 realize that the only way to change the account its been logged In
 
-first you need to verify your account,
-get code: /auth/v1/account/request/code/
-verify code: /auth/v1/account/verify/code/
+    first you need to verify your account,
+    get code: /auth/v1/account/request/code/
+    verify code: /auth/v1/account/verify/code/
 
 
 ### Output
@@ -189,9 +189,9 @@ this endpoint only executes the update-account fn, does not authorized or authen
 _Method: DELETE_
 ### Input
 
-first you need to verify your account,
-get code: /auth/v1/password/request/code/
-verify code: /auth/v1/password/verify/code/
+    first you need to verify your account,
+    get code: /auth/v1/password/request/code/
+    verify code: /auth/v1/password/verify/code/
 
 ### Output
 - `complete`: boolean

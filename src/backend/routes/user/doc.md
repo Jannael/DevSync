@@ -4,6 +4,7 @@
 _Method: GET_
 ### Input
 this endpoint does not actually need an input but accessToken, so make sure to ask for one
+if you already have a refreshToken you can get an accessToken from /auth/v1/request/accessToken/
 
 ### Output
 - `fullName`
@@ -33,6 +34,10 @@ this endpoint returns the public user info containing in the accessToken
 ## /create/ 
 _Method: POST_
 ### Input
+first you need to verify your account,
+get code: /auth/v1/request/code/
+verify code: /auth/v1/verify/code/
+
 - `fullName`
 - `account`
 - `pwd`
@@ -73,6 +78,10 @@ this endpoint returns an accessToken and refreshToken, none of them are availabl
 ## /update/ 
 _Method: PUT_
 ### Input
+first you need to verify your account,
+get code: /auth/v1/request/code/
+verify code: /auth/v1/verify/code/
+
 Here you only can update this fields
 - `fullName`
 - `role`
@@ -111,6 +120,36 @@ this endpoint returns a new accessToken and refreshToken with the new data, and 
 ## /delete/ 
 _Method: DELETE_
 ### Input
+first you need to verify your account,
+get code: /auth/v1/request/code/
+verify code: /auth/v1/verify/code/
+
+### Output
+- `complete`: boolean
+
+`complete` field its to help frontend developer to handle the response its in error output as well
+
+### Error
+`output`
+
+    _body: 
+        msg: '',
+        complete: false,
+        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|401|Account not verified|This happens when you don't verified the account previously|
+|403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
+|500|Server error|My bad|
+
+### Explanation
+this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same update
+
+
+## /update/account/ 
+_Method: DELETE_
+### Input
 it doesn't need input but the account-cookie, you have the routes to get it, in the link-field, for an error response
 
 ### Output
@@ -133,4 +172,4 @@ it doesn't need input but the account-cookie, you have the routes to get it, in 
 |500|Server error|My bad|
 
 ### Explanation
-this endpoint has a simple output, but remember that you need tyo ask for a code, then verify that code, and then you can delete the account, works the same update
+this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same update

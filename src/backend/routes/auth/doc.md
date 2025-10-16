@@ -173,3 +173,36 @@ _Method: PATCH_
 
 ### Explanation
 this endpoint it helps when you want to change your account but you need to be log in its the only way to change the account, this is the first step
+
+## /account/verify/code/
+_Method: PATCH_
+### Input
+    you need an accessToken 
+    /auth/v1/request/accessToken/
+    you also need to ask for a code
+    /auth/v1/account/request/code/
+    `codeCurrentAccount`
+    `codeNewAccount`
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if the both account were verified
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|400|You need to ask for verification code|you didn't ask for the code to verify both accounts|
+|400|Invalid token|the account-cookie, or the currentAccount-cookie, or the newAccount-cookie, are invalid, you need to get them again|
+|400|Current account code is wrong|the code you sent for the currentAccount verification doesn't match the one the server sent|
+|400|New account code is wrong|the code you sent for the newAccount verification doesn't match the one the server sent|
+|500|Server Error|My bad|
+
+### Explanation
+this endpoint its the second step to change the account, once you get the complete true, from here you can ask for change it, in /user/v1/update/account/

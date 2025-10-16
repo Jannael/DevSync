@@ -3,9 +3,8 @@
 ## /request/code/ 
 _Method: POST_
 ### Input
-
-  `account`
-  `TEST_PWD`: this is pwd for test env, it avoids no send the emails, and the code to 'verify', it always will be '1234'
+    `account`
+    `TEST_PWD`: this is pwd for test env, it avoids no send the emails, and the code to 'verify', it always will be '1234'
 
 ### Output
 - `complete`: boolean
@@ -30,11 +29,10 @@ this endpoint send and email to verify the account, and make some operations lik
 ## /verify/code/ 
 _Method: POST_
 ### Input
-  
-  first you need to ask for a code
-  /auth/v1/request/code/
-  `account`
-  `code`: if you used the correct TEST_PWD, it always will be '1234'
+    first you need to ask for a code
+    /auth/v1/request/code/
+    `account`
+    `code`: if you used the correct TEST_PWD, it always will be '1234'
 
 ### Output
 - `complete`: boolean

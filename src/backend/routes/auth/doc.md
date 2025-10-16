@@ -117,7 +117,7 @@ _Method: POST_
 ### Explanation
 this endpoint its the second and last step to log in
 
-## /request/accessToken/ 
+## /request/accessToken/
 _Method: GET_
 ### Input
     doesn't need an input but you to have a valid refreshToken
@@ -138,8 +138,38 @@ _Method: GET_
 
 |StatusCode|Message|Issue|
 |:-----------|:-----------|-----------:|
-|400|You need tyo login|When you don't have a refreshToken|
+|400|You need to login|When you don't have a refreshToken|
 |500|Server Error|My bad|
 
 ### Explanation
 this endpoint it's to keep the access to server resource with an accessToken
+
+
+## /account/request/code/
+_Method: PATCH_
+### Input
+    you need an accessToken 
+    /auth/v1/request/accessToken/
+    `newAccount`,
+    `TEST_PWD`: for test environment
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if the code for verifying the account was send and saved
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|401|Not authorized|When you either don't have an accessToken or you sent an invalid account|
+|400|Invalid token|the accessToken is invalid|
+|500|Server Error|My bad|
+
+### Explanation
+this endpoint it helps when you want to change your account but you need to be log in its the only way to change the account, this is the first step

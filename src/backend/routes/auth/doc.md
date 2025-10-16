@@ -87,6 +87,36 @@ _Method: POST_
 ### Explanation
 this endpoint its the first step to log in
 
+
+## /request/refreshToken/ 
+_Method: POST_
+### Input
+    first you need to ask for a code
+    /auth/v1/request/refreshToken/code/
+    'code'
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if you got the refreshToken
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|400|You need to use MFA for login|you didn't asked for a code or you didn't sent one|
+|400|Invalid token|the code-cookie you have is invalid and you need to ask for a new one|
+|400|Wrong code|the code you sent its different from the one the server sent|
+|500|Server Error|My bad|
+
+### Explanation
+this endpoint its the second and last step to log in
+
 ## /request/accessToken/ 
 _Method: GET_
 ### Input

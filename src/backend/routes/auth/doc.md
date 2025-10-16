@@ -59,16 +59,16 @@ _Method: POST_
 this endpoint verify the code you're sending its the same the server sent and the account also must match with the one you asked to verify for
 
 ## /request/refreshToken/code/ 
-_Method: get_
+_Method: POST_
 ### Input
-    doesn't need an input but you to have a valid refreshToken
-    ask code for refreshToken: /request/refreshToken/code/
-    verify code for refreshToken: /request/refreshToken/
+    `account`
+    `pwd`
+    `TEST_PWD`: this endpoint ask for a code to the user email, to MFA, if the TEST_PWD, its the correct one, it wont send the code, and the code will always be '1234',if its wrong it wont send it but the code to verify will be random
 
 ### Output
 - `complete`: boolean
 
-`complete`: it says if you got a new accessToken the server handles all the tokens, so you wont get them but this field tells you if everything went right
+`complete`: it says if the code was sent and saved to verify it
 
 ### Error
 `output`
@@ -79,14 +79,16 @@ _Method: get_
 
 |StatusCode|Message|Issue|
 |:-----------|:-----------|-----------:|
-|400|You need tyo login|When you don't have a refreshToken|
+|400|Missing or invalid data the account must match the following pattern example@service.ext|the account you sent it isn't even valid, or you're not sending all the input-fields need it|
+|404|User not found|the user you're asking to log in doesn't exist|
+|400|Incorrect password|everything went fine, but the pwd is incorrect|
 |500|Server Error|My bad|
 
 ### Explanation
-this endpoint it's to keep the access to server resource with an accessToken
+this endpoint its the first step to log in
 
 ## /request/accessToken/ 
-_Method: get_
+_Method: GET_
 ### Input
     doesn't need an input but you to have a valid refreshToken
     ask code for refreshToken: /request/refreshToken/code/

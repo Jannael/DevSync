@@ -206,3 +206,30 @@ _Method: PATCH_
 
 ### Explanation
 this endpoint its the second step to change the account, once you get the complete true, from here you can ask for change it, in /user/v1/update/account/
+
+## /password/request/code/
+_Method: PATCH_
+### Input
+    `account`
+    `TEST_PWD`: for test environment
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if the code to the account was sent
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|400|Missing or invalid account it must match example@service.ext||
+|404|This user doesn't exists||
+|500|Server Error|My bad|
+
+### Explanation
+this endpoint its for when you want to change the password of the account without been log in, `forgot password`

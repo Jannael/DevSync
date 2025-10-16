@@ -233,3 +233,35 @@ _Method: PATCH_
 
 ### Explanation
 this endpoint its for when you want to change the password of the account without been log in, `forgot password`
+
+## /password/verify/code/
+_Method: PATCH_
+### Input
+    you need to ask for a code
+    /auth/v1/password/request/code/
+    `code`
+    `account`
+    `newPwd`
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if you can change the pwd
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|400|Missing data|you're not sending the data the server needs, or you didn't ask for a code|
+|400|Invalid token|the token the server need to verify your account its invalid and you need to ask for a new one|
+|400|Wrong code|the code you sent and the one the server sent doesn't match|
+|400|You tried to change the account now your banned forever|the account you sent an the onw the server is verifying does match|
+|500|Server Error|My bad|
+
+### Explanation
+with this endpoint you verify the account its yours, and you can change the pwd in /user/v1/update/password/

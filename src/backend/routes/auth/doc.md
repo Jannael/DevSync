@@ -265,3 +265,26 @@ _Method: PATCH_
 
 ### Explanation
 with this endpoint you verify the account its yours, and you can change the pwd in /user/v1/update/password/
+
+## /request/logout/
+_Method: PATCH_
+### Input
+
+### Output
+- `complete`: boolean
+
+`complete`: it says if you are logout
+
+### Error
+`output`
+
+    _body: 
+        msg: ''
+        complete: boolean
+
+|StatusCode|Message|Issue|
+|:-----------|:-----------|-----------:|
+|500|Server Error|My bad|
+
+### Explanation
+to logout xd

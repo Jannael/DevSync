@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import { IEnv } from '../interface/env'
 import { ServerError } from '../error/error'
+import crypto from 'node:crypto'
 
 dotenv.config({ quiet: true })
 const { EMAIL_ENV, PASSWORD_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
@@ -40,4 +41,24 @@ export async function sendEmail (email: string, code: string, msg?: string): Pro
   } catch (e) {
     throw new ServerError('Something went wrong while sending emails')
   }
+}
+
+const IV_LENGTH = 16 // AES block size
+
+export function encrypt (text: string, key: string): string {
+  const iv = crypto.randomBytes(IV_LENGTH)
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key, 'utf8'), iv)
+  let encrypted = cipher.update(text, 'utf8', 'hex')
+  encrypted += cipher.final('hex')
+  const ivHex = iv.toString('hex')
+  return ivHex + ':' + encrypted
+}
+
+export function decrypt (encryptedText: string, key: string): string {
+  const [ivHex, encrypted] = encryptedText.split(':')
+  const iv = Buffer.from(ivHex, 'hex')
+  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key, 'utf8'), iv)
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8')
+  decrypted += decipher.final('utf8')
+  return decrypted
 }

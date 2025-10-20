@@ -41,7 +41,7 @@ const functions = {
       }
 
       const tokenHash = encrypt(JSON.stringify(tokenInfo), CRYPTO_AUTH_ENV)
-      const jwtToken = jwt.sign(tokenHash, JWT_AUTH_ENV, config.jwt.code)
+      const jwtToken = jwt.sign(tokenHash, JWT_AUTH_ENV)
       res.cookie('code', jwtToken, config.cookies.code)
       return true
     },

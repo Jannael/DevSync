@@ -45,6 +45,8 @@ describe('/auth/v1/', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
+      console.log(res.body)
+
       expect(res.headers['set-cookie'][0]).toMatch(/code=.* HttpOnly$/)
       expect(res.body).toEqual({ complete: true })
     })
@@ -235,7 +237,6 @@ describe('/auth/v1/', () => {
           },
           error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
         },
-        {
         {
           fn: async function () {
             return await request(app)

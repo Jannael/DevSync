@@ -5,7 +5,7 @@
 
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { generateCode, sendEmail, verifyEmail } from '../../utils/utils'
+import { encrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
@@ -14,11 +14,12 @@ import { Types } from 'mongoose'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV } = process.env as Pick<IEnv,
+const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV, CRYPTO_AUTH_ENV } = process.env as Pick<IEnv,
 'JWT_ACCESS_TOKEN_ENV' |
 'JWT_REFRESH_TOKEN_ENV' |
 'JWT_AUTH_ENV' |
-'TEST_PWD_ENV'>
+'TEST_PWD_ENV' |
+'CRYPTO_AUTH_ENV'>
 
 const functions = {
   request: {
@@ -34,8 +35,14 @@ const functions = {
 
       if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-      const codeHash = jwt.sign({ code, account: req.body.account }, JWT_AUTH_ENV, config.jwt.code)
-      res.cookie('code', codeHash, config.cookies.code)
+      const tokenInfo = {
+        code,
+        account: req.body.account
+      }
+
+      const tokenHash = encrypt(JSON.stringify(tokenInfo), CRYPTO_AUTH_ENV)
+      const jwtToken = jwt.sign(tokenHash, JWT_AUTH_ENV, config.jwt.code)
+      res.cookie('code', jwtToken, config.cookies.code)
       return true
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {

@@ -29,6 +29,9 @@ const handler = {
     } else if (e.name === 'NotBeforeError') {
       status.code = 403
       status.msg = 'Token it is not valid yet'
+    } else if (e.message === 'Invalid initialization vector' && e.name === 'TypeError') {
+      status.code = 400
+      status.msg = 'Invalid token'
     }
 
     res.status(status.code).json({ complete: false, msg: status.msg, link })

@@ -14,12 +14,21 @@ import { Types } from 'mongoose'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV, TEST_PWD_ENV, CRYPTO_AUTH_ENV } = process.env as Pick<IEnv,
+const {
+  JWT_ACCESS_TOKEN_ENV,
+  JWT_REFRESH_TOKEN_ENV,
+  JWT_AUTH_ENV, TEST_PWD_ENV,
+  CRYPTO_AUTH_ENV,
+  CRYPTO_ACCESS_TOKEN_ENV,
+  CRYPTO_REFRESH_TOKEN_ENV
+} = process.env as Pick<IEnv,
 'JWT_ACCESS_TOKEN_ENV' |
 'JWT_REFRESH_TOKEN_ENV' |
 'JWT_AUTH_ENV' |
 'TEST_PWD_ENV' |
-'CRYPTO_AUTH_ENV'>
+'CRYPTO_AUTH_ENV' |
+'CRYPTO_ACCESS_TOKEN_ENV' |
+'CRYPTO_REFRESH_TOKEN_ENV'>
 
 const functions = {
   request: {
@@ -106,18 +115,23 @@ const functions = {
           req.body?.code === undefined
         ) throw new UserBadRequest('You need to use MFA for login')
 
-        const code = jwt.verify(req.cookies.codeR, JWT_AUTH_ENV)
+        const tokenCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV)
+        const tokenUser = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV)
+
+        const code = jwt.verify(tokenCode, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Forbidden')
         if (code.code !== req.body.code) throw new UserBadRequest('Wrong code')
 
-        const user = jwt.verify(req.cookies?.tokenR, JWT_AUTH_ENV)
+        const user = jwt.verify(tokenUser, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Forbidden')
 
         delete user.iat
         delete user.exp
 
-        const refreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-        const accessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+        const jwtRefreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+        const jwtAccessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+        const refreshToken = encrypt(jwtRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+        const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
         const savedInDB = await model.auth.refreshToken.save(refreshToken, user._id)
         if (!savedInDB) throw new DatabaseError('something went wrong please try again')

@@ -226,9 +226,13 @@ const functions = {
           req.body?.codeNewAccount === undefined
         ) throw new UserBadRequest('You need to ask for verification codes')
 
-        const code = jwt.verify(req.cookies.currentAccount, JWT_AUTH_ENV) as JwtPayload
-        const codeNewAccount = jwt.verify(req.cookies.newAccount, JWT_AUTH_ENV) as JwtPayload
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
+        const jwtCode = decrypt(req.cookies.currentAccount, CRYPTO_AUTH_ENV)
+        const jwtCodeNewAccount = decrypt(req.cookies.newAccount, CRYPTO_AUTH_ENV)
+        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+
+        const code = jwt.verify(jwtCode, JWT_AUTH_ENV) as JwtPayload
+        const codeNewAccount = jwt.verify(jwtCodeNewAccount, JWT_AUTH_ENV) as JwtPayload
+        const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
 
         if (typeof code === 'string' ||
           typeof codeNewAccount === 'string' ||
@@ -241,7 +245,8 @@ const functions = {
         res.clearCookie('currentAccount')
         res.clearCookie('newAccount')
 
-        const account = jwt.sign({ account: codeNewAccount.account }, JWT_AUTH_ENV, config.jwt.code)
+        const jwtAccount = jwt.sign({ account: codeNewAccount.account }, JWT_AUTH_ENV, config.jwt.code)
+        const account = encrypt(jwtAccount, CRYPTO_AUTH_ENV)
 
         res.cookie('newAccount_account', account, config.cookies.code)
         return true

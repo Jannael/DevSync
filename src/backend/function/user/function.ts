@@ -117,8 +117,11 @@ const functions = {
         req.cookies.accessToken === undefined
       ) throw new UserBadRequest('Account not verified')
 
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
-      const cookieAccount = jwt.verify(req.cookies.account, JWT_AUTH_ENV) as JwtPayload
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+      const jwtCookieAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
+
+      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
+      const cookieAccount = jwt.verify(jwtCookieAccount, JWT_AUTH_ENV) as JwtPayload
 
       if (typeof accessToken === 'string' ||
         typeof cookieAccount === 'string'

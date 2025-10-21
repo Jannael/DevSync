@@ -11,19 +11,31 @@ import { Request, Response } from 'express'
 import config from './../../config/config'
 import { UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
+import { decrypt, encrypt } from '../../utils/utils'
 
 dotenv.config({ quiet: true })
-const { JWT_ACCESS_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, JWT_AUTH_ENV } = process.env as Pick<IEnv,
+const {
+  JWT_ACCESS_TOKEN_ENV,
+  JWT_REFRESH_TOKEN_ENV,
+  JWT_AUTH_ENV,
+  CRYPTO_ACCESS_TOKEN_ENV,
+  CRYPTO_AUTH_ENV,
+  CRYPTO_REFRESH_TOKEN_ENV
+} = process.env as Pick<IEnv,
 'JWT_ACCESS_TOKEN_ENV' |
 'JWT_REFRESH_TOKEN_ENV' |
-'JWT_AUTH_ENV'>
+'JWT_AUTH_ENV' |
+'CRYPTO_ACCESS_TOKEN_ENV' |
+'CRYPTO_AUTH_ENV' |
+'CRYPTO_REFRESH_TOKEN_ENV'>
 
 const functions = {
   user: {
     get: async function (req: Request, res: Response) {
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Missing accessToken')
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
+      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
 
       if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
@@ -37,7 +49,8 @@ const functions = {
       if (req.cookies?.account === undefined ||
         req.body === undefined) throw new UserBadRequest('Account not verified')
 
-      const decoded = jwt.verify(req.cookies?.account, JWT_AUTH_ENV)
+      const jwtAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
+      const decoded = jwt.verify(jwtAccount, JWT_AUTH_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Account not verified')
       if (decoded.account !== req.body.account) throw new UserBadRequest('Verified account does not match the sent account')
 
@@ -46,8 +59,10 @@ const functions = {
       const validData = validator.user.create(req.body)
       const result = await model.user.create(validData)
 
-      const refreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
-      const accessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const jwtRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
+      const jwtAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
+      const refreshToken = encrypt(jwtRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
       res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)

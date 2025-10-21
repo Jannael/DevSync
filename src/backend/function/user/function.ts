@@ -138,16 +138,24 @@ const functions = {
           req.cookies.newAccount_account === undefined
         ) throw new UserBadRequest('Not authorized')
 
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
-        const newAccount = jwt.verify(req.cookies.newAccount_account, JWT_AUTH_ENV)
+        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_ACCESS_TOKEN_ENV)
+
+        const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
+        const newAccount = jwt.verify(jwtNewAccount, JWT_AUTH_ENV)
 
         if (typeof accessToken === 'string' ||
           typeof newAccount === 'string'
         ) throw new UserBadRequest('Forbidden')
 
         const response = await model.user.account.update(accessToken._id, newAccount.account)
-        const newRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-        const newAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+        const jwtNewRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+        const jwtNewAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+        const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+        const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+
+        const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
+        if (!isSaved) throw new DatabaseError('Something went wrong please try again')
 
         res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', newAccessToken, config.cookies.accessToken)

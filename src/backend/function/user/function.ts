@@ -4,12 +4,13 @@
 
 import { IRefreshToken, IUser } from '../../interface/user'
 import model from './../../model/user/model'
+import authModel from './../../model/auth/model'
 import validator from '../../validator/validator'
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
-import { UserBadRequest } from '../../error/error'
+import { DatabaseError, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { decrypt, encrypt } from '../../utils/utils'
 
@@ -80,8 +81,11 @@ const functions = {
         req.cookies?.accessToken === undefined
       ) throw new UserBadRequest('Not authorized')
 
-      const accountCookie = jwt.verify(req.cookies.account, JWT_AUTH_ENV)
-      const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
+      const jwtAccountCookie = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+
+      const accountCookie = jwt.verify(jwtAccountCookie, JWT_AUTH_ENV)
+      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
 
       if (typeof accountCookie === 'string' ||
         typeof accessToken === 'string'
@@ -93,8 +97,13 @@ const functions = {
       if (data === null) throw new UserBadRequest('No data to update or invalid data')
 
       const result = await model.user.update(data, accessToken._id)
-      const newRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-      const newAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+      const jwtNewRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+      const jwtNewAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+      const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+
+      const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
+      if (!isSaved) throw new DatabaseError('Something went wrong please try again')
 
       res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', newAccessToken, config.cookies.accessToken)

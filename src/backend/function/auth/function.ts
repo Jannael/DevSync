@@ -90,8 +90,11 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-        const token = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code)
-        const hashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        const jwtToken = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code)
+        const jwtHashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        const token = encrypt(jwtToken, CRYPTO_AUTH_ENV)
+        const hashCode = encrypt(jwtHashCode, CRYPTO_AUTH_ENV)
+
         res.cookie('tokenR', token, config.cookies.code)
         res.cookie('codeR', hashCode, config.cookies.code)
 

@@ -170,7 +170,8 @@ const functions = {
       update: async function (req: Request, res: Response) {
         if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Not authorized')
 
-        const newPwd = jwt.verify(req.cookies.newPwd, JWT_AUTH_ENV)
+        const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV)
+        const newPwd = jwt.verify(jwtNewPwd, JWT_AUTH_ENV)
         if (typeof newPwd === 'string') throw new UserBadRequest('Invalid token')
 
         await model.user.password.update(newPwd.account, newPwd.pwd)

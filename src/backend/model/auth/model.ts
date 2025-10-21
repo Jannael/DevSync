@@ -9,7 +9,7 @@ const model = {
   verify: {
     refreshToken: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid user ID')
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
       }
 
       const result = await dbModel.findOne(
@@ -17,14 +17,14 @@ const model = {
         { refreshToken: 1, _id: 0 }
       ).lean()
 
-      if (result === null) throw new NotFound('User do not found check the _id')
+      if (result === null) throw new NotFound('User not found')
 
       const tokens = result?.refreshToken
       return Array.isArray(tokens) && tokens.includes(token)
     },
     login: async function (account: string, pwd: string): Promise<IRefreshToken> {
       const isValidAccount = verifyEmail(account)
-      if (!isValidAccount) throw new UserBadRequest('Invalid account it must match example@service.ext')
+      if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
 
       const user = await dbModel.findOne(
         { account },
@@ -34,7 +34,7 @@ const model = {
       if (user === null) throw new NotFound('User not found')
 
       const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
-      if (!pwdIsCorrect) throw new UserBadRequest('Incorrect password')
+      if (!pwdIsCorrect) throw new UserBadRequest('Invalid credentials', 'Incorrect password')
 
       delete (user as Partial<IUser>).pwd
 
@@ -42,7 +42,7 @@ const model = {
     },
     user: async function (account: string): Promise<boolean> {
       const exists = await dbModel.exists({ account })
-      if (exists === null) throw new NotFound('This user does not exists')
+      if (exists === null) throw new NotFound('User not found')
       return true
     }
   },
@@ -51,11 +51,11 @@ const model = {
       save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
         try {
           if (!Types.ObjectId.isValid(userId)) {
-            throw new UserBadRequest('Invalid user ID')
+            throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
 
           const exists = await dbModel.exists({ _id: userId })
-          if (exists == null) throw new UserBadRequest('User does not exist')
+          if (exists == null) throw new NotFound('User not found')
 
           const result = await dbModel.updateOne(
             { _id: userId },
@@ -65,17 +65,17 @@ const model = {
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
           if (e instanceof UserBadRequest) throw e
-          throw new DatabaseError('something went wrong please try again')
+          throw new DatabaseError('Failed to save')
         }
       },
       remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
         try {
           if (!Types.ObjectId.isValid(userId)) {
-            throw new UserBadRequest('Invalid user ID')
+            throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
 
           const exists = await dbModel.exists({ _id: userId })
-          if (exists == null) throw new UserBadRequest('User does not exist')
+          if (exists == null) throw new NotFound('User not found')
 
           const result = await dbModel.updateOne(
             { _id: userId },
@@ -85,7 +85,7 @@ const model = {
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
           if (e instanceof UserBadRequest) throw e
-          throw new DatabaseError('something went wrong please try again')
+          throw new DatabaseError('Failed to remove')
         }
       }
     }

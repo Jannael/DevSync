@@ -56,17 +56,17 @@ const functions = {
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('You need to login')
       let refreshToken
-      const token = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
-      const decoded = jwt.decode(token)
+      const jwtRefreshToken = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const decoded = jwt.decode(jwtRefreshToken)
 
       try {
-        refreshToken = jwt.verify(token, JWT_REFRESH_TOKEN_ENV)
+        refreshToken = jwt.verify(jwtRefreshToken, JWT_REFRESH_TOKEN_ENV)
       } catch (e) {
         if ((e as Error).name === 'TokenExpiredError' &&
           decoded !== null &&
           typeof decoded !== 'string' &&
           decoded._id !== undefined) {
-          await model.auth.refreshToken.remove(token, decoded._id)
+          await model.auth.refreshToken.remove(jwtRefreshToken, decoded._id)
         }
         throw e
       }
@@ -117,14 +117,14 @@ const functions = {
           req.body?.code === undefined
         ) throw new UserBadRequest('You need to use MFA for login')
 
-        const tokenCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV)
-        const tokenUser = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV)
+        const jwtCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV)
+        const jwtToken = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV)
 
-        const code = jwt.verify(tokenCode, JWT_AUTH_ENV)
+        const code = jwt.verify(jwtCode, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Forbidden')
         if (code.code !== req.body.code) throw new UserBadRequest('Wrong code')
 
-        const user = jwt.verify(tokenUser, JWT_AUTH_ENV)
+        const user = jwt.verify(jwtToken, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Forbidden')
 
         delete user.iat
@@ -165,8 +165,8 @@ const functions = {
         req.cookies?.code === undefined
       ) throw new UserBadRequest('Missing code')
 
-      const token = decrypt(req.cookies.code, CRYPTO_AUTH_ENV)
-      const decodedCode = jwt.verify(token, JWT_AUTH_ENV)
+      const jwtCode = decrypt(req.cookies.code, CRYPTO_AUTH_ENV)
+      const decodedCode = jwt.verify(jwtCode, JWT_AUTH_ENV)
       if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
 
       if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
@@ -191,8 +191,8 @@ const functions = {
           !verifyEmail(req.body?.newAccount)
         ) throw new UserBadRequest('Not authorized')
 
-        const token = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
-        const accessToken = jwt.verify(token, JWT_ACCESS_TOKEN_ENV)
+        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
         if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
         if (req.body?.TEST_PWD !== undefined &&

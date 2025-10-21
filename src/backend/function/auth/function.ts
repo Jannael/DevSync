@@ -285,13 +285,15 @@ const functions = {
           req.body?.account === undefined
         ) throw new UserBadRequest('Missing data')
 
-        const code = jwt.verify(req.cookies.pwdChange, JWT_AUTH_ENV)
+        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV)
+        const code = jwt.verify(jwtPwdChange, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Invalid token')
 
         if (code.code !== req.body?.code) throw new UserBadRequest('Wrong code')
         if (code.account !== req.body?.account) throw new UserBadRequest('You tried to change the account now your banned forever')
 
-        const hash = jwt.sign({ pwd: req.body?.newPwd, account: code.account }, JWT_AUTH_ENV, config.jwt.code)
+        const jwtHash = jwt.sign({ pwd: req.body?.newPwd, account: code.account }, JWT_AUTH_ENV, config.jwt.code)
+        const hash = encrypt(jwtHash, CRYPTO_AUTH_ENV)
 
         res.cookie('newPwd', hash, config.cookies.code)
         res.clearCookie('pwdChange')

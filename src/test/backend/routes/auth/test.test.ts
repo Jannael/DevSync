@@ -80,7 +80,7 @@ describe('/auth/v1/', () => {
   describe('/verify/code/', () => {
     const endpoint = '/auth/v1/verify/code/'
 
-    test.only('', async () => {
+    test('', async () => {
       await agent
         .post('/auth/v1/request/code/')
         .send({

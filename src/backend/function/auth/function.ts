@@ -154,8 +154,9 @@ const functions = {
 
       res.clearCookie('code')
 
-      const emailHash = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code)
-      res.cookie('account', emailHash, config.cookies.code)
+      const jwtToken = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code)
+      const encrypted = encrypt(jwtToken, CRYPTO_AUTH_ENV)
+      res.cookie('account', encrypted, config.cookies.code)
       return true
     }
   },

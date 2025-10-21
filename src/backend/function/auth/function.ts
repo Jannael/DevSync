@@ -54,18 +54,19 @@ const functions = {
       return true
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.cookies.refreshToken === undefined) throw new UserBadRequest('You need to login')
+      if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('You need to login')
       let refreshToken
-      const decoded = jwt.decode(req.cookies.refreshToken)
+      const token = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const decoded = jwt.decode(token)
 
       try {
-        refreshToken = jwt.verify(req.cookies.refreshToken, JWT_REFRESH_TOKEN_ENV)
+        refreshToken = jwt.verify(token, JWT_REFRESH_TOKEN_ENV)
       } catch (e) {
         if ((e as Error).name === 'TokenExpiredError' &&
           decoded !== null &&
           typeof decoded !== 'string' &&
           decoded._id !== undefined) {
-          await model.auth.refreshToken.remove(req.cookies.refreshToken, decoded._id)
+          await model.auth.refreshToken.remove(token, decoded._id)
         }
         throw e
       }
@@ -73,12 +74,13 @@ const functions = {
       if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
 
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
-      if (!dbValidation) throw new DatabaseError('the validation has failed please try again')
+      if (!dbValidation) throw new DatabaseError('You are not logged In')
 
       delete refreshToken.iat
       delete refreshToken.exp
 
-      const accessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+      const jwtAccessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
+      const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return true
     },

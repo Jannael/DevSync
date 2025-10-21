@@ -139,7 +139,7 @@ const functions = {
         ) throw new UserBadRequest('Not authorized')
 
         const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
-        const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_ACCESS_TOKEN_ENV)
+        const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_AUTH_ENV)
 
         const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
         const newAccount = jwt.verify(jwtNewAccount, JWT_AUTH_ENV)

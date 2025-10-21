@@ -35,14 +35,13 @@ const functions = {
 
       if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-      const tokenInfo = {
+      const jwtToken = jwt.sign({
         code,
         account: req.body.account
-      }
+      }, JWT_AUTH_ENV, config.jwt.code)
 
-      const tokenHash = encrypt(JSON.stringify(tokenInfo), CRYPTO_AUTH_ENV)
-      const jwtToken = jwt.sign(tokenHash, JWT_AUTH_ENV)
-      res.cookie('code', jwtToken, config.cookies.code)
+      const jwtEncrypt = encrypt(jwtToken, CRYPTO_AUTH_ENV)
+      res.cookie('code', jwtEncrypt, config.cookies.code)
       return true
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
@@ -146,8 +145,9 @@ const functions = {
         req.cookies?.code === undefined
       ) throw new UserBadRequest('Missing code')
 
-      const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV) as JwtPayload
+      const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV)
       if (typeof decodedCode !== 'string') throw new UserBadRequest('Forbidden')
+
       const token = JSON.parse(decrypt(decodedCode, CRYPTO_AUTH_ENV))
       if (req.body?.code !== token.code) throw new UserBadRequest('Wrong code')
       if (req.body?.account !== token.account) throw new UserBadRequest('You tried to change the account now your banned forever')

@@ -271,7 +271,8 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-        const hashCode = jwt.sign({ code, account: req.body?.account }, JWT_AUTH_ENV, config.jwt.code)
+        const jwtHashCode = jwt.sign({ code, account: req.body?.account }, JWT_AUTH_ENV, config.jwt.code)
+        const hashCode = encrypt(jwtHashCode, CRYPTO_AUTH_ENV)
         res.cookie('pwdChange', hashCode, config.cookies.code)
         return true
       }

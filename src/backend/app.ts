@@ -8,9 +8,7 @@ import middleware from './middleware/merge'
 
 dotenv.config({ quiet: true })
 
-const { DB_URL_ENV } = process.env as Pick<IEnv,
-'DB_URL_ENV'
->
+const { DB_URL_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV'>
 
 export async function createApp (): Promise<express.Express> {
   await mongoose.connect(DB_URL_ENV)

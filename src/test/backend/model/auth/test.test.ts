@@ -47,7 +47,7 @@ describe('auth model', () => {
             fn: async function () {
               await model.auth.refreshToken.save('', notExistUser)
             },
-            error: new UserBadRequest('User does not exist')
+            error: new NotFound('User not found')
           }
         ]
 
@@ -69,13 +69,13 @@ describe('auth model', () => {
             fn: async function () {
               await model.auth.refreshToken.remove('', notExistUser)
             },
-            error: new UserBadRequest('User does not exist')
+            error: new NotFound('User not found')
           },
           {
             fn: async function () {
               await model.auth.refreshToken.remove('', '' as unknown as Types.ObjectId)
             },
-            error: new UserBadRequest('Invalid user ID')
+            error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
         ]
 
@@ -104,13 +104,13 @@ describe('auth model', () => {
           fn: async function () {
             await model.verify.refreshToken('token', notExistUser)
           },
-          error: new NotFound('User do not found check the _id')
+          error: new NotFound('User not found')
         },
         {
           fn: async function () {
             await model.verify.refreshToken('token', 'invalid' as unknown as Types.ObjectId)
           },
-          error: new UserBadRequest('Invalid user ID')
+          error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
         }
       ]
 
@@ -140,7 +140,7 @@ describe('auth model', () => {
           fn: async function () {
             await model.verify.login('account', 'pwd')
           },
-          error: new UserBadRequest('Invalid account it must match example@service.ext')
+          error: new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
         },
         {
           fn: async function () {
@@ -152,7 +152,7 @@ describe('auth model', () => {
           fn: async function () {
             await model.verify.login('test@email.com', 'pwd')
           },
-          error: new UserBadRequest('Incorrect password')
+          error: new UserBadRequest('Invalid credentials', 'Incorrect password')
         }
       ]
 
@@ -174,7 +174,7 @@ describe('auth model', () => {
           fn: async function () {
             await model.verify.user('notExists')
           },
-          error: new NotFound('This user does not exists')
+          error: new NotFound('User not found')
         }
       ]
 

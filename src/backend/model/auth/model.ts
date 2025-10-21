@@ -64,7 +64,8 @@ const model = {
 
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
-          if (e instanceof UserBadRequest) throw e
+          if (e instanceof UserBadRequest ||
+            e instanceof NotFound) throw e
           throw new DatabaseError('Failed to save')
         }
       },
@@ -84,7 +85,9 @@ const model = {
 
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
-          if (e instanceof UserBadRequest) throw e
+          if (e instanceof UserBadRequest ||
+            e instanceof NotFound
+          ) throw e
           throw new DatabaseError('Failed to remove')
         }
       }

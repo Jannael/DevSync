@@ -190,7 +190,8 @@ const functions = {
           !verifyEmail(req.body?.newAccount)
         ) throw new UserBadRequest('Not authorized')
 
-        const accessToken = jwt.verify(req.cookies.accessToken, JWT_ACCESS_TOKEN_ENV)
+        const token = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const accessToken = jwt.verify(token, JWT_ACCESS_TOKEN_ENV)
         if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
 
         if (req.body?.TEST_PWD !== undefined &&
@@ -205,8 +206,10 @@ const functions = {
           await sendEmail(req.body.newAccount, code)
         }
 
-        const codeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
-        const codeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount)
+        const jwtCodeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
+        const jwtCodeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount)
+        const codeEncrypted = encrypt(jwtCodeEncrypted, CRYPTO_AUTH_ENV)
+        const codeNewAccountEncrypted = encrypt(jwtCodeNewAccountEncrypted, CRYPTO_AUTH_ENV)
 
         res.cookie('currentAccount', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)

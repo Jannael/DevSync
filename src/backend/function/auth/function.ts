@@ -5,8 +5,8 @@
 
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { encrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
-import dotenv, { decrypt } from 'dotenv'
+import { encrypt, decrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
+import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
 import { IEnv } from '../../interface/env'
@@ -145,16 +145,16 @@ const functions = {
         req.cookies?.code === undefined
       ) throw new UserBadRequest('Missing code')
 
-      const decodedCode = jwt.verify(req.cookies.code, JWT_AUTH_ENV)
-      if (typeof decodedCode !== 'string') throw new UserBadRequest('Forbidden')
+      const token = decrypt(req.cookies.code, CRYPTO_AUTH_ENV)
+      const decodedCode = jwt.verify(token, JWT_AUTH_ENV)
+      if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
 
-      const token = JSON.parse(decrypt(decodedCode, CRYPTO_AUTH_ENV))
-      if (req.body?.code !== token.code) throw new UserBadRequest('Wrong code')
-      if (req.body?.account !== token.account) throw new UserBadRequest('You tried to change the account now your banned forever')
+      if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
+      if (req.body?.account !== decodedCode.account) throw new UserBadRequest('You tried to change the account now your banned forever')
 
       res.clearCookie('code')
 
-      const emailHash = jwt.sign({ account: token.account }, JWT_AUTH_ENV, config.jwt.code)
+      const emailHash = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('account', emailHash, config.cookies.code)
       return true
     }

@@ -1,4 +1,4 @@
-import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
+import { DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
 import { IRefreshToken, IUser } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/user/model'

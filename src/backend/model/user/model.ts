@@ -45,6 +45,10 @@ const model = {
       }
     },
     update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+
       if (data.pwd !== undefined) {
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
         const pwd = await bcrypt.hash(data.pwd, salt)
@@ -77,6 +81,10 @@ const model = {
     },
     account: {
       update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
+
         const isValidAccount = verifyEmail(account)
         if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
 

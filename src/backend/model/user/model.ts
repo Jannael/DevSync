@@ -99,7 +99,9 @@ const model = {
       update: async function (account: string, pwd: string): Promise<boolean> {
         if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
 
-        const response = await dbModel.updateOne({ account }, { pwd })
+        const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
+        const hashedPwd = await bcrypt.hash(pwd, salt)
+        const response = await dbModel.updateOne({ account }, { pwd: hashedPwd })
         if (response.matchedCount === 0) throw new NotFound('User not found')
 
         return true

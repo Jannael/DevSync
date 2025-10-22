@@ -60,7 +60,7 @@ describe('user model', () => {
               personalization: { theme: 'test' }
             })
           },
-          error: new DuplicateData('This user already exists')
+          error: new DuplicateData('User already exists', 'This account belongs to an existing user')
         },
         {
           fn: async function () {
@@ -74,7 +74,7 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new DatabaseError('Something went wrong while writing the user')
+          error: new UserBadRequest('Invalid credentials', 'Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
         },
         {
           fn: async function () {
@@ -91,7 +91,7 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new UserBadRequest('You cant put the _id yourself')
+          error: new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
         },
         {
           fn: async function () {
@@ -107,7 +107,7 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new UserBadRequest('You cant put the refreshToken yourself')
+          error: new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
         },
         {
           fn: async function () {
@@ -122,7 +122,7 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new UserBadRequest('Invalid account it must match example@service.ext')
+          error: new UserBadRequest('Invalid credentials', 'Invalid account it must match example@service.ext')
         }
       ]
 

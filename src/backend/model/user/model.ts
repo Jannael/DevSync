@@ -6,6 +6,7 @@ import { IRefreshToken, IUser } from './../../interface/user'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { Types } from 'mongoose'
+import validator from '../../validator/validator'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -16,9 +17,13 @@ const model = {
       try {
         if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
         if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
+        validator.user.create(data)
 
         const isValidAccount = verifyEmail(data.account)
         if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'Invalid account it must match example@service.ext')
+
+        const exists = await dbModel.exists({ account: data.account })
+        if (exists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
 
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
         const hashedPwd = await bcrypt.hash(data.pwd, salt)
@@ -28,11 +33,11 @@ const model = {
           { pwd: 0, refreshToken: 0 }
         ).lean()
 
-        if (user === null) throw new NotFound('User not found')
+        if (user === null) throw new NotFound('User not found', 'The user appears to be created but it was not found')
 
         return user
       } catch (e: any) {
-        if (e?.code === 11000) throw new DuplicateData('User already exists')
+        if (e instanceof DuplicateData) throw e
         else if (e instanceof UserBadRequest) throw e
         else if (e instanceof NotFound) throw e
 

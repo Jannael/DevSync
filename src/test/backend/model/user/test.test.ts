@@ -154,25 +154,25 @@ describe('user model', () => {
           fn: async function () {
             await model.user.update({ }, notExistUser)
           },
-          error: new NotFound('User does not exist')
+          error: new NotFound('User not found')
         },
         {
           fn: async function () {
             await model.user.update({ account: 'test' }, userId)
           },
-          error: new UserBadRequest('You need to use the endpoint for account change')
+          error: new UserBadRequest('Invalid credentials', 'You can not update the account here')
         },
         {
           fn: async function () {
             await model.user.update({ _id: notExistUser }, userId)
           },
-          error: new UserBadRequest('You cant change the _id field')
+          error: new UserBadRequest('Invalid credentials', 'You can not change the _id')
         },
         {
           fn: async function () {
             await model.user.update({ refreshToken: ['hello Dexter Morgan'] }, userId)
           },
-          error: new UserBadRequest('You cant change the refreshToken field')
+          error: new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
         }
       ]
 

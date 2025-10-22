@@ -203,13 +203,13 @@ describe('user model', () => {
           fn: async function () {
             await model.user.account.update(notExistUser, 'test@gmail.com')
           },
-          error: new NotFound('User does not exist')
+          error: new NotFound('User not found')
         },
         {
           fn: async function () {
             await model.user.account.update(userId, 'test')
           },
-          error: new UserBadRequest('Invalid account it must match example@service.ext')
+          error: new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
         }
       ]
 

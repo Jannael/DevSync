@@ -261,7 +261,7 @@ describe('user model', () => {
           fn: async function () {
             await model.user.delete(notExistUser)
           },
-          error: new NotFound('User may not exist or the id is incorrect')
+          error: new NotFound('User not found')
         }
       ]
 

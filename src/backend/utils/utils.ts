@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import { IEnv } from '../interface/env'
-import { ServerError } from '../error/error'
+import { ServerError, UserBadRequest } from '../error/error'
 import crypto from 'node:crypto'
 
 dotenv.config({ quiet: true })
@@ -39,7 +39,7 @@ export async function sendEmail (email: string, code: string, msg?: string): Pro
     })
     return true
   } catch (e) {
-    throw new ServerError('Something went wrong while sending emails')
+    throw new ServerError('Operation Failed', 'Something went wrong while sending emails')
   }
 }
 
@@ -53,10 +53,20 @@ export function encrypt (text: string, key: string): string {
 }
 
 export function decrypt (encryptedText: string, key: string): string {
-  const [ivHex, encrypted] = encryptedText.split(':')
-  const iv = Buffer.from(ivHex, 'hex')
-  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key, 'base64'), iv)
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8')
-  decrypted += decipher.final('utf8')
-  return decrypted
+  try {
+    const [ivHex, encrypted] = encryptedText.split(':')
+    const iv = Buffer.from(ivHex, 'hex')
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key, 'base64'), iv)
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8')
+    decrypted += decipher.final('utf8')
+    return decrypted
+  } catch (error) {
+    const e = error as Error
+    if (e.name === 'TypeError' &&
+      e.message === 'Invalid initialization vector'
+    ) {
+      throw new UserBadRequest('Invalid credentials', 'The token is invalid')
+    }
+    return ''
+  }
 }

@@ -82,6 +82,7 @@ describe('/auth/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.msg).toEqual(error.msg)
       }
     })
@@ -119,7 +120,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Missing code',
+            msg: 'Missing data',
+            description: 'Missing code you need to ask for one',
             complete: false
           }
         },
@@ -133,7 +135,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Missing code',
+            msg: 'Missing data',
+            description: 'Missing code you need to ask for one',
             complete: false
           }
         },
@@ -146,7 +149,12 @@ describe('/auth/v1/', () => {
                 code: '1234'
               })
           },
-          error: { code: 400, msg: 'Invalid token', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The token is invalid',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -165,7 +173,12 @@ describe('/auth/v1/', () => {
                 code: '123'
               })
           },
-          error: { code: 400, msg: 'Wrong code', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Wrong code',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -185,7 +198,12 @@ describe('/auth/v1/', () => {
                 code: '1234'
               })
           },
-          error: { code: 400, msg: 'You tried to change the account now your banned forever', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'You tried to change the account now your banned forever',
+            complete: false
+          }
         }
       ]
 
@@ -195,6 +213,7 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'Missing code', href: '/auth/v1/request/code' }
         ])

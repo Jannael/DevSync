@@ -248,7 +248,12 @@ describe('/auth/v1/', () => {
                 account: 'test'
               })
           },
-          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
+          error: {
+            complete: false,
+            msg: 'Invalid credentials',
+            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
+            code: 400
+          }
         },
         {
           fn: async function () {
@@ -258,7 +263,12 @@ describe('/auth/v1/', () => {
                 account: 'test@gmail.com'
               })
           },
-          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
+          error: {
+            complete: false,
+            msg: 'Invalid credentials',
+            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
+            code: 400
+          }
         },
         {
           fn: async function () {
@@ -269,7 +279,12 @@ describe('/auth/v1/', () => {
                 pwd: ''
               })
           },
-          error: { complete: false, msg: 'Missing or invalid data the account must match the following pattern example@service.ext', code: 400 }
+          error: {
+            complete: false,
+            msg: 'Invalid credentials',
+            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
+            code: 400
+          }
         },
         {
           fn: async function () {
@@ -280,7 +295,12 @@ describe('/auth/v1/', () => {
                 pwd: ''
               })
           },
-          error: { complete: false, msg: 'User not found', code: 404 }
+          error: {
+            complete: false,
+            msg: 'User not found',
+            description: undefined,
+            code: 404
+          }
         },
         {
           fn: async function () {
@@ -291,7 +311,12 @@ describe('/auth/v1/', () => {
                 pwd: '1234'
               })
           },
-          error: { complete: false, msg: 'Incorrect password', code: 400 }
+          error: {
+            complete: false,
+            msg: 'Invalid credentials',
+            description: 'Incorrect password',
+            code: 400
+          }
         }
       ]
 

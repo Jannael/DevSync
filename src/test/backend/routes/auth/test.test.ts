@@ -447,7 +447,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'You need to login',
+            msg: 'Missing data',
+            description: 'You need to login',
             complete: false
           }
         }

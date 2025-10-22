@@ -56,6 +56,8 @@ const model = {
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
       if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
 
+      validator.user.partial(data)
+
       const user = await dbModel.updateOne({ _id: userId }, { ...data })
       if (user.matchedCount === 0) throw new NotFound('User not found')
       const refreshToken = await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 }).lean()

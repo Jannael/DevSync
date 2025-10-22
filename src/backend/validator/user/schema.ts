@@ -20,7 +20,7 @@ const validator = {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
   },
-  partial: function (obj: IUser) {
+  partial: function (obj: Partial<IUser>) {
     try {
       const result = create.partial().parse(obj)
       return result

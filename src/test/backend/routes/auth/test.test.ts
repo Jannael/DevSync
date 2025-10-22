@@ -493,7 +493,12 @@ describe('/auth/v1/', () => {
             return await request(app)
               .patch(endpoint)
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Missing or invalid data you may be not logged in',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -501,7 +506,12 @@ describe('/auth/v1/', () => {
               .patch(endpoint)
               .set('Cookie', ['accessToken=token'])
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Missing or invalid data you may be not logged in',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -511,7 +521,12 @@ describe('/auth/v1/', () => {
                 newAccount: 'account'
               })
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Missing or invalid data you may be not logged in',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -522,7 +537,12 @@ describe('/auth/v1/', () => {
                 newAccount: 'account'
               })
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Missing or invalid data you may be not logged in',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -533,7 +553,12 @@ describe('/auth/v1/', () => {
                 newAccount: 'account@gmail.com'
               })
           },
-          error: { code: 400, msg: 'Invalid token', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The token is invalid',
+            complete: false
+          }
         }
       ]
 

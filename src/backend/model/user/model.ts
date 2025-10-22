@@ -19,9 +19,6 @@ const model = {
         if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
         validator.user.create(data)
 
-        const isValidAccount = verifyEmail(data.account)
-        if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'Invalid account it must match example@service.ext')
-
         const exists = await dbModel.exists({ account: data.account })
         if (exists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
 

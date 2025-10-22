@@ -74,7 +74,7 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new UserBadRequest('Invalid credentials', 'Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
+          error: new UserBadRequest('Invalid credentials', 'FullName is required')
         },
         {
           fn: async function () {
@@ -122,12 +122,19 @@ describe('user model', () => {
 
             await model.user.create(obj)
           },
-          error: new UserBadRequest('Invalid credentials', 'Invalid account it must match example@service.ext')
+          error: new UserBadRequest('Invalid credentials', 'Invalid email address')
         }
       ]
 
       for (const { fn, error } of func) {
-        await expect(fn()).rejects.toThrow(error)
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
       }
     })
   })

@@ -3,10 +3,10 @@ import { IUser } from '../../interface/user'
 import { UserBadRequest } from '../../error/error'
 
 const create = z.object({
-  fullName: z.string(),
-  account: z.string().email(),
-  pwd: z.string().min(3).max(255),
-  role: z.array(z.enum(['documenter', 'techLead', 'developer'] as const)),
+  fullName: z.string('fullName is required'),
+  account: z.string('the Account is required').email(),
+  pwd: z.string('Password is required').min(3).max(255),
+  role: z.array(z.enum(['documenter', 'techLead', 'developer'] as const, 'role is required and it has to be \'documenter\', \'techLead\', \'developer\'')),
   nickName: z.string().min(3).max(255).optional(),
   personalization: z.object({ theme: z.string() }).optional()
 })
@@ -16,8 +16,8 @@ const validator = {
     try {
       const result = create.parse(obj)
       return result
-    } catch {
-      throw new UserBadRequest('Invalid credentials', 'Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]')
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
   },
   partial: function (obj: IUser) {

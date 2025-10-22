@@ -142,7 +142,11 @@ describe('/user/v1/', () => {
               .post(endpoint)
               .set('Cookie', ['account=value'])
           },
-          error: { code: 401, msg: 'Account not verified', complete: false }
+          error: {
+            code: 401,
+            msg: 'Account not verified',
+            complete: false
+          }
         },
         {
           fn: async function () {

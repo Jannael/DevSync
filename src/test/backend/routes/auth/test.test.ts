@@ -58,13 +58,23 @@ describe('/auth/v1/', () => {
                 account: 'test'
               })
           },
-          error: { code: 400, msg: 'Missing or invalid account, the account must match the following pattern example@service.ext', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
+            complete: false
+          }
         },
         {
           fn: async function () {
             return await request(app).post('/auth/v1/request/code')
           },
-          error: { code: 400, msg: 'Missing or invalid account, the account must match the following pattern example@service.ext', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
+            complete: false
+          }
         }
       ]
 

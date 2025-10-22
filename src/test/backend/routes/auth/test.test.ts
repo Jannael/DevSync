@@ -358,7 +358,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'You need to use MFA for login',
+            msg: 'Missing data',
+            description: 'You need to use MFA for login',
             complete: false
           }
         },
@@ -370,7 +371,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'You need to use MFA for login',
+            msg: 'Missing data',
+            description: 'You need to use MFA for login',
             complete: false
           }
         },
@@ -383,7 +385,12 @@ describe('/auth/v1/', () => {
                 code: '1234'
               })
           },
-          error: { code: 400, msg: 'Invalid token', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The token is invalid',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -400,7 +407,12 @@ describe('/auth/v1/', () => {
                 code: '0000'
               })
           },
-          error: { code: 400, msg: 'Wrong code', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Wrong code',
+            complete: false
+          }
         }
       ]
 

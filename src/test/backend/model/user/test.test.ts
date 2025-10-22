@@ -231,13 +231,13 @@ describe('user model', () => {
           fn: async function () {
             await model.user.password.update('test', 'test')
           },
-          error: new UserBadRequest('invalid account')
+          error: new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
         },
         {
           fn: async function () {
             await model.user.password.update('helloDexterMorgan@gmail.com.mx', 'test')
           },
-          error: new NotFound('User does not exist')
+          error: new NotFound('User not found')
         }
 
       ]

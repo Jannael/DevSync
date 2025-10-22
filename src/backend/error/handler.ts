@@ -1,40 +1,49 @@
 import { Response } from 'express'
-import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from './error'
+import { CustomError } from './error'
+
+function jwtHandler (e: CustomError):
+{ code: number, msg: string, description: string, link: Array<{ rel: string, href: string }> | undefined } {
+  const status = { code: 500, msg: '', description: '', link: e.link }
+
+  if (e.name === 'TokenExpiredError') {
+    status.code = 401
+    status.msg = 'Expired token'
+    status.description = 'The token has expired and is no longer valid'
+  } else if (e.name === 'JsonWebTokenError') {
+    status.code = 400
+    status.msg = 'Invalid token'
+    status.description = 'The token is malformed or has been tampered with'
+  } else if (e.name === 'NotBeforeError') {
+    status.code = 403
+    status.msg = 'Invalid token'
+    status.description = 'The token is not active yet; check the "nbf" claim'
+  }
+
+  return status
+}
 
 const handler = {
-  user: function (res: Response, e: Error, link?: Array<{ rel: string, href: string }>) {
-    const status = { code: 500, msg: '', links: [] }
+  user: function (res: Response, e: CustomError) {
+    let status: {
+      code: number
+      msg: string
+      description: string | undefined
+      link: Array<{ rel: string, href: string }> | undefined
+    } = { code: 500, msg: '', description: '', link: undefined }
 
-    if (e instanceof DatabaseError) {
-      status.code = 500
-      status.msg = e.message
-    } else if (e instanceof DuplicateData) {
-      status.code = 409
-      status.msg = e.message
-    } else if (e instanceof UserBadRequest) {
-      status.code = 400
-      if (e.message === 'Account not verified' ||
-        e.message === 'Not authorized') status.code = 401
-      else if (e.message === 'Forbidden') status.code = 403
-      status.msg = e.message
-    } else if (e instanceof NotFound) {
-      status.code = 404
-      status.msg = e.message
-    } else if (e.name === 'TokenExpiredError') {
-      status.code = 401
-      status.msg = 'Expired token'
-    } else if (e.name === 'JsonWebTokenError') {
-      status.code = 400
-      status.msg = 'Invalid token'
-    } else if (e.name === 'NotBeforeError') {
-      status.code = 403
-      status.msg = 'Token it is not valid yet'
-    } else if (e.message === 'Invalid initialization vector' && e.name === 'TypeError') {
-      status.code = 400
-      status.msg = 'Invalid token'
-    }
+    status.code = e.code
+    status.msg = e.message
+    status.description = e.description
+    status.link = e.link
 
-    res.status(status.code).json({ complete: false, msg: status.msg, link })
+    status = jwtHandler(e)
+
+    res.status(status.code).json({
+      complete: false,
+      msg: status.msg,
+      description: status.description,
+      link: status.link
+    })
   }
 }
 

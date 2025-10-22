@@ -36,7 +36,7 @@ const functions = {
       let code = generateCode()
       if (req.body?.account === undefined ||
         !verifyEmail(req.body?.account)
-      ) throw new UserBadRequest('Missing or invalid account, the account must match the following pattern example@service.ext')
+      ) throw new UserBadRequest('Invalid credentials', 'Missing or invalid account, the account must match the following pattern example@service.ext')
 
       if (req.body?.TEST_PWD !== undefined &&
         req.body?.TEST_PWD === TEST_PWD_ENV
@@ -54,7 +54,7 @@ const functions = {
       return true
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('You need to login')
+      if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('Missing data', 'You need to login')
       let refreshToken
       const jwtRefreshToken = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
       const decoded = jwt.decode(jwtRefreshToken)
@@ -74,7 +74,7 @@ const functions = {
       if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
 
       const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
-      if (!dbValidation) throw new DatabaseError('You are not logged In')
+      if (!dbValidation) throw new UserBadRequest('Invalid credentials', 'You are not logged In')
 
       delete refreshToken.iat
       delete refreshToken.exp
@@ -89,7 +89,7 @@ const functions = {
         if (req.body?.account === undefined ||
         req.body?.pwd === undefined ||
         !verifyEmail(req.body?.account)
-        ) throw new UserBadRequest('Missing or invalid data the account must match the following pattern example@service.ext')
+        ) throw new UserBadRequest('Invalid credentials', 'Missing or invalid data the account must match the following pattern example@service.ext')
 
         let code = generateCode()
 
@@ -115,17 +115,17 @@ const functions = {
         if (req.cookies?.tokenR === undefined ||
           req.cookies?.codeR === undefined ||
           req.body?.code === undefined
-        ) throw new UserBadRequest('You need to use MFA for login')
+        ) throw new UserBadRequest('Missing data', 'You need to use MFA for login')
 
         const jwtCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV)
         const jwtToken = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV)
 
         const code = jwt.verify(jwtCode, JWT_AUTH_ENV)
-        if (typeof code === 'string') throw new UserBadRequest('Forbidden')
-        if (code.code !== req.body.code) throw new UserBadRequest('Wrong code')
+        if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re code token is invalid')
+        if (code.code !== req.body.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
 
         const user = jwt.verify(jwtToken, JWT_AUTH_ENV)
-        if (typeof user === 'string') throw new UserBadRequest('Forbidden')
+        if (typeof user === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re')
 
         delete user.iat
         delete user.exp
@@ -136,7 +136,7 @@ const functions = {
         const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
         const savedInDB = await model.auth.refreshToken.save(refreshToken, user._id)
-        if (!savedInDB) throw new DatabaseError('something went wrong please try again')
+        if (!savedInDB) throw new DatabaseError('Failed to save', 'The session was not saved please try again')
 
         res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', accessToken, config.cookies.accessToken)
@@ -163,14 +163,14 @@ const functions = {
     code: async function (req: Request, res: Response): Promise<boolean> {
       if (req.body?.code === undefined ||
         req.cookies?.code === undefined
-      ) throw new UserBadRequest('Missing code')
+      ) throw new UserBadRequest('Missing data', 'Missing code you need to ask for one')
 
       const jwtCode = decrypt(req.cookies.code, CRYPTO_AUTH_ENV)
       const decodedCode = jwt.verify(jwtCode, JWT_AUTH_ENV)
-      if (typeof decodedCode === 'string') throw new UserBadRequest('Forbidden')
+      if (typeof decodedCode === 'string') throw new UserBadRequest('Invalid credentials', 'The code you asked for is invalid')
 
-      if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Wrong code')
-      if (req.body?.account !== decodedCode.account) throw new UserBadRequest('You tried to change the account now your banned forever')
+      if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
+      if (req.body?.account !== decodedCode.account) throw new UserBadRequest('Invalid credentials', 'You tried to change the account now your banned forever')
 
       res.clearCookie('code')
 
@@ -189,11 +189,11 @@ const functions = {
         if (req.cookies.accessToken === undefined ||
           req.body?.newAccount === undefined ||
           !verifyEmail(req.body?.newAccount)
-        ) throw new UserBadRequest('Not authorized')
+        ) throw new UserBadRequest('Missing data', 'Missing or invalid data you may be not logged in')
 
         const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
         const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-        if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
+        if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
 
         if (req.body?.TEST_PWD !== undefined &&
           req.body?.TEST_PWD === TEST_PWD_ENV
@@ -225,7 +225,7 @@ const functions = {
           req.cookies?.accessToken === undefined ||
           req.body?.codeCurrentAccount === undefined ||
           req.body?.codeNewAccount === undefined
-        ) throw new UserBadRequest('You need to ask for verification codes')
+        ) throw new UserBadRequest('Invalid credentials', 'You need to ask for verification codes')
 
         const jwtCode = decrypt(req.cookies.currentAccount, CRYPTO_AUTH_ENV)
         const jwtCodeNewAccount = decrypt(req.cookies.newAccount, CRYPTO_AUTH_ENV)
@@ -238,10 +238,10 @@ const functions = {
         if (typeof code === 'string' ||
           typeof codeNewAccount === 'string' ||
           typeof accessToken === 'string'
-        ) throw new UserBadRequest('Forbidden')
+        ) throw new UserBadRequest('Invalid credentials', 'The codes, or you\'re session token are invalid')
 
-        if (code.code !== req.body.codeCurrentAccount) throw new UserBadRequest('Current account code is wrong')
-        if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('New account code is wrong')
+        if (code.code !== req.body.codeCurrentAccount) throw new UserBadRequest('Invalid credentials', 'Current account code is wrong')
+        if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('Invalid credentials', 'New account code is wrong')
 
         res.clearCookie('currentAccount')
         res.clearCookie('newAccount')
@@ -259,10 +259,10 @@ const functions = {
       code: async function (req: Request, res: Response): Promise<boolean> {
         if (req.body?.account === undefined ||
           !verifyEmail(req.body?.account)
-        ) throw new UserBadRequest('Missing or invalid account it must match example@service.ext')
+        ) throw new UserBadRequest('Missing data', 'Missing or invalid account it must match example@service.ext')
 
         const dbValidation = await model.verify.user(req.body.account)
-        if (!dbValidation) throw new NotFound('This user does not exist')
+        if (!dbValidation) throw new NotFound('User not found')
 
         let code = generateCode()
         if (req.body?.TEST_PWD !== undefined &&
@@ -287,10 +287,10 @@ const functions = {
 
         const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV)
         const code = jwt.verify(jwtPwdChange, JWT_AUTH_ENV)
-        if (typeof code === 'string') throw new UserBadRequest('Invalid token')
+        if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid token')
 
-        if (code.code !== req.body?.code) throw new UserBadRequest('Wrong code')
-        if (code.account !== req.body?.account) throw new UserBadRequest('You tried to change the account now your banned forever')
+        if (code.code !== req.body?.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
+        if (code.account !== req.body?.account) throw new UserBadRequest('Invalid credentials', 'You tried to change the account now your banned forever')
 
         const jwtHash = jwt.sign({ pwd: req.body?.newPwd, account: code.account }, JWT_AUTH_ENV, config.jwt.code)
         const hash = encrypt(jwtHash, CRYPTO_AUTH_ENV)

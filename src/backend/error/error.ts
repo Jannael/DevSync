@@ -1,15 +1,26 @@
-function createError<T extends string> (
+export type CustomError = Error & {
+  code: number
+  description?: string
+  link?: Array<{ rel: string, href: string }>
+}
+
+export function createError<T extends string> (
   code: number,
   name: string
-): new (message: T, description?: string, link?: string[]) => Error & { description?: string, link?: string[] } {
+): new (
+    message: T,
+    description?: string,
+    link?: Array<{ rel: string, href: string }>
+  ) => CustomError {
   const capitalize = (text: string): string =>
     text.charAt(0).toUpperCase() + text.slice(1)
-  return class extends Error {
-    description?: string
-    link?: string[]
-    code: number
 
-    constructor (message: T, description?: string, link?: string[]) {
+  return class extends Error {
+    code: number
+    description?: string
+    link?: Array<{ rel: string, href: string }>
+
+    constructor (message: T, description?: string, link?: Array<{ rel: string, href: string }>) {
       super(capitalize(message))
       this.name = name
       this.code = code

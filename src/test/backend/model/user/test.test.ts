@@ -184,7 +184,14 @@ describe('user model', () => {
       ]
 
       for (const { fn, error } of func) {
-        await expect(fn()).rejects.toThrow(error)
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
       }
     })
   })
@@ -221,7 +228,14 @@ describe('user model', () => {
       ]
 
       for (const { fn, error } of func) {
-        await expect(fn()).rejects.toThrow(error)
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
       }
     })
   })
@@ -250,7 +264,14 @@ describe('user model', () => {
       ]
 
       for (const { fn, error } of cases) {
-        await expect(fn()).rejects.toThrow(error)
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
       }
     })
   })
@@ -273,7 +294,14 @@ describe('user model', () => {
       ]
 
       for (const { fn, error } of func) {
-        await expect(fn()).rejects.toThrow(error)
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
       }
     })
   })

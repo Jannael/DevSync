@@ -89,6 +89,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
         ])
@@ -148,8 +149,9 @@ describe('/user/v1/', () => {
               .set('Cookie', ['account=value'])
           },
           error: {
-            code: 401,
-            msg: 'Account not verified',
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Account not verified',
             complete: false
           }
         },
@@ -161,7 +163,12 @@ describe('/user/v1/', () => {
                 user: 'test'
               })
           },
-          error: { code: 401, msg: 'Account not verified', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Account not verified',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -172,7 +179,12 @@ describe('/user/v1/', () => {
                 user: 'test'
               })
           },
-          error: { code: 400, msg: 'Invalid token', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The token is invalid',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -202,7 +214,12 @@ describe('/user/v1/', () => {
                 personalization: { theme: 'test' }
               })
           },
-          error: { code: 400, msg: 'Verified account does not match the sent account', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Verified account does not match the sent account',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -231,7 +248,12 @@ describe('/user/v1/', () => {
                 personalization: { theme: 'test' }
               })
           },
-          error: { code: 400, msg: 'Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'FullName is required',
+            complete: false
+          }
         }
       ]
 
@@ -241,6 +263,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },
           { rel: 'code', href: '/auth/v1/verify/code/' }

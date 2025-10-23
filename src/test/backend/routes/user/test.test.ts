@@ -459,7 +459,12 @@ describe('/user/v1/', () => {
             return await request(app)
               .patch(endpoint)
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Make sure to follow the auth flow for this operation',
+            complete: false
+          }
         }
       ]
 

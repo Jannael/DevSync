@@ -46,4 +46,4 @@ type IServerError = 'Operation Failed'
 export const ServerError = createError<IServerError>(500, 'ServerError')
 
 type IForbidden = 'Invalid account'
-export const Forbidden = createError<IForbidden>(500, 'Forbidden')
+export const Forbidden = createError<IForbidden>(403, 'Forbidden')

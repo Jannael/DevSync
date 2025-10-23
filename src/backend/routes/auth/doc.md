@@ -47,13 +47,13 @@ _Method: POST_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing code|you didn't ask for a code first|
-|400|Invalid token|the code-cookie you sent is invalid|
-|400|Wrong code|the code that was sent to the account doesn't match with the one you're sending|
-|400|You tried to change the account now your banned forever|it happens when you send a different account from the one you asked to verify|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing code you need to ask for one|
+|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Invalid credentials|Wrong code|
+|400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
+|500|ServerError||My bad|
 
 ### Explanation
 this endpoint verify the code you're sending its the same the server sent and the account also must match with the one you asked to verify for

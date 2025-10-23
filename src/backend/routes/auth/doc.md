@@ -18,10 +18,10 @@ _Method: POST_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing or invalid account, the account must match the following pattern example@service.com|the account sent didn't fit the rules to be an actual account|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Invalid credentials|Missing or invalid account, the account must match the following pattern example@service.ext|
+|500|ServerError||My bad|
 
 ### Explanation
 this endpoint send and email to verify the account, and make some operations like delete or update de user, check the doc for user-routes

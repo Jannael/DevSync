@@ -568,6 +568,7 @@ describe('/auth/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
           { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
@@ -601,7 +602,12 @@ describe('/auth/v1/', () => {
               .patch(endpoint)
               .set('Cookie', ['currentAccount=val', 'newAccount=val', 'accessToken=val'])
           },
-          error: { code: 400, msg: 'You need to ask for verification codes', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'You need to ask for verification codes',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -612,7 +618,12 @@ describe('/auth/v1/', () => {
                 codeNewAccount: '0000'
               })
           },
-          error: { code: 400, msg: 'You need to ask for verification codes', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'You need to ask for verification codes',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -624,7 +635,12 @@ describe('/auth/v1/', () => {
                 codeNewAccount: '0000'
               })
           },
-          error: { code: 400, msg: 'Invalid token', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The token is invalid',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -642,7 +658,12 @@ describe('/auth/v1/', () => {
                 codeNewAccount: '1234'
               })
           },
-          error: { code: 400, msg: 'Current account code is wrong', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Current account code is wrong',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -660,7 +681,12 @@ describe('/auth/v1/', () => {
                 codeNewAccount: '0000'
               })
           },
-          error: { code: 400, msg: 'New account code is wrong', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'New account code is wrong',
+            complete: false
+          }
         }
       ]
 

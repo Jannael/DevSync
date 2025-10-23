@@ -569,7 +569,12 @@ describe('/user/v1/', () => {
             return await request(app)
               .delete(endpoint)
           },
-          error: { code: 401, msg: 'Account not verified', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Account not verified',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -615,7 +620,12 @@ describe('/user/v1/', () => {
             return await agent
               .delete(endpoint)
           },
-          error: { code: 403, msg: 'Forbidden', complete: false }
+          error: {
+            code: 403,
+            msg: 'Invalid credentials',
+            description: 'The verified account and yours does not match',
+            complete: false
+          }
         }
       ]
 
@@ -624,6 +634,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },
           { rel: 'code', href: '/auth/v1/verify/code/' }

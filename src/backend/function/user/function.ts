@@ -127,7 +127,7 @@ const functions = {
         typeof cookieAccount === 'string'
       ) throw new UserBadRequest('Invalid credentials')
 
-      if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Invalid credentials', 'The verified account and the yours does not match')
+      if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Invalid credentials', 'The verified account and yours does not match')
 
       res.clearCookie('refreshToken')
       res.clearCookie('accessToken')

@@ -398,6 +398,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },
           { rel: 'code', href: '/auth/v1/verify/code/' }
@@ -474,6 +475,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toStrictEqual([
           { rel: 'code', href: '/auth/v1/account/request/code/' },
           { rel: 'code', href: '/auth/v1/account/verify/code/' }
@@ -517,7 +519,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Make sure to follow the auth flow for this endpoint',
+            description: 'Make sure to follow the auth flow for this operation',
             complete: false
           }
         }
@@ -528,6 +530,7 @@ describe('/user/v1/', () => {
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toStrictEqual([
           { rel: 'code', href: '/auth/v1/password/request/code/' },
           { rel: 'verify', href: '/auth/v1/password/verify/code/' }
@@ -621,7 +624,7 @@ describe('/user/v1/', () => {
               .delete(endpoint)
           },
           error: {
-            code: 403,
+            code: 400,
             msg: 'Invalid credentials',
             description: 'The verified account and yours does not match',
             complete: false

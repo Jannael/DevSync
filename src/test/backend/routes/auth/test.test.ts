@@ -760,7 +760,12 @@ describe('/auth/v1/', () => {
                 account: 'test'
               })
           },
-          error: { code: 400, msg: 'Missing or invalid account it must match example@service.ext', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'Missing or invalid account it must match example@service.ext',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -770,7 +775,12 @@ describe('/auth/v1/', () => {
                 account: 'test@service.ext'
               })
           },
-          error: { code: 404, msg: 'This user does not exists', complete: false }
+          error: {
+            code: 404,
+            msg: 'User not found',
+            complete: false
+          }
+
         }
       ]
 

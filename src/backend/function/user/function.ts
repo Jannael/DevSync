@@ -33,12 +33,12 @@ const {
 const functions = {
   user: {
     get: async function (req: Request, res: Response) {
-      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Missing accessToken')
+      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
       const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
 
-      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid accessToken')
+      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
 
       delete accessToken.iat
       delete accessToken.exp
@@ -48,12 +48,12 @@ const functions = {
     },
     create: async function (req: Request, res: Response): Promise<Partial<IRefreshToken>> {
       if (req.cookies?.account === undefined ||
-        req.body === undefined) throw new UserBadRequest('Account not verified')
+        req.body === undefined) throw new UserBadRequest('Invalid credentials', 'Account not verified')
 
       const jwtAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
       const decoded = jwt.verify(jwtAccount, JWT_AUTH_ENV)
-      if (typeof decoded === 'string') throw new UserBadRequest('Account not verified')
-      if (decoded.account !== req.body.account) throw new UserBadRequest('Verified account does not match the sent account')
+      if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials', 'Account not verified')
+      if (decoded.account !== req.body.account) throw new UserBadRequest('Invalid credentials', 'Verified account does not match the sent account')
 
       req.body.account = decoded.account
 
@@ -79,7 +79,7 @@ const functions = {
         req.body?._id !== undefined ||
         req.cookies?.account === undefined ||
         req.cookies?.accessToken === undefined
-      ) throw new UserBadRequest('Not authorized')
+      ) throw new UserBadRequest('Missing data', 'The\'res missing credentials, make sure to get them before update')
 
       const jwtAccountCookie = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
@@ -89,12 +89,12 @@ const functions = {
 
       if (typeof accountCookie === 'string' ||
         typeof accessToken === 'string'
-      ) throw new UserBadRequest('Account not verified')
+      ) throw new UserBadRequest('Invalid credentials', 'Account not verified')
 
-      if (accessToken.account !== accountCookie.account) throw new UserBadRequest('Forbidden')
+      if (accessToken.account !== accountCookie.account) throw new UserBadRequest('Invalid credentials', 'The account verified and your account does not match')
 
       const data = validator.user.partial(req.body)
-      if (data === null) throw new UserBadRequest('No data to update or invalid data')
+      if (data === null) throw new UserBadRequest('Missing data', 'No data to update or invalid data')
 
       const result = await model.user.update(data, accessToken._id)
       const jwtNewRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
@@ -103,7 +103,7 @@ const functions = {
       const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
       const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
-      if (!isSaved) throw new DatabaseError('Something went wrong please try again')
+      if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
 
       res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
       res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
@@ -115,7 +115,7 @@ const functions = {
     delete: async function (req: Request, res: Response) {
       if (req.cookies.account === undefined ||
         req.cookies.accessToken === undefined
-      ) throw new UserBadRequest('Account not verified')
+      ) throw new UserBadRequest('Missing data', 'Account not verified')
 
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
       const jwtCookieAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
@@ -125,9 +125,9 @@ const functions = {
 
       if (typeof accessToken === 'string' ||
         typeof cookieAccount === 'string'
-      ) throw new UserBadRequest('Not authorized')
+      ) throw new UserBadRequest('Invalid credentials')
 
-      if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Forbidden')
+      if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Invalid credentials', 'The verified account and the yours does not match')
 
       res.clearCookie('refreshToken')
       res.clearCookie('accessToken')
@@ -139,7 +139,7 @@ const functions = {
       update: async function (req: Request, res: Response): Promise<IRefreshToken> {
         if (req.cookies.accessToken === undefined ||
           req.cookies.newAccount_account === undefined
-        ) throw new UserBadRequest('Not authorized')
+        ) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
 
         const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
         const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_AUTH_ENV)
@@ -149,7 +149,7 @@ const functions = {
 
         if (typeof accessToken === 'string' ||
           typeof newAccount === 'string'
-        ) throw new UserBadRequest('Forbidden')
+        ) throw new UserBadRequest('Invalid credentials')
 
         const response = await model.user.account.update(accessToken._id, newAccount.account)
         const jwtNewRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
@@ -158,7 +158,7 @@ const functions = {
         const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
         const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
-        if (!isSaved) throw new DatabaseError('Something went wrong please try again')
+        if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
 
         res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
         res.cookie('accessToken', newAccessToken, config.cookies.accessToken)
@@ -171,11 +171,11 @@ const functions = {
     },
     password: {
       update: async function (req: Request, res: Response) {
-        if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Not authorized')
+        if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
 
         const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV)
         const newPwd = jwt.verify(jwtNewPwd, JWT_AUTH_ENV)
-        if (typeof newPwd === 'string') throw new UserBadRequest('Invalid token')
+        if (typeof newPwd === 'string') throw new UserBadRequest('Invalid credentials')
 
         await model.user.password.update(newPwd.account, newPwd.pwd)
         res.clearCookie('newPwd')

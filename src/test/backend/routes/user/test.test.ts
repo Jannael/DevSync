@@ -74,7 +74,12 @@ describe('/user/v1/', () => {
             return await request(app)
               .get(endpoint)
           },
-          error: { code: 400, msg: 'Missing accessToken', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Missing accessToken',
+            complete: false
+          }
         }
       ]
 

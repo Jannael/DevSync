@@ -329,7 +329,12 @@ describe('/user/v1/', () => {
             return await request(app)
               .put(endpoint)
           },
-          error: { code: 401, msg: 'Not authorized', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'The\'res missing credentials, make sure to get them before update',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -353,7 +358,12 @@ describe('/user/v1/', () => {
                 fullName: 'second new names'
               })
           },
-          error: { code: 403, msg: 'Forbidden', complete: false }
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The account verified and your account does not match',
+            complete: false
+          }
         },
         {
           fn: async function () {
@@ -374,7 +384,12 @@ describe('/user/v1/', () => {
             return await agent
               .put(endpoint)
           },
-          error: { code: 400, msg: 'No data to update or invalid data', complete: false }
+          error: {
+            code: 400,
+            msg: 'Missing data',
+            description: 'No data to update or invalid data',
+            complete: false
+          }
         }
       ]
 

@@ -136,10 +136,10 @@ _Method: GET_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|You need to login|When you don't have a refreshToken|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|You need to login|
+|500|Server Error||My bad|
 
 ### Explanation
 this endpoint it's to keep the access to server resource with an accessToken

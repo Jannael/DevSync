@@ -206,9 +206,9 @@ _Method: DELETE_
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Not authorized|this happens when you don't have the require credentials check the input section above|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Make sure to follow the auth flow for this operation|
 |500|Server error|My bad|
 
 ### Explanation

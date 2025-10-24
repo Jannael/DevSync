@@ -15,8 +15,8 @@ _Method: GET_
     _body: 
         field: ''
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-||||
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|||||
 
 ### Explanation

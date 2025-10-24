@@ -255,12 +255,12 @@ _Method: PATCH_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing data|you're not sending the data the server needs, or you didn't ask for a code|
-|400|Invalid token|the token the server need to verify your account its invalid and you need to ask for a new one|
-|400|Wrong code|the code you sent and the one the server sent doesn't match|
-|400|You tried to change the account now your banned forever|the account you sent an the onw the server is verifying does match|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|undefined|
+|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Invalid credentials|Wrong code|
+|400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
 |500|Server Error|My bad|
 
 ### Explanation

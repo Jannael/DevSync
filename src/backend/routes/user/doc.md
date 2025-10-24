@@ -23,9 +23,9 @@ _Method: GET_
         msg: '',
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing accessToken|you don't have an accessToken|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Invalid credentials|Missing accessToken|
 
 ### Explanation
 this endpoint returns the public user info containing in the accessToken

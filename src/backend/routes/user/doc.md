@@ -137,10 +137,10 @@ _Method: DELETE_
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Account not verified|This happens when you don't verified the account previously|
-|403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Account not verified|
+|400|UserBadRequest|Invalid credentials|The verified account and yours does not match|
 |500|Server error|My bad|
 
 ### Explanation

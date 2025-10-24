@@ -77,12 +77,12 @@ _Method: POST_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing or invalid data the account must match the following pattern example@service.ext|the account you sent it isn't even valid, or you're not sending all the input-fields need it|
-|404|User not found|the user you're asking to log in doesn't exist|
-|400|Incorrect password|everything went fine, but the pwd is incorrect|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Invalid credentials|Missing or invalid data the account must match the following pattern example@service.ext|
+|400|UserBadRequest|Invalid credentials|Incorrect password|
+|404|NotFound|User not found|undefined|
+|500|ServerError||My bad|
 
 ### Explanation
 this endpoint its the first step to log in

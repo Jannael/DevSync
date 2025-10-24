@@ -107,12 +107,12 @@ _Method: POST_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|You need to use MFA for login|you didn't asked for a code or you didn't sent one|
-|400|Invalid token|the code-cookie you have is invalid and you need to ask for a new one|
-|400|Wrong code|the code you sent its different from the one the server sent|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|You need to use MFA for login|
+|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Invalid credentials|Wrong code|
+|500|Server Error||My bad|
 
 ### Explanation
 this endpoint its the second and last step to log in

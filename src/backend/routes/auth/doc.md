@@ -225,10 +225,10 @@ _Method: PATCH_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|400|Missing or invalid account it must match example@service.ext||
-|404|This user doesn't exists||
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing or invalid account it must match example@service.ext|
+|404|NotFound|User not found|undefined|
 |500|Server Error|My bad|
 
 ### Explanation

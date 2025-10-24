@@ -165,11 +165,11 @@ _Method: PATCH_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Not authorized|When you either don't have an accessToken or you sent an invalid account|
-|400|Invalid token|the accessToken is invalid|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing or invalid data you may be not logged in|
+|400|UserBadRequest|Invalid credentials|The token is invalid|
+|500|Server Error||My bad|
 
 ### Explanation
 this endpoint it helps when you want to change your account but you need to be log in its the only way to change the account, this is the first step

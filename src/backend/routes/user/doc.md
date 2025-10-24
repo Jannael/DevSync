@@ -63,13 +63,13 @@ _Method: POST_
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Account not verified|You need to ask for a code|
-|400|Invalid token|The verification token account is invalid|
-|400|Verified account does not match the send account|You are trying to create a user with a different account instead of the one verified|
-|400|Invalid or missing data, the user must match the following rules, pwd-length>=6, account(unique cant be two users with the same account): example@service.com, nickName-length>=3, personalization: {theme: \'\'}, role: ["documenter" or "techLead" or "developer"]||
-|500|Server error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Invalid credentials|Account not verified|
+|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Invalid credentials|Verified account does not match the sent account|
+|400|UserBadRequest|Invalid credentials|This message will tell if something in your request body is wrong|
+|500|Server error||My bad|
 
 ### Explanation
 this endpoint returns an accessToken and refreshToken, none of them are available for you, but for me

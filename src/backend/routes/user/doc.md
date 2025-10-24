@@ -107,11 +107,11 @@ Here you only can update this fields
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Not authorized|You are missing one of these, cookie-account, accessToken, or your sending one of these to update, account, refreshToken, _id|
-|403|Forbidden|This error happens when the account saved in the accessToken and the one in the account-cookie does not match|
-|400|No data yo update or invalid data|The data sent should follow the same schema that /create/ penultimate error|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|The\'res missing credentials, make sure to get them before update|
+|400|UserBadRequest|Invalid credentials|The account verified and your account does not match|
+|400|UserBadRequest|Missing data|No data to update or invalid data|
 |500|Server error|My bad|
 
 ### Explanation

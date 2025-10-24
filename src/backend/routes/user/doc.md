@@ -176,9 +176,9 @@ realize that the only way to change the account its been logged In
         complete: false,
         `link`: here you will get all the routes you need to make the operation correctly in case something is missing
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|401|Not authorized|this happens when you don't have the require credentials check the input section above|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Make sure yo follow the auth flow for this operation|
 |500|Server error|My bad|
 
 ### Explanation

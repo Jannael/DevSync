@@ -282,9 +282,9 @@ _Method: PATCH_
         msg: ''
         complete: boolean
 
-|StatusCode|Message|Issue|
-|:-----------|:-----------|-----------:|
-|500|Server Error|My bad|
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|500|ServerError||My bad|
 
 ### Explanation
 to logout xd

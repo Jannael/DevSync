@@ -5,8 +5,8 @@ export type CustomError = Error & {
 }
 
 export function createError<T extends string> (
-  code: number,
-  name: string
+  private code: number,
+  private name: string
 ): new (
     message: T,
     description?: string,

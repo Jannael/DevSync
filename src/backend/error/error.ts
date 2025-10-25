@@ -5,8 +5,8 @@ export type CustomError = Error & {
 }
 
 export function createError<T extends string> (
-  private code: number,
-  private name: string
+  code: number,
+  name: string
 ): new (
     message: T,
     description?: string,
@@ -16,9 +16,9 @@ export function createError<T extends string> (
     text.charAt(0).toUpperCase() + text.slice(1)
 
   return class extends Error {
-    code: number
-    description?: string
-    link?: Array<{ rel: string, href: string }>
+    readonly code: number
+    readonly description?: string
+    readonly link?: Array<{ rel: string, href: string }>
 
     constructor (message: T, description?: string, link?: Array<{ rel: string, href: string }>) {
       super(capitalize(message))

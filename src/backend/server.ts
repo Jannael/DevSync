@@ -7,7 +7,7 @@ const PORT = process.env.PORT as string
 
 async function init (PORT: string): Promise<void> {
   const app = await createApp()
-  app.listen(PORT)
+  app.listen(PORT, () => console.log('server at PORT: ' + PORT))
 }
 
 init(PORT)

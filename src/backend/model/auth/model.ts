@@ -57,6 +57,12 @@ const model = {
           const exists = await dbModel.exists({ _id: userId })
           if (exists == null) throw new NotFound('User not found')
 
+          const { refreshToken } = await dbModel.findOne({ _id: userId }, { _id: 0, refreshToken: 1 }) as { refreshToken: string[] }
+
+          if (Array.isArray(refreshToken) && refreshToken.length >= 3) {
+            await dbModel.updateOne({ _id: userId }, { refreshToken: refreshToken.slice(1) })
+          }
+
           const result = await dbModel.updateOne(
             { _id: userId },
             { $push: { refreshToken: token } }

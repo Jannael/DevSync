@@ -33,7 +33,7 @@ const {
 const functions = {
   get: async function (req: Request, res: Response) {
     if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
 
     const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
 
@@ -49,7 +49,7 @@ const functions = {
     if (req.cookies?.account === undefined ||
         req.body === undefined) throw new UserBadRequest('Invalid credentials', 'Account not verified')
 
-    const jwtAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
+    const jwtAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'account token')
     const decoded = jwt.verify(jwtAccount, JWT_AUTH_ENV)
     if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials', 'Account not verified')
     if (decoded.account !== req.body.account) throw new UserBadRequest('Invalid credentials', 'Verified account does not match the sent account')
@@ -80,8 +80,8 @@ const functions = {
         req.cookies?.accessToken === undefined
     ) throw new UserBadRequest('Missing data', 'The\'res missing credentials, make sure to get them before update')
 
-    const jwtAccountCookie = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+    const jwtAccountCookie = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'accountToken')
+    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
 
     const accountCookie = jwt.verify(jwtAccountCookie, JWT_AUTH_ENV)
     const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
@@ -116,8 +116,8 @@ const functions = {
         req.cookies.accessToken === undefined
     ) throw new UserBadRequest('Missing data', 'Account not verified')
 
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
-    const jwtCookieAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV)
+    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
+    const jwtCookieAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'accountToken')
 
     const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
     const cookieAccount = jwt.verify(jwtCookieAccount, JWT_AUTH_ENV) as JwtPayload
@@ -140,8 +140,8 @@ const functions = {
           req.cookies.newAccount_account === undefined
       ) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
 
-      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
-      const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_AUTH_ENV)
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
+      const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_AUTH_ENV, 'newAccountToken')
 
       const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
       const newAccount = jwt.verify(jwtNewAccount, JWT_AUTH_ENV)
@@ -172,7 +172,7 @@ const functions = {
     update: async function (req: Request, res: Response) {
       if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
 
-      const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV)
+      const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV, 'newPwdToken')
       const newPwd = jwt.verify(jwtNewPwd, JWT_AUTH_ENV)
       if (typeof newPwd === 'string') throw new UserBadRequest('Invalid credentials')
 

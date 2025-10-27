@@ -56,7 +56,7 @@ const functions = {
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('Missing data', 'You need to login')
       let refreshToken
-      const jwtRefreshToken = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const jwtRefreshToken = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV, 'refreshToken')
       const decoded = jwt.decode(jwtRefreshToken)
 
       try {
@@ -117,8 +117,8 @@ const functions = {
           req.body?.code === undefined
         ) throw new UserBadRequest('Missing data', 'You need to use MFA for login')
 
-        const jwtCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV)
-        const jwtToken = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV)
+        const jwtCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV, 'codeToken')
+        const jwtToken = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV, 'infoToken')
 
         const code = jwt.verify(jwtCode, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re code token is invalid')
@@ -148,7 +148,7 @@ const functions = {
     },
     logout: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies.refreshToken === undefined) return true
-      const token = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV)
+      const token = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV, 'refreshToken')
 
       const decoded = jwt.verify(token, JWT_REFRESH_TOKEN_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials')
@@ -165,7 +165,7 @@ const functions = {
         req.cookies?.code === undefined
       ) throw new UserBadRequest('Missing data', 'Missing code you need to ask for one')
 
-      const jwtCode = decrypt(req.cookies.code, CRYPTO_AUTH_ENV)
+      const jwtCode = decrypt(req.cookies.code, CRYPTO_AUTH_ENV, 'codeToken')
       const decodedCode = jwt.verify(jwtCode, JWT_AUTH_ENV)
       if (typeof decodedCode === 'string') throw new UserBadRequest('Invalid credentials', 'The code you asked for is invalid')
 
@@ -191,7 +191,7 @@ const functions = {
           !verifyEmail(req.body?.newAccount)
         ) throw new UserBadRequest('Missing data', 'Missing or invalid data you may be not logged in')
 
-        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
         const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
         if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
 
@@ -227,9 +227,9 @@ const functions = {
           req.body?.codeNewAccount === undefined
         ) throw new UserBadRequest('Invalid credentials', 'You need to ask for verification codes')
 
-        const jwtCode = decrypt(req.cookies.currentAccount, CRYPTO_AUTH_ENV)
-        const jwtCodeNewAccount = decrypt(req.cookies.newAccount, CRYPTO_AUTH_ENV)
-        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const jwtCode = decrypt(req.cookies.currentAccount, CRYPTO_AUTH_ENV, 'currentAccountToken')
+        const jwtCodeNewAccount = decrypt(req.cookies.newAccount, CRYPTO_AUTH_ENV, 'newAccountToken')
+        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
 
         const code = jwt.verify(jwtCode, JWT_AUTH_ENV) as JwtPayload
         const codeNewAccount = jwt.verify(jwtCodeNewAccount, JWT_AUTH_ENV) as JwtPayload
@@ -285,7 +285,7 @@ const functions = {
           req.body?.account === undefined
         ) throw new UserBadRequest('Missing data')
 
-        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV)
+        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV, 'Token for pwd change')
         const code = jwt.verify(jwtPwdChange, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid token')
 

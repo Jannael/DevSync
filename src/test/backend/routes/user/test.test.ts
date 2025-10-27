@@ -178,7 +178,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The account token is invalid',
             complete: false
           }
         },

@@ -25,7 +25,7 @@ describe('user model', () => {
 
   describe('create user', () => {
     test('', async () => {
-      const res = await model.user.create({
+      const res = await model.create({
         fullName: 'test',
         account: 'test@gmail.com',
         pwd: 'test',
@@ -49,7 +49,7 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.create({
+            await model.create({
               fullName: 'test',
               account: 'test@gmail.com',
               pwd: 'test',
@@ -68,7 +68,7 @@ describe('user model', () => {
               nickName: 'test1'
             } as unknown as IUser
 
-            await model.user.create(obj)
+            await model.create(obj)
           },
           error: new UserBadRequest('Invalid credentials', 'FullName is required')
         },
@@ -84,7 +84,7 @@ describe('user model', () => {
               nickName: 'test'
             }
 
-            await model.user.create(obj)
+            await model.create(obj)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
         },
@@ -99,7 +99,7 @@ describe('user model', () => {
               nickName: 'test'
             }
 
-            await model.user.create(obj)
+            await model.create(obj)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
         },
@@ -113,7 +113,7 @@ describe('user model', () => {
               nickName: 'test'
             }
 
-            await model.user.create(obj)
+            await model.create(obj)
           },
           error: new UserBadRequest('Invalid credentials', 'Invalid email address')
         }
@@ -134,7 +134,7 @@ describe('user model', () => {
 
   describe('update user', () => {
     test('', async () => {
-      const res = await model.user.update({
+      const res = await model.update({
         fullName: 'test1'
       }, userId)
 
@@ -151,25 +151,25 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.update({ }, notExistUser)
+            await model.update({ }, notExistUser)
           },
           error: new NotFound('User not found')
         },
         {
           fn: async function () {
-            await model.user.update({ account: 'test' }, userId)
+            await model.update({ account: 'test' }, userId)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not update the account here')
         },
         {
           fn: async function () {
-            await model.user.update({ _id: notExistUser }, userId)
+            await model.update({ _id: notExistUser }, userId)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not change the _id')
         },
         {
           fn: async function () {
-            await model.user.update({ refreshToken: ['hello Dexter Morgan'] }, userId)
+            await model.update({ refreshToken: ['hello Dexter Morgan'] }, userId)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
         }
@@ -190,7 +190,7 @@ describe('user model', () => {
 
   describe('update user account', () => {
     test('', async () => {
-      const res = await model.user.account.update(userId, 'test2@gmail.com')
+      const res = await model.account.update(userId, 'test2@gmail.com')
       user = res
 
       expect(res).toStrictEqual({
@@ -206,13 +206,13 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.account.update(notExistUser, 'test@gmail.com')
+            await model.account.update(notExistUser, 'test@gmail.com')
           },
           error: new NotFound('User not found')
         },
         {
           fn: async function () {
-            await model.user.account.update(userId, 'test')
+            await model.account.update(userId, 'test')
           },
           error: new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
         }
@@ -233,7 +233,7 @@ describe('user model', () => {
 
   describe('update user password', () => {
     test('', async () => {
-      const res = await model.user.password.update(user.account, 'newPassword')
+      const res = await model.password.update(user.account, 'newPassword')
       expect(res).toEqual(true)
     })
 
@@ -241,13 +241,13 @@ describe('user model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.user.password.update('test', 'test')
+            await model.password.update('test', 'test')
           },
           error: new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
         },
         {
           fn: async function () {
-            await model.user.password.update('helloDexterMorgan@gmail.com.mx', 'test')
+            await model.password.update('helloDexterMorgan@gmail.com.mx', 'test')
           },
           error: new NotFound('User not found')
         }
@@ -269,7 +269,7 @@ describe('user model', () => {
 
   describe('delete user', () => {
     test('', async () => {
-      const res = await model.user.delete(userId)
+      const res = await model.delete(userId)
 
       expect(res).toBe(true)
     })
@@ -278,7 +278,7 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.user.delete(notExistUser)
+            await model.delete(notExistUser)
           },
           error: new NotFound('User not found')
         }

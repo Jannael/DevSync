@@ -18,7 +18,7 @@ beforeAll(async () => {
   app = await createApp()
   agent = await request.agent(app)
 
-  user = await userModel.user.create({
+  user = await userModel.create({
     fullName: 'test',
     account: 'test@gmail.com',
     pwd: 'test',
@@ -28,7 +28,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await userModel.user.delete(user._id)
+  await userModel.delete(user._id)
   await mongoose.connection.close()
 })
 

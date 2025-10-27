@@ -57,7 +57,7 @@ const functions = {
     req.body.account = decoded.account
 
     const validData = validator.user.create(req.body)
-    const result = await model.user.create(validData)
+    const result = await model.create(validData)
 
     const jwtRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
     const jwtAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
@@ -95,7 +95,7 @@ const functions = {
     const data = validator.user.partial(req.body)
     if (data === null) throw new UserBadRequest('Missing data', 'No data to update or invalid data')
 
-    const result = await model.user.update(data, accessToken._id)
+    const result = await model.update(data, accessToken._id)
     const jwtNewRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
     const jwtNewAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
     const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
@@ -132,7 +132,7 @@ const functions = {
     res.clearCookie('accessToken')
     res.clearCookie('account')
 
-    return await model.user.delete(accessToken._id)
+    return await model.delete(accessToken._id)
   },
   account: {
     update: async function (req: Request, res: Response): Promise<IRefreshToken> {
@@ -150,7 +150,7 @@ const functions = {
           typeof newAccount === 'string'
       ) throw new UserBadRequest('Invalid credentials')
 
-      const response = await model.user.account.update(accessToken._id, newAccount.account)
+      const response = await model.account.update(accessToken._id, newAccount.account)
       const jwtNewRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
       const jwtNewAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
       const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
@@ -176,7 +176,7 @@ const functions = {
       const newPwd = jwt.verify(jwtNewPwd, JWT_AUTH_ENV)
       if (typeof newPwd === 'string') throw new UserBadRequest('Invalid credentials')
 
-      await model.user.password.update(newPwd.account, newPwd.pwd)
+      await model.password.update(newPwd.account, newPwd.pwd)
       res.clearCookie('newPwd')
       return true
     }

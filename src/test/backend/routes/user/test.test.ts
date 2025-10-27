@@ -19,7 +19,7 @@ beforeAll(async () => {
   app = await createApp()
   agent = await request.agent(app)
 
-  user = await userModel.user.create({
+  user = await userModel.create({
     fullName: 'test',
     account: 'test@gmail.com',
     pwd: 'test',
@@ -573,7 +573,7 @@ describe('/user/v1/', () => {
           fn: async function () {
             const agent = request.agent(app)
 
-            user = await userModel.user.create({
+            user = await userModel.create({
               fullName: 'test',
               account: 'test@gmail.com',
               pwd: 'test',

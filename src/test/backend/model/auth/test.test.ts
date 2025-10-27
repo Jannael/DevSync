@@ -24,12 +24,12 @@ describe('auth model', () => {
   const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
 
   beforeAll(async () => {
-    user = await userModel.user.create({
+    user = await userModel.create({
       fullName: 'test',
       account: 'test@email.com',
       pwd: 'test',
       role: ['documenter'],
-      nickName: 'test',
+      nickName: 'test'
     })
   })
 
@@ -149,7 +149,7 @@ describe('auth model', () => {
         fullName: 'test',
         account: 'test@email.com',
         role: ['documenter'],
-        nickName: 'test',
+        nickName: 'test'
       })
     })
 

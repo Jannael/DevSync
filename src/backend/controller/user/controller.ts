@@ -6,7 +6,7 @@ import { CustomError } from '../../error/error'
 const controller = {
   get: async function (req: Request, res: Response) {
     try {
-      const result = await fn.user.get(req, res)
+      const result = await fn.get(req, res)
       result.complete = true
       res.json(result)
     } catch (e) {
@@ -18,7 +18,7 @@ const controller = {
   },
   create: async function (req: Request, res: Response) {
     try {
-      const result = await fn.user.create(req, res)
+      const result = await fn.create(req, res)
       res.status(201).json({ ...result, complete: true })
     } catch (e) {
       (e as CustomError).link = [
@@ -30,7 +30,7 @@ const controller = {
   },
   update: async function (req: Request, res: Response) {
     try {
-      const result = await fn.user.update(req, res)
+      const result = await fn.update(req, res)
       res.json({ complete: true, user: result })
     } catch (e) {
       (e as CustomError).link = [
@@ -42,7 +42,7 @@ const controller = {
   },
   delete: async function (req: Request, res: Response) {
     try {
-      const result = await fn.user.delete(req, res)
+      const result = await fn.delete(req, res)
       if (result) res.json({ complete: true })
     } catch (e) {
       (e as CustomError).link = [
@@ -55,7 +55,7 @@ const controller = {
   account: {
     update: async function (req: Request, res: Response) {
       try {
-        const result = await fn.user.account.update(req, res)
+        const result = await fn.account.update(req, res)
         res.json({ complete: true, user: result })
       } catch (e) {
         (e as CustomError).link = [
@@ -69,7 +69,7 @@ const controller = {
   password: {
     update: async function (req: Request, res: Response) {
       try {
-        const result = await fn.user.password.update(req, res)
+        const result = await fn.password.update(req, res)
         res.json({ complete: result })
       } catch (e) {
         (e as CustomError).link = [

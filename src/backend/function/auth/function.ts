@@ -285,7 +285,7 @@ const functions = {
           req.body?.account === undefined
         ) throw new UserBadRequest('Missing data')
 
-        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV, 'Token for pwd change')
+        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV, 'token for pwd change')
         const code = jwt.verify(jwtPwdChange, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid token')
 

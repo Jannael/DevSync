@@ -151,7 +151,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The codeToken is invalid',
             complete: false
           }
         },
@@ -388,7 +388,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The codeToken is invalid',
             complete: false
           }
         },
@@ -555,7 +555,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The accessToken is invalid',
             complete: false
           }
         }
@@ -637,7 +637,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The currentAccountToken is invalid',
             complete: false
           }
         },
@@ -865,7 +865,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token is invalid',
+            description: 'The token for pwd change is invalid',
             complete: false
           }
         },

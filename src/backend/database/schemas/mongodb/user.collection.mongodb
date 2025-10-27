@@ -32,14 +32,6 @@ db.createCollection('user', {
           bsonType: 'string',
           description: 'nickname'
         },
-        personalization: {
-          bsonType: 'object',
-          required: ['theme'],
-          additionalProperties: false,
-          properties: {
-            theme: { bsonType: 'string' }
-          }
-        },
         refreshToken: {
           bsonType: 'array',
           uniqueItems: true,

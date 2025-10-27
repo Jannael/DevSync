@@ -24,7 +24,6 @@ beforeAll(async () => {
     pwd: 'test',
     role: ['documenter'],
     nickName: 'test',
-    personalization: { theme: 'test' }
   })
 })
 

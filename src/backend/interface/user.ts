@@ -1,8 +1,5 @@
 import { Types } from 'mongoose'
 
-export interface IUserPersonalization {
-  theme?: string | null
-}
 export interface IUser {
   _id?: Types.ObjectId
   fullName: string
@@ -10,7 +7,6 @@ export interface IUser {
   pwd: string
   role: string[]
   nickName?: string | null
-  personalization?: IUserPersonalization | null
   refreshToken?: string[] | null
 }
 

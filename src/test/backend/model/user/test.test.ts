@@ -30,8 +30,7 @@ describe('user model', () => {
         account: 'test@gmail.com',
         pwd: 'test',
         role: ['documenter'],
-        nickName: 'test',
-        personalization: { theme: 'test' }
+        nickName: 'test'
       })
 
       userId = res._id
@@ -42,8 +41,7 @@ describe('user model', () => {
         fullName: 'test',
         account: 'test@gmail.com',
         role: ['documenter'],
-        nickName: 'test',
-        personalization: { theme: 'test' }
+        nickName: 'test'
       })
     })
 
@@ -56,8 +54,7 @@ describe('user model', () => {
               account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
-              nickName: 'test',
-              personalization: { theme: 'test' }
+              nickName: 'test'
             })
           },
           error: new DuplicateData('User already exists', 'This account belongs to an existing user')
@@ -68,8 +65,7 @@ describe('user model', () => {
               account: 'test1@gmail.com',
               pwd: 'test1',
               role: ['documenter'],
-              nickName: 'test1',
-              personalization: { theme: 'test1' }
+              nickName: 'test1'
             } as unknown as IUser
 
             await model.user.create(obj)
@@ -85,8 +81,7 @@ describe('user model', () => {
               account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
-              nickName: 'test',
-              personalization: { theme: 'test' }
+              nickName: 'test'
             }
 
             await model.user.create(obj)
@@ -101,8 +96,7 @@ describe('user model', () => {
               account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
-              nickName: 'test',
-              personalization: { theme: 'test' }
+              nickName: 'test'
             }
 
             await model.user.create(obj)
@@ -116,8 +110,7 @@ describe('user model', () => {
               account: 'test',
               pwd: 'test',
               role: ['documenter'],
-              nickName: 'test',
-              personalization: { theme: 'test' }
+              nickName: 'test'
             }
 
             await model.user.create(obj)
@@ -150,7 +143,6 @@ describe('user model', () => {
         account: 'test@gmail.com',
         fullName: 'test1',
         nickName: 'test',
-        personalization: { theme: 'test' },
         role: ['documenter']
       })
     })
@@ -206,8 +198,7 @@ describe('user model', () => {
         fullName: 'test1',
         account: 'test2@gmail.com',
         role: ['documenter'],
-        nickName: 'test',
-        personalization: { theme: 'test' }
+        nickName: 'test'
       })
     })
 

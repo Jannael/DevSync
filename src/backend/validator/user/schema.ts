@@ -8,7 +8,6 @@ const create = z.object({
   pwd: z.string('Password is required').min(3).max(255),
   role: z.array(z.enum(['documenter', 'techLead', 'developer'] as const, 'role is required and it has to be \'documenter\', \'techLead\', \'developer\'')),
   nickName: z.string().min(3).max(255).optional(),
-  personalization: z.object({ theme: z.string() }).optional()
 })
 
 const validator = {

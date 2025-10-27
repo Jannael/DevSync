@@ -24,8 +24,7 @@ beforeAll(async () => {
     account: 'test@gmail.com',
     pwd: 'test',
     role: ['documenter'],
-    nickName: 'test',
-    personalization: { theme: 'test' }
+    nickName: 'test'
   })
 })
 
@@ -62,7 +61,6 @@ describe('/user/v1/', () => {
         account: 'test@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' },
         complete: true
       })
     })
@@ -123,15 +121,13 @@ describe('/user/v1/', () => {
           account: 'create@gmail.com',
           pwd: '123456',
           role: ['documenter'],
-          nickName: 'test',
-          personalization: { theme: 'test' }
+          nickName: 'test'
         })
       expect(res.body).toStrictEqual({
         fullName: 'test',
         account: 'create@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' },
         complete: true
       })
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
@@ -210,8 +206,7 @@ describe('/user/v1/', () => {
                 account: 'create@gmail.com',
                 pwd: '123456',
                 role: ['documenter'],
-                nickName: 'test',
-                personalization: { theme: 'test' }
+                nickName: 'test'
               })
           },
           error: {
@@ -244,8 +239,7 @@ describe('/user/v1/', () => {
                 account: 'create1@gmail.com',
                 pwd: '123456',
                 role: ['documenter'],
-                nickName: 'test',
-                personalization: { theme: 'test' }
+                nickName: 'test'
               })
           },
           error: {
@@ -302,8 +296,7 @@ describe('/user/v1/', () => {
         fullName: 'new Name',
         account: 'test@gmail.com',
         role: ['documenter'],
-        nickName: 'test',
-        personalization: { theme: 'test' }
+        nickName: 'test'
       })
       expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
 
@@ -315,7 +308,6 @@ describe('/user/v1/', () => {
         account: 'test@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' },
         complete: true
       })
 
@@ -433,8 +425,7 @@ describe('/user/v1/', () => {
         fullName: 'new Name',
         account: 'test1@gmail.com',
         role: ['documenter'],
-        nickName: 'test',
-        personalization: { theme: 'test' }
+        nickName: 'test'
       })
       expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*GMT$/)
 
@@ -448,7 +439,6 @@ describe('/user/v1/', () => {
         account: 'test1@gmail.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' },
         complete: true
       })
     })
@@ -588,8 +578,7 @@ describe('/user/v1/', () => {
               account: 'test@gmail.com',
               pwd: 'test',
               role: ['documenter'],
-              nickName: 'test',
-              personalization: { theme: 'test' }
+              nickName: 'test'
             })
 
             await agent

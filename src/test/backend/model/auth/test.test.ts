@@ -30,7 +30,6 @@ describe('auth model', () => {
       pwd: 'test',
       role: ['documenter'],
       nickName: 'test',
-      personalization: { theme: 'test' }
     })
   })
 
@@ -151,7 +150,6 @@ describe('auth model', () => {
         account: 'test@email.com',
         role: ['documenter'],
         nickName: 'test',
-        personalization: { theme: 'test' }
       })
     })
 

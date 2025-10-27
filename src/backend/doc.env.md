@@ -1,11 +1,11 @@
 ## Generate JWT passwords
 
-```bash
+```javascript
   require('crypto').randomBytes(128).toString('hex')
 ```
 
 ## Generate CRYPTO passwords
 
-```bash
+```javascript
   require('crypto').randomBytes(32).toString('base64')
 ```

@@ -7,7 +7,13 @@ const schema = new Schema({
   pwd: { type: String, required: true },
   role: [{ type: String }],
   nickName: { type: String },
-  refreshToken: [{ type: String }]
+  refreshToken: [{ type: String }],
+  invitation: [
+    {
+      name: { type: String, required: true },
+      _id: { type: Schema.Types.ObjectId, required: true }
+    }
+  ]
 }, {
   ...config.database.mongodb.schemaOptions,
   collection: 'user'

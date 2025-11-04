@@ -70,3 +70,6 @@ export function decrypt (encryptedText: string, key: string, tokenName: string):
     return ''
   }
 }
+
+export const omit = (obj: Record<string, any>, keys: string[]): Record<string, any> =>
+  Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)))

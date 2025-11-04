@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt'
 import { IRefreshToken, IUser } from '../../interface/user'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
-import { verifyEmail } from '../../utils/utils'
+import { verifyEmail, omit } from '../../utils/utils'
+import config from '../../config/config'
 
 const model = {
   verify: {
@@ -26,9 +27,11 @@ const model = {
       const isValidAccount = verifyEmail(account)
       if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
 
+      const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
+
       const user = await dbModel.findOne(
         { account },
-        { refreshToken: 0 }
+        projection
       ).lean()
 
       if (user === null) throw new NotFound('User not found')

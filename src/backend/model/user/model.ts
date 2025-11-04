@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { Types } from 'mongoose'
 import validator from '../../validator/validator'
+import config from '../../config/config'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -26,7 +27,7 @@ const model = {
       const payload = { ...data, pwd: hashedPwd }
       const result = await dbModel.insertOne({ ...payload })
       const user = await dbModel.findOne({ _id: result._id },
-        { pwd: 0, refreshToken: 0 }
+        config.database.projection.IRefreshToken
       ).lean()
 
       if (user === null) throw new NotFound('User not found', 'The user appears to be created but it was not found')
@@ -59,7 +60,7 @@ const model = {
 
     const user = await dbModel.updateOne({ _id: userId }, { ...data })
     if (user.matchedCount === 0) throw new NotFound('User not found')
-    const refreshToken = await dbModel.findOne({ _id: userId }, { pwd: 0, refreshToken: 0 }).lean()
+    const refreshToken = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
 
     if (user.acknowledged && refreshToken !== null) {
       return refreshToken
@@ -89,7 +90,7 @@ const model = {
       const response = await dbModel.updateOne({ _id: userId }, { account })
       if (response.matchedCount === 0) throw new NotFound('User not found')
 
-      const user = await dbModel.findOne({ _id: userId }, { refreshToken: 0, pwd: 0 }).lean()
+      const user = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
       if (user === null) throw new NotFound('User not found')
       return user
     }

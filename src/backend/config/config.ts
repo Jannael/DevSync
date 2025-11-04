@@ -18,6 +18,9 @@ export default {
         strict: true,
         minimize: false
       }
+    },
+    projection: {
+      IRefreshToken: { pwd: 0, refreshToken: 0 }
     }
   }
 } as const

@@ -207,6 +207,10 @@ const functions = {
           await sendEmail(req.body.newAccount, code)
         }
 
+        if (accessToken.account === req.body.newAccount) {
+          throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')
+        }
+
         const jwtCodeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
         const jwtCodeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount)
         const codeEncrypted = encrypt(jwtCodeEncrypted, CRYPTO_AUTH_ENV)

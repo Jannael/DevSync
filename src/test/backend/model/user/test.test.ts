@@ -215,6 +215,12 @@ describe('user model', () => {
             await model.account.update(userId, 'test')
           },
           error: new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+        },
+        {
+          fn: async function () {
+            await model.account.update(userId, user.account)
+          },
+          error: new DuplicateData('User already exists', 'This account belongs to an existing user')
         }
       ]
 

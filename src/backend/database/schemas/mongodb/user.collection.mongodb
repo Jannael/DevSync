@@ -39,6 +39,19 @@ db.createCollection('user', {
             bsonType: 'string'
           },
           description: 'refreshToken for the user to validate when generating an access token'
+        },
+        invitation: {
+          type: 'array',
+          uniqueItems: true,
+          items: {
+            bsonType: 'object',
+            required: ['name', '_id'],
+            additionalProperties: false,
+            properties: {
+              name: { bsonType: 'string' },
+              _id: { bsonType: 'objectId' }
+            }
+          }
         }
       }
     }

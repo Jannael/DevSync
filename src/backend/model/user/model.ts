@@ -1,3 +1,4 @@
+
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { verifyEmail } from '../../utils/utils'
@@ -86,6 +87,9 @@ const model = {
 
       const isValidAccount = verifyEmail(account)
       if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+
+      const newAccountExists = await dbModel.exists({ account })
+      if (newAccountExists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
 
       const response = await dbModel.updateOne({ _id: userId }, { account })
       if (response.matchedCount === 0) throw new NotFound('User not found')

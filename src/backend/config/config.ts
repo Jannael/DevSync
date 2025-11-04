@@ -20,7 +20,7 @@ export default {
       }
     },
     projection: {
-      IRefreshToken: { pwd: 0, refreshToken: 0 }
+      IRefreshToken: { pwd: 0, refreshToken: 0, invitation: 0 }
     }
   }
 } as const

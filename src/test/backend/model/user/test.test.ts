@@ -292,6 +292,34 @@ describe('user model', () => {
     })
   })
 
+  describe('get user group', () => {
+    test('', async () => {
+      const res = await model.group.get(userId)
+      expect(res).toStrictEqual([])
+    })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.invitation.get(notExistUser)
+          },
+          error: new NotFound('User not found')
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        try {
+          await fn()
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
+  })
+
   describe('delete user', () => {
     test('', async () => {
       const res = await model.delete(userId)

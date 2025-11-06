@@ -1,14 +1,5 @@
 import { Types } from 'mongoose'
 
-export interface IUser {
-  _id?: Types.ObjectId
-  fullName: string
-  account: string
-  pwd: string
-  nickName?: string | null
-  refreshToken?: string[] | null
-}
-
 export interface IUserInvitation {
   _id: Types.ObjectId
   color: string
@@ -16,6 +7,17 @@ export interface IUserInvitation {
 }
 
 export interface IUserGroup extends IUserInvitation {}
+
+export interface IUser {
+  _id?: Types.ObjectId
+  fullName: string
+  account: string
+  pwd: string
+  nickName?: string | null
+  refreshToken?: string[] | null
+  invitation?: IUserInvitation[] | null
+  group?: IUserGroup[] | null
+}
 
 export interface IRefreshToken extends Omit<IUser, 'refreshToken' | 'pwd'> {
   _id: Types.ObjectId

@@ -3,7 +3,7 @@ import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../er
 import { IEnv } from '../../interface/env'
 import { verifyEmail } from '../../utils/utils'
 import dbModel from './../../database/schemas/node/user'
-import { IRefreshToken, IUser } from './../../interface/user'
+import { IRefreshToken, IUser, IUserGroup, IUserInvitation } from './../../interface/user'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { Types } from 'mongoose'
@@ -111,24 +111,25 @@ const model = {
       return true
     }
   },
-  invitation: async function (userId: Types.ObjectId) {
-    if (!Types.ObjectId.isValid(userId)) {
-      throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-    }
+  invitation: {
+    get: async function (userId: Types.ObjectId): Promise<IUserInvitation[] | undefined | null> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
 
-    const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
-    console.log(user)
-    if (user === null) throw new NotFound('User not found')
-    return user.invitation
+      const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
+      if (user === null) throw new NotFound('User not found')
+      return user.invitation
+    }
   },
-  group: async function (userId: Types.ObjectId) {
+  group: async function (userId: Types.ObjectId): Promise<IUserGroup[] | undefined | null> {
     if (!Types.ObjectId.isValid(userId)) {
       throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
     }
 
     const user = await dbModel.findOne({ _id: userId }, { group: 1, _id: 0 }).lean()
     if (user === null) throw new NotFound('User not found')
-    return user.invitation
+    return user.group
   }
 }
 

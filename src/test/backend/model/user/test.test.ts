@@ -266,7 +266,7 @@ describe('user model', () => {
 
   describe('get user invitation', () => {
     test('', async () => {
-      const res = await model.invitation(userId)
+      const res = await model.invitation.get(userId)
       expect(res).toStrictEqual([])
     })
 
@@ -274,7 +274,7 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.invitation(notExistUser)
+            await model.invitation.get(notExistUser)
           },
           error: new NotFound('User not found')
         }

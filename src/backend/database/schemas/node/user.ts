@@ -1,9 +1,10 @@
 import { model, Schema } from 'mongoose'
 import config from '../../../config/config'
 
-const invitationSchema = new Schema({
+const groupSchema = new Schema({
   name: { type: String },
-  _id: { type: Schema.Types.ObjectId }
+  _id: { type: Schema.Types.ObjectId },
+  color: { type: String }
 }, { _id: false })
 
 const schema = new Schema({
@@ -14,8 +15,10 @@ const schema = new Schema({
   nickName: { type: String },
   refreshToken: [{ type: String }],
   invitation: [{
-    type: invitationSchema,
-    required: false
+    type: groupSchema
+  }],
+  group: [{
+    type: groupSchema
   }]
 }, {
   ...config.database.mongodb.schemaOptions,

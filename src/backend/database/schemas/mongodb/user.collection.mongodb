@@ -2,7 +2,7 @@ db.createCollection('user', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['_id', 'fullName', 'account', 'pwd', 'role'],
+      required: ['_id', 'fullName', 'account', 'pwd'],
       additionalProperties: false,
       properties: {
         _id: {
@@ -19,14 +19,6 @@ db.createCollection('user', {
         pwd: {
           bsonType: 'string',
           description: 'password'
-        },
-        role: {
-          bsonType: 'array',
-          uniqueItems: true,
-          items: {
-            bsonType: 'string'
-          },
-          description: 'roles as strings'
         },
         nickName: {
           bsonType: 'string',

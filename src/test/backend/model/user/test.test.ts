@@ -29,7 +29,6 @@ describe('user model', () => {
         fullName: 'test',
         account: 'test@gmail.com',
         pwd: 'test',
-        role: ['documenter'],
         nickName: 'test'
       })
 
@@ -40,7 +39,6 @@ describe('user model', () => {
         _id: expect.any(Types.ObjectId),
         fullName: 'test',
         account: 'test@gmail.com',
-        role: ['documenter'],
         nickName: 'test'
       })
     })
@@ -53,7 +51,6 @@ describe('user model', () => {
               fullName: 'test',
               account: 'test@gmail.com',
               pwd: 'test',
-              role: ['documenter'],
               nickName: 'test'
             })
           },
@@ -64,7 +61,6 @@ describe('user model', () => {
             const obj = {
               account: 'test1@gmail.com',
               pwd: 'test1',
-              role: ['documenter'],
               nickName: 'test1'
             } as unknown as IUser
 
@@ -80,7 +76,6 @@ describe('user model', () => {
               fullName: 'test',
               account: 'test@gmail.com',
               pwd: 'test',
-              role: ['documenter'],
               nickName: 'test'
             }
 
@@ -95,7 +90,6 @@ describe('user model', () => {
               fullName: 'test',
               account: 'test@gmail.com',
               pwd: 'test',
-              role: ['documenter'],
               nickName: 'test'
             }
 
@@ -109,7 +103,6 @@ describe('user model', () => {
               fullName: 'test',
               account: 'test',
               pwd: 'test',
-              role: ['documenter'],
               nickName: 'test'
             }
 
@@ -142,8 +135,7 @@ describe('user model', () => {
         _id: expect.any(Types.ObjectId),
         account: 'test@gmail.com',
         fullName: 'test1',
-        nickName: 'test',
-        role: ['documenter']
+        nickName: 'test'
       })
     })
 
@@ -197,7 +189,6 @@ describe('user model', () => {
         _id: expect.any(Types.ObjectId),
         fullName: 'test1',
         account: 'test2@gmail.com',
-        role: ['documenter'],
         nickName: 'test'
       })
     })

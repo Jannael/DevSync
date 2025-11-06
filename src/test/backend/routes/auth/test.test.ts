@@ -22,7 +22,6 @@ beforeAll(async () => {
     fullName: 'test',
     account: 'test@gmail.com',
     pwd: 'test',
-    role: ['documenter'],
     nickName: 'test'
   })
 })

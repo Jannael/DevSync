@@ -5,7 +5,6 @@ export interface IUser {
   fullName: string
   account: string
   pwd: string
-  role: string[]
   nickName?: string | null
   refreshToken?: string[] | null
 }

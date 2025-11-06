@@ -110,6 +110,25 @@ const model = {
 
       return true
     }
+  },
+  invitation: async function (userId: Types.ObjectId) {
+    if (!Types.ObjectId.isValid(userId)) {
+      throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+    }
+
+    const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
+    console.log(user)
+    if (user === null) throw new NotFound('User not found')
+    return user.invitation
+  },
+  group: async function (userId: Types.ObjectId) {
+    if (!Types.ObjectId.isValid(userId)) {
+      throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+    }
+
+    const user = await dbModel.findOne({ _id: userId }, { group: 1, _id: 0 }).lean()
+    if (user === null) throw new NotFound('User not found')
+    return user.invitation
   }
 }
 

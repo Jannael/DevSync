@@ -180,6 +180,12 @@ const functions = {
       res.clearCookie('newPwd')
       return true
     }
+  },
+  invitation: async function (req: Request, res: Response) {
+
+  },
+  group: async function (req: Request, res: Response) {
+
   }
 }
 

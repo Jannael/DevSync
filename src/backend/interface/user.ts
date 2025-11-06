@@ -9,6 +9,14 @@ export interface IUser {
   refreshToken?: string[] | null
 }
 
+export interface IUserInvitation {
+  _id: Types.ObjectId
+  color: string
+  name: string
+}
+
+export interface IUserGroup extends IUserInvitation {}
+
 export interface IRefreshToken extends Omit<IUser, 'refreshToken' | 'pwd'> {
   _id: Types.ObjectId
 }

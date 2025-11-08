@@ -137,7 +137,11 @@ const model = {
         throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
       }
 
-      
+      validator.group.add(group)
+      const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
+
+      if (res.matchedCount === 0) throw new NotFound('User not found')
+      return res.acknowledged
     }
   }
 }

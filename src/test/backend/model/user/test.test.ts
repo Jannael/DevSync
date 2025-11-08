@@ -264,6 +264,52 @@ describe('user model', () => {
     })
   })
 
+  describe('create user invitation', () => {
+    test('', async () => {
+      const res = await model.invitation.create(userId, {
+        _id: userId,
+        name: 'invitation test',
+        color: '#123456'
+      })
+
+      expect(res).toBe(true)
+    })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.invitation.create(notExistUser, {
+              _id: new mongoose.Types.ObjectId(),
+              name: 'invitation test',
+              color: '#123456'
+            })
+          },
+          error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            await model.invitation.create(userId, {
+              _id: 'invalidId' as unknown as Types.ObjectId,
+              name: 'invitation test',
+              color: '#123456'
+            })
+          },
+          error: new UserBadRequest('Invalid credentials', 'Invalid _id format')
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        try {
+          await fn()
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
+  })
   describe('get user invitation', () => {
     test('', async () => {
       const res = await model.invitation.get(userId)

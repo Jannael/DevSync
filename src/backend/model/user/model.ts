@@ -123,6 +123,7 @@ const model = {
     },
     create: async function (userId: Types.ObjectId, invitation: IUserInvitation): Promise<boolean> {
       validator.invitation.add(invitation)
+
       const res = await dbModel.updateOne({ _id: userId }, { $push: { invitation } })
       if (res.matchedCount === 0) throw new NotFound('User not found')
 

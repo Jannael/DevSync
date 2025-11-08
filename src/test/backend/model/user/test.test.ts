@@ -310,6 +310,16 @@ describe('user model', () => {
       }
     })
   })
+
+  describe('remove user invitation', () => {
+    test('', async () => {
+      const res = await model.invitation.remove(userId, userId)
+      expect(res).toBe(true)
+    })
+
+    test('error', async () => {
+    })
+  })
   describe('get user invitation', () => {
     test('', async () => {
       const res = await model.invitation.get(userId)

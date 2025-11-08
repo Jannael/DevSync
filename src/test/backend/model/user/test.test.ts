@@ -318,8 +318,33 @@ describe('user model', () => {
     })
 
     test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId())
+          },
+          error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId)
+          },
+          error: new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        try {
+          await fn()
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
     })
   })
+
   describe('get user invitation', () => {
     test('', async () => {
       const res = await model.invitation.get(userId)

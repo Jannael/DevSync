@@ -131,6 +131,18 @@ const model = {
       if (res.matchedCount === 0) throw new NotFound('User not found')
 
       return res.acknowledged
+    },
+    remove: async function (userId: Types.ObjectId, invitationId: Types.ObjectId): Promise<boolean> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+      if (!Types.ObjectId.isValid(invitationId)) {
+        throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+      }
+
+      const res = await dbModel.updateOne({ _id: userId }, { $pull: { invitation: { _id: invitationId } } })
+      if (res.matchedCount === 0) throw new NotFound('User not found')
+      return res.acknowledged
     }
   },
   group: {

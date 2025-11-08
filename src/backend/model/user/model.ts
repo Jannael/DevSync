@@ -120,6 +120,17 @@ const model = {
       const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
       if (user === null) throw new NotFound('User not found')
       return user.invitation
+    },
+    add: async function (userId: Types.ObjectId, invitation: IUserInvitation): Promise<boolean> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+
+      validator.invitation.add(invitation)
+      const res = await dbModel.updateOne({ _id: userId }, { $push: { invitation } })
+      if (res.matchedCount === 0) throw new NotFound('User not found')
+
+      return res.acknowledged
     }
   },
   group: {

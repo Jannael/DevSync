@@ -302,7 +302,7 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.invitation.get(notExistUser)
+            await model.group.get(notExistUser)
           },
           error: new NotFound('User not found')
         }

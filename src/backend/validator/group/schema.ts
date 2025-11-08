@@ -1,0 +1,24 @@
+import z from 'zod'
+import { IUserGroup } from '../../interface/user'
+import { UserBadRequest } from '../../error/error'
+
+const groupSchema = z.object({
+  _id: z.string().regex(/^[0-9a-fA-F]{24}$/, {
+    message: 'Invalid _id format'
+  }),
+  color: z.string('Color is required #------').min(4).max(7),
+  name: z.string('Name is required').min(3).max(100)
+})
+
+const validator = {
+  add: function (obj: IUserGroup) {
+    try {
+      const result = groupSchema.parse(obj)
+      return result
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
+    }
+  }
+}
+
+export default validator

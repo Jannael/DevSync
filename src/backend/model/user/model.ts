@@ -131,6 +131,13 @@ const model = {
       const user = await dbModel.findOne({ _id: userId }, { group: 1, _id: 0 }).lean()
       if (user === null) throw new NotFound('User not found')
       return user.group
+    },
+    add: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+
+      
     }
   }
 }

@@ -1,10 +1,11 @@
-import userValidator from './user/schema'
+import user from './user/schema'
+import group from './group/schema'
+import invitation from './invitation/schema'
 
 const validator = {
-  user: {
-    create: userValidator.create,
-    partial: userValidator.partial
-  }
+  user,
+  group,
+  invitation
 }
 
 export default validator

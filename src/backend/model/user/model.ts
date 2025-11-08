@@ -122,7 +122,7 @@ const model = {
       return user.invitation
     },
     create: async function (userId: Types.ObjectId, invitation: IUserInvitation): Promise<boolean> {
-      validator.invitation.add(invitation)
+      validator.user.invitation.add(invitation)
 
       const res = await dbModel.updateOne({ _id: userId }, { $push: { invitation } })
       if (res.matchedCount === 0) throw new NotFound('User not found')
@@ -153,7 +153,7 @@ const model = {
       return user.group
     },
     create: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
-      validator.group.add(group)
+      validator.user.group.add(group)
       const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
 
       if (res.matchedCount === 0) throw new NotFound('User not found')
@@ -171,7 +171,6 @@ const model = {
       if (res.matchedCount === 0) throw new NotFound('User not found')
       return res.acknowledged
     }
-
   }
 }
 

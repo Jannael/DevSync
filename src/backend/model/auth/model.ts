@@ -1,52 +1,77 @@
 import dbModel from './../../database/schemas/node/user'
 import bcrypt from 'bcrypt'
 import { IRefreshToken, IUser } from '../../interface/user'
-import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
+import { CustomError, DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
 import { verifyEmail, omit } from '../../utils/utils'
 import config from '../../config/config'
+import errorHandler from '../../error/handler'
 
 const model = {
   verify: {
     refreshToken: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
+
+        const result = await dbModel.findOne(
+          { _id: userId },
+          { refreshToken: 1, _id: 0 }
+        ).lean()
+
+        if (result === null) throw new NotFound('User not found')
+
+        const tokens = result?.refreshToken
+        return Array.isArray(tokens) && tokens.includes(token)
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
+        )
+        throw new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
       }
-
-      const result = await dbModel.findOne(
-        { _id: userId },
-        { refreshToken: 1, _id: 0 }
-      ).lean()
-
-      if (result === null) throw new NotFound('User not found')
-
-      const tokens = result?.refreshToken
-      return Array.isArray(tokens) && tokens.includes(token)
     },
     login: async function (account: string, pwd: string): Promise<IRefreshToken> {
-      const isValidAccount = verifyEmail(account)
-      if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
+      try {
+        const isValidAccount = verifyEmail(account)
+        if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
 
-      const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
+        const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
 
-      const user = await dbModel.findOne(
-        { account },
-        projection
-      ).lean()
+        const user = await dbModel.findOne(
+          { account },
+          projection
+        ).lean()
 
-      if (user === null) throw new NotFound('User not found')
+        if (user === null) throw new NotFound('User not found')
 
-      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
-      if (!pwdIsCorrect) throw new UserBadRequest('Invalid credentials', 'Incorrect password')
+        const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
+        if (!pwdIsCorrect) throw new UserBadRequest('Invalid credentials', 'Incorrect password')
 
-      delete (user as Partial<IUser>).pwd
+        delete (user as Partial<IUser>).pwd
 
-      return user as IRefreshToken
+        return user
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
+        )
+        throw new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
+      }
     },
     user: async function (account: string): Promise<boolean> {
-      const exists = await dbModel.exists({ account })
-      if (exists === null) throw new NotFound('User not found')
-      return true
+      try {
+        const exists = await dbModel.exists({ account })
+        if (exists === null) throw new NotFound('User not found')
+        return true
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
+        )
+        throw new DatabaseError('Failed to access data', 'The user was not retrieved, something went wrong please try again')
+      }
     }
   },
   auth: {
@@ -73,8 +98,10 @@ const model = {
 
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
-          if (e instanceof UserBadRequest ||
-            e instanceof NotFound) throw e
+          errorHandler.allErrors(
+            e as CustomError,
+            new DatabaseError('Failed to save', 'The session was not saved, something went wrong please try again')
+          )
           throw new DatabaseError('Failed to save')
         }
       },
@@ -94,9 +121,10 @@ const model = {
 
           return result.matchedCount === 1 && result.modifiedCount === 1
         } catch (e) {
-          if (e instanceof UserBadRequest ||
-            e instanceof NotFound
-          ) throw e
+          errorHandler.allErrors(
+            e as CustomError,
+            new DatabaseError('Failed to remove', 'The session was not removed, something went wrong please try again')
+          )
           throw new DatabaseError('Failed to remove')
         }
       }

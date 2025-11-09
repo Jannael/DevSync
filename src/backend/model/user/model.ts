@@ -9,6 +9,7 @@ import { Types } from 'mongoose'
 import validator from '../../validator/validator'
 import config from '../../config/config'
 import errorHandler from '../../error/handler'
+import groupModel from '../group/model'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -167,8 +168,7 @@ const model = {
           throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
         }
 
-        // pending...
-        /* add the validation that the group actually exists */
+        await groupModel.exists(invitation._id)
 
         validator.user.invitation.add(invitation)
 

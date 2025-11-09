@@ -20,6 +20,19 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
+  exists: async function (id: Types.ObjectId): Promise<boolean> {
+    try {
+      const res = await dbModel.exists({ _id: id })
+      if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
+      return true
+    } catch (e) {
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to access data', 'The group existence could not be verified, something went wrong please try again')
+      )
+      throw new DatabaseError('Failed to access data', 'The group existence could not be verified, something went wrong please try again')
+    }
+  },
   create: async function (data: IGroup): Promise<IGroup> {
     try {
       validator.group.create(data)

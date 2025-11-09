@@ -519,6 +519,17 @@ describe('/user/v1/', () => {
     })
   })
 
+  describe('/get/invitation/', () => {
+    const endpoint = path + '/get/invitation/'
+    test('', async () => {
+      const res = await agent
+        .get(endpoint)
+
+      expect(res.body.complete).toEqual(true)
+      expect(res.body.invitation).toEqual([])
+    })
+  })
+
   describe('/delete/', () => {
     const endpoint = path + '/delete/'
     test('', async () => {

@@ -528,6 +528,45 @@ describe('/user/v1/', () => {
       expect(res.body.complete).toEqual(true)
       expect(res.body.invitation).toEqual([])
     })
+
+    test('error', async () => {
+      const func = [
+        {
+          fn: async function () {
+            return await request(app)
+              .get(endpoint)
+          },
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'Missing accessToken',
+            complete: false
+          }
+        },
+        {
+          fn: async function () {
+            return await request(app)
+              .get(endpoint)
+              .set('Cookie', ['accessToken=invalidToken'])
+          },
+
+          error: {
+            code: 400,
+            msg: 'Invalid credentials',
+            description: 'The accessToken is invalid',
+            complete: false
+          }
+        }
+      ]
+
+      for (const { fn, error } of func) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.description).toEqual(error.description)
+      }
+    })
   })
 
   describe('/delete/', () => {

@@ -264,140 +264,213 @@ describe('user model', () => {
     })
   })
 
-  describe('create user invitation', () => {
-    test('', async () => {
-      const res = await model.invitation.create(userId, {
-        _id: userId,
-        name: 'invitation test',
-        color: '#123456'
+  describe('invitation', () => {
+    describe('create user invitation', () => {
+      test('', async () => {
+        const res = await model.invitation.create(userId, {
+          _id: userId,
+          name: 'invitation test',
+          color: '#123456'
+        })
+
+        expect(res).toBe(true)
       })
 
-      expect(res).toBe(true)
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.invitation.create(notExistUser, {
+                _id: new mongoose.Types.ObjectId(),
+                name: 'invitation test',
+                color: '#123456'
+              })
+            },
+            error: new NotFound('User not found')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create(userId, {
+                _id: 'invalidId' as unknown as Types.ObjectId,
+                name: 'invitation test',
+                color: '#123456'
+              })
+            },
+            error: new UserBadRequest('Invalid credentials', 'Invalid _id format')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
 
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            await model.invitation.create(notExistUser, {
-              _id: new mongoose.Types.ObjectId(),
-              name: 'invitation test',
-              color: '#123456'
-            })
-          },
-          error: new NotFound('User not found')
-        },
-        {
-          fn: async function () {
-            await model.invitation.create(userId, {
-              _id: 'invalidId' as unknown as Types.ObjectId,
-              name: 'invitation test',
-              color: '#123456'
-            })
-          },
-          error: new UserBadRequest('Invalid credentials', 'Invalid _id format')
-        }
-      ]
+    describe('remove user invitation', () => {
+      test('', async () => {
+        const res = await model.invitation.remove(userId, userId)
+        expect(res).toBe(true)
+      })
 
-      for (const { fn, error } of func) {
-        try {
-          await fn()
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId())
+            },
+            error: new NotFound('User not found')
+          },
+          {
+            fn: async function () {
+              await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId)
+            },
+            error: new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
         }
-      }
+      })
+    })
+
+    describe('get user invitation', () => {
+      test('', async () => {
+        const res = await model.invitation.get(userId)
+        expect(res).toStrictEqual([])
+      })
+
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.invitation.get(notExistUser)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
   })
 
-  describe('remove user invitation', () => {
-    test('', async () => {
-      const res = await model.invitation.remove(userId, userId)
-      expect(res).toBe(true)
+  describe('group', () => {
+    describe('create user group', () => {
+      test('', async () => {
+        const res = await model.group.create(userId, {
+          _id: userId,
+          name: 'group test',
+          color: '#654321'
+        })
+        expect(res).toBe(true)
+      })
+
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.group.create(notExistUser, {
+                _id: new mongoose.Types.ObjectId(),
+                name: 'group test',
+                color: '#654321'
+              })
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
 
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId())
+    describe('remove user group', () => {
+      test('', async () => {
+        const res = await model.group.remove(userId, userId)
+        expect(res).toBe(true)
+      })
+
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.group.remove(notExistUser, new mongoose.Types.ObjectId())
+            },
+            error: new NotFound('User not found')
           },
-          error: new NotFound('User not found')
-        },
-        {
-          fn: async function () {
-            await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId)
-          },
-          error: new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+          {
+            fn: async function () {
+              await model.group.remove(userId, 'invalidId' as unknown as Types.ObjectId)
+            },
+            error: new UserBadRequest('Invalid credentials', 'The group _id is invalid')
+          }
+        ]
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
         }
-      ]
-
-      for (const { fn, error } of func) {
-        try {
-          await fn()
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
-        }
-      }
-    })
-  })
-
-  describe('get user invitation', () => {
-    test('', async () => {
-      const res = await model.invitation.get(userId)
-      expect(res).toStrictEqual([])
+      })
     })
 
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            await model.invitation.get(notExistUser)
-          },
-          error: new NotFound('User not found')
-        }
-      ]
+    describe('get user group', () => {
+      test('', async () => {
+        const res = await model.group.get(userId)
+        expect(res).toStrictEqual([])
+      })
 
-      for (const { fn, error } of func) {
-        try {
-          await fn()
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
-        }
-      }
-    })
-  })
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.group.get(notExistUser)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
 
-  describe('get user group', () => {
-    test('', async () => {
-      const res = await model.group.get(userId)
-      expect(res).toStrictEqual([])
-    })
-
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            await model.group.get(notExistUser)
-          },
-          error: new NotFound('User not found')
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
         }
-      ]
-
-      for (const { fn, error } of func) {
-        try {
-          await fn()
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
-        }
-      }
+      })
     })
   })
 

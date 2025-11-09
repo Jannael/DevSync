@@ -45,7 +45,7 @@ const functions = {
 
     return accessToken
   },
-  create: async function (req: Request, res: Response): Promise<Partial<IRefreshToken>> {
+  create: async function (req: Request, res: Response) {
     if (req.cookies?.account === undefined ||
         req.body === undefined) throw new UserBadRequest('Invalid credentials', 'Account not verified')
 
@@ -183,7 +183,14 @@ const functions = {
   },
   invitation: {
     get: async function (req: Request, res: Response) {
+      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
 
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
+      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
+      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
+
+      const result = await model.invitation.get(accessToken._id)
+      return result
     },
     invite: async function (req: Request, res: Response) {
 

@@ -378,7 +378,7 @@ describe('user model', () => {
   describe('group', () => {
     describe('create user group', () => {
       test('', async () => {
-        const res = await model.group.add(userId, {
+        const res = await model.group.add(user.account, {
           _id: userId,
           name: 'group test',
           color: '#654321'
@@ -390,7 +390,7 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.group.add(notExistUser, {
+              await model.group.add(user.account, {
                 _id: new mongoose.Types.ObjectId(),
                 name: 'group test',
                 color: '#654321'
@@ -414,7 +414,7 @@ describe('user model', () => {
 
     describe('remove user group', () => {
       test('', async () => {
-        const res = await model.group.remove(userId, userId)
+        const res = await model.group.remove(user.account, userId)
         expect(res).toBe(true)
       })
 
@@ -422,13 +422,13 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.group.remove(notExistUser, new mongoose.Types.ObjectId())
+              await model.group.remove(user.account, new mongoose.Types.ObjectId())
             },
             error: new NotFound('User not found')
           },
           {
             fn: async function () {
-              await model.group.remove(userId, 'invalidId' as unknown as Types.ObjectId)
+              await model.group.remove(user.account, 'invalidId' as unknown as Types.ObjectId)
             },
             error: new UserBadRequest('Invalid credentials', 'The group _id is invalid')
           }

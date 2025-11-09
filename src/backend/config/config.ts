@@ -22,5 +22,8 @@ export default {
     projection: {
       IRefreshToken: { pwd: 0, refreshToken: 0, invitation: 0, group: 0 }
     }
+  },
+  user: {
+    maxInvitations: 5
   }
 } as const

@@ -1,4 +1,4 @@
-import { CustomError, DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
+import { CustomError, DatabaseError, DuplicateData, Forbidden, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { verifyEmail } from '../../utils/utils'
 import dbModel from './../../database/schemas/node/user'
@@ -171,6 +171,16 @@ const model = {
         await groupModel.exists(invitation._id)
 
         validator.user.invitation.add(invitation)
+
+        const currentInvitation = await dbModel.findOne(
+          { account }, { invitation: 1, _id: 0 }
+        )
+
+        if (currentInvitation?.invitation?.length !== undefined &&
+          currentInvitation?.invitation?.length >= config.user.maxInvitations
+        ) {
+          throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of invitations`)
+        }
 
         const res = await dbModel.updateOne({ account }, { $push: { invitation } })
         if (res.matchedCount === 0) throw new NotFound('User not found')

@@ -26,17 +26,24 @@ const model = {
     }
   },
   update: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
-    validator.group.partial(data)
-    const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLeadId })
-    if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can update group information')
+    try {
+      validator.group.partial(data)
+      const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLeadId })
+      if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can update group information')
 
-    const updated = await dbModel.updateOne({ _id: groupId }, data)
-    if (updated.matchedCount === 0) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
+      const updated = await dbModel.updateOne({ _id: groupId }, data)
+      if (updated.matchedCount === 0) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
 
-    const group = await dbModel.findOne({ _id: groupId }).lean()
-    if (group === null) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
+      const group = await dbModel.findOne({ _id: groupId }).lean()
+      if (group === null) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
 
-    return group
+      return group
+    } catch (e) {
+      if (e instanceof UserBadRequest) throw e
+      else if (e instanceof Forbidden) throw e
+      else if (e instanceof NotFound) throw e
+      throw new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
+    }
   }
 }
 

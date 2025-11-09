@@ -267,7 +267,11 @@ describe('user model', () => {
   describe('invitation', () => {
     describe('create user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.create(user.account, {
+        const res = await model.invitation.create({
+          account: user.account,
+          fullName: user.fullName,
+          role: 'techLead'
+        }, {
           _id: userId,
           name: 'invitation test',
           color: '#123456'
@@ -280,7 +284,11 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.invitation.create('Veronica@gmail.com', {
+              await model.invitation.create({
+                account: 'Veronica@gmail.com',
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
                 _id: new mongoose.Types.ObjectId(),
                 name: 'invitation test',
                 color: '#123456'
@@ -290,7 +298,11 @@ describe('user model', () => {
           },
           {
             fn: async function () {
-              await model.invitation.create('Veronica@gmail.com', {
+              await model.invitation.create({
+                account: 'Veronica@gmail.com',
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
                 _id: 'invalidId' as unknown as Types.ObjectId,
                 name: 'invitation test',
                 color: '#123456'
@@ -314,7 +326,7 @@ describe('user model', () => {
 
     describe('remove user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.remove(userId, userId)
+        const res = await model.invitation.remove(userId, userId, user.account)
         expect(res).toBe(true)
       })
 
@@ -322,13 +334,13 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId())
+              await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId(), 'veronica@gmail.com')
             },
             error: new NotFound('User not found')
           },
           {
             fn: async function () {
-              await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId)
+              await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId, 'veronica@gmail.com')
             },
             error: new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
           }

@@ -40,20 +40,24 @@ const model = {
 
       const created = await dbModel.create(data)
 
-      for (const techLead of data.techLead) {
-        await UserModel.invitation.create({ ...techLead, role: 'techLead' }, {
-          _id: created._id,
-          name: created.name,
-          color: created.color
-        }, techLeadId)
+      if (data.techLead !== undefined) {
+        for (const techLead of data.techLead) {
+          await UserModel.invitation.create({ ...techLead, role: 'techLead' }, {
+            _id: created._id,
+            name: created.name,
+            color: created.color
+          })
+        }
       }
 
-      for (const member of data.member) {
-        await UserModel.invitation.create(member, {
-          _id: created._id,
-          name: created.name,
-          color: created.color
-        }, techLeadId)
+      if (data.member !== undefined) {
+        for (const member of data.member) {
+          await UserModel.invitation.create(member, {
+            _id: created._id,
+            name: created.name,
+            color: created.color
+          })
+        }
       }
 
       await UserModel.group.add(techLead, {
@@ -99,8 +103,11 @@ const model = {
 
       const members = await dbModel.findOne({ _id: groupId }, { member: 1 }).lean()
       if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
-      for (const member of members.member) {
-        await UserModel.group.remove(member.account, groupId)
+
+      if (members.member !== undefined) {
+        for (const member of members.member) {
+          await UserModel.group.remove(member.account, groupId)
+        }
       }
 
       const deleted = await dbModel.deleteOne({ _id: groupId })
@@ -115,11 +122,8 @@ const model = {
     }
   },
   member: {
-    add: async function (groupId: Types.ObjectId, member: IGroup['member'][number], techLead: Types.ObjectId): Promise<boolean> {
+    add: async function (groupId: Types.ObjectId, member: NonNullable<IGroup['member']>[number]): Promise<boolean> {
       try {
-        const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLead })
-        if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can add members')
-
         const currentMembers = await dbModel.findOne({ _id: groupId }, { member: 1, _id: 0 })
 
         if (currentMembers?.member?.length !== undefined &&

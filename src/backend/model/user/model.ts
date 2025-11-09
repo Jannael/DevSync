@@ -151,7 +151,7 @@ const model = {
       if (user === null) throw new NotFound('User not found')
       return user.group
     },
-    create: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
+    add: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
       validator.user.group.add(group)
       const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
 

@@ -89,7 +89,9 @@ const controller = {
         ErrorHandler.user(res, e as CustomError)
       }
     },
-    create: async function (req: Request, res: Response) {}
+    create: async function (req: Request, res: Response) {},
+    accept: async function (req: Request, res: Response) {},
+    remove: async function (req: Request, res: Response) {}
   },
   group: {
     get: async function (req: Request, res: Response) {},

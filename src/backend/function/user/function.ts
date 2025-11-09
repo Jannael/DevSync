@@ -192,7 +192,10 @@ const functions = {
       const result = await model.invitation.get(accessToken._id)
       return result
     },
-    invite: async function (req: Request, res: Response) {
+    create: async function (req: Request, res: Response) {
+
+    },
+    accept: async function (req: Request, res: Response) {
 
     }
   },

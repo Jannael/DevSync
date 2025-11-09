@@ -378,7 +378,7 @@ describe('user model', () => {
   describe('group', () => {
     describe('create user group', () => {
       test('', async () => {
-        const res = await model.group.create(userId, {
+        const res = await model.group.add(userId, {
           _id: userId,
           name: 'group test',
           color: '#654321'
@@ -390,7 +390,7 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.group.create(notExistUser, {
+              await model.group.add(notExistUser, {
                 _id: new mongoose.Types.ObjectId(),
                 name: 'group test',
                 color: '#654321'

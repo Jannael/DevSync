@@ -519,6 +519,25 @@ describe('/user/v1/', () => {
     })
   })
 
+  describe('/get/group/', () => {
+    describe('pending...', () => {})
+  })
+
+  describe('/delete/group/', () => {
+    describe('pending...', () => {})
+  })
+
+  describe('/create/invitation/', () => {
+    describe('pending...', () => {
+      /* Here you have to make sure to make impossible to invite yourself */
+    })
+  })
+
+  describe('/accept/invitation/', () => {
+    describe('pending...', () => {
+    })
+  })
+
   describe('/get/invitation/', () => {
     const endpoint = path + '/get/invitation/'
     test('', async () => {
@@ -567,6 +586,10 @@ describe('/user/v1/', () => {
         expect(res.body.description).toEqual(error.description)
       }
     })
+  })
+
+  describe('/delete/invitation/', () => {
+    describe('pending...', () => {})
   })
 
   describe('/delete/', () => {

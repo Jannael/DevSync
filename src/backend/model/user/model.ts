@@ -10,6 +10,7 @@ import validator from '../../validator/validator'
 import config from '../../config/config'
 import errorHandler from '../../error/handler'
 import groupModel from '../group/model'
+import { IGroup } from '../../interface/group'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -162,27 +163,28 @@ const model = {
         return null
       }
     },
-    create: async function (account: string, invitation: IUserInvitation): Promise<boolean> {
+    create: async function (user: IGroup['member'][number], invitation: IUserInvitation, techLead: Types.ObjectId): Promise<boolean> {
       try {
-        if (!verifyEmail(account)) {
+        if (!verifyEmail(user.account)) {
           throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
         }
 
         await groupModel.exists(invitation._id)
-
         validator.user.invitation.add(invitation)
 
         const currentInvitation = await dbModel.findOne(
-          { account }, { invitation: 1, _id: 0 }
+          { account: user.account }, { invitation: 1, _id: 0 }
         )
 
         if (currentInvitation?.invitation?.length !== undefined &&
           currentInvitation?.invitation?.length >= config.user.maxInvitations
         ) {
-          throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of invitations`)
+          throw new Forbidden('Access denied', `The user with the account ${user.account} has reached the maximum number of invitations`)
         }
 
-        const res = await dbModel.updateOne({ account }, { $push: { invitation } })
+        await groupModel.member.add(invitation._id, { ...user }, techLead)
+
+        const res = await dbModel.updateOne({ account: user.account }, { $push: { invitation } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
 
         return res.acknowledged

@@ -1,4 +1,4 @@
-import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
+import { CustomError, DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { verifyEmail } from '../../utils/utils'
 import dbModel from './../../database/schemas/node/user'
@@ -8,6 +8,7 @@ import dotenv from 'dotenv'
 import { Types } from 'mongoose'
 import validator from '../../validator/validator'
 import config from '../../config/config'
+import handler from '../../error/handler'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -178,9 +179,11 @@ const model = {
         if (res.matchedCount === 0) throw new NotFound('User not found')
         return res.acknowledged
       } catch (e) {
-        if (e instanceof UserBadRequest) throw e
-        else if (e instanceof NotFound) throw e
-        
+        handler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to remove', 'The group was not removed from the user, something went wrong please try again')
+        )
+        return false
       }
     }
   }

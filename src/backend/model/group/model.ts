@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import dbModel from './../../database/schemas/node/group'
 import { IGroup } from '../../interface/group'
 import validator from '../../validator/validator'
-import { DatabaseError, Forbidden, NotFound } from '../../error/error'
+import { DatabaseError, Forbidden, NotFound, UserBadRequest } from '../../error/error'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -16,9 +16,14 @@ const model = {
     }
   },
   create: async function (data: IGroup): Promise<IGroup> {
-    validator.group.create(data)
-    const created = await dbModel.create(data)
-    return created.toObject()
+    try {
+      validator.group.create(data)
+      const created = await dbModel.create(data)
+      return created.toObject()
+    } catch (e) {
+      if (e instanceof UserBadRequest) throw e
+      throw new DatabaseError('Failed to save', 'The group was not created, something went wrong please try again')
+    }
   },
   update: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
     validator.group.partial(data)

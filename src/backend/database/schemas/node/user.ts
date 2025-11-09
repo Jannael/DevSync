@@ -1,20 +1,26 @@
 import { model, Schema } from 'mongoose'
 import config from '../../../config/config'
-import { IUser, IUserInvitation } from '../../../interface/user'
+import { IUser, IUserGroup, IUserInvitation } from '../../../interface/user'
 
-const groupSchema = new Schema<IUserInvitation>({
+const groupSchema = new Schema<IUserGroup>({
   name: { type: String, required: true },
   _id: { type: Schema.Types.ObjectId, required: true },
   color: { type: String, required: true }
 }, { _id: false, versionKey: false })
 
-const schema = new Schema({
+const invitationSchema = new Schema<IUserInvitation>({
+  name: { type: String, required: true },
+  _id: { type: Schema.Types.ObjectId, required: true },
+  color: { type: String, required: true }
+}, { _id: false, versionKey: false })
+
+const schema = new Schema<IUser>({
   fullName: { type: String, required: true },
   account: { type: String, required: true, unique: true },
   pwd: { type: String, required: true },
   nickName: { type: String },
   refreshToken: [{ type: String }],
-  invitation: [groupSchema],
+  invitation: [invitationSchema],
   group: [groupSchema]
 }, {
   ...config.database.mongodb.schemaOptions,

@@ -33,7 +33,7 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group existence could not be verified, something went wrong please try again')
     }
   },
-  create: async function (data: IGroup): Promise<IGroup> {
+  create: async function (data: IGroup, techLead: string): Promise<IGroup> {
     try {
       validator.group.create(data)
 
@@ -54,6 +54,12 @@ const model = {
           color: created.color
         })
       }
+
+      await UserModel.group.add(techLead, {
+        _id: created._id,
+        name: created.name,
+        color: created.color
+      })
 
       return created.toObject()
     } catch (e) {

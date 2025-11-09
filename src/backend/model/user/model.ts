@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 import { Types } from 'mongoose'
 import validator from '../../validator/validator'
 import config from '../../config/config'
-import handler from '../../error/handler'
+import errorHandler from '../../error/handler'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -35,136 +35,208 @@ const model = {
 
       return user
     } catch (e: any) {
-      if (e instanceof DuplicateData) throw e
-      else if (e instanceof UserBadRequest) throw e
-      else if (e instanceof NotFound) throw e
-
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to save', 'The user was not created, something went wrong please try again')
+      )
       throw new DatabaseError('Failed to save', 'The user was not created, something went wrong please try again')
     }
   },
   update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
-    if (!Types.ObjectId.isValid(userId)) {
-      throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-    }
-
-    if (data.pwd !== undefined) {
-      const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
-      const pwd = await bcrypt.hash(data.pwd, salt)
-      data.pwd = pwd
-    }
-
-    if (data.account !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the account here')
-    if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
-    if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
-
-    validator.user.partial(data)
-
-    const user = await dbModel.updateOne({ _id: userId }, { ...data })
-    if (user.matchedCount === 0) throw new NotFound('User not found')
-    const refreshToken = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
-
-    if (user.acknowledged && refreshToken !== null) {
-      return refreshToken
-    }
-
-    throw new NotFound('User not found')
-  },
-  delete: async function (userId: Types.ObjectId): Promise<boolean> {
-    if (!Types.ObjectId.isValid(userId)) {
-      throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-    }
-
-    const result = await dbModel.deleteOne({ _id: userId })
-
-    if (result.acknowledged && result.deletedCount === 1) { return true }
-    throw new NotFound('User not found')
-  },
-  account: {
-    update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
+    try {
       if (!Types.ObjectId.isValid(userId)) {
         throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
       }
 
-      const isValidAccount = verifyEmail(account)
-      if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+      if (data.pwd !== undefined) {
+        const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
+        const pwd = await bcrypt.hash(data.pwd, salt)
+        data.pwd = pwd
+      }
 
-      const newAccountExists = await dbModel.exists({ account })
-      if (newAccountExists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
+      if (data.account !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the account here')
+      if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
+      if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
 
-      const response = await dbModel.updateOne({ _id: userId }, { account })
-      if (response.matchedCount === 0) throw new NotFound('User not found')
+      validator.user.partial(data)
 
-      const user = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
-      if (user === null) throw new NotFound('User not found')
-      return user
+      const user = await dbModel.updateOne({ _id: userId }, { ...data })
+      if (user.matchedCount === 0) throw new NotFound('User not found')
+      const refreshToken = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
+
+      if (user.acknowledged && refreshToken !== null) {
+        return refreshToken
+      }
+
+      throw new NotFound('User not found')
+    } catch (e) {
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to save', 'The user was not updated, something went wrong please try again')
+      )
+      throw new DatabaseError('Failed to save', 'The user was not updated, something went wrong please try again')
+    }
+  },
+  delete: async function (userId: Types.ObjectId): Promise<boolean> {
+    try {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+
+      const result = await dbModel.deleteOne({ _id: userId })
+
+      if (result.acknowledged && result.deletedCount === 1) { return true }
+      throw new NotFound('User not found')
+    } catch (e) {
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to remove', 'The user was not deleted, something went wrong please try again')
+      )
+      return false
+    }
+  },
+  account: {
+    update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
+
+        const isValidAccount = verifyEmail(account)
+        if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+
+        const newAccountExists = await dbModel.exists({ account })
+        if (newAccountExists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
+
+        const response = await dbModel.updateOne({ _id: userId }, { account })
+        if (response.matchedCount === 0) throw new NotFound('User not found')
+
+        const user = await dbModel.findOne({ _id: userId }, config.database.projection.IRefreshToken).lean()
+        if (user === null) throw new NotFound('User not found')
+        return user
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The account was not updated, something went wrong please try again')
+        )
+        throw new DatabaseError('Failed to save', 'The account was not updated, something went wrong please try again')
+      }
     }
   },
   password: {
     update: async function (account: string, pwd: string): Promise<boolean> {
-      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+      try {
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
 
-      const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
-      const hashedPwd = await bcrypt.hash(pwd, salt)
-      const response = await dbModel.updateOne({ account }, { pwd: hashedPwd })
-      if (response.matchedCount === 0) throw new NotFound('User not found')
+        const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
+        const hashedPwd = await bcrypt.hash(pwd, salt)
+        const response = await dbModel.updateOne({ account }, { pwd: hashedPwd })
+        if (response.matchedCount === 0) throw new NotFound('User not found')
 
-      return true
+        return true
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The password was not updated, something went wrong please try again')
+        )
+        return false
+      }
     }
   },
   invitation: {
     get: async function (userId: Types.ObjectId): Promise<IUserInvitation[] | undefined | null> {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
 
-      const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
-      if (user === null) throw new NotFound('User not found')
-      return user.invitation
+        const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
+        if (user === null) throw new NotFound('User not found')
+        return user.invitation
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to access data', 'The invitations were not retrieved, something went wrong please try again')
+        )
+        return null
+      }
     },
     create: async function (account: string, invitation: IUserInvitation): Promise<boolean> {
-      if (!verifyEmail(account)) {
-        throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
+      try {
+        if (!verifyEmail(account)) {
+          throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
+        }
+
+        // pending...
+        /* add the validation that the group actually exists */
+
+        validator.user.invitation.add(invitation)
+
+        const res = await dbModel.updateOne({ account }, { $push: { invitation } })
+        if (res.matchedCount === 0) throw new NotFound('User not found')
+
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The user was not invited, something went wrong please try again')
+        )
+        return false
       }
-
-      // pending...
-      /* add the validation that the group actually exists */
-
-      validator.user.invitation.add(invitation)
-
-      const res = await dbModel.updateOne({ account }, { $push: { invitation } })
-      if (res.matchedCount === 0) throw new NotFound('User not found')
-
-      return res.acknowledged
     },
     remove: async function (userId: Types.ObjectId, invitationId: Types.ObjectId): Promise<boolean> {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
-      if (!Types.ObjectId.isValid(invitationId)) {
-        throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
-      }
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
+        if (!Types.ObjectId.isValid(invitationId)) {
+          throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+        }
 
-      const res = await dbModel.updateOne({ _id: userId }, { $pull: { invitation: { _id: invitationId } } })
-      if (res.matchedCount === 0) throw new NotFound('User not found')
-      return res.acknowledged
+        const res = await dbModel.updateOne({ _id: userId }, { $pull: { invitation: { _id: invitationId } } })
+        if (res.matchedCount === 0) throw new NotFound('User not found')
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to remove', 'The invitation was not removed from the user, something went wrong please try again')
+        )
+        return false
+      }
     }
   },
   group: {
     get: async function (userId: Types.ObjectId): Promise<IUserGroup[] | undefined | null> {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
 
-      const user = await dbModel.findOne({ _id: userId }, { group: 1, _id: 0 }).lean()
-      if (user === null) throw new NotFound('User not found')
-      return user.group
+        const user = await dbModel.findOne({ _id: userId }, { group: 1, _id: 0 }).lean()
+        if (user === null) throw new NotFound('User not found')
+        return user.group
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to access data', 'The groups were not retrieved, something went wrong please try again')
+        )
+        return null
+      }
     },
     add: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
-      validator.user.group.add(group)
-      const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
+      try {
+        validator.user.group.add(group)
+        const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
 
-      if (res.matchedCount === 0) throw new NotFound('User not found')
-      return res.acknowledged
+        if (res.matchedCount === 0) throw new NotFound('User not found')
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The group was not added to the user, something went wrong please try again')
+        )
+        return false
+      }
     },
     remove: async function (userId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
       try {
@@ -179,7 +251,7 @@ const model = {
         if (res.matchedCount === 0) throw new NotFound('User not found')
         return res.acknowledged
       } catch (e) {
-        handler.allErrors(
+        errorHandler.allErrors(
           e as CustomError,
           new DatabaseError('Failed to remove', 'The group was not removed from the user, something went wrong please try again')
         )

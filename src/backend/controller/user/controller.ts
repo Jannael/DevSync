@@ -81,12 +81,19 @@ const controller = {
     }
   },
   invitation: {
-    get: async function (req: Request, res: Response) {},
+    get: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.invitation.get(req, res)
+        res.json({ complete: true, invitation: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    },
     create: async function (req: Request, res: Response) {}
   },
   group: {
     get: async function (req: Request, res: Response) {},
-    remove: async function (req: Request, res: Response) {}git abstract
+    remove: async function (req: Request, res: Response) {}
   }
 }
 

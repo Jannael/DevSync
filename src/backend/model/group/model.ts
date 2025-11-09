@@ -36,7 +36,25 @@ const model = {
   create: async function (data: IGroup): Promise<IGroup> {
     try {
       validator.group.create(data)
+
       const created = await dbModel.create(data)
+
+      for (const techLead of data.techLead) {
+        await UserModel.invitation.create(techLead.account, {
+          _id: created._id,
+          name: created.name,
+          color: created.color
+        })
+      }
+
+      for (const member of data.member) {
+        await UserModel.invitation.create(member.account, {
+          _id: created._id,
+          name: created.name,
+          color: created.color
+        })
+      }
+
       return created.toObject()
     } catch (e) {
       errorHandler.allErrors(
@@ -75,7 +93,7 @@ const model = {
       const members = await dbModel.findOne({ _id: groupId }, { member: 1 }).lean()
       if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
       for (const member of members.member) {
-        await UserModel.group.remove(member._id, groupId)
+        await UserModel.group.remove(member.account, groupId)
       }
 
       const deleted = await dbModel.deleteOne({ _id: groupId })

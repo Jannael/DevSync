@@ -18,7 +18,7 @@ db.createCollection('group', {
             additionalProperties: false,
             properties: {
               fullName: { bsonType: 'string' },
-              _id: { bsonType: 'objectId' }
+              account: { bsonType: 'string' }
             }
           }
         },
@@ -38,7 +38,7 @@ db.createCollection('group', {
             required: ['_id', 'fullName', 'role'],
             additionalProperties: false,
             properties: {
-              _id: { bsonType: 'objectId' },
+              account: { bsonType: 'string' },
               fullName: { bsonType: 'string' },
               role: { bsonType: 'string' }
             }

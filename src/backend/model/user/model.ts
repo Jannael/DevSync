@@ -223,12 +223,12 @@ const model = {
         return null
       }
     },
-    add: async function (userId: Types.ObjectId, group: IUserGroup): Promise<boolean> {
+    add: async function (account: string, group: IUserGroup): Promise<boolean> {
       try {
         validator.user.group.add(group)
-        const res = await dbModel.updateOne({ _id: userId }, { $push: { group } })
+        const res = await dbModel.updateOne({ account }, { $push: { group } })
 
-        if (res.matchedCount === 0) throw new NotFound('User not found')
+        if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(
@@ -238,17 +238,17 @@ const model = {
         return false
       }
     },
-    remove: async function (userId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
+    remove: async function (account: string, groupId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        if (!verifyEmail(account)) {
+          throw new UserBadRequest('Invalid credentials', 'The account is invalid')
         }
         if (!Types.ObjectId.isValid(groupId)) {
           throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
         }
 
-        const res = await dbModel.updateOne({ _id: userId }, { $pull: { group: { _id: groupId } } })
-        if (res.matchedCount === 0) throw new NotFound('User not found')
+        const res = await dbModel.updateOne({ account }, { $pull: { group: { _id: groupId } } })
+        if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(

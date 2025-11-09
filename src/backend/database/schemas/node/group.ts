@@ -6,14 +6,14 @@ const { ObjectId } = Schema.Types
 
 const techLeadSchema = new Schema<IGroup['techLead'][number]>({
   fullName: { type: String, require: true },
-  _id: { type: ObjectId, require: true }
+  account: { type: String, require: true }
 }, {
   ...config.database.mongodb.schemaOptions,
   _id: false
 })
 
 const memberSchema = new Schema<IGroup['member'][number]>({
-  _id: { type: ObjectId, require: true },
+  account: { type: String, require: true },
   fullName: { type: String, require: true },
   role: { type: String, require: true }
 }, {

@@ -3,13 +3,14 @@ import { Types } from 'mongoose'
 export interface IGroup {
   _id?: Types.ObjectId
   techLead: Array<{
-    _id: Types.ObjectId
+    account: string
     fullName: string
   }>
   name: string
+  color: string
   repository?: string
   member: Array<{
-    _id: Types.ObjectId
+    account: string
     fullName: string
     role: string
   }>

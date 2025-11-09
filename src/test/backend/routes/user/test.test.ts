@@ -370,8 +370,8 @@ describe('/user/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Missing data',
-            description: 'No data to update or invalid data',
+            msg: 'Invalid credentials',
+            description: 'Invalid input: expected object, received undefined',
             complete: false
           }
         }

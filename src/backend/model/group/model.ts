@@ -92,7 +92,7 @@ const model = {
       throw new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
     }
   },
-  remove: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
+  delete: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
     try {
       const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLeadId })
       if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can delete a group')
@@ -141,11 +141,8 @@ const model = {
         throw new DatabaseError('Failed to save', `the member with the account ${member.account} was not added`)
       }
     },
-    remove: async function (groupId: Types.ObjectId, account: string, techLead: Types.ObjectId): Promise<boolean> {
+    remove: async function (groupId: Types.ObjectId, account: string): Promise<boolean> {
       try {
-        const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLead })
-        if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can add members')
-
         const res = await dbModel.updateOne({ _id: groupId }, {
           $pull: { member: { account } }
         })

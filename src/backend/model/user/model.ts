@@ -11,6 +11,7 @@ import config from '../../config/config'
 import errorHandler from '../../error/handler'
 import groupModel from '../group/model'
 import { IGroup } from '../../interface/group'
+import group from '../../database/schemas/node/group'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
@@ -196,7 +197,7 @@ const model = {
         return false
       }
     },
-    remove: async function (userId: Types.ObjectId, invitationId: Types.ObjectId): Promise<boolean> {
+    remove: async function (userId: Types.ObjectId, invitationId: Types.ObjectId, userAccount: string): Promise<boolean> {
       try {
         if (!Types.ObjectId.isValid(userId)) {
           throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
@@ -204,6 +205,8 @@ const model = {
         if (!Types.ObjectId.isValid(invitationId)) {
           throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
         }
+
+        await groupModel.member.remove(invitationId, userAccount)
 
         const res = await dbModel.updateOne({ _id: userId }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')

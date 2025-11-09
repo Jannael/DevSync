@@ -181,11 +181,21 @@ const functions = {
       return true
     }
   },
-  invitation: async function (req: Request, res: Response) {
+  invitation: {
+    get: async function (req: Request, res: Response) {
 
+    },
+    invite: async function (req: Request, res: Response) {
+
+    }
   },
-  group: async function (req: Request, res: Response) {
+  group: {
+    get: async function (req: Request, res: Response) {
 
+    },
+    remove: async function (req: Request, res: Response) {
+
+    }
   }
 }
 

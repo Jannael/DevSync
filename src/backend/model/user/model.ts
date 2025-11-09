@@ -1,4 +1,3 @@
-
 import { DatabaseError, DuplicateData, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { verifyEmail } from '../../utils/utils'

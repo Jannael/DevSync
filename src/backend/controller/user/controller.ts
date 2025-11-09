@@ -80,21 +80,13 @@ const controller = {
       }
     }
   },
-  invitation: async function (req: Request, res: Response) {
-    try {
-      const result = await fn.invitation(req, res)
-      res.json({ complete: true, invitations: result })
-    } catch (e) {
-      ErrorHandler.user(res, e as CustomError)
-    }
+  invitation: {
+    get: async function (req: Request, res: Response) {},
+    create: async function (req: Request, res: Response) {}
   },
-  group: async function (req: Request, res: Response) {
-    try {
-      const result = await fn.group(req, res)
-      res.json({ complete: true, groups: result })
-    } catch (e) {
-      ErrorHandler.user(res, e as CustomError)
-    }
+  group: {
+    get: async function (req: Request, res: Response) {},
+    remove: async function (req: Request, res: Response) {}git abstract
   }
 }
 

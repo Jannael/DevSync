@@ -5,6 +5,7 @@ import validator from '../../validator/validator'
 import { CustomError, DatabaseError, Forbidden, NotFound } from '../../error/error'
 import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
+import config from '../../config/config'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -111,6 +112,34 @@ const model = {
         new DatabaseError('Failed to remove', 'The group was not deleted, something went wrong please try again')
       )
       throw new DatabaseError('Failed to remove', 'The group was not deleted, something went wrong please try again')
+    }
+  },
+  member: {
+    add: async function (groupId: Types.ObjectId, member: IGroup['member'][number], techLead: Types.ObjectId): Promise<boolean> {
+      try {
+        const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLead })
+        if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can add members')
+
+        const currentMembers = await dbModel.findOne({ _id: groupId }, { member: 1, _id: 0 })
+
+        if (currentMembers?.member?.length !== undefined &&
+          currentMembers?.member?.length >= config.group.maxMembers
+        ) throw new Forbidden('Access denied', 'The group has reached the max number of members')
+
+        const res = await dbModel.updateOne({ _id: groupId }, {
+          $push: { member }
+        })
+
+        if (res.matchedCount === 0) throw new NotFound('Group not found', 'The group you are trying to access was not found')
+
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', `the member with the account ${member.account} was not added`)
+        )
+        throw new DatabaseError('Failed to save', `the member with the account ${member.account} was not added`)
+      }
     }
   }
 }

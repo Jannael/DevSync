@@ -30,7 +30,7 @@ export function createError<T extends string> (
   }
 }
 
-type IDatabaseError = 'Connection error' | 'Failed to save' | 'Failed to remove'
+type IDatabaseError = 'Connection error' | 'Failed to save' | 'Failed to remove' | 'Failed to access data'
 export const DatabaseError = createError<IDatabaseError>(500, 'databaseError')
 
 type IUserBadRequest = 'Missing data' | 'Invalid credentials'
@@ -39,11 +39,11 @@ export const UserBadRequest = createError<IUserBadRequest>(400, 'userBadRequest'
 type IDuplicateData = 'User already exists'
 export const DuplicateData = createError<IDuplicateData>(409, 'duplicateData')
 
-type INotFound = 'User not found'
+type INotFound = 'User not found' | 'Group not found'
 export const NotFound = createError<INotFound>(404, 'NotFound')
 
 type IServerError = 'Operation Failed'
 export const ServerError = createError<IServerError>(500, 'ServerError')
 
-type IForbidden = 'Invalid account'
+type IForbidden = 'Invalid account' | 'Access denied'
 export const Forbidden = createError<IForbidden>(403, 'Forbidden')

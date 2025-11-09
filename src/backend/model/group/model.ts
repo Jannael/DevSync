@@ -2,8 +2,9 @@ import { Types } from 'mongoose'
 import dbModel from './../../database/schemas/node/group'
 import { IGroup } from '../../interface/group'
 import validator from '../../validator/validator'
-import { DatabaseError, Forbidden, NotFound, UserBadRequest } from '../../error/error'
+import { CustomError, DatabaseError, Forbidden, NotFound } from '../../error/error'
 import UserModel from '../user/model'
+import errorHandler from '../../error/handler'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -12,8 +13,11 @@ const model = {
       if (res === null) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
       return res
     } catch (e) {
-      if (e instanceof NotFound) throw e
-      throw new DatabaseError('Failed to access data')
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
+      )
+      throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
   create: async function (data: IGroup): Promise<IGroup> {
@@ -22,7 +26,10 @@ const model = {
       const created = await dbModel.create(data)
       return created.toObject()
     } catch (e) {
-      if (e instanceof UserBadRequest) throw e
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to save', 'The group was not created, something went wrong please try again')
+      )
       throw new DatabaseError('Failed to save', 'The group was not created, something went wrong please try again')
     }
   },
@@ -40,9 +47,10 @@ const model = {
 
       return group
     } catch (e) {
-      if (e instanceof UserBadRequest) throw e
-      else if (e instanceof Forbidden) throw e
-      else if (e instanceof NotFound) throw e
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
+      )
       throw new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
     }
   },
@@ -61,9 +69,10 @@ const model = {
       if (deleted.deletedCount === 0) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
       return true
     } catch (e) {
-      if (e instanceof Forbidden) throw e
-      else if (e instanceof NotFound) throw e
-      else if (e instanceof UserBadRequest) throw e
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to remove', 'The group was not deleted, something went wrong please try again')
+      )
       throw new DatabaseError('Failed to remove', 'The group was not deleted, something went wrong please try again')
     }
   }

@@ -22,8 +22,8 @@ const validator = {
     try {
       const result = create.partial().parse(obj)
       return result
-    } catch {
-      return null
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
   }
 }

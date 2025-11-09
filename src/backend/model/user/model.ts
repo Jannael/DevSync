@@ -120,10 +120,17 @@ const model = {
       if (user === null) throw new NotFound('User not found')
       return user.invitation
     },
-    create: async function (userId: Types.ObjectId, invitation: IUserInvitation): Promise<boolean> {
+    create: async function (account: string, invitation: IUserInvitation): Promise<boolean> {
+      if (!verifyEmail(account)) {
+        throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
+      }
+
+      // pending...
+      /* add the validation that the group actually exists */
+
       validator.user.invitation.add(invitation)
 
-      const res = await dbModel.updateOne({ _id: userId }, { $push: { invitation } })
+      const res = await dbModel.updateOne({ account }, { $push: { invitation } })
       if (res.matchedCount === 0) throw new NotFound('User not found')
 
       return res.acknowledged

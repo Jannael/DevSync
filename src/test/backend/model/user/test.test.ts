@@ -267,7 +267,7 @@ describe('user model', () => {
   describe('invitation', () => {
     describe('create user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.create(userId, {
+        const res = await model.invitation.create(user.account, {
           _id: userId,
           name: 'invitation test',
           color: '#123456'
@@ -280,7 +280,7 @@ describe('user model', () => {
         const func = [
           {
             fn: async function () {
-              await model.invitation.create(notExistUser, {
+              await model.invitation.create('Veronica@gmail.com', {
                 _id: new mongoose.Types.ObjectId(),
                 name: 'invitation test',
                 color: '#123456'
@@ -290,7 +290,7 @@ describe('user model', () => {
           },
           {
             fn: async function () {
-              await model.invitation.create(userId, {
+              await model.invitation.create('Veronica@gmail.com', {
                 _id: 'invalidId' as unknown as Types.ObjectId,
                 name: 'invitation test',
                 color: '#123456'

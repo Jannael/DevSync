@@ -166,16 +166,22 @@ const model = {
       return res.acknowledged
     },
     remove: async function (userId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
-      if (!Types.ObjectId.isValid(groupId)) {
-        throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
-      }
+      try {
+        if (!Types.ObjectId.isValid(userId)) {
+          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        }
+        if (!Types.ObjectId.isValid(groupId)) {
+          throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
+        }
 
-      const res = await dbModel.updateOne({ _id: userId }, { $pull: { group: { _id: groupId } } })
-      if (res.matchedCount === 0) throw new NotFound('User not found')
-      return res.acknowledged
+        const res = await dbModel.updateOne({ _id: userId }, { $pull: { group: { _id: groupId } } })
+        if (res.matchedCount === 0) throw new NotFound('User not found')
+        return res.acknowledged
+      } catch (e) {
+        if (e instanceof UserBadRequest) throw e
+        else if (e instanceof NotFound) throw e
+        
+      }
     }
   }
 }

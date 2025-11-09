@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { CustomError } from './error'
+import { CustomError, DatabaseError, DuplicateData, Forbidden, NotFound, ServerError, UserBadRequest } from './error'
 
 function jwtHandler (e: CustomError):
 { code: number, msg: string, description: string, link: Array<{ rel: string, href: string }> | undefined } | undefined {
@@ -50,6 +50,16 @@ const handler = {
       description: status.description,
       link: status.link
     })
+  },
+  allErrors: function (e: CustomError, lastError: CustomError) {
+    if (e instanceof DatabaseError) throw e
+    else if (e instanceof UserBadRequest) throw e
+    else if (e instanceof DuplicateData) throw e
+    else if (e instanceof NotFound) throw e
+    else if (e instanceof ServerError) throw e
+    else if (e instanceof Forbidden) throw e
+
+    throw lastError
   }
 }
 

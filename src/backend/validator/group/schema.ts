@@ -8,10 +8,13 @@ const schema = z.object({
   })),
   name: z.string('name is required').min(3).max(255),
   repository: z.string().url().optional(),
+  color: z.string('color is required #------').length(7),
   member: z.array(z.object({
     _id: z.string('member._id is required'),
     fullName: z.string('member.fullName is required').min(3).max(255),
-    role: z.string('member.role is required').min(3).max(255)
+    role: z.enum(['techLead', 'developer', 'documenter'], {
+      message: 'member.role is required and must be one of: admin, editor, viewer'
+    })
   }))
 })
 

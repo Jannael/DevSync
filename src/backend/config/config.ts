@@ -24,6 +24,7 @@ export default {
     }
   },
   user: {
-    maxInvitations: 5
+    maxInvitations: 5,
+    maxGroups: 5
   }
 } as const

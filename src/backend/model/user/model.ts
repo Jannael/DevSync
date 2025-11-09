@@ -236,6 +236,17 @@ const model = {
     add: async function (account: string, group: IUserGroup): Promise<boolean> {
       try {
         validator.user.group.add(group)
+
+        const currentGroup = await dbModel.findOne(
+          { account }, { group: 1, _id: 0 }
+        )
+
+        if (currentGroup?.group?.length !== undefined &&
+          currentGroup?.group?.length >= config.user.maxGroups
+        ) {
+          throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
+        }
+
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 
         if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)

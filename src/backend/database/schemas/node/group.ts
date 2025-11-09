@@ -4,7 +4,7 @@ import { IGroup } from '../../../interface/group'
 
 const { ObjectId } = Schema.Types
 
-const techLeadSchema = new Schema<IGroup['techLead']>({
+const techLeadSchema = new Schema<IGroup['techLead'][number]>({
   fullName: { type: String, require: true },
   _id: { type: ObjectId, require: true }
 }, {
@@ -23,7 +23,7 @@ const memberSchema = new Schema<IGroup['member'][number]>({
 
 const schema = new Schema<IGroup>({
   _id: { type: ObjectId },
-  techLead: { type: techLeadSchema, require: true },
+  techLead: [{ type: techLeadSchema, require: true }],
   name: { type: String, require: true },
   repository: { type: String },
   member: [memberSchema]

@@ -9,13 +9,17 @@ db.createCollection('group', {
           bsonType: 'objectId'
         },
         techLead: {
-          bsonType: 'object',
-          description: 'tech lead',
-          required: ['fullName', '_id'],
-          additionalProperties: false,
-          properties: {
-            fullName: { bsonType: 'string' },
-            _id: { bsonType: 'objectId' }
+          bsonType: 'array',
+          maxItems: 5, 
+          items: {
+            bsonType: 'object',
+            description: 'tech lead',
+            required: ['fullName', '_id'],
+            additionalProperties: false,
+            properties: {
+              fullName: { bsonType: 'string' },
+              _id: { bsonType: 'objectId' }
+            }
           }
         },
         name: {
@@ -29,9 +33,17 @@ db.createCollection('group', {
         member: {
           bsonType: 'array',
           items: {
-            bsonType: 'objectId'
+            bsonType: 'object',
+            description: 'member',
+            required: ['_id', 'fullName', 'role'],
+            additionalProperties: false,
+            properties: {
+              _id: { bsonType: 'objectId' },
+              fullName: { bsonType: 'string' },
+              role: { bsonType: 'string' }
+            }
           },
-          description: 'members id array'
+          description: 'members array'
         }
       }
     }

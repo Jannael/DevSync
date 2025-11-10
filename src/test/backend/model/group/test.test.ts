@@ -2,6 +2,25 @@ import { IRefreshToken } from '../../../../backend/interface/user'
 import model from './../../../../backend/model/group/model'
 import userModel from './../../../../backend/model/user/model'
 
+import dotenv from 'dotenv'
+import mongoose, { Types } from 'mongoose'
+import dbModel from './../../../../backend/database/schemas/node/group'
+import { IEnv } from '../../../../backend/interface/env'
+import userDbModel from './../../../../backend/database/schemas/node/user'
+
+dotenv.config({ quiet: true })
+const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
+
+beforeAll(async () => {
+  await mongoose.connect(DB_URL_ENV_TEST)
+})
+
+afterAll(async () => {
+  await dbModel.deleteMany({})
+  await userDbModel.deleteMany({})
+  await mongoose.connection.close()
+})
+
 let user: IRefreshToken
 
 beforeAll(async () => {
@@ -19,9 +38,15 @@ describe('group model', () => {
       const res = await model.create({
         name: 'test',
         color: '#000000'
-      }, user.account, user._id)
+      }, user.account)
 
-      console.log(res)
+      expect(res).toStrictEqual({
+        name: 'test',
+        color: '#000000',
+        _id: expect.any(Types.ObjectId),
+        techLead: [],
+        member: []
+      })
     })
   })
 

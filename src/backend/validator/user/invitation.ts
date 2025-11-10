@@ -7,7 +7,7 @@ const groupSchema = z.object({
   _id: z.instanceof(Types.ObjectId, {
     message: 'Invalid _id format'
   }),
-  color: z.string('Color is required #------').min(4).max(7),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
   name: z.string('Name is required').min(3).max(100)
 })
 

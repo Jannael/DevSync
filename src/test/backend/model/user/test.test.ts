@@ -457,6 +457,68 @@ describe('user model', () => {
             await fn()
             throw new Error('Expected function to throw')
           } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
+
+    describe('get user invitation', () => {
+      test('', async () => {
+        const res = await model.invitation.get(secondUser._id)
+        expect(res).toStrictEqual([
+          {
+            name: 'test-0',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-1',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-2',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-3',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-4',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          }
+        ])
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.invitation.get('' as unknown as Types.ObjectId)
+            },
+            error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
+          },
+          {
+            fn: async function () {
+              await model.invitation.get(new mongoose.Types.ObjectId)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
             expect(err.message).toBe(error.message)
             expect(err.description).toBe(error.description)
           }
@@ -470,14 +532,6 @@ describe('user model', () => {
 
       test('error', async () => {
 
-      })
-    })
-
-    describe('get user invitation', () => {
-      test('', async () => {
-      })
-
-      test('error', async () => {
       })
     })
   })

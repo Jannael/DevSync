@@ -7,6 +7,7 @@ import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
 import config from '../../config/config'
 import { IUserInvitation } from '../../interface/user'
+import { omit } from '../../utils/utils'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -140,6 +141,15 @@ const model = {
         if (currentMembers?.member?.length !== undefined &&
           currentMembers?.member?.length >= config.group.maxMembers
         ) throw new Forbidden('Access denied', 'The group has reached the max number of members')
+
+        if (member.role === 'techLead') {
+          const techLead = omit(member, ['role'])
+          const res = await dbModel.updateOne({ _id: groupId }, {
+            $push: { techLead }
+          })
+          if (res.matchedCount === 0) throw new NotFound('Group not found', 'The group you are trying to access was not found')
+          return res.acknowledged
+        }
 
         const res = await dbModel.updateOne({ _id: groupId }, {
           $push: { member }

@@ -22,13 +22,13 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
-  exists: async function (group: IUserInvitation, techLeadId?: string): Promise<boolean> {
+  exists: async function (group: IUserInvitation, techLeadAccount?: string): Promise<boolean> {
     try {
       const res = await dbModel.exists({ _id: group._id, name: group.name, color: group.color })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
 
-      if (techLeadId !== undefined) {
-        const isTechLead = await dbModel.exists({ _id: group._id, name: group.name, color: group.color, 'techLead.account': techLeadId })
+      if (techLeadAccount !== undefined) {
+        const isTechLead = await dbModel.exists({ _id: group._id, name: group.name, color: group.color, 'techLead.account': techLeadAccount })
         if (isTechLead === null || isTechLead === undefined) throw new Forbidden('Access denied', 'The group exists but the user is not a techLead')
       }
 

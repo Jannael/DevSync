@@ -1,10 +1,12 @@
 import { DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
 import { IRefreshToken, IUser } from '../../../../backend/interface/user'
+import { IGroup } from '../../../../backend/interface/group'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
 import mongoose, { Types } from 'mongoose'
+import groupModel from '../../../../backend/model/group/model'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
@@ -19,8 +21,16 @@ afterAll(async () => {
 })
 
 describe('user model', () => {
+  let group: IGroup
+
   let userId: Types.ObjectId
-  let user: IRefreshToken
+  let user: IRefreshToken = {
+    _id: '' as unknown as Types.ObjectId,
+    fullName: 'test',
+    account: 'test@gmail.com',
+    nickName: 'test'
+  }
+
   const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
 
   describe('create user', () => {
@@ -41,6 +51,11 @@ describe('user model', () => {
         account: 'test@gmail.com',
         nickName: 'test'
       })
+
+      group = await groupModel.create({
+        name: 'test',
+        color: '#000000'
+      }, { account: user.account, fullName: user.fullName })
     })
 
     test('error', async () => {
@@ -272,7 +287,7 @@ describe('user model', () => {
           fullName: user.fullName,
           role: 'techLead'
         }, {
-          _id: userId,
+          _id: group._id,
           name: 'invitation test',
           color: '#123456'
         })

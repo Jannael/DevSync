@@ -23,7 +23,7 @@ const schema = new Schema<IGroup>({
   techLead: [{ type: techLeadSchema, require: true }],
   name: { type: String, require: true },
   repository: { type: String },
-  color: { type: String },
+  color: { type: String, require: true },
   member: [memberSchema]
 }, {
   ...config.database.mongodb.schemaOptions,

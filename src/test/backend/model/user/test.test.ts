@@ -38,10 +38,24 @@ describe('user model', () => {
     nickName: 'test'
   }
 
+  let secondTechLead: IRefreshToken = {
+    _id: '' as unknown as Types.ObjectId,
+    fullName: 'veronicaCruz',
+    account: 'veronicaCruz@gmail.com',
+    nickName: 'test'
+  }
+
   beforeAll(async () => {
     secondUser = await model.create({
       fullName: 'veronica',
       account: 'veronica@gmail.com',
+      nickName: 'test',
+      pwd: 'test'
+    })
+
+    secondTechLead = await model.create({
+      fullName: 'veronicaCruz',
+      account: 'veronicaCruz@gmail.com',
       nickName: 'test',
       pwd: 'test'
     })
@@ -75,6 +89,12 @@ describe('user model', () => {
         }, { account: user.account, fullName: user.fullName })
         group.push(newGroup)
       }
+
+      const lastGroup = await groupModel.create({
+        name: 'test-5',
+        color: '#000000'
+      }, { account: secondTechLead.account, fullName: secondTechLead.fullName })
+      group.push(lastGroup)
     })
 
     test('error', async () => {
@@ -399,6 +419,36 @@ describe('user model', () => {
               }, 'test@gmail.com')
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
+          },
+          {
+            fn: async function () {
+              const lastGroup = group[group.length - 1]
+              group.pop()
+
+              for (const [index, el] of group.entries()) {
+                if (index === 0) continue
+                await model.invitation.create({
+                  account: secondUser.account,
+                  fullName: secondUser.fullName,
+                  role: 'techLead'
+                }, {
+                  _id: el._id,
+                  name: el.name,
+                  color: el.color
+                }, 'test@gmail.com')
+              }
+
+              await model.invitation.create({
+                account: secondUser.account,
+                fullName: secondUser.fullName,
+                role: 'techLead'
+              }, {
+                _id: lastGroup._id,
+                name: lastGroup.name,
+                color: lastGroup.color
+              }, secondTechLead.account)
+            },
+            error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com has reached the maximum number of invitations')
           }
         ]
 

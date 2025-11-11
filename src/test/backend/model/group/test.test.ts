@@ -23,7 +23,7 @@ afterAll(async () => {
 })
 
 let user: IRefreshToken
-let group: IGroup & Required<Pick<IGroup, '_id'>>
+let group: IGroup
 
 beforeAll(async () => {
   user = await userModel.create({

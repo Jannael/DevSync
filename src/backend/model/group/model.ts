@@ -34,7 +34,7 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group existence could not be verified, something went wrong please try again')
     }
   },
-  create: async function (data: IGroup, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
+  create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
     try {
       if (data.techLead === undefined) data.techLead = []
 

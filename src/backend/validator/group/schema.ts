@@ -20,7 +20,7 @@ const schema = z.object({
 })
 
 const validator = {
-  create: function (obj: IGroup) {
+  create: function (obj: Omit<IGroup, '_id'>) {
     try {
       const result = schema.parse(obj)
       return result

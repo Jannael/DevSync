@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 
 export interface IGroup {
-  _id?: Types.ObjectId
+  _id: Types.ObjectId
   techLead?: Array<{
     account: string
     fullName: string

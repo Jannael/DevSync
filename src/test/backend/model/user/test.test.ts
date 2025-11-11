@@ -24,6 +24,8 @@ describe('user model', () => {
   const group: IGroup[] = []
 
   let userId: Types.ObjectId
+  const notExistUser = new mongoose.Types.ObjectId()
+
   let user: IRefreshToken = {
     _id: '' as unknown as Types.ObjectId,
     fullName: 'test',
@@ -64,12 +66,10 @@ describe('user model', () => {
   afterAll(async () => {
     for (const el of group.entries()) {
       if (el[1].techLead !== undefined) {
-        await groupModel.delete(secondUser.account, el[1]._id)
+        await groupModel.delete(el[1].techLead[0].account, el[1]._id)
       }
     }
   })
-
-  const notExistUser = new mongoose.Types.ObjectId()
 
   describe('create user', () => {
     test('', async () => {

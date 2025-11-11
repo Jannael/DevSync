@@ -62,8 +62,8 @@ describe('group model', () => {
 
   describe('delete', () => {
     test('', async () => {
-      const res = await model.delete(user._id, group._id)
-      console.log(res)
+      const res = await model.delete(user.account, group._id)
+      console.log('delete', res)
     })
 
     test('error', () => {

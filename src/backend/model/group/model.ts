@@ -38,18 +38,15 @@ const model = {
     try {
       if (data.techLead === undefined) data.techLead = []
 
-      if (data.techLead !== undefined &&
-        !data.techLead.includes(techLead)
-      ) {
-        data.techLead.push(techLead)
-      }
+      if (!data.techLead.includes(techLead)) data.techLead.push(techLead)
 
       validator.group.create(data)
       const created = await dbModel.create(data)
 
       if (data.techLead !== undefined) {
-        for (const techLead of data.techLead) {
-          await UserModel.invitation.create({ ...techLead, role: 'techLead' }, {
+        for (const techLd of data.techLead) {
+          if (techLd.account === techLead.account) continue
+          await UserModel.invitation.create({ ...techLd, role: 'techLead' }, {
             _id: created._id,
             name: created.name,
             color: created.color
@@ -75,7 +72,6 @@ const model = {
 
       return created.toObject()
     } catch (e) {
-      console.log(e)
       errorHandler.allErrors(
         e as CustomError,
         new DatabaseError('Failed to save', 'The group was not created, something went wrong please try again')
@@ -104,9 +100,9 @@ const model = {
       throw new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
     }
   },
-  delete: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId): Promise<boolean> {
+  delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
     try {
-      const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLeadId })
+      const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': techLeadAccount })
       if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can delete a group')
 
       const members = await dbModel.findOne({ _id: groupId }, { member: 1 }).lean()
@@ -146,7 +142,6 @@ const model = {
 
         return res.acknowledged
       } catch (e) {
-        console.log(e)
         errorHandler.allErrors(
           e as CustomError,
           new DatabaseError('Failed to save', `the member with the account ${member.account} was not added`)

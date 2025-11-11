@@ -182,6 +182,29 @@ const model = {
         )
         return false
       }
+    },
+    update: async function (groupId: Types.ObjectId, data: { fullName?: string, account?: string }): Promise<boolean> {
+      try {
+        const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName })
+
+        if (isTechLead !== null) {
+          const res = await dbModel.updateOne(
+            { _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName },
+            { $set: { 'techLead.$.account': data.account, 'techLead.$.fullname': data.fullName } })
+          return res.acknowledged
+        }
+
+        const res = await dbModel.updateOne(
+          { _id: groupId, 'member.account': data.account, 'member.fullName': data.fullName },
+          { $set: { 'member.$.account': data.account, 'member.$.fullname': data.fullName } })
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The user was not updated')
+        )
+        return false
+      }
     }
   }
 }

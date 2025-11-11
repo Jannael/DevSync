@@ -163,19 +163,30 @@ const model = {
         return null
       }
     },
-    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation): Promise<boolean> {
+    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadId: Types.ObjectId): Promise<boolean> {
       try {
         if (!verifyEmail(user.account)) {
           throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
         }
 
-        await groupModel.exists(invitation)
         validator.user.invitation.add(invitation)
+        await groupModel.exists(invitation, techLeadId)
 
         const currentInvitation = await dbModel.findOne(
-          { account: user.account }, { invitation: 1, _id: 0 }
+          { account: user.account }, { invitation: 1, _id: 0, group: 1 }
         )
 
+        if (currentInvitation === null) throw new NotFound('User not found')
+
+        if (currentInvitation?.group !== null &&
+          currentInvitation?.group !== undefined &&
+          currentInvitation.group?.some(g => g._id.equals(invitation._id))) throw new Forbidden('Access denied', `The user with the account ${user.account} already belongs to the group`)
+
+        if (currentInvitation?.invitation !== null &&
+          currentInvitation?.invitation !== undefined &&
+          currentInvitation.invitation?.some(g => g._id.equals(invitation._id))) {
+          throw new Forbidden('Access denied', `The user with the account ${user.account} already has an invitation for the group`)
+        }
         if (currentInvitation?.invitation?.length !== undefined &&
           currentInvitation?.invitation?.length >= config.user.maxInvitations
         ) {
@@ -241,6 +252,8 @@ const model = {
       try {
         validator.user.group.add(group)
 
+        await groupModel.exists(group)
+
         const currentGroup = await dbModel.findOne(
           { account }, { group: 1, _id: 0 }
         )
@@ -256,6 +269,7 @@ const model = {
         if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)
         return res.acknowledged
       } catch (e) {
+        console.log(e)
         errorHandler.allErrors(
           e as CustomError,
           new DatabaseError('Failed to save', 'The group was not added to the user, something went wrong please try again')

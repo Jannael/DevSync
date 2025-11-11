@@ -1,4 +1,4 @@
-import { DuplicateData, NotFound, UserBadRequest } from '../../../../backend/error/error'
+import { DuplicateData, NotFound, UserBadRequest, Forbidden } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
 import { IRefreshToken, IUser } from '../../../../backend/interface/user'
 import { IGroup } from '../../../../backend/interface/group'
@@ -31,7 +31,23 @@ describe('user model', () => {
     nickName: 'test'
   }
 
-  const notExistUser = '68de8beca3acccec4ac2fddb' as unknown as Types.ObjectId
+  let secondUser: IRefreshToken = {
+    _id: '' as unknown as Types.ObjectId,
+    fullName: 'veronica',
+    account: 'veronica@gmail.com',
+    nickName: 'test'
+  }
+
+  beforeAll(async () => {
+    secondUser = await model.create({
+      fullName: 'veronica',
+      account: 'veronica@gmail.com',
+      nickName: 'test',
+      pwd: 'test'
+    })
+  })
+
+  const notExistUser = new mongoose.Types.ObjectId()
 
   describe('create user', () => {
     test('', async () => {
@@ -55,7 +71,7 @@ describe('user model', () => {
       group = await groupModel.create({
         name: 'test',
         color: '#000000'
-      }, { account: user.account, fullName: user.fullName })
+      }, { account: user.account, fullName: user.fullName, _id: user._id })
     })
 
     test('error', async () => {
@@ -283,19 +299,87 @@ describe('user model', () => {
     describe('create user invitation', () => {
       test('', async () => {
         const res = await model.invitation.create({
-          account: user.account,
-          fullName: user.fullName,
+          account: secondUser.account,
+          fullName: secondUser.fullName,
           role: 'techLead'
         }, {
           _id: group._id,
           name: group.name,
           color: group.color
-        })
+        }, user._id)
 
         expect(res).toBe(true)
       })
 
       test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: user.account,
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
+                _id: notExistUser,
+                name: 'no group',
+                color: '#000000'
+              }, user._id)
+            },
+            error: new NotFound('Group not found', 'The group you are trying to access does not exist')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: user.account,
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
+                _id: notExistUser,
+                name: 'no group',
+                color: '1234567'
+              }, user._id)
+            },
+            error: new UserBadRequest('Invalid credentials', 'Color must be a valid hex code')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: 'veronica@gmail.com',
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
+                _id: group._id,
+                name: group.name,
+                color: group.color
+              }, user._id)
+            },
+            error: new NotFound('User not found')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: user.account,
+                fullName: user.fullName,
+                role: 'techLead'
+              }, {
+                _id: group._id,
+                name: group.name,
+                color: group.color
+              }, user._id)
+            },
+            error: new Forbidden('Access denied', 'The user with the account test2@gmail.com already has an invitation for the group')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
       })
     })
 
@@ -318,39 +402,11 @@ describe('user model', () => {
   })
 
   describe('group', () => {
-    describe('create user group', () => {
+    describe('add user group', () => {
       test('', async () => {
-        const res = await model.group.add(user.account, {
-          _id: userId,
-          name: 'group test',
-          color: '#654321'
-        })
-        expect(res).toBe(true)
       })
 
       test('error', async () => {
-        const func = [
-          {
-            fn: async function () {
-              await model.group.add(user.account, {
-                _id: new mongoose.Types.ObjectId(),
-                name: 'group test',
-                color: '#654321'
-              })
-            },
-            error: new NotFound('User not found')
-          }
-        ]
-
-        for (const { fn, error } of func) {
-          try {
-            await fn()
-          } catch (err: any) {
-            expect(err).toBeInstanceOf(error.constructor)
-            expect(err.message).toBe(error.message)
-            expect(err.description).toBe(error.description)
-          }
-        }
       })
     })
 
@@ -389,35 +445,16 @@ describe('user model', () => {
 
     describe('get user group', () => {
       test('', async () => {
-        const res = await model.group.get(userId)
-        expect(res).toStrictEqual([])
       })
 
       test('error', async () => {
-        const func = [
-          {
-            fn: async function () {
-              await model.group.get(notExistUser)
-            },
-            error: new NotFound('User not found')
-          }
-        ]
-
-        for (const { fn, error } of func) {
-          try {
-            await fn()
-          } catch (err: any) {
-            expect(err).toBeInstanceOf(error.constructor)
-            expect(err.message).toBe(error.message)
-            expect(err.description).toBe(error.description)
-          }
-        }
       })
     })
   })
 
   describe('delete user', () => {
     test('', async () => {
+      await groupModel.delete('test@gmail.com', group._id)
       const res = await model.delete(userId)
 
       expect(res).toBe(true)

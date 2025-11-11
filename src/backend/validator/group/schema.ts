@@ -4,11 +4,12 @@ import { UserBadRequest } from '../../error/error'
 
 const schema = z.object({
   techLead: z.array(z.object({
-    _id: z.string('techLead._id is required')
+    fullName: z.string('techLead fullName is required').min(3).max(100),
+    account: z.string('techLead account is required').email()
   })).optional(),
   name: z.string('name is required').min(3).max(255),
   repository: z.string().url().optional(),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code').optional(),
   member: z.array(z.object({
     _id: z.string('member._id is required'),
     fullName: z.string('member.fullName is required').min(3).max(255),

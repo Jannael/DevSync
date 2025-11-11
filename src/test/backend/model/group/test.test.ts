@@ -7,6 +7,7 @@ import mongoose, { Types } from 'mongoose'
 import dbModel from './../../../../backend/database/schemas/node/group'
 import { IEnv } from '../../../../backend/interface/env'
 import userDbModel from './../../../../backend/database/schemas/node/user'
+import { IGroup } from '../../../../backend/interface/group'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
@@ -22,6 +23,7 @@ afterAll(async () => {
 })
 
 let user: IRefreshToken
+let group: IGroup & Required<Pick<IGroup, '_id'>>
 
 beforeAll(async () => {
   user = await userModel.create({
@@ -38,13 +40,15 @@ describe('group model', () => {
       const res = await model.create({
         name: 'test',
         color: '#000000'
-      }, user.account)
+      }, { account: user.account, fullName: user.fullName })
+
+      group = res
 
       expect(res).toStrictEqual({
         name: 'test',
         color: '#000000',
         _id: expect.any(Types.ObjectId),
-        techLead: [],
+        techLead: [{ account: user.account, fullName: user.fullName }],
         member: []
       })
     })
@@ -56,7 +60,16 @@ describe('group model', () => {
 
   describe('update', () => {})
 
-  describe('remove', () => {})
+  describe('delete', () => {
+    test('', async () => {
+      const res = await model.delete(user._id, group._id)
+      console.log(res)
+    })
+
+    test('error', () => {
+
+    })
+  })
 
   describe('member', () => {
     describe('add', () => {

@@ -14,7 +14,7 @@ db.createCollection('group', {
           items: {
             bsonType: 'object',
             description: 'tech lead',
-            required: ['fullName', '_id'],
+            required: ['fullName', 'account'],
             additionalProperties: false,
             properties: {
               fullName: { bsonType: 'string' },
@@ -35,7 +35,7 @@ db.createCollection('group', {
           items: {
             bsonType: 'object',
             description: 'member',
-            required: ['_id', 'fullName', 'role'],
+            required: ['account', 'fullName', 'role'],
             additionalProperties: false,
             properties: {
               account: { bsonType: 'string' },
@@ -44,6 +44,10 @@ db.createCollection('group', {
             }
           },
           description: 'members array'
+        },
+        color: {
+          bsonType: 'string',
+          description: 'color for the group'
         }
       }
     }

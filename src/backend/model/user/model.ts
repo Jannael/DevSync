@@ -218,7 +218,7 @@ const model = {
 
         await groupModel.member.remove(invitationId, userAccount)
 
-        const res = await dbModel.updateOne({ _id: userId }, { $pull: { invitation: { _id: invitationId } } })
+        const res = await dbModel.updateOne({ _id: userId, account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
         return res.acknowledged
       } catch (e) {

@@ -5,7 +5,7 @@ import { IGroup } from '../../../../backend/interface/group'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
-import mongoose, { Types } from 'mongoose'
+import mongoose, { mongo, Types } from 'mongoose'
 import groupModel from '../../../../backend/model/group/model'
 
 dotenv.config({ quiet: true })
@@ -507,7 +507,7 @@ describe('user model', () => {
           },
           {
             fn: async function () {
-              await model.invitation.get(new mongoose.Types.ObjectId)
+              await model.invitation.get(new mongoose.Types.ObjectId())
             },
             error: new NotFound('User not found')
           }
@@ -528,10 +528,32 @@ describe('user model', () => {
 
     describe('remove user invitation', () => {
       test('', async () => {
+        for (const { _id } of group) {
+          const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
+          expect(res).toEqual(true)
+        }
       })
 
       test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
 
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
       })
     })
   })

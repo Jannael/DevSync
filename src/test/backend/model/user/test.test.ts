@@ -21,7 +21,7 @@ afterAll(async () => {
 })
 
 describe('user model', () => {
-  let group: IGroup
+  const group: IGroup[] = []
 
   let userId: Types.ObjectId
   let user: IRefreshToken = {
@@ -68,10 +68,13 @@ describe('user model', () => {
         nickName: 'test'
       })
 
-      group = await groupModel.create({
-        name: 'test',
-        color: '#000000'
-      }, { account: user.account, fullName: user.fullName })
+      for (let i = 0; i < 5; i++) {
+        const newGroup = await groupModel.create({
+          name: `test-${i}`,
+          color: '#000000'
+        }, { account: user.account, fullName: user.fullName })
+        group.push(newGroup)
+      }
     })
 
     test('error', async () => {
@@ -303,9 +306,9 @@ describe('user model', () => {
           fullName: secondUser.fullName,
           role: 'techLead'
         }, {
-          _id: group._id,
-          name: group.name,
-          color: group.color
+          _id: group[0]._id,
+          name: group[0].name,
+          color: group[0].color
         }, 'test@gmail.com')
 
         expect(res).toBe(true)
@@ -348,9 +351,9 @@ describe('user model', () => {
                 fullName: user.fullName,
                 role: 'techLead'
               }, {
-                _id: group._id,
-                name: group.name,
-                color: group.color
+                _id: group[0]._id,
+                name: group[0].name,
+                color: group[0].color
               }, 'test@gmail.com')
             },
             error: new NotFound('User not found')
@@ -362,12 +365,40 @@ describe('user model', () => {
                 fullName: user.fullName,
                 role: 'techLead'
               }, {
-                _id: group._id,
-                name: group.name,
-                color: group.color
+                _id: group[0]._id,
+                name: group[0].name,
+                color: group[0].color
               }, 'test@gmail.com')
             },
             error: new Forbidden('Access denied', 'The user with the account test2@gmail.com already belongs to the group')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: secondUser.account,
+                fullName: secondUser.fullName,
+                role: 'techLead'
+              }, {
+                _id: group[0]._id,
+                name: group[0].name,
+                color: group[0].color
+              }, 'test@gmail.com')
+            },
+            error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
+          },
+          {
+            fn: async function () {
+              await model.invitation.create({
+                account: secondUser.account,
+                fullName: secondUser.fullName,
+                role: 'techLead'
+              }, {
+                _id: group[0]._id,
+                name: group[0].name,
+                color: group[0].color
+              }, 'test@gmail.com')
+            },
+            error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
           }
         ]
 
@@ -454,7 +485,7 @@ describe('user model', () => {
 
   describe('delete user', () => {
     test('', async () => {
-      await groupModel.delete('test@gmail.com', group._id)
+      await groupModel.delete('test@gmail.com', group[0]._id)
       const res = await model.delete(userId)
 
       expect(res).toBe(true)

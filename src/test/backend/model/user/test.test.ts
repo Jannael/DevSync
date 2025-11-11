@@ -61,6 +61,14 @@ describe('user model', () => {
     })
   })
 
+  afterAll(async () => {
+    for (const el of group.entries()) {
+      if (el[1].techLead !== undefined) {
+        await groupModel.delete(el[1].techLead[0].account, el[1]._id)
+      }
+    }
+  })
+
   const notExistUser = new mongoose.Types.ObjectId()
 
   describe('create user', () => {
@@ -715,7 +723,6 @@ describe('user model', () => {
 
   describe('delete user', () => {
     test('', async () => {
-      await groupModel.delete('test@gmail.com', group[0]._id)
       const res = await model.delete(userId)
 
       expect(res).toBe(true)

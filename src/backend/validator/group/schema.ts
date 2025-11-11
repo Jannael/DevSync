@@ -1,15 +1,11 @@
 import z from 'zod'
 import { IGroup } from '../../interface/group'
 import { UserBadRequest } from '../../error/error'
-import { Types } from 'mongoose'
 
 const schema = z.object({
   techLead: z.array(z.object({
     fullName: z.string('techLead fullName is required').min(3).max(100),
-    account: z.string('techLead account is required').email(),
-    _id: z.instanceof(Types.ObjectId, {
-      message: 'The _id is required'
-    })
+    account: z.string('techLead account is required').email()
   })).optional(),
   name: z.string('name is required').min(3).max(255),
   repository: z.string().url().optional(),

@@ -71,7 +71,7 @@ describe('user model', () => {
       group = await groupModel.create({
         name: 'test',
         color: '#000000'
-      }, { account: user.account, fullName: user.fullName, _id: user._id })
+      }, { account: user.account, fullName: user.fullName })
     })
 
     test('error', async () => {
@@ -306,7 +306,7 @@ describe('user model', () => {
           _id: group._id,
           name: group.name,
           color: group.color
-        }, user._id)
+        }, user.account)
 
         expect(res).toBe(true)
       })
@@ -323,7 +323,7 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '#000000'
-              }, user._id)
+              }, user.account)
             },
             error: new NotFound('Group not found', 'The group you are trying to access does not exist')
           },
@@ -337,7 +337,7 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '1234567'
-              }, user._id)
+              }, user.account)
             },
             error: new UserBadRequest('Invalid credentials', 'Color must be a valid hex code')
           },
@@ -351,7 +351,7 @@ describe('user model', () => {
                 _id: group._id,
                 name: group.name,
                 color: group.color
-              }, user._id)
+              }, user.account)
             },
             error: new NotFound('User not found')
           },
@@ -365,7 +365,7 @@ describe('user model', () => {
                 _id: group._id,
                 name: group.name,
                 color: group.color
-              }, user._id)
+              }, user.account)
             },
             error: new Forbidden('Access denied', 'The user with the account test2@gmail.com already has an invitation for the group')
           }

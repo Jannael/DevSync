@@ -14,12 +14,11 @@ db.createCollection('group', {
           items: {
             bsonType: 'object',
             description: 'tech lead',
-            required: ['fullName', 'account', '_id'],
+            required: ['fullName', 'account'],
             additionalProperties: false,
             properties: {
               fullName: { bsonType: 'string' },
-              account: { bsonType: 'string' },
-              _id: { bsonType: 'objectId' }
+              account: { bsonType: 'string' }
             }
           }
         },

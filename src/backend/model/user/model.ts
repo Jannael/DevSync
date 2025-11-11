@@ -163,14 +163,14 @@ const model = {
         return null
       }
     },
-    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadId: Types.ObjectId): Promise<boolean> {
+    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadAccount: string): Promise<boolean> {
       try {
         if (!verifyEmail(user.account)) {
           throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
         }
 
         validator.user.invitation.add(invitation)
-        await groupModel.exists(invitation, techLeadId)
+        await groupModel.exists(invitation, techLeadAccount)
 
         const currentInvitation = await dbModel.findOne(
           { account: user.account }, { invitation: 1, _id: 0, group: 1 }

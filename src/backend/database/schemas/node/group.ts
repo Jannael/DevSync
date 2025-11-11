@@ -4,8 +4,7 @@ import { IGroup } from '../../../interface/group'
 
 const techLeadSchema = new Schema<NonNullable<IGroup['techLead']>[number]>({
   fullName: { type: String, required: true },
-  account: { type: String, required: true },
-  _id: { type: Schema.Types.ObjectId, required: true }
+  account: { type: String, required: true }
 }, {
   ...config.database.mongodb.schemaOptions,
   _id: false

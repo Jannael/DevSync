@@ -22,13 +22,13 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
-  exists: async function (group: IUserInvitation, techLeadId?: Types.ObjectId): Promise<boolean> {
+  exists: async function (group: IUserInvitation, techLeadId?: string): Promise<boolean> {
     try {
       const res = await dbModel.exists({ _id: group._id, name: group.name, color: group.color })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
 
       if (techLeadId !== undefined) {
-        const isTechLead = await dbModel.exists({ _id: group._id, name: group.name, color: group.color, 'techLead._id': techLeadId })
+        const isTechLead = await dbModel.exists({ _id: group._id, name: group.name, color: group.color, 'techLead.account': techLeadId })
         if (isTechLead === null || isTechLead === undefined) throw new Forbidden('Access denied', 'The group exists but the user is not a techLead')
       }
 
@@ -41,7 +41,7 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group existence could not be verified, something went wrong please try again')
     }
   },
-  create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string, _id: Types.ObjectId }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
+  create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
     try {
       if (data.techLead === undefined) data.techLead = []
 
@@ -57,7 +57,7 @@ const model = {
             _id: created._id,
             name: created.name,
             color: created.color
-          }, techLead._id)
+          }, techLead.account)
         }
       }
 
@@ -67,7 +67,7 @@ const model = {
             _id: created._id,
             name: created.name,
             color: created.color
-          }, techLead._id)
+          }, techLead.account)
         }
       }
 

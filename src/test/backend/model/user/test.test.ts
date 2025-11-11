@@ -569,6 +569,61 @@ describe('user model', () => {
       })
     })
 
+    describe('get user group', () => {
+      test('', async () => {
+        const res = await model.group.get(secondUser._id)
+        expect(res).toStrictEqual([
+          {
+            name: 'test-0',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-1',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-2',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-3',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-4',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          }
+        ])
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.group.get(new mongoose.Types.ObjectId())
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
+
     describe('remove user group', () => {
       test('', async () => {
         const res = await model.group.remove(user.account, userId)
@@ -599,14 +654,6 @@ describe('user model', () => {
             expect(err.description).toBe(error.description)
           }
         }
-      })
-    })
-
-    describe('get user group', () => {
-      test('', async () => {
-      })
-
-      test('error', async () => {
       })
     })
   })

@@ -6,6 +6,7 @@ import { CustomError, DatabaseError, Forbidden, NotFound } from '../../error/err
 import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
 import config from '../../config/config'
+import { IUserInvitation } from '../../interface/user'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -21,9 +22,9 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
-  exists: async function (id: Types.ObjectId): Promise<boolean> {
+  exists: async function (group: IUserInvitation): Promise<boolean> {
     try {
-      const res = await dbModel.exists({ _id: id })
+      const res = await dbModel.exists({ _id: group._id, name: group.name, color: group.color })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
       return true
     } catch (e) {

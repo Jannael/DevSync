@@ -169,7 +169,7 @@ const model = {
           throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
         }
 
-        await groupModel.exists(invitation._id)
+        await groupModel.exists(invitation)
         validator.user.invitation.add(invitation)
 
         const currentInvitation = await dbModel.findOne(

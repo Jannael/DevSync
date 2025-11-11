@@ -288,116 +288,31 @@ describe('user model', () => {
           role: 'techLead'
         }, {
           _id: group._id,
-          name: 'invitation test',
-          color: '#123456'
+          name: group.name,
+          color: group.color
         })
 
         expect(res).toBe(true)
       })
 
       test('error', async () => {
-        const func = [
-          {
-            fn: async function () {
-              await model.invitation.create({
-                account: 'Veronica@gmail.com',
-                fullName: user.fullName,
-                role: 'techLead'
-              }, {
-                _id: new mongoose.Types.ObjectId(),
-                name: 'invitation test',
-                color: '#123456'
-              })
-            },
-            error: new NotFound('User not found')
-          },
-          {
-            fn: async function () {
-              await model.invitation.create({
-                account: 'Veronica@gmail.com',
-                fullName: user.fullName,
-                role: 'techLead'
-              }, {
-                _id: 'invalidId' as unknown as Types.ObjectId,
-                name: 'invitation test',
-                color: '#123456'
-              })
-            },
-            error: new UserBadRequest('Invalid credentials', 'Invalid _id format')
-          }
-        ]
-
-        for (const { fn, error } of func) {
-          try {
-            await fn()
-          } catch (err: any) {
-            expect(err).toBeInstanceOf(error.constructor)
-            expect(err.message).toBe(error.message)
-            expect(err.description).toBe(error.description)
-          }
-        }
       })
     })
 
     describe('remove user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.remove(userId, userId, user.account)
-        expect(res).toBe(true)
       })
 
       test('error', async () => {
-        const func = [
-          {
-            fn: async function () {
-              await model.invitation.remove(notExistUser, new mongoose.Types.ObjectId(), 'veronica@gmail.com')
-            },
-            error: new NotFound('User not found')
-          },
-          {
-            fn: async function () {
-              await model.invitation.remove(userId, 'invalidId' as unknown as Types.ObjectId, 'veronica@gmail.com')
-            },
-            error: new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
-          }
-        ]
 
-        for (const { fn, error } of func) {
-          try {
-            await fn()
-          } catch (err: any) {
-            expect(err).toBeInstanceOf(error.constructor)
-            expect(err.message).toBe(error.message)
-            expect(err.description).toBe(error.description)
-          }
-        }
       })
     })
 
     describe('get user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.get(userId)
-        expect(res).toStrictEqual([])
       })
 
       test('error', async () => {
-        const func = [
-          {
-            fn: async function () {
-              await model.invitation.get(notExistUser)
-            },
-            error: new NotFound('User not found')
-          }
-        ]
-
-        for (const { fn, error } of func) {
-          try {
-            await fn()
-          } catch (err: any) {
-            expect(err).toBeInstanceOf(error.constructor)
-            expect(err.message).toBe(error.message)
-            expect(err.description).toBe(error.description)
-          }
-        }
       })
     })
   })

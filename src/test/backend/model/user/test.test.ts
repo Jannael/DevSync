@@ -522,6 +522,37 @@ describe('user model', () => {
         }
       })
     })
+
+    describe('remove user invitation', () => {
+      test('', async () => {
+        for (const { _id } of group) {
+          const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
+          expect(res).toEqual(true)
+        }
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
   })
 
   describe('group', () => {
@@ -626,8 +657,32 @@ describe('user model', () => {
 
     describe('remove user group', () => {
       test('', async () => {
-        const res = await model.group.remove(user.account, userId)
+        const res = await model.group.remove(user.account, group[0]._id)
         expect(res).toBe(true)
+
+        const groups = await model.group.get(user._id)
+        expect(groups).toStrictEqual([
+          {
+            name: 'test-1',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-2',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-3',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-4',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          }
+        ])
       })
 
       test('error', async () => {
@@ -655,37 +710,6 @@ describe('user model', () => {
           }
         }
       })
-    })
-  })
-
-  describe('remove user invitation', () => {
-    test('', async () => {
-      for (const { _id } of group) {
-        const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
-        expect(res).toEqual(true)
-      }
-    })
-
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
-          },
-          error: new NotFound('User not found')
-        }
-      ]
-
-      for (const { fn, error } of cases) {
-        try {
-          await fn()
-          throw new Error('Expected function to throw')
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
-        }
-      }
     })
   })
 

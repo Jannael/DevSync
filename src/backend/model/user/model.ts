@@ -220,6 +220,7 @@ const model = {
 
         const res = await dbModel.updateOne({ _id: userId, account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
+
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(
@@ -255,14 +256,21 @@ const model = {
         await groupModel.exists(group)
 
         const currentGroup = await dbModel.findOne(
-          { account }, { group: 1, _id: 0 }
+          { account }, { group: 1, _id: 1 }
         )
+
+        if (currentGroup === null) throw new NotFound('User not found', `The user with the account ${account} was not found`)
+
+        if (currentGroup?.group !== null &&
+          currentGroup?.group !== undefined &&
+          currentGroup.group?.some(g => g._id.equals(group._id))
+        ) throw new Forbidden('Access denied', `The user with the account ${account} already belongs to the group`)
 
         if (currentGroup?.group?.length !== undefined &&
           currentGroup?.group?.length >= config.user.maxGroups
-        ) {
-          throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
-        }
+        ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
+
+        await model.invitation.remove(currentGroup._id, group._id, account)
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

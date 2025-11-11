@@ -5,7 +5,7 @@ import { IGroup } from '../../../../backend/interface/group'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
-import mongoose, { mongo, Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import groupModel from '../../../../backend/model/group/model'
 
 dotenv.config({ quiet: true })
@@ -422,11 +422,8 @@ describe('user model', () => {
           },
           {
             fn: async function () {
-              const lastGroup = group[group.length - 1]
-              group.pop()
-
               for (const [index, el] of group.entries()) {
-                if (index === 0) continue
+                if (index === 0 || index === group.length - 1) continue
                 await model.invitation.create({
                   account: secondUser.account,
                   fullName: secondUser.fullName,
@@ -443,9 +440,9 @@ describe('user model', () => {
                 fullName: secondUser.fullName,
                 role: 'techLead'
               }, {
-                _id: lastGroup._id,
-                name: lastGroup.name,
-                color: lastGroup.color
+                _id: group[group.length - 1]._id,
+                name: group[group.length - 1].name,
+                color: group[group.length - 1].color
               }, secondTechLead.account)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com has reached the maximum number of invitations')
@@ -525,22 +522,37 @@ describe('user model', () => {
         }
       })
     })
+  })
 
-    describe('remove user invitation', () => {
+  describe('group', () => {
+    describe('add user group', () => {
       test('', async () => {
-        for (const { _id } of group) {
-          const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
-          expect(res).toEqual(true)
-        }
+        const res = await model.group.add(secondUser.account, group[0])
+        expect(res).toEqual(true)
       })
 
       test('error', async () => {
         const cases = [
           {
             fn: async function () {
-              await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
+              await model.group.add(secondUser.account, group[0])
             },
-            error: new NotFound('User not found')
+            error: new Forbidden('Access denied', `The user with the account ${secondUser.account} already belongs to the group`)
+          },
+          {
+            fn: async function () {
+              await model.group.add('notfound@gmail.com', group[0])
+            },
+            error: new NotFound('User not found', 'The user with the account notfound@gmail.com was not found')
+          },
+          {
+            fn: async function () {
+              for (const [index, el] of group.entries()) {
+                if (index === 0) continue
+                await model.group.add(secondUser.account, el)
+              }
+            },
+            error: new Forbidden('Access denied', `The user with the account ${secondUser.account} has reached the maximum number of groups`)
           }
         ]
 
@@ -554,16 +566,6 @@ describe('user model', () => {
             expect(err.description).toBe(error.description)
           }
         }
-      })
-    })
-  })
-
-  describe('group', () => {
-    describe('add user group', () => {
-      test('', async () => {
-      })
-
-      test('error', async () => {
       })
     })
 
@@ -606,6 +608,37 @@ describe('user model', () => {
 
       test('error', async () => {
       })
+    })
+  })
+
+  describe('remove user invitation', () => {
+    test('', async () => {
+      for (const { _id } of group) {
+        const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
+        expect(res).toEqual(true)
+      }
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
+          },
+          error: new NotFound('User not found')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
     })
   })
 

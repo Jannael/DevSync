@@ -133,6 +133,27 @@ const model = {
         const newAccountExists = await dbModel.exists({ account })
         if (newAccountExists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
 
+        const groupParticipation = await dbModel.findOne({ _id: userId }, { _id: 0, group: 1, invitation: 1, fullName: 1, account: 1 })
+        if (groupParticipation === null) throw new NotFound('User not found')
+
+        if (groupParticipation?.group !== null && groupParticipation?.group !== undefined) {
+          for (const { _id } of groupParticipation?.group) {
+            await groupModel.member.update(_id,
+              { fullName: groupParticipation.fullName, account: groupParticipation.account },
+              { fullName: groupParticipation.fullName, account }
+            )
+          }
+        }
+
+        if (groupParticipation?.invitation !== null && groupParticipation?.invitation !== undefined) {
+          for (const { _id } of groupParticipation?.invitation) {
+            await groupModel.member.update(_id,
+              { fullName: groupParticipation.fullName, account: groupParticipation.account },
+              { fullName: groupParticipation.fullName, account }
+            )
+          }
+        }
+
         const response = await dbModel.updateOne({ _id: userId }, { account })
         if (response.matchedCount === 0) throw new NotFound('User not found')
 

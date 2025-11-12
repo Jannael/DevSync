@@ -63,13 +63,13 @@ describe('user model', () => {
     })
   })
 
-  afterAll(async () => {
-    for (const el of group.entries()) {
-      if (el[1].techLead !== undefined) {
-        await groupModel.delete(el[1].techLead[0].account, el[1]._id)
-      }
-    }
-  })
+  // afterAll(async () => {
+  //   for (const el of group.entries()) {
+  //     if (el[1].techLead !== undefined) {
+  //       await groupModel.delete(el[1].techLead[0].account, el[1]._id)
+  //     }
+  //   }
+  // })
 
   describe('create user', () => {
     test('', async () => {

@@ -108,6 +108,21 @@ const model = {
         throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
       }
 
+      const groupParticipation = await dbModel.findOne({ _id: userId }, { _id: 0, group: 1, invitation: 1, account: 1 })
+      if (groupParticipation === null) throw new NotFound('User not found')
+
+      if (groupParticipation?.group !== null && groupParticipation?.group !== undefined) {
+        for (const { _id } of groupParticipation?.group) {
+          await groupModel.member.remove(_id, groupParticipation.account)
+        }
+      }
+
+      if (groupParticipation?.invitation !== null && groupParticipation?.invitation !== undefined) {
+        for (const { _id } of groupParticipation?.invitation) {
+          await groupModel.member.remove(_id, groupParticipation.account)
+        }
+      }
+
       const result = await dbModel.deleteOne({ _id: userId })
 
       if (result.acknowledged && result.deletedCount === 1) { return true }

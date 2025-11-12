@@ -190,8 +190,7 @@ describe('user model', () => {
   describe('update user', () => {
     test('', async () => {
       const res = await model.update({
-        fullName: 'test1',
-        account: user.account
+        fullName: 'test1'
       }, userId)
 
       expect(res).toStrictEqual({
@@ -206,19 +205,25 @@ describe('user model', () => {
       const func = [
         {
           fn: async function () {
-            await model.update({ account: user.account }, notExistUser)
+            await model.update({ }, notExistUser)
           },
           error: new NotFound('User not found')
         },
         {
           fn: async function () {
-            await model.update({ _id: notExistUser, account: user.account }, userId)
+            await model.update({ account: 'newAccount@gmail.com' }, userId)
+          },
+          error: new UserBadRequest('Invalid credentials', 'You can not change the account here')
+        },
+        {
+          fn: async function () {
+            await model.update({ _id: notExistUser }, userId)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not change the _id')
         },
         {
           fn: async function () {
-            await model.update({ refreshToken: ['hello Dexter Morgan'], account: user.account }, userId)
+            await model.update({ refreshToken: ['hello Dexter Morgan'] }, userId)
           },
           error: new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
         }

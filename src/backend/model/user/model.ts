@@ -44,7 +44,7 @@ const model = {
       throw new DatabaseError('Failed to save', 'The user was not created, something went wrong please try again')
     }
   },
-  update: async function (data: Partial<IUser> & Pick<IUser, 'account'>, userId: Types.ObjectId): Promise<IRefreshToken> {
+  update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
     try {
       if (!Types.ObjectId.isValid(userId)) {
         throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
@@ -56,24 +56,31 @@ const model = {
         data.pwd = pwd
       }
 
+      if (data.account !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the account here')
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
       if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not update the refreshToken')
 
       validator.user.partial(data)
 
       if (data.fullName !== undefined) {
-        const groupParticipation = await dbModel.findOne({ _id: userId }, { _id: 0, group: 1, invitation: 1 })
+        const groupParticipation = await dbModel.findOne({ _id: userId }, { _id: 0, group: 1, invitation: 1, fullName: 1, account: 1 })
         if (groupParticipation === null) throw new NotFound('User not found')
 
         if (groupParticipation?.group !== null && groupParticipation?.group !== undefined) {
           for (const { _id } of groupParticipation?.group) {
-            await groupModel.member.update(_id, { fullName: data.fullName, account: data.account })
+            await groupModel.member.update(_id,
+              { fullName: groupParticipation.fullName, account: groupParticipation.account },
+              { fullName: data.fullName, account: groupParticipation.account }
+            )
           }
         }
 
         if (groupParticipation?.invitation !== null && groupParticipation?.invitation !== undefined) {
           for (const { _id } of groupParticipation?.invitation) {
-            await groupModel.member.update(_id, { fullName: data.fullName, account: data.account })
+            await groupModel.member.update(_id,
+              { fullName: groupParticipation.fullName, account: groupParticipation.account },
+              { fullName: data.fullName, account: groupParticipation.account }
+            )
           }
         }
       }

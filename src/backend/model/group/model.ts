@@ -183,20 +183,25 @@ const model = {
         return false
       }
     },
-    update: async function (groupId: Types.ObjectId, data: { fullName: string, account: string }): Promise<boolean> {
+    update: async function (groupId: Types.ObjectId,
+      data: { fullName: string, account: string },
+      updateData: { fullName: string, account: string }
+    ): Promise<boolean> {
       try {
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName })
 
         if (isTechLead !== null) {
           const res = await dbModel.updateOne(
             { _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName },
-            { $set: { 'techLead.$.account': data.account, 'techLead.$.fullname': data.fullName } })
+            { $set: { 'techLead.$.account': updateData.account, 'techLead.$.fullName': updateData.fullName } })
+
           return res.acknowledged
         }
 
         const res = await dbModel.updateOne(
           { _id: groupId, 'member.account': data.account, 'member.fullName': data.fullName },
-          { $set: { 'member.$.account': data.account, 'member.$.fullname': data.fullName } })
+          { $set: { 'member.$.account': updateData.account, 'member.$.fullName': updateData.fullName } })
+
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(

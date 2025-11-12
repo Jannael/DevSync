@@ -8,6 +8,7 @@ import errorHandler from '../../error/handler'
 import config from '../../config/config'
 import { IUserInvitation } from '../../interface/user'
 import { omit } from '../../utils/utils'
+import userDbModel from '../../database/schemas/node/user'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -45,8 +46,14 @@ const model = {
   create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
     try {
       if (data.techLead === undefined) data.techLead = []
-
       if (!data.techLead.includes(techLead)) data.techLead.push(techLead)
+
+      const user = await userDbModel.findOne({ account: techLead.account }, { _id: 1, group: 1 })
+      if (user === null || user === undefined) throw new NotFound('User not found')
+      if (user.group !== null &&
+        user.group !== undefined &&
+        user.group.length >= config.user.maxGroups
+      ) throw new Forbidden('Access denied', 'The user has reached the max number of groups')
 
       validator.group.create(data)
       const created = await dbModel.create(data)

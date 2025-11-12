@@ -51,6 +51,39 @@ describe('group model', () => {
         _id: expect.any(Types.ObjectId)
       })
     })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.create(group, { fullName: 'name', account: 'notFound@gmail.com' })
+          },
+          error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            for (let i = 0; i < 5; i++) {
+              await model.create({
+                name: 'test',
+                color: '#000000'
+              }, { account: user.account, fullName: user.fullName })
+            }
+          },
+          error: new Forbidden('Access denied', 'The user has reached the max number of groups')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
   })
 
   describe('exists', () => {

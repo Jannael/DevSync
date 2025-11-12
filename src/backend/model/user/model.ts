@@ -216,6 +216,9 @@ const model = {
         validator.user.invitation.add(invitation)
         await groupModel.exists(invitation, techLeadAccount)
 
+        const techLeadExists = await dbModel.findOne({ account: techLeadAccount }, { _id: 1 })
+        if (techLeadExists === null) throw new NotFound('User not found', 'TechLead does not exists')
+
         const currentInvitation = await dbModel.findOne(
           { account: user.account }, { invitation: 1, _id: 0, group: 1 }
         )

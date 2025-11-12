@@ -78,7 +78,11 @@ const model = {
         color: created.color
       })
 
-      return created.toObject()
+      const res = created.toObject()
+      delete res.techLead
+      delete res.member
+
+      return res
     } catch (e) {
       errorHandler.allErrors(
         e as CustomError,

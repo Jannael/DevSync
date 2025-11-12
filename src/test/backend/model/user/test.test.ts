@@ -63,13 +63,15 @@ describe('user model', () => {
     })
   })
 
-  // afterAll(async () => {
-  //   for (const el of group.entries()) {
-  //     if (el[1].techLead !== undefined) {
-  //       await groupModel.delete(el[1].techLead[0].account, el[1]._id)
-  //     }
-  //   }
-  // })
+  afterAll(async () => {
+    for (const [index, el] of group.entries()) {
+      if (index === 5) {
+        await groupModel.delete(secondTechLead.account, el._id)
+        return
+      }
+      await groupModel.delete(user.account, el._id)
+    }
+  })
 
   describe('create user', () => {
     test('', async () => {
@@ -337,7 +339,7 @@ describe('user model', () => {
           _id: group[0]._id,
           name: group[0].name,
           color: group[0].color
-        }, 'test@gmail.com')
+        }, user.account)
 
         expect(res).toBe(true)
       })
@@ -354,7 +356,7 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '#000000'
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new NotFound('Group not found', 'The group you are trying to access does not exist')
           },
@@ -368,7 +370,7 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '1234567'
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new UserBadRequest('Invalid credentials', 'Color must be a valid hex code')
           },
@@ -382,7 +384,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new NotFound('User not found')
           },
@@ -396,7 +398,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new Forbidden('Access denied', 'The user with the account test2@gmail.com already belongs to the group')
           },
@@ -410,7 +412,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
           },
@@ -424,7 +426,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, 'test@gmail.com')
+              }, user.account)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
           },
@@ -440,7 +442,7 @@ describe('user model', () => {
                   _id: el._id,
                   name: el.name,
                   color: el.color
-                }, 'test@gmail.com')
+                }, user.account)
               }
 
               await model.invitation.create({

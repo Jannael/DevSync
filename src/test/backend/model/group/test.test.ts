@@ -121,7 +121,40 @@ describe('group model', () => {
     })
   })
 
-  describe('get', () => {})
+  describe('get', () => {
+    test('', async () => {
+      const res = await model.get(group._id)
+      expect(res).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
+        name: 'test',
+        color: '#000000',
+        member: []
+      })
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.get(new mongoose.Types.ObjectId())
+          },
+          error: new NotFound('Group not found', 'The group you are trying to access does not exist')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
+  })
 
   describe('update', () => {})
 

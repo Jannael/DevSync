@@ -183,7 +183,7 @@ const model = {
         return false
       }
     },
-    update: async function (groupId: Types.ObjectId, data: { fullName?: string, account?: string }): Promise<boolean> {
+    update: async function (groupId: Types.ObjectId, data: { fullName: string, account: string }): Promise<boolean> {
       try {
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName })
 

@@ -672,6 +672,28 @@ describe('user model', () => {
         const updatedGroups = await model.group.get(user._id) as IUserGroup[]
         expect(updatedGroups[0].name).toStrictEqual('newName')
       })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.group.update(user.account, new mongoose.Types.ObjectId(), { name: 'not Found', color: '#000000' })
+            },
+            error: new NotFound('Group not found', 'The user it\'s in the group')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
 
     describe('remove user group', () => {

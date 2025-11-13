@@ -1,6 +1,6 @@
 import { DuplicateData, NotFound, UserBadRequest, Forbidden } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
-import { IRefreshToken, IUser } from '../../../../backend/interface/user'
+import { IRefreshToken, IUser, IUserGroup } from '../../../../backend/interface/user'
 import { IGroup } from '../../../../backend/interface/group'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
@@ -662,6 +662,15 @@ describe('user model', () => {
             expect(err.description).toBe(error.description)
           }
         }
+      })
+    })
+
+    describe('update user group', () => {
+      test('', async () => {
+        const res = await model.group.update(user.account, group[0]._id, { name: 'newName', color: group[0].color })
+        expect(res).toEqual(true)
+        const updatedGroups = await model.group.get(user._id) as IUserGroup[]
+        expect(updatedGroups[0].name).toStrictEqual('newName')
       })
     })
 

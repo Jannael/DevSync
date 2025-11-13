@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import dbModel from './../../database/schemas/node/group'
 import { IGroup } from '../../interface/group'
 import validator from '../../validator/validator'
-import { CustomError, DatabaseError, Forbidden, NotFound } from '../../error/error'
+import { CustomError, DatabaseError, Forbidden, NotFound, UserBadRequest } from '../../error/error'
 import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
 import config from '../../config/config'
@@ -100,17 +100,40 @@ const model = {
   },
   update: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
     try {
+      if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
+      if (data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the member')
+      if (data.techLead !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the techLead')
+
+      const user = await userDbModel.findOne({ _id: techLeadId }, { _id: 0, account: 1 }).lean()
+      if (user === null) throw new NotFound('User not found')
+
+      const group = await dbModel.findOne({ _id: groupId }, { _id: 1, name: 1, color: 1 }).lean()
+      if (group === null) throw new NotFound('Group not found')
+      await model.exists({ ...group }, user.account)
+
       validator.group.partial(data)
-      const isTechLead = await dbModel.exists({ _id: groupId, 'techLead._id': techLeadId })
-      if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can update group information')
 
       const updated = await dbModel.updateOne({ _id: groupId }, data)
       if (updated.matchedCount === 0) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
 
-      const group = await dbModel.findOne({ _id: groupId }).lean()
-      if (group === null) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
+      const updatedGroup = await dbModel.findOne({ _id: groupId }).lean()
+      if (updatedGroup === null) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
 
-      return group
+      if (updatedGroup.techLead !== undefined) {
+        for (const techLead of updatedGroup.techLead) {
+          await UserModel.group.update(techLead.account, groupId, { name: updatedGroup.name, color: updatedGroup.color })
+        }
+      }
+
+      if (updatedGroup.member !== undefined) {
+        for (const member of updatedGroup.member) {
+          await UserModel.group.update(member.account, groupId, { name: updatedGroup.name, color: updatedGroup.color })
+        }
+      }
+
+      delete updatedGroup.techLead
+      delete updatedGroup.member
+      return updatedGroup
     } catch (e) {
       errorHandler.allErrors(
         e as CustomError,

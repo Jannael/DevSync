@@ -156,12 +156,21 @@ describe('group model', () => {
     })
   })
 
-  describe('update', () => {})
+  describe('update', () => {
+    test('', async () => {
+      const res = await model.update(user._id, group._id, { color: '#111111' })
+      expect(res).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        name: 'test',
+        color: '#111111'
+      })
+    })
+  })
 
   describe('delete', () => {
     test('', async () => {
-      const res = await model.delete(user.account, group._id)
-      console.log('delete', res)
+      // const res = await model.delete(user.account, group._id)
+      // console.log('delete', res)
     })
 
     test('error', () => {

@@ -363,6 +363,9 @@ const model = {
         )
         return false
       }
+    },
+    update: async function (userAccount: string, invitationId: Types.ObjectId, data: { name: string, color: string }) {
+      return true
     }
   }
 }

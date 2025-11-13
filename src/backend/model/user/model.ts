@@ -364,8 +364,29 @@ const model = {
         return false
       }
     },
-    update: async function (userAccount: string, invitationId: Types.ObjectId, data: { name: string, color: string }) {
-      return true
+    update: async function (userAccount: string, groupId: Types.ObjectId, data: { name: string, color: string }): Promise<boolean> {
+      try {
+        const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': groupId })
+        if (isInvitation !== null) {
+          const res = await dbModel.updateOne({ account: userAccount, 'invitation._id': groupId },
+            { 'invitation.$.name': data.name, 'invitation.$.color': data.color }
+          )
+          return res.acknowledged
+        }
+
+        const res = await dbModel.updateOne({ account: userAccount, 'group._id': groupId },
+          { 'group.$.name': data.name, 'group.$.color': data.color }
+        )
+
+        if (res.matchedCount === 0) throw new NotFound('Group not found', 'The user it\'s in the group')
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The user was not updated')
+        )
+        throw new DatabaseError('Failed to save', 'The user was not updated')
+      }
     }
   }
 }

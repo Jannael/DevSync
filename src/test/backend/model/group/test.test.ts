@@ -164,6 +164,15 @@ describe('group model', () => {
         name: 'test',
         color: '#111111'
       })
+
+      const guard = await model.get(group._id)
+      expect(guard).toStrictEqual({
+        _id: expect.any(Types.ObjectId),
+        techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
+        name: 'test',
+        color: '#111111',
+        member: []
+      })
     })
   })
 

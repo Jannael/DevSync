@@ -27,8 +27,19 @@ let user: IRefreshToken
 let group: IGroup
 let secondUser: IRefreshToken
 let secondGroup: IGroup
+const users: IRefreshToken[] = []
 
 beforeAll(async () => {
+  for (let i = 0; i < 5; i++) {
+    const user = await userModel.create({
+      fullName: 'test',
+      account: `test-${i}@gmail.com`,
+      pwd: 'test',
+      nickName: 'test'
+    })
+    users.push(user)
+  }
+
   user = await userModel.create({
     fullName: 'test',
     account: 'test@gmail.com',
@@ -218,6 +229,62 @@ describe('group model', () => {
     })
   })
 
+  describe('member', () => {
+    describe('add', () => {
+      test('', async () => {
+        const res = await model.member.add(group._id, {
+          account: secondUser.account,
+          fullName: secondUser.account,
+          role: 'documenter'
+        })
+        expect(res).toEqual(true)
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              for (const el of users.entries()) {
+                await model.member.add(group._id, {
+                  account: el[1].account,
+                  fullName: el[1].account,
+                  role: 'documenter'
+                })
+              }
+            },
+            error: new Forbidden('Access denied', 'The group has reached the max number of members')
+          },
+          {
+            fn: async function () {
+              const { account, fullName } = user
+              await model.member.add(new mongoose.Types.ObjectId(), { account, fullName, role: 'documenter' })
+            },
+            error: new NotFound('Group not found', 'The group you are trying to access was not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
+
+    describe('remove', () => {
+
+    })
+
+    describe('update', () => {
+
+    })
+  })
+
   describe('delete', () => {
     test('', async () => {
       const res = await model.delete(user.account, group._id)
@@ -250,16 +317,6 @@ describe('group model', () => {
           expect(err.description).toBe(error.description)
         }
       }
-    })
-  })
-
-  describe('member', () => {
-    describe('add', () => {
-
-    })
-
-    describe('remove', () => {
-
     })
   })
 })

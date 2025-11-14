@@ -276,11 +276,52 @@ describe('group model', () => {
       })
     })
 
-    describe('remove', () => {
+    describe('update', () => {
+      test('', async () => {
+        const res = await model.member.update(group._id,
+          { fullName: user.fullName, account: user.account },
+          { fullName: 'newFullName', account: user.account }
+        )
 
+        expect(res).toEqual(true)
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.member.update(new mongoose.Types.ObjectId(),
+                { fullName: user.fullName, account: user.account },
+                { fullName: 'newFullName', account: user.account }
+              )
+            },
+            error: new NotFound('Group not found')
+          },
+          {
+            fn: async function () {
+              await model.member.update(group._id,
+                { fullName: 'notExists', account: 'NotExists' },
+                { fullName: 'newFullName', account: user.account }
+              )
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
 
-    describe('update', () => {
+    describe('remove', () => {
 
     })
   })

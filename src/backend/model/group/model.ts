@@ -230,6 +230,9 @@ const model = {
       updateData: { fullName: string, account: string }
     ): Promise<boolean> {
       try {
+        const exists = await dbModel.exists({ _id: groupId })
+        if (exists === null) throw new NotFound('Group not found')
+
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': data.account, 'techLead.fullName': data.fullName })
 
         if (isTechLead !== null) {
@@ -243,6 +246,8 @@ const model = {
         const res = await dbModel.updateOne(
           { _id: groupId, 'member.account': data.account, 'member.fullName': data.fullName },
           { $set: { 'member.$.account': updateData.account, 'member.$.fullName': updateData.fullName } })
+
+        if (res.matchedCount === 0) throw new NotFound('User not found')
 
         return res.acknowledged
       } catch (e) {

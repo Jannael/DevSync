@@ -174,6 +174,34 @@ describe('group model', () => {
         member: []
       })
     })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.update(new mongoose.Types.ObjectId(), group._id, { name: 'test' })
+          },
+          error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            await model.update(user._id, new mongoose.Types.ObjectId(), { name: 'test' })
+          },
+          error: new NotFound('Group not found')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
   })
 
   describe('delete', () => {

@@ -25,6 +25,8 @@ afterAll(async () => {
 
 let user: IRefreshToken
 let group: IGroup
+let secondUser: IRefreshToken
+let secondGroup: IGroup
 
 beforeAll(async () => {
   user = await userModel.create({
@@ -33,6 +35,18 @@ beforeAll(async () => {
     pwd: 'test',
     nickName: 'test'
   })
+
+  secondUser = await userModel.create({
+    fullName: 'test',
+    account: 'secondUser@gmail.com',
+    pwd: 'test',
+    nickName: 'test'
+  })
+
+  secondGroup = await model.create({
+    name: 'test',
+    color: '#000000'
+  }, { account: user.account, fullName: user.fullName })
 })
 
 describe('group model', () => {
@@ -206,12 +220,36 @@ describe('group model', () => {
 
   describe('delete', () => {
     test('', async () => {
-      // const res = await model.delete(user.account, group._id)
-      // console.log('delete', res)
+      const res = await model.delete(user.account, group._id)
+      expect(res).toEqual(true)
     })
 
-    test('error', () => {
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.delete(secondUser.account, secondGroup._id)
+          },
+          error: new Forbidden('Access denied', 'Only tech leads can delete a group')
+        },
+        {
+          fn: async function () {
+            await model.delete(user.account, new mongoose.Types.ObjectId())
+          },
+          error: new NotFound('Group not found', 'The group you are trying to delete does not exist')
+        }
+      ]
 
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
     })
   })
 

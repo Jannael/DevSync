@@ -9,6 +9,7 @@ import config from '../../config/config'
 import { IUserInvitation } from '../../interface/user'
 import { omit } from '../../utils/utils'
 import userDbModel from '../../database/schemas/node/user'
+import authModel from './../../../backend/model/auth/model'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
@@ -144,11 +145,12 @@ const model = {
   },
   delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
     try {
+      await authModel.verify.user(techLeadAccount)
+      const members = await dbModel.findOne({ _id: groupId }, { member: 1, techLead: 1 }).lean()
+      if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
+
       const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': techLeadAccount })
       if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can delete a group')
-
-      const members = await dbModel.findOne({ _id: groupId }, { member: 1 }).lean()
-      if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
 
       if (members.member !== undefined) {
         for (const member of members.member) {
@@ -156,9 +158,15 @@ const model = {
         }
       }
 
+      if (members.techLead !== undefined) {
+        for (const techLead of members.techLead) {
+          await UserModel.group.remove(techLead.account, groupId)
+        }
+      }
+
       const deleted = await dbModel.deleteOne({ _id: groupId })
       if (deleted.deletedCount === 0) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
-      return true
+      return deleted.acknowledged
     } catch (e) {
       errorHandler.allErrors(
         e as CustomError,

@@ -66,14 +66,14 @@ const functions = {
           decoded !== null &&
           typeof decoded !== 'string' &&
           decoded._id !== undefined) {
-          await model.auth.refreshToken.remove(jwtRefreshToken, decoded._id)
+          await model.refreshToken.remove(jwtRefreshToken, decoded._id)
         }
         throw e
       }
 
       if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
 
-      const dbValidation = await model.verify.refreshToken(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
+      const dbValidation = await model.refreshToken.verify(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
       if (!dbValidation) throw new UserBadRequest('Invalid credentials', 'You are not logged In')
 
       delete refreshToken.iat
@@ -97,7 +97,7 @@ const functions = {
           req.body?.TEST_PWD === TEST_PWD_ENV
         ) code = generateCode(req.body.TEST_PWD)
 
-        const user = await model.verify.login(req.body.account, req.body.pwd)
+        const user = await model.login(req.body.account, req.body.pwd)
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
@@ -135,7 +135,7 @@ const functions = {
         const refreshToken = encrypt(jwtRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
         const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
-        const savedInDB = await model.auth.refreshToken.save(refreshToken, user._id)
+        const savedInDB = await model.refreshToken.save(refreshToken, user._id)
         if (!savedInDB) throw new DatabaseError('Failed to save', 'The session was not saved please try again')
 
         res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
@@ -152,7 +152,7 @@ const functions = {
 
       const decoded = jwt.verify(token, JWT_REFRESH_TOKEN_ENV)
       if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials')
-      await model.auth.refreshToken.remove(req.cookies.refreshToken, decoded._id)
+      await model.refreshToken.remove(req.cookies.refreshToken, decoded._id)
 
       res.clearCookie('refreshToken')
       res.clearCookie('accessToken')
@@ -265,7 +265,7 @@ const functions = {
           !verifyEmail(req.body?.account)
         ) throw new UserBadRequest('Missing data', 'Missing or invalid account it must match example@service.ext')
 
-        const dbValidation = await model.verify.user(req.body.account)
+        const dbValidation = await model.exists(req.body.account)
         if (!dbValidation) throw new NotFound('User not found')
 
         let code = generateCode()

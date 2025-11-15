@@ -322,7 +322,38 @@ describe('group model', () => {
     })
 
     describe('remove', () => {
+      test('', async () => {
+        const res = await model.member.remove(group._id, secondUser.account)
+        expect(res).toEqual(true)
+      })
 
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.member.remove(group._id, user.account)
+            },
+            error: new Forbidden('Access denied', 'You can not remove the last techLead')
+          },
+          {
+            fn: async function () {
+              await model.member.remove(new mongoose.Types.ObjectId(), user.account)
+            },
+            error: new NotFound('Group not found', 'The group was not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
     })
   })
 

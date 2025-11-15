@@ -210,6 +210,8 @@ const model = {
     },
     remove: async function (groupId: Types.ObjectId, account: string): Promise<boolean> {
       try {
+        await authModel.verify.user(account)
+
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': account }, { techLead: 1, _id: 0 })
         if (isTechLead !== null && isTechLead !== undefined) {
           if (isTechLead.techLead?.length !== undefined && isTechLead.techLead?.length <= 1) throw new Forbidden('Access denied', 'You can not remove the last techLead')

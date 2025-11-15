@@ -32,10 +32,10 @@ describe('auth model', () => {
     })
   })
 
-  describe('auth refreshToken', () => {
-    describe('save refreshToken', () => {
+  describe('refreshToken', () => {
+    describe('save', () => {
       test('', async () => {
-        const res = await model.auth.refreshToken.save('token', user._id)
+        const res = await model.refreshToken.save('token', user._id)
         expect(res).toBe(true)
       })
 
@@ -43,7 +43,7 @@ describe('auth model', () => {
         const func = [
           {
             fn: async function () {
-              await model.auth.refreshToken.save('', notExistUser)
+              await model.refreshToken.save('', notExistUser)
             },
             error: new NotFound('User not found')
           }
@@ -62,9 +62,9 @@ describe('auth model', () => {
       })
     })
 
-    describe('remove refreshToken', () => {
+    describe('remove', () => {
       test('', async () => {
-        const res = await model.auth.refreshToken.remove('token', user._id)
+        const res = await model.refreshToken.remove('token', user._id)
         expect(res).toBe(true)
       })
 
@@ -72,13 +72,54 @@ describe('auth model', () => {
         const func = [
           {
             fn: async function () {
-              await model.auth.refreshToken.remove('', notExistUser)
+              await model.refreshToken.remove('', notExistUser)
             },
             error: new NotFound('User not found')
           },
           {
             fn: async function () {
-              await model.auth.refreshToken.remove('', '' as unknown as Types.ObjectId)
+              await model.refreshToken.remove('', '' as unknown as Types.ObjectId)
+            },
+            error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
+          }
+        ]
+
+        for (const { fn, error } of func) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
+
+    describe('verify', () => {
+      test('', async () => {
+      // first we save the token to verify it
+        const save = await model.refreshToken.save('token', user._id)
+        expect(save).toBe(true)
+
+        const res = await model.refreshToken.verify('token', user._id)
+        expect(res).toBe(true)
+
+        await model.refreshToken.remove('token', user._id)
+      })
+
+      test('error', async () => {
+        const func = [
+          {
+            fn: async function () {
+              await model.refreshToken.verify('token', notExistUser)
+            },
+            error: new NotFound('User not found')
+          },
+          {
+            fn: async function () {
+              await model.refreshToken.verify('token', 'invalid' as unknown as Types.ObjectId)
             },
             error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
@@ -98,50 +139,9 @@ describe('auth model', () => {
     })
   })
 
-  describe('verify refreshToken', () => {
+  describe('login', () => {
     test('', async () => {
-      // first we save the token to verify it
-      const save = await model.auth.refreshToken.save('token', user._id)
-      expect(save).toBe(true)
-
-      const res = await model.verify.refreshToken('token', user._id)
-      expect(res).toBe(true)
-
-      await model.auth.refreshToken.remove('token', user._id)
-    })
-
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            await model.verify.refreshToken('token', notExistUser)
-          },
-          error: new NotFound('User not found')
-        },
-        {
-          fn: async function () {
-            await model.verify.refreshToken('token', 'invalid' as unknown as Types.ObjectId)
-          },
-          error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
-      ]
-
-      for (const { fn, error } of func) {
-        try {
-          await fn()
-          throw new Error('Expected function to throw')
-        } catch (err: any) {
-          expect(err).toBeInstanceOf(error.constructor)
-          expect(err.message).toBe(error.message)
-          expect(err.description).toBe(error.description)
-        }
-      }
-    })
-  })
-
-  describe('verify login', () => {
-    test('', async () => {
-      const res = await model.verify.login(user.account, 'test')
+      const res = await model.login(user.account, 'test')
 
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
@@ -155,19 +155,19 @@ describe('auth model', () => {
       const func = [
         {
           fn: async function () {
-            await model.verify.login('account', 'pwd')
+            await model.login('account', 'pwd')
           },
           error: new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
         },
         {
           fn: async function () {
-            await model.verify.login('account@gmail.com', 'pwd')
+            await model.login('account@gmail.com', 'pwd')
           },
           error: new NotFound('User not found')
         },
         {
           fn: async function () {
-            await model.verify.login('test@email.com', 'pwd')
+            await model.login('test@email.com', 'pwd')
           },
           error: new UserBadRequest('Invalid credentials', 'Incorrect password')
         }
@@ -186,9 +186,9 @@ describe('auth model', () => {
     })
   })
 
-  describe('verify user', () => {
+  describe('exists', () => {
     test('', async () => {
-      const res = await model.verify.user(user.account)
+      const res = await model.exists(user.account)
       expect(res).toEqual(true)
     })
 
@@ -196,7 +196,7 @@ describe('auth model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.verify.user('notExists')
+            await model.exists('notExists')
           },
           error: new NotFound('User not found')
         }

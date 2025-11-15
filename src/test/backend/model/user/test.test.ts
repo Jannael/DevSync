@@ -528,6 +528,35 @@ describe('user model', () => {
       })
     })
 
+    describe('reject user invitation', () => {
+      test('', async () => {
+        const res = await model.invitation.reject(secondUser.account, group[group.length - 1]._id)
+        expect(res).toEqual(true)
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              await model.invitation.reject('notExists@gmail.com', group[0]._id)
+            },
+            error: new NotFound('User not found')
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          try {
+            await fn()
+            throw new Error('Expected function to throw')
+          } catch (err: any) {
+            expect(err).toBeInstanceOf(error.constructor)
+            expect(err.message).toBe(error.message)
+            expect(err.description).toBe(error.description)
+          }
+        }
+      })
+    })
+
     describe('remove user invitation', () => {
       test('', async () => {
         for (const { _id } of group) {

@@ -4,7 +4,7 @@
 gets the whole group information
 
 Parameters:
--account ObjectId
+- account ObjectId
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -20,7 +20,7 @@ it has two different uses
 
 Parameters:
 - groupId ObjectId
-- techLeadAccount string
+- techLeadAccount? string
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -30,8 +30,8 @@ Parameters:
 
 ## Create
 to create group
-- if you do not add the techLead that is creating the group it will added for you
-- for each techLead/member you add it will send an invitation
+- if you do not add the techLead who is creating the group, it will add it for you
+- for each techLead/member you add, it will send an invitation
 - adds the group to user schema
 
 ### Functions
@@ -58,7 +58,7 @@ Parameters:
 
 - techLead 
   ```TypeScript
-    { fullName: string, account: string}
+    { fullName: string, account: string }
   ```
 
 |Instance|Error|Message|

@@ -6,7 +6,6 @@ import { CustomError, DatabaseError, Forbidden, NotFound, UserBadRequest } from 
 import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
 import config from '../../config/config'
-import { IUserInvitation } from '../../interface/user'
 import { omit } from '../../utils/utils'
 import userDbModel from '../../database/schemas/node/user'
 import authModel from './../../../backend/model/auth/model'
@@ -25,13 +24,13 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The group was not retrieved, something went wrong please try again')
     }
   },
-  exists: async function (group: IUserInvitation, techLeadAccount?: string): Promise<boolean> {
+  exists: async function (groupId: Types.ObjectId, techLeadAccount?: string): Promise<boolean> {
     try {
-      const res = await dbModel.exists({ _id: group._id, name: group.name, color: group.color })
+      const res = await dbModel.exists({ _id: groupId })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
 
       if (techLeadAccount !== undefined) {
-        const isTechLead = await dbModel.exists({ _id: group._id, name: group.name, color: group.color, 'techLead.account': techLeadAccount })
+        const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': techLeadAccount })
         if (isTechLead === null || isTechLead === undefined) throw new Forbidden('Access denied', 'The group exists but the user is not a techLead')
       }
 
@@ -110,7 +109,7 @@ const model = {
 
       const group = await dbModel.findOne({ _id: groupId }, { _id: 1, name: 1, color: 1 }).lean()
       if (group === null) throw new NotFound('Group not found')
-      await model.exists({ ...group }, user.account)
+      await model.exists(group._id, user.account)
 
       validator.group.partial(data)
 

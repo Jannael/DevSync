@@ -4,8 +4,8 @@
 it validates the given pwd, and if it match with the one in the database
 
 Parameters:
--account string
--pwd string
+- account string
+- pwd string
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -17,7 +17,7 @@ Parameters:
 ## Exists
 Validates if the user exists
 Parameters:
--account string
+- account string
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|User not found||
@@ -29,8 +29,8 @@ Parameters:
 This function tells you if the token is saved in the db, to get more protection, on the information in it.
 
 Parameters:
--token string
--userId ObjectId
+- token string
+- userId ObjectId
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -42,8 +42,8 @@ Parameters:
 it removes a refreshToken from user's sessions
 
 Parameters:
--token string
--userId ObjectId
+- token string
+- userId ObjectId
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -56,8 +56,8 @@ Parameters:
 it saves a session in the database
 
 Parameters:
--token string
--userId ObjectId
+- token string
+- userId ObjectId
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|

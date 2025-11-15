@@ -145,7 +145,7 @@ const model = {
   },
   delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
     try {
-      await authModel.verify.user(techLeadAccount)
+      await authModel.exists(techLeadAccount)
       const members = await dbModel.findOne({ _id: groupId }, { member: 1, techLead: 1 }).lean()
       if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
 
@@ -210,7 +210,7 @@ const model = {
     },
     remove: async function (groupId: Types.ObjectId, account: string): Promise<boolean> {
       try {
-        await authModel.verify.user(account)
+        await authModel.exists(account)
 
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': account }, { techLead: 1, _id: 0 })
         if (isTechLead !== null && isTechLead !== undefined) {

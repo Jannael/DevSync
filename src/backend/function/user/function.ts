@@ -101,7 +101,7 @@ const functions = {
     const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
     const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
-    const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
+    const isSaved = await authModel.refreshToken.save(newRefreshToken, accessToken._id)
     if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
 
     res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)
@@ -156,7 +156,7 @@ const functions = {
       const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
       const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
 
-      const isSaved = await authModel.auth.refreshToken.save(newRefreshToken, accessToken._id)
+      const isSaved = await authModel.refreshToken.save(newRefreshToken, accessToken._id)
       if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
 
       res.cookie('refreshToken', newRefreshToken, config.cookies.refreshToken)

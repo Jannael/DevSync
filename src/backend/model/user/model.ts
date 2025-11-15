@@ -327,7 +327,8 @@ const model = {
           currentGroup?.group?.length >= config.user.maxGroups
         ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
 
-        await model.invitation.remove(account, group._id)
+        const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
+        if (isInvitation !== null && isInvitation !== undefined) await model.invitation.remove(account, group._id)
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

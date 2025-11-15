@@ -3,6 +3,10 @@
 ## Login
 it validates the given pwd, and if it match with the one in the database
 
+Parameters:
+-account string
+-pwd string
+
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The account must match example@gmail.com|
@@ -12,7 +16,8 @@ it validates the given pwd, and if it match with the one in the database
 
 ## Exists
 Validates if the user exists
-
+Parameters:
+-account string
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|User not found||
@@ -23,6 +28,10 @@ Validates if the user exists
 ### Verify
 This function tells you if the token is saved in the db, to get more protection, on the information in it.
 
+Parameters:
+-token string
+-userId ObjectId
+
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The _id is invalid|
@@ -31,6 +40,10 @@ This function tells you if the token is saved in the db, to get more protection,
 
 ### Remove
 it removes a refreshToken from user's sessions
+
+Parameters:
+-token string
+-userId ObjectId
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -41,6 +54,11 @@ it removes a refreshToken from user's sessions
 
 ### Save
 it saves a session in the database
+
+Parameters:
+-token string
+-userId ObjectId
+
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The _id is invalid|

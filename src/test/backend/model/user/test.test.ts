@@ -7,6 +7,7 @@ import dbModel from './../../../../backend/database/schemas/node/user'
 import dotenv from 'dotenv'
 import mongoose, { Types } from 'mongoose'
 import groupModel from '../../../../backend/model/group/model'
+import groupDbModel from './../../../../backend/database/schemas/node/group'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
@@ -64,13 +65,7 @@ describe('user model', () => {
   })
 
   afterAll(async () => {
-    for (const [index, el] of group.entries()) {
-      if (index === 5) {
-        await groupModel.delete(secondTechLead.account, el._id)
-        return
-      }
-      await groupModel.delete(user.account, el._id)
-    }
+    await groupDbModel.deleteMany({})
   })
 
   describe('create user', () => {
@@ -536,7 +531,7 @@ describe('user model', () => {
     describe('remove user invitation', () => {
       test('', async () => {
         for (const { _id } of group) {
-          const res = await model.invitation.remove(secondUser._id, _id, secondUser.account)
+          const res = await model.invitation.remove(secondUser.account, _id)
           expect(res).toEqual(true)
         }
       })
@@ -545,7 +540,7 @@ describe('user model', () => {
         const cases = [
           {
             fn: async function () {
-              await model.invitation.remove(new mongoose.Types.ObjectId(), group[0]._id, user.account)
+              await model.invitation.remove('notExists@gmail.com', group[0]._id)
             },
             error: new NotFound('User not found')
           }
@@ -757,7 +752,6 @@ describe('user model', () => {
   describe('delete user', () => {
     test('', async () => {
       const res = await model.delete(userId)
-
       expect(res).toBe(true)
     })
 

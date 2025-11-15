@@ -269,18 +269,15 @@ const model = {
         return false
       }
     },
-    remove: async function (userId: Types.ObjectId, invitationId: Types.ObjectId, userAccount: string): Promise<boolean> {
+    remove: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
         if (!Types.ObjectId.isValid(invitationId)) {
           throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
         }
 
         await groupModel.member.remove(invitationId, userAccount)
 
-        const res = await dbModel.updateOne({ _id: userId, account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
+        const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
 
         return res.acknowledged
@@ -330,7 +327,7 @@ const model = {
           currentGroup?.group?.length >= config.user.maxGroups
         ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
 
-        await model.invitation.remove(currentGroup._id, group._id, account)
+        await model.invitation.remove(account, group._id)
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

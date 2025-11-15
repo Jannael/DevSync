@@ -269,13 +269,31 @@ const model = {
         return false
       }
     },
-    remove: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
+    reject: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
         if (!Types.ObjectId.isValid(invitationId)) {
           throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
         }
 
         await groupModel.member.remove(invitationId, userAccount)
+
+        const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
+        if (res.matchedCount === 0) throw new NotFound('User not found')
+
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to remove', 'The invitation was not removed from the user, something went wrong please try again')
+        )
+        return false
+      }
+    },
+    remove: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
+      try {
+        if (!Types.ObjectId.isValid(invitationId)) {
+          throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+        }
 
         const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')

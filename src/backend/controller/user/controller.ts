@@ -91,11 +91,12 @@ const controller = {
     },
     create: async function (req: Request, res: Response) {},
     accept: async function (req: Request, res: Response) {},
-    remove: async function (req: Request, res: Response) {}
+    reject: async function (req: Request, res: Response) {}
   },
   group: {
     get: async function (req: Request, res: Response) {},
-    remove: async function (req: Request, res: Response) {}
+    remove: async function (req: Request, res: Response) {},
+    add: async function (req: Request, res: Response) {}
   }
 }
 

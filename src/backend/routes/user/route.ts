@@ -16,10 +16,11 @@ router.patch('/update/password/', controller.password.update)
 router.get('/get/invitation/', controller.invitation.get)
 router.post('/create/invitation/', controller.invitation.create)
 router.put('/accept/invitation/', controller.invitation.accept)
-router.delete('/delete/invitation/', controller.invitation.remove)
+router.delete('/reject/invitation/', controller.invitation.reject)
 
 // Group
 router.get('/get/group/', controller.group.get)
 router.delete('/delete/group/', controller.group.remove)
+router.post('/add/group/', controller.group.add)
 
 export default router

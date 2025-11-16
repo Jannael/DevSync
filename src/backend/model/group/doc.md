@@ -5,13 +5,27 @@ gets the whole group information
 
 Parameters:
 - account ObjectId
+Output:
+```TypeScript
+  _id: Types.ObjectId
+  techLead?: Array<{
+    account: string
+    fullName: string
+  }>
+  name: string
+  color: string
+  repository?: string
+  member?: Array<{
+    account: string
+    fullName: string
+    role: string
+  }>
+```
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|Group not found|The group you are trying to access does not exist|
 |DatabaseError|Failed to access data|The group was not retrieved, something went wrong please try again|
-
-
 
 ## Exists
 it has two different uses 
@@ -21,6 +35,8 @@ it has two different uses
 Parameters:
 - groupId ObjectId
 - techLeadAccount? string
+Output:
+- boolean
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -55,11 +71,27 @@ Parameters:
         role: string
       }>
    ```
-
 - techLead 
   ```TypeScript
     { fullName: string, account: string }
   ```
+
+Output:
+```TypeScript
+  _id: Types.ObjectId
+  techLead?: Array<{
+    account: string
+    fullName: string
+  }>
+  name: string
+  color: string
+  repository?: string
+  member?: Array<{
+    account: string
+    fullName: string
+    role: string
+  }>
+```
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|

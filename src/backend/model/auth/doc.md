@@ -7,6 +7,16 @@ Parameters:
 - account string
 - pwd string
 
+Output:
+```TypeScript
+  _id: Types.ObjectId
+  fullName: string
+  account: string
+  pwd: string
+  nickName?: string | null
+  invitation?: IUserInvitation[] | null
+  group?: IUserGroup[] | null
+```
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The account must match example@gmail.com|
@@ -18,6 +28,8 @@ Parameters:
 Validates if the user exists
 Parameters:
 - account string
+Output:
+- boolean
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|User not found||
@@ -32,6 +44,9 @@ Parameters:
 - token string
 - userId ObjectId
 
+Output:
+- boolean
+
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The _id is invalid|
@@ -44,6 +59,9 @@ it removes a refreshToken from user's sessions
 Parameters:
 - token string
 - userId ObjectId
+
+Output: 
+- boolean
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -58,6 +76,9 @@ it saves a session in the database
 Parameters:
 - token string
 - userId ObjectId
+
+Output:
+- boolean
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|

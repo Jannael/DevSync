@@ -369,6 +369,11 @@ const model = {
           throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
         }
 
+        const isInvitation = await dbModel.exists({ account, 'invitation._id': groupId })
+        if (isInvitation !== null && isInvitation !== undefined) {
+          return await model.invitation.remove(account, groupId)
+        }
+
         const res = await dbModel.updateOne({ account }, { $pull: { group: { _id: groupId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)
         return res.acknowledged

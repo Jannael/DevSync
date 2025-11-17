@@ -10,9 +10,9 @@ import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
-import { DatabaseError, UserBadRequest } from '../../error/error'
+import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
-import { decrypt, encrypt, verifyEmail } from '../../utils/utils'
+import { decrypt, encrypt } from '../../utils/utils'
 
 dotenv.config({ quiet: true })
 const {
@@ -192,17 +192,23 @@ const functions = {
       const result = await model.invitation.get(accessToken._id)
       return result
     },
-    create: async function (req: Request, res: Response) {
+    create: async function (req: Request, res: Response): Promise<boolean> {
+      // req.body = account(to Invite), role, _id(group), color(group), name(group)
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
       const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
       if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
 
-      if (verifyEmail(req.body.account)) {
-        throw new UserBadRequest('Invalid credentials', 'The account for the user you are trying to invite is invalid')
-      }
+      const { account, role, _id, color, name } = await validator.user.invitation.create(req.body)
 
-      const userToInvite = await model.get(req.body.account, { fullName: 1 })
+      const { fullName } = await model.get(req.body.account, { fullName: 1 })
+      if (fullName === undefined) throw new NotFound('User not found', 'The user you are trying to invite was not found')
+
+      return await model.invitation.create(
+        { account, fullName, role },
+        { _id, color, name },
+        accessToken.account
+      )
     },
     accept: async function (req: Request, res: Response) {
 

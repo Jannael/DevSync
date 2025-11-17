@@ -16,7 +16,10 @@ const invitationSchema = z.object({
   }),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
   name: z.string('Name is required').min(3).max(100),
-  account: z.string('Account for the user you want to invite is required').email()
+  account: z.string('Account for the user you want to invite is required').email(),
+  role: z.enum(['techLead', 'developer', 'documenter'], {
+    message: 'member.role is required and must be one of: techLead, developer, documenter'
+  })
 })
 
 const validator = {

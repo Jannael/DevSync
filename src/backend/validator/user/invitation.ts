@@ -10,11 +10,27 @@ const groupSchema = z.object({
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
   name: z.string('Name is required').min(3).max(100)
 })
+const invitationSchema = z.object({
+  _id: z.instanceof(Types.ObjectId, {
+    message: 'Invalid _id format'
+  }),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
+  name: z.string('Name is required').min(3).max(100),
+  account: z.string('Account for the user you want to invite is required').email()
+})
 
 const validator = {
   add: function (obj: IUserGroup) {
     try {
       const result = groupSchema.parse(obj)
+      return result
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
+    }
+  },
+  create: function (obj: typeof invitationSchema) {
+    try {
+      const result = invitationSchema.parse(obj)
       return result
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)

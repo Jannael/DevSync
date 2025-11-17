@@ -202,7 +202,7 @@ const functions = {
         throw new UserBadRequest('Invalid credentials', 'The account for the user you are trying to invite is invalid')
       }
 
-      // const userToInvite = await model.get(req.body.account, )
+      const userToInvite = await model.get(req.body.account, { fullName: 1 })
     },
     accept: async function (req: Request, res: Response) {
 

@@ -519,77 +519,12 @@ describe('/user/v1/', () => {
     })
   })
 
-  describe('/get/group/', () => {
-    describe('pending...', () => {})
+  describe('/invitation/', () => {
+
   })
 
-  describe('/delete/group/', () => {
-    describe('pending...', () => {})
-  })
+  describe('/group/', () => {
 
-  describe('/create/invitation/', () => {
-    describe('pending...', () => {
-      /* Here you have to make sure to make impossible to invite yourself */
-    })
-  })
-
-  describe('/accept/invitation/', () => {
-    describe('pending...', () => {
-    })
-  })
-
-  describe('/get/invitation/', () => {
-    const endpoint = path + '/get/invitation/'
-    test('', async () => {
-      const res = await agent
-        .get(endpoint)
-
-      expect(res.body.complete).toEqual(true)
-      expect(res.body.invitation).toEqual([])
-    })
-
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            return await request(app)
-              .get(endpoint)
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Missing accessToken',
-            complete: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .get(endpoint)
-              .set('Cookie', ['accessToken=invalidToken'])
-          },
-
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The accessToken is invalid',
-            complete: false
-          }
-        }
-      ]
-
-      for (const { fn, error } of func) {
-        const res = await fn()
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
-        expect(res.body.description).toEqual(error.description)
-      }
-    })
-  })
-
-  describe('/delete/invitation/', () => {
-    describe('pending...', () => {})
   })
 
   describe('/delete/', () => {

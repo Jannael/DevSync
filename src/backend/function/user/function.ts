@@ -10,7 +10,7 @@ import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
-import { DatabaseError, UserBadRequest } from '../../error/error'
+import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { decrypt, encrypt } from '../../utils/utils'
 
@@ -194,10 +194,7 @@ const functions = {
     },
     create: async function (req: Request, res: Response): Promise<boolean> {
       // req.body = account(to Invite), role, _id(group), color(group), name(group)
-      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
-      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
+      if (req.body.accessToken.account === req.body.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
 
       const { account, role, _id, color, name } = await validator.user.invitation.create(req.body)
 
@@ -206,7 +203,7 @@ const functions = {
       return await model.invitation.create(
         { account, fullName, role },
         { _id, color, name },
-        accessToken.account
+        req.body.accessToken.account
       )
     },
     accept: async function (req: Request, res: Response) {

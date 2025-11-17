@@ -262,7 +262,7 @@ to add a group to the user
 - model.invitation.remove()
 ### Parameters:
 - account string
-- group 
+- group
 ```TypeScript
   _id: Types.ObjectId
   color: string

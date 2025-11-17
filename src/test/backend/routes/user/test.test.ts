@@ -72,7 +72,7 @@ describe('/user/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Invalid credentials',
+            msg: 'Missing data',
             description: 'Missing accessToken',
             complete: false
           }
@@ -142,8 +142,8 @@ describe('/user/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Invalid credentials',
-            description: 'Account not verified',
+            msg: 'Missing data',
+            description: 'You did not send any information',
             complete: false
           }
         },
@@ -157,8 +157,8 @@ describe('/user/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Invalid credentials',
-            description: 'Account not verified',
+            msg: 'Missing data',
+            description: 'Missing account',
             complete: false
           }
         },
@@ -174,7 +174,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The account token is invalid',
+            description: 'The account is invalid',
             complete: false
           }
         },
@@ -316,7 +316,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'The\'res missing credentials, make sure to get them before update',
+            description: 'Missing account',
             complete: false
           }
         },
@@ -443,7 +443,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Make sure to follow the auth flow for this operation',
+            description: 'Missing accessToken',
             complete: false
           }
         }
@@ -499,7 +499,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Make sure to follow the auth flow for this operation',
+            description: 'Missing newPwd',
             complete: false
           }
         }
@@ -563,7 +563,7 @@ describe('/user/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Account not verified',
+            description: 'Missing accessToken',
             complete: false
           }
         },

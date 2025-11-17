@@ -6,13 +6,13 @@ import { IRefreshToken, IUser, IUserInvitation } from '../../interface/user'
 import model from './../../model/user/model'
 import authModel from './../../model/auth/model'
 import validator from '../../validator/validator'
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
 import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
-import { decrypt, encrypt } from '../../utils/utils'
+import { encrypt } from '../../utils/utils'
 import getToken from '../../utils/token'
 
 dotenv.config({ quiet: true })
@@ -33,12 +33,7 @@ const {
 
 const functions = {
   get: async function (req: Request, res: Response): Promise<IRefreshToken> {
-    if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-
-    const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-
-    if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
     delete accessToken.iat
     delete accessToken.exp
@@ -47,12 +42,10 @@ const functions = {
     return accessToken as IRefreshToken
   },
   create: async function (req: Request, res: Response): Promise<IRefreshToken> {
-    if (req.cookies?.account === undefined ||
-        req.body === undefined) throw new UserBadRequest('Invalid credentials', 'Account not verified')
+    if (req.body === undefined) throw new UserBadRequest('Missing data', 'You did not send any information')
 
-    const jwtAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'account token')
-    const decoded = jwt.verify(jwtAccount, JWT_AUTH_ENV)
-    if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials', 'Account not verified')
+    const decoded = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
+
     if (decoded.account !== req.body.account) throw new UserBadRequest('Invalid credentials', 'Verified account does not match the sent account')
 
     req.body.account = decoded.account
@@ -76,16 +69,11 @@ const functions = {
   update: async function (req: Request, res: Response): Promise<IRefreshToken> {
     if (req.body?.account !== undefined ||
         req.body?.refreshToken !== undefined ||
-        req.body?._id !== undefined ||
-        req.cookies?.account === undefined ||
-        req.cookies?.accessToken === undefined
-    ) throw new UserBadRequest('Missing data', 'The\'res missing credentials, make sure to get them before update')
+        req.body?._id !== undefined
+    ) throw new UserBadRequest('Invalid credentials', 'You can not update _id, account, refreshToken')
 
-    const jwtAccountCookie = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'accountToken')
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-
-    const accountCookie = jwt.verify(jwtAccountCookie, JWT_AUTH_ENV)
-    const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
+    const accountCookie = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
     if (typeof accountCookie === 'string' ||
         typeof accessToken === 'string'
@@ -113,15 +101,8 @@ const functions = {
     return result
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
-    if (req.cookies.account === undefined ||
-        req.cookies.accessToken === undefined
-    ) throw new UserBadRequest('Missing data', 'Account not verified')
-
-    const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-    const jwtCookieAccount = decrypt(req.cookies.account, CRYPTO_AUTH_ENV, 'accountToken')
-
-    const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
-    const cookieAccount = jwt.verify(jwtCookieAccount, JWT_AUTH_ENV) as JwtPayload
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+    const cookieAccount = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
     if (typeof accessToken === 'string' ||
         typeof cookieAccount === 'string'
@@ -164,10 +145,7 @@ const functions = {
   },
   password: {
     update: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
-
-      const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV, 'newPwdToken')
-      const newPwd = jwt.verify(jwtNewPwd, JWT_AUTH_ENV)
+      const newPwd = getToken(req, 'newPwd', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
       if (typeof newPwd === 'string') throw new UserBadRequest('Invalid credentials')
 
       await model.password.update(newPwd.account, newPwd.pwd)

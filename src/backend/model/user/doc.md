@@ -1,5 +1,32 @@
 # User Model
 
+
+## Get
+to get specific fields of the user with the _id
+
+### Parameters
+- _id ObjectId
+- projection
+you can choose this fields, by putting them with the value "1"
+```TypeScript
+  _id?: Types.ObjectId
+  fullName: string
+  account: string
+  pwd: string
+  nickName?: string
+  refreshToken?: string[]
+  invitation?: IUserInvitation[]
+  group?: IUserGroup[]
+```
+### Output
+returns the fields tou asked for
+- Partial<IRefreshToken>
+### Error
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|NotFound|User not found||
+|DatabaseError|Failed to access data||
+
 ## Create
 to create a user
 

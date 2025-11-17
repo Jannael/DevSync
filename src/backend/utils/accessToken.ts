@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import { decrypt } from './utils'
 import { IEnv } from '../interface/env'
 import { UserBadRequest } from '../error/error'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 dotenv.config({ quiet: true })
 const {
@@ -15,12 +15,12 @@ const {
 'JWT_ACCESS_TOKEN_ENV'
 >
 
-async function getAccessToken (req: Request): Promise<void> {
+function getAccessToken (req: Request): JwtPayload {
   if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
   const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
   const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
   if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
-  req.body.accessToken = accessToken
+  return accessToken
 }
 
 export default getAccessToken

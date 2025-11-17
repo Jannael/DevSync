@@ -13,6 +13,7 @@ import config from './../../config/config'
 import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { decrypt, encrypt } from '../../utils/utils'
+import getAccessToken from '../../utils/accessToken'
 
 dotenv.config({ quiet: true })
 const {
@@ -183,27 +184,22 @@ const functions = {
   },
   invitation: {
     get: async function (req: Request, res: Response): Promise<IUserInvitation[] | null | undefined> {
-      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
-
-      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
-
+      const accessToken = getAccessToken(req)
       const result = await model.invitation.get(accessToken._id)
       return result
     },
     create: async function (req: Request, res: Response): Promise<boolean> {
       // req.body = account(to Invite), role, _id(group), color(group), name(group)
-      if (req.body.accessToken.account === req.body.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
+      const accessToken = getAccessToken(req)
+      if (accessToken.account === req.body.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
 
       const { account, role, _id, color, name } = await validator.user.invitation.create(req.body)
-
       const { fullName } = await model.get(req.body.account, { fullName: 1 })
 
       return await model.invitation.create(
         { account, fullName, role },
         { _id, color, name },
-        req.body.accessToken.account
+        accessToken.account
       )
     },
     accept: async function (req: Request, res: Response) {

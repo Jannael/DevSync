@@ -18,7 +18,7 @@ const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 const model = {
   get: async function (_id: Types.ObjectId, projection: Record<string, number>): Promise<Partial<IRefreshToken>> {
     try {
-      const user = await dbModel.findOne({ _id }, { ...projection })
+      const user = await dbModel.findOne({ _id }, { ...projection }).lean()
       if (user === null) throw new NotFound('User not found')
       return user
     } catch (e) {

@@ -184,6 +184,35 @@ describe('user model', () => {
     })
   })
 
+  describe('get user', () => {
+    test('', async () => {
+      const res = await model.get(user._id, { _id: 0, fullName: 1 })
+      expect(res).toStrictEqual({ fullName: 'test' })
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            await model.get(notExistUser, { _id: 0 })
+          },
+          error: new NotFound('User not found')
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        try {
+          await fn()
+          throw new Error('Expected function to throw')
+        } catch (err: any) {
+          expect(err).toBeInstanceOf(error.constructor)
+          expect(err.message).toBe(error.message)
+          expect(err.description).toBe(error.description)
+        }
+      }
+    })
+  })
+
   describe('update user', () => {
     test('', async () => {
       const res = await model.update({

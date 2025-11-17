@@ -14,7 +14,7 @@ const schema = z.object({
     _id: z.string('member._id is required'),
     fullName: z.string('member.fullName is required').min(3).max(255),
     role: z.enum(['techLead', 'developer', 'documenter'], {
-      message: 'member.role is required and must be one of: admin, editor, viewer'
+      message: 'member.role is required and must be one of: techLead, developer, documenter'
     })
   })).optional()
 })

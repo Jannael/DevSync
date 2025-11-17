@@ -193,7 +193,10 @@ const functions = {
       return result
     },
     create: async function (req: Request, res: Response) {
-
+      if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
+      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
+      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
+      if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
     },
     accept: async function (req: Request, res: Response) {
 

@@ -16,6 +16,19 @@ dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
+  get: async function (_id: Types.ObjectId, projection: Record<string, number>): Promise<Partial<IRefreshToken>> {
+    try {
+      const user = await dbModel.findOne({ _id }, { ...projection })
+      if (user === null) throw new NotFound('User not found')
+      return user
+    } catch (e) {
+      errorHandler.allErrors(
+        e as CustomError,
+        new DatabaseError('Failed to access data')
+      )
+      throw new DatabaseError('Failed to access data')
+    }
+  },
   create: async function (data: IUser): Promise<IRefreshToken> {
     try {
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')

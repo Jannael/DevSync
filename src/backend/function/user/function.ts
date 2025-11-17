@@ -12,7 +12,7 @@ import { Request, Response } from 'express'
 import config from './../../config/config'
 import { DatabaseError, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
-import { decrypt, encrypt } from '../../utils/utils'
+import { decrypt, encrypt, verifyEmail } from '../../utils/utils'
 
 dotenv.config({ quiet: true })
 const {
@@ -197,6 +197,12 @@ const functions = {
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
       const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
       if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
+
+      if (verifyEmail(req.body.account)) {
+        throw new UserBadRequest('Invalid credentials', 'The account for the user you are trying to invite is invalid')
+      }
+
+      // const userToInvite = await model.get(req.body.account, )
     },
     accept: async function (req: Request, res: Response) {
 

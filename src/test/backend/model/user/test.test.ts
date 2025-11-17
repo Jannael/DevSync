@@ -186,7 +186,7 @@ describe('user model', () => {
 
   describe('get user', () => {
     test('', async () => {
-      const res = await model.get(user._id, { _id: 0, fullName: 1 })
+      const res = await model.get(user.account, { _id: 0, fullName: 1 })
       expect(res).toStrictEqual({ fullName: 'test' })
     })
 
@@ -194,9 +194,15 @@ describe('user model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.get(notExistUser, { _id: 0 })
+            await model.get('example@gmail.com', { _id: 0 })
           },
           error: new NotFound('User not found')
+        },
+        {
+          fn: async function () {
+            await model.get('example', { _id: 0 })
+          },
+          error: new UserBadRequest('Invalid credentials', 'The account example is invalid')
         }
       ]
 

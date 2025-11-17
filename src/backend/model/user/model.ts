@@ -16,9 +16,11 @@ dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
-  get: async function (_id: Types.ObjectId, projection: Record<string, number>): Promise<Partial<IRefreshToken>> {
+  get: async function (account: string, projection: Record<string, number>): Promise<Partial<IRefreshToken>> {
     try {
-      const user = await dbModel.findOne({ _id }, { ...projection }).lean()
+      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
+
+      const user = await dbModel.findOne({ account }, { ...projection }).lean()
       if (user === null) throw new NotFound('User not found')
       return user
     } catch (e) {

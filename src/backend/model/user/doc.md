@@ -5,7 +5,7 @@
 to get specific fields of the user with the _id
 
 ### Parameters
-- _id ObjectId
+- account string
 - projection
 you can choose this fields, by putting them with the value "1"
 ```TypeScript
@@ -26,6 +26,7 @@ returns the fields tou asked for
 |:-----------|:-----------|-----------:|
 |NotFound|User not found||
 |DatabaseError|Failed to access data||
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
 
 ## Create
 to create a user

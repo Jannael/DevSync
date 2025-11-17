@@ -16,7 +16,10 @@ dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
-  get: async function (account: string, projection: Record<string, number>): Promise<Partial<IRefreshToken>> {
+  get: async function <K extends keyof IRefreshToken>(
+    account: string,
+    projection: Record<K, number>
+  ): Promise<Pick<IRefreshToken, K>> {
     try {
       if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
 

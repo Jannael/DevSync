@@ -10,7 +10,7 @@ import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
-import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
+import { DatabaseError, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { decrypt, encrypt } from '../../utils/utils'
 
@@ -202,7 +202,6 @@ const functions = {
       const { account, role, _id, color, name } = await validator.user.invitation.create(req.body)
 
       const { fullName } = await model.get(req.body.account, { fullName: 1 })
-      if (fullName === undefined) throw new NotFound('User not found', 'The user you are trying to invite was not found')
 
       return await model.invitation.create(
         { account, fullName, role },

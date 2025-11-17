@@ -2,7 +2,7 @@
   User's CRUD
 ***/
 
-import { IRefreshToken, IUser } from '../../interface/user'
+import { IRefreshToken, IUser, IUserInvitation } from '../../interface/user'
 import model from './../../model/user/model'
 import authModel from './../../model/auth/model'
 import validator from '../../validator/validator'
@@ -31,7 +31,7 @@ const {
 'CRYPTO_REFRESH_TOKEN_ENV'>
 
 const functions = {
-  get: async function (req: Request, res: Response) {
+  get: async function (req: Request, res: Response): Promise<IRefreshToken> {
     if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
     const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
 
@@ -43,9 +43,9 @@ const functions = {
     delete accessToken.exp
     delete accessToken._id
 
-    return accessToken
+    return accessToken as IRefreshToken
   },
-  create: async function (req: Request, res: Response) {
+  create: async function (req: Request, res: Response): Promise<IRefreshToken> {
     if (req.cookies?.account === undefined ||
         req.body === undefined) throw new UserBadRequest('Invalid credentials', 'Account not verified')
 
@@ -72,7 +72,7 @@ const functions = {
 
     return result
   },
-  update: async function (req: Request, res: Response) {
+  update: async function (req: Request, res: Response): Promise<IRefreshToken> {
     if (req.body?.account !== undefined ||
         req.body?.refreshToken !== undefined ||
         req.body?._id !== undefined ||
@@ -111,7 +111,7 @@ const functions = {
     delete (result as IUser)._id
     return result
   },
-  delete: async function (req: Request, res: Response) {
+  delete: async function (req: Request, res: Response): Promise<boolean> {
     if (req.cookies.account === undefined ||
         req.cookies.accessToken === undefined
     ) throw new UserBadRequest('Missing data', 'Account not verified')
@@ -169,7 +169,7 @@ const functions = {
     }
   },
   password: {
-    update: async function (req: Request, res: Response) {
+    update: async function (req: Request, res: Response): Promise<boolean> {
       if (req.cookies?.newPwd === undefined) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
 
       const jwtNewPwd = decrypt(req.cookies.newPwd, CRYPTO_AUTH_ENV, 'newPwdToken')
@@ -182,7 +182,7 @@ const functions = {
     }
   },
   invitation: {
-    get: async function (req: Request, res: Response) {
+    get: async function (req: Request, res: Response): Promise<IUserInvitation[] | null | undefined> {
       if (req.cookies.accessToken === undefined) throw new UserBadRequest('Invalid credentials', 'Missing accessToken')
 
       const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')

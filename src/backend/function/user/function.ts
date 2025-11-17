@@ -137,15 +137,8 @@ const functions = {
   },
   account: {
     update: async function (req: Request, res: Response): Promise<IRefreshToken> {
-      if (req.cookies.accessToken === undefined ||
-          req.cookies.newAccount_account === undefined
-      ) throw new UserBadRequest('Missing data', 'Make sure to follow the auth flow for this operation')
-
-      const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-      const jwtNewAccount = decrypt(req.cookies.newAccount_account, CRYPTO_AUTH_ENV, 'newAccountToken')
-
-      const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-      const newAccount = jwt.verify(jwtNewAccount, JWT_AUTH_ENV)
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+      const newAccount = getToken(req, 'newAccount_account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
       if (typeof accessToken === 'string' ||
           typeof newAccount === 'string'

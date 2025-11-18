@@ -705,7 +705,20 @@ describe('/user/v1/', () => {
   })
 
   describe('/group/', () => {
+    describe('/get/group/', () => {
+      const endpoint = path + '/get/group/'
+      test('', async () => {
+        const res = await agent
+          .get(endpoint)
 
+        expect(res.body).toStrictEqual({
+          complete: true,
+          group: [
+            { name: 'test', _id: expect.any(String), color: '#000000' }
+          ]
+        })
+      })
+    })
   })
 
   describe('/delete/', () => {

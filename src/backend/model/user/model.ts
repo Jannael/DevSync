@@ -378,7 +378,7 @@ const model = {
         return false
       }
     },
-    remove: async function (account: string, groupId: Types.ObjectId): Promise<boolean> {
+    remove: async function (account: string, groupId: Types.ObjectId, removeMember: boolean = false): Promise<boolean> {
       try {
         if (!verifyEmail(account)) {
           throw new UserBadRequest('Invalid credentials', 'The account is invalid')
@@ -386,6 +386,8 @@ const model = {
         if (!Types.ObjectId.isValid(groupId)) {
           throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
         }
+
+        if (removeMember) await groupModel.member.remove(groupId, account)
 
         const isInvitation = await dbModel.exists({ account, 'invitation._id': groupId })
         if (isInvitation !== null && isInvitation !== undefined) {

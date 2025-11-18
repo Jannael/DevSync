@@ -113,7 +113,7 @@ describe('group model', () => {
 
   describe('exists', () => {
     test('', async () => {
-      const res = await model.exists(group, user.account)
+      const res = await model.exists(group._id, user.account)
       expect(res).toEqual(true)
     })
 
@@ -121,13 +121,13 @@ describe('group model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.exists(group, 'notExist@gmail.com')
+            await model.exists(group._id, 'notExist@gmail.com')
           },
           error: new Forbidden('Access denied', 'The group exists but the user is not a techLead')
         },
         {
           fn: async function () {
-            await model.exists({ ...group, _id: new mongoose.Types.ObjectId() }, user.account)
+            await model.exists(new mongoose.Types.ObjectId(), user.account)
           },
           error: new NotFound('Group not found', 'The group you are trying to access does not exist')
         }

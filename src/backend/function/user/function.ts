@@ -166,7 +166,8 @@ const functions = {
       return await model.group.get(accessToken._id)
     },
     remove: async function (req: Request, res: Response) {
-
+      // body = _id (group you want to delete)
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
     },
     add: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id(group you want to add)

@@ -154,6 +154,11 @@ const functions = {
       )
     },
     reject: async function (req: Request, res: Response) {
+      // body = _id (invitation to reject)
+      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the invitation you want to reject')
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+
+      await model.invitation.reject(accessToken.account, req.body._id)
     }
   },
   group: {
@@ -167,7 +172,6 @@ const functions = {
       // body = _id(group you want to add)
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
-      validator.user.invitation.add(req.body)
       const { _id, color, name } = await groupModel.get(req.body._id)
 
       await model.group.add(accessToken.account, { _id, color, name })

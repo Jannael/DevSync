@@ -343,7 +343,7 @@ const model = {
         return null
       }
     },
-    add: async function (account: string, group: IUserGroup): Promise<boolean> {
+    add: async function (account: string, group: IUserGroup, addToTheGroup: boolean = false): Promise<boolean> {
       try {
         validator.user.group.add(group)
         await groupModel.exists(group._id)
@@ -364,13 +364,9 @@ const model = {
         ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
 
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
-        if (isInvitation !== null && isInvitation !== undefined) {
-          await model.invitation.remove(account, group._id)
-          const res = await dbModel.updateOne({ account }, { $push: { group } })
-          return res.acknowledged
-        }
+        if (isInvitation !== null && isInvitation !== undefined) await model.invitation.remove(account, group._id)
 
-        await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: 'developer' })
+        if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: 'developer' })
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

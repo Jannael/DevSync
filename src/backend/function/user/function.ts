@@ -2,7 +2,7 @@
   User's CRUD
 ***/
 
-import { IRefreshToken, IUser, IUserInvitation } from '../../interface/user'
+import { IRefreshToken, IUser, IUserGroup, IUserInvitation } from '../../interface/user'
 import model from './../../model/user/model'
 import authModel from './../../model/auth/model'
 import validator from '../../validator/validator'
@@ -136,8 +136,7 @@ const functions = {
   invitation: {
     get: async function (req: Request, res: Response): Promise<IUserInvitation[] | null | undefined> {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
-      const result = await model.invitation.get(accessToken._id)
-      return result
+      return await model.invitation.get(accessToken._id)
     },
     create: async function (req: Request, res: Response): Promise<boolean> {
       // req.body = account(to Invite), role, _id(group), color(group), name(group)
@@ -153,28 +152,29 @@ const functions = {
         accessToken.account
       )
     },
-    reject: async function (req: Request, res: Response) {
+    reject: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id (invitation to reject)
       if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the invitation you want to reject')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
-      await model.invitation.reject(accessToken.account, req.body._id)
+      return await model.invitation.reject(accessToken.account, req.body._id)
     }
   },
   group: {
-    get: async function (req: Request, res: Response) {
-
+    get: async function (req: Request, res: Response): Promise<IUserGroup[] | null | undefined> {
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+      return await model.group.get(accessToken._id)
     },
     remove: async function (req: Request, res: Response) {
 
     },
-    add: async function (req: Request, res: Response) {
+    add: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id(group you want to add)
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
       const { _id, color, name } = await groupModel.get(req.body._id)
 
-      await model.group.add(accessToken.account, { _id, color, name })
+      return await model.group.add(accessToken.account, { _id, color, name })
     }
   }
 }

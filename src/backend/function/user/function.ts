@@ -139,10 +139,13 @@ const functions = {
       return await model.invitation.get(accessToken._id)
     },
     create: async function (req: Request, res: Response): Promise<boolean> {
-      // req.body = account(to Invite), role, _id(group), color(group), name(group)
+      // req.body = account(to Invite), role, _id(group)
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
-      if (accessToken.account === req.body.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
-      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the group you want to invite the user to')
+      if (accessToken.account === req.body?.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
+      if (req.body?._id === undefined ||
+        req.body?.account === undefined ||
+        req.body?.role === undefined
+      ) throw new UserBadRequest('Missing data', 'You need to send the _id for the group, account to invite and role')
 
       const { _id, color, name } = await groupModel.get(req.body._id)
       const { account, role } = req.body
@@ -156,7 +159,7 @@ const functions = {
     },
     reject: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id (invitation to reject)
-      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the invitation you want to reject')
+      if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the invitation you want to reject')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
       return await model.invitation.reject(accessToken.account, req.body._id)

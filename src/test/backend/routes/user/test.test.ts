@@ -581,7 +581,7 @@ describe('/user/v1/', () => {
             error: {
               code: 400,
               msg: 'Missing data',
-              description: 'You did not send the _id for the group you want to invite the user to',
+              description: 'You need to send the _id for the group, account to invite and role',
               complete: false
             }
           }
@@ -650,6 +650,58 @@ describe('/user/v1/', () => {
         }
       })
     })
+
+    describe('/reject/invitation/', () => {
+      const endpoint = path + '/reject/invitation/'
+      test('', async () => {
+        const agent = request.agent(app)
+        await agent
+          .post('/auth/v1/request/refreshToken/code/')
+          .send({
+            account: secondUser.account,
+            pwd: 'test',
+            TEST_PWD: TEST_PWD_ENV
+          })
+        await agent
+          .post('/auth/v1/request/refreshToken/')
+          .send({
+            code: '1234'
+          })
+
+        const res = await agent
+          .delete(endpoint)
+          .send({
+            _id: group._id
+          })
+
+        expect(res.body.complete).toEqual(true)
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await request(app)
+                .delete(endpoint)
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'You did not send the _id for the invitation you want to reject',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
+    })
   })
 
   describe('/group/', () => {
@@ -659,6 +711,14 @@ describe('/user/v1/', () => {
   describe('/delete/', () => {
     const endpoint = path + '/delete/'
     test('', async () => {
+      await agent
+        .post(path + '/create/invitation/')
+        .send({
+          account: secondUser.account,
+          role: 'techLead',
+          _id: group._id
+        })
+
       await agent
         .post('/auth/v1/request/code/')
         .send({

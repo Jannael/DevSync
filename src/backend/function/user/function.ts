@@ -172,7 +172,7 @@ const functions = {
     },
     remove: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id (group you want to delete)
-      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the group you want to remove')
+      if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the group you want to remove')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
       return await model.group.remove(accessToken.account, req.body._id, true)

@@ -744,6 +744,57 @@ describe('/user/v1/', () => {
         }
       })
     })
+
+    describe('/remove/group/', () => {
+      const endpoint = path + '/delete/group/'
+      test('', async () => {
+        await agent
+          .post(path + '/create/invitation/')
+          .send({
+            account: secondUser.account,
+            role: 'techLead',
+            _id: group._id
+          })
+
+        const res = await agent
+          .delete(endpoint)
+          .send({
+            _id: group._id
+          })
+
+        expect(res.body.complete).toEqual(true)
+
+        const guard = await agent
+          .get(path + '/get/group/')
+
+        expect(guard.body).toStrictEqual({ complete: true, group: [] })
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await agent
+                .delete(endpoint)
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'You did not send the _id for the group you want to remove',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
+    })
   })
 
   describe('/delete/', () => {

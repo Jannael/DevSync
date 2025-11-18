@@ -718,6 +718,31 @@ describe('/user/v1/', () => {
           ]
         })
       })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await request(app)
+                .get(endpoint)
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'Missing accessToken',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
     })
   })
 

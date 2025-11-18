@@ -6,13 +6,12 @@ import { IRefreshToken, IUser, IUserInvitation } from '../../interface/user'
 import model from './../../model/user/model'
 import authModel from './../../model/auth/model'
 import validator from '../../validator/validator'
-import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import config from './../../config/config'
 import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
-import { encrypt } from '../../utils/utils'
+import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'
 
 dotenv.config({ quiet: true })
@@ -53,10 +52,8 @@ const functions = {
     const validData = validator.user.create(req.body)
     const result = await model.create(validData)
 
-    const jwtRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken as SignOptions)
-    const jwtAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken as SignOptions)
-    const refreshToken = encrypt(jwtRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
-    const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+    const refreshToken = encrypt(result, CRYPTO_REFRESH_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+    const accessToken = encrypt(result, CRYPTO_ACCESS_TOKEN_ENV, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
 
     res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
     res.cookie('accessToken', accessToken, config.cookies.accessToken)
@@ -74,21 +71,14 @@ const functions = {
 
     const accountCookie = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
-
-    if (typeof accountCookie === 'string' ||
-        typeof accessToken === 'string'
-    ) throw new UserBadRequest('Invalid credentials', 'Account not verified')
-
     if (accessToken.account !== accountCookie.account) throw new UserBadRequest('Invalid credentials', 'The account verified and your account does not match')
 
     const data = validator.user.partial(req.body)
     if (data === null) throw new UserBadRequest('Missing data', 'No data to update or invalid data')
 
     const result = await model.update(data, accessToken._id)
-    const jwtNewRefreshToken = jwt.sign(result, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-    const jwtNewAccessToken = jwt.sign(result, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
-    const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
-    const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+    const newRefreshToken = encrypt(result, CRYPTO_REFRESH_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+    const newAccessToken = encrypt(result, CRYPTO_ACCESS_TOKEN_ENV, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
 
     const isSaved = await authModel.refreshToken.save(newRefreshToken, accessToken._id)
     if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
@@ -104,10 +94,6 @@ const functions = {
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
     const cookieAccount = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
-    if (typeof accessToken === 'string' ||
-        typeof cookieAccount === 'string'
-    ) throw new UserBadRequest('Invalid credentials')
-
     if (accessToken.account !== cookieAccount.account) throw new UserBadRequest('Invalid credentials', 'The verified account and yours does not match')
 
     res.clearCookie('refreshToken')
@@ -121,15 +107,9 @@ const functions = {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
       const newAccount = getToken(req, 'newAccount_account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
-      if (typeof accessToken === 'string' ||
-          typeof newAccount === 'string'
-      ) throw new UserBadRequest('Invalid credentials')
-
       const response = await model.account.update(accessToken._id, newAccount.account)
-      const jwtNewRefreshToken = jwt.sign(response, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-      const jwtNewAccessToken = jwt.sign(response, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
-      const newRefreshToken = encrypt(jwtNewRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
-      const newAccessToken = encrypt(jwtNewAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+      const newRefreshToken = encrypt(response, CRYPTO_REFRESH_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+      const newAccessToken = encrypt(response, CRYPTO_ACCESS_TOKEN_ENV, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
 
       const isSaved = await authModel.refreshToken.save(newRefreshToken, accessToken._id)
       if (!isSaved) throw new DatabaseError('Failed to save', 'Something went wrong please try again')
@@ -146,7 +126,6 @@ const functions = {
   password: {
     update: async function (req: Request, res: Response): Promise<boolean> {
       const newPwd = getToken(req, 'newPwd', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
-      if (typeof newPwd === 'string') throw new UserBadRequest('Invalid credentials')
 
       await model.password.update(newPwd.account, newPwd.pwd)
       res.clearCookie('newPwd')

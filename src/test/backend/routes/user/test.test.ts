@@ -596,6 +596,60 @@ describe('/user/v1/', () => {
         }
       })
     })
+
+    describe('/get/invitation/', () => {
+      const endpoint = path + '/get/invitation/'
+      test('', async () => {
+        const agent = request.agent(app)
+        await agent
+          .post('/auth/v1/request/refreshToken/code/')
+          .send({
+            account: secondUser.account,
+            pwd: 'test',
+            TEST_PWD: TEST_PWD_ENV
+          })
+        await agent
+          .post('/auth/v1/request/refreshToken/')
+          .send({
+            code: '1234'
+          })
+
+        const res = await agent
+          .get(endpoint)
+
+        expect(res.body).toStrictEqual({
+          complete: true,
+          invitation: [
+            { name: 'test', _id: expect.any(String), color: '#000000' }
+          ]
+        })
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await request(app)
+                .get(endpoint)
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'Missing accessToken',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
+    })
   })
 
   describe('/group/', () => {

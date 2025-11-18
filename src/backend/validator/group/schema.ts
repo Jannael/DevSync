@@ -11,7 +11,7 @@ const schema = z.object({
   repository: z.string().url().optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
   member: z.array(z.object({
-    _id: z.string('member._id is required'),
+    account: z.string('member.account is required').email(),
     fullName: z.string('member.fullName is required').min(3).max(255),
     role: z.enum(['techLead', 'developer', 'documenter'], {
       message: 'member.role is required and must be one of: techLead, developer, documenter'

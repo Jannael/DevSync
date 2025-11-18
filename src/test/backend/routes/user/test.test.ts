@@ -795,6 +795,53 @@ describe('/user/v1/', () => {
         }
       })
     })
+
+    describe('/add/group/', () => {
+      const endpoint = path + '/add/group/'
+      test('', async () => {
+        const res = await agent
+          .post(endpoint)
+          .send({
+            _id: group._id
+          })
+        expect(res.body.complete).toEqual(true)
+
+        const guard = await agent
+          .get(path + '/get/group/')
+
+        expect(guard.body).toStrictEqual({
+          complete: true,
+          group: [
+            { name: 'test', _id: expect.any(String), color: '#000000' }
+          ]
+        })
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await agent
+                .post(endpoint)
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'You did not send the _id for the group you want to add',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
+    })
   })
 
   describe('/delete/', () => {

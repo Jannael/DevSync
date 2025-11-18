@@ -5,7 +5,8 @@
 
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { encrypt, decrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
+import { decrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
+import { encrypt } from '../../utils/encrypt'
 import dotenv from 'dotenv'
 import model from '../../model/auth/model'
 import config from '../../config/config'
@@ -44,12 +45,7 @@ const functions = {
 
       if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-      const jwtToken = jwt.sign({
-        code,
-        account: req.body.account
-      }, JWT_AUTH_ENV, config.jwt.code)
-
-      const jwtEncrypt = encrypt(jwtToken, CRYPTO_AUTH_ENV)
+      const jwtEncrypt = encrypt({ code, account: req.body.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('code', jwtEncrypt, config.cookies.code)
       return true
     },
@@ -79,8 +75,7 @@ const functions = {
       delete refreshToken.iat
       delete refreshToken.exp
 
-      const jwtAccessToken = jwt.sign(refreshToken, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
-      const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+      const accessToken = encrypt(refreshToken, CRYPTO_ACCESS_TOKEN_ENV, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
       res.cookie('accessToken', accessToken, config.cookies.accessToken)
       return true
     },
@@ -101,10 +96,8 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
 
-        const jwtToken = jwt.sign(user, JWT_AUTH_ENV, config.jwt.code)
-        const jwtHashCode = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
-        const token = encrypt(jwtToken, CRYPTO_AUTH_ENV)
-        const hashCode = encrypt(jwtHashCode, CRYPTO_AUTH_ENV)
+        const token = encrypt(user, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
+        const hashCode = encrypt({ code }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
 
         res.cookie('tokenR', token, config.cookies.code)
         res.cookie('codeR', hashCode, config.cookies.code)
@@ -130,10 +123,8 @@ const functions = {
         delete user.iat
         delete user.exp
 
-        const jwtRefreshToken = jwt.sign(user, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
-        const jwtAccessToken = jwt.sign(user, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
-        const refreshToken = encrypt(jwtRefreshToken, CRYPTO_REFRESH_TOKEN_ENV)
-        const accessToken = encrypt(jwtAccessToken, CRYPTO_ACCESS_TOKEN_ENV)
+        const refreshToken = encrypt(user, CRYPTO_REFRESH_TOKEN_ENV, JWT_REFRESH_TOKEN_ENV, config.jwt.refreshToken)
+        const accessToken = encrypt(user, CRYPTO_ACCESS_TOKEN_ENV, JWT_ACCESS_TOKEN_ENV, config.jwt.accessToken)
 
         const savedInDB = await model.refreshToken.save(refreshToken, user._id)
         if (!savedInDB) throw new DatabaseError('Failed to save', 'The session was not saved please try again')
@@ -174,8 +165,7 @@ const functions = {
 
       res.clearCookie('code')
 
-      const jwtToken = jwt.sign({ account: decodedCode.account }, JWT_AUTH_ENV, config.jwt.code)
-      const encrypted = encrypt(jwtToken, CRYPTO_AUTH_ENV)
+      const encrypted = encrypt({ account: decodedCode.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('account', encrypted, config.cookies.code)
       return true
     }
@@ -211,10 +201,8 @@ const functions = {
           throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')
         }
 
-        const jwtCodeEncrypted = jwt.sign({ code }, JWT_AUTH_ENV, config.jwt.code)
-        const jwtCodeNewAccountEncrypted = jwt.sign({ code: codeNewAccount, account: req.body.newAccount }, JWT_AUTH_ENV, config.jwt.codeNewAccount)
-        const codeEncrypted = encrypt(jwtCodeEncrypted, CRYPTO_AUTH_ENV)
-        const codeNewAccountEncrypted = encrypt(jwtCodeNewAccountEncrypted, CRYPTO_AUTH_ENV)
+        const codeEncrypted = encrypt({ code }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
+        const codeNewAccountEncrypted = encrypt({ code: codeNewAccount, account: req.body.newAccount }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.codeNewAccount)
 
         res.cookie('currentAccount', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)
@@ -250,8 +238,7 @@ const functions = {
         res.clearCookie('currentAccount')
         res.clearCookie('newAccount')
 
-        const jwtAccount = jwt.sign({ account: codeNewAccount.account }, JWT_AUTH_ENV, config.jwt.code)
-        const account = encrypt(jwtAccount, CRYPTO_AUTH_ENV)
+        const account = encrypt({ account: codeNewAccount.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
 
         res.cookie('newAccount_account', account, config.cookies.code)
         return true
@@ -275,8 +262,7 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-        const jwtHashCode = jwt.sign({ code, account: req.body?.account }, JWT_AUTH_ENV, config.jwt.code)
-        const hashCode = encrypt(jwtHashCode, CRYPTO_AUTH_ENV)
+        const hashCode = encrypt({ code, account: req.body?.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
         res.cookie('pwdChange', hashCode, config.cookies.code)
         return true
       }
@@ -296,8 +282,7 @@ const functions = {
         if (code.code !== req.body?.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
         if (code.account !== req.body?.account) throw new UserBadRequest('Invalid credentials', 'You tried to change the account now your banned forever')
 
-        const jwtHash = jwt.sign({ pwd: req.body?.newPwd, account: code.account }, JWT_AUTH_ENV, config.jwt.code)
-        const hash = encrypt(jwtHash, CRYPTO_AUTH_ENV)
+        const hash = encrypt({ pwd: req.body?.newPwd, account: code.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
 
         res.cookie('newPwd', hash, config.cookies.code)
         res.clearCookie('pwdChange')

@@ -15,7 +15,6 @@ router.patch('/update/password/', controller.password.update)
 // Invitation
 router.get('/get/invitation/', controller.invitation.get)
 router.post('/create/invitation/', controller.invitation.create)
-router.put('/accept/invitation/', controller.invitation.accept)
 router.delete('/reject/invitation/', controller.invitation.reject)
 
 // Group

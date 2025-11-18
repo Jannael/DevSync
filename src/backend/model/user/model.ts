@@ -346,7 +346,6 @@ const model = {
     add: async function (account: string, group: IUserGroup): Promise<boolean> {
       try {
         validator.user.group.add(group)
-
         await groupModel.exists(group._id)
 
         const currentGroup = await dbModel.findOne(

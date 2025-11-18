@@ -13,6 +13,7 @@ import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import { IEnv } from '../../interface/env'
 import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'
+import groupModel from './../../model/group/model'
 
 dotenv.config({ quiet: true })
 const {
@@ -152,8 +153,7 @@ const functions = {
         accessToken.account
       )
     },
-    accept: async function (req: Request, res: Response) {
-
+    reject: async function (req: Request, res: Response) {
     }
   },
   group: {
@@ -162,6 +162,15 @@ const functions = {
     },
     remove: async function (req: Request, res: Response) {
 
+    },
+    add: async function (req: Request, res: Response) {
+      // body = _id(group you want to add)
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+
+      validator.user.invitation.add(req.body)
+      const { _id, color, name } = await groupModel.get(req.body._id)
+
+      await model.group.add(accessToken.account, { _id, color, name })
     }
   }
 }

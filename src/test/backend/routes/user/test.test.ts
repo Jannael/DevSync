@@ -7,6 +7,8 @@ import { IEnv } from '../../../../backend/interface/env'
 import userModel from './../../../../backend/model/user/model'
 import { IRefreshToken } from '../../../../backend/interface/user'
 import dbModel from './../../../../backend/database/schemas/node/user'
+import { IGroup } from '../../../../backend/interface/group'
+import groupModel from '../../../../backend/model/group/model'
 
 dotenv.config({ quiet: true })
 const { TEST_PWD_ENV } = process.env as unknown as IEnv
@@ -14,6 +16,8 @@ const { TEST_PWD_ENV } = process.env as unknown as IEnv
 let app: Express
 let agent: ReturnType<typeof request.agent>
 let user: IRefreshToken
+let group: IGroup
+let secondUser: IRefreshToken
 
 beforeAll(async () => {
   app = await createApp()
@@ -25,6 +29,18 @@ beforeAll(async () => {
     pwd: 'test',
     nickName: 'test'
   })
+
+  secondUser = await userModel.create({
+    fullName: 'second test',
+    account: 'secondUser@gmail.com',
+    pwd: 'test',
+    nickName: 'second test'
+  })
+
+  group = await groupModel.create({
+    name: 'test',
+    color: '#000000'
+  }, { account: user.account, fullName: user.fullName })
 })
 
 afterAll(async () => {
@@ -520,7 +536,19 @@ describe('/user/v1/', () => {
   })
 
   describe('/invitation/', () => {
-
+    describe('/create/invitation/', () => {
+      const endpoint = path + '/create/invitation/'
+      test('', async () => {
+        const res = await agent
+          .post(endpoint)
+          .send({
+            account: secondUser.account,
+            role: 'developer',
+            _id: group._id
+          })
+        console.log(res.body)
+      })
+    })
   })
 
   describe('/group/', () => {

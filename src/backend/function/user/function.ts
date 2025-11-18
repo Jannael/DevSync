@@ -142,8 +142,10 @@ const functions = {
       // req.body = account(to Invite), role, _id(group), color(group), name(group)
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
       if (accessToken.account === req.body.account) throw new Forbidden('Access denied', 'You can not invite yourself to one group')
+      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the group you want to invite the user to')
 
-      const { account, role, _id, color, name } = await validator.user.invitation.create(req.body)
+      const { _id, color, name } = await groupModel.get(req.body._id)
+      const { account, role } = req.body
       const { fullName } = await model.get(req.body.account, { fullName: 1 })
 
       return await model.invitation.create(

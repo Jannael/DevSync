@@ -4,7 +4,7 @@
 gets the whole group information
 
 ### Parameters:
-- account ObjectId
+- id ObjectId
 ### Output:
 ```TypeScript
   _id: Types.ObjectId

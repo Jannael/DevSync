@@ -745,7 +745,7 @@ describe('/user/v1/', () => {
       })
     })
 
-    describe('/remove/group/', () => {
+    describe('/delete/group/', () => {
       const endpoint = path + '/delete/group/'
       test('', async () => {
         await agent

@@ -13,13 +13,13 @@ router.patch('/update/account/', controller.account.update)
 router.patch('/update/password/', controller.password.update)
 
 // Invitation
-router.get('/get/invitation/', controller.invitation.get) // test
-router.post('/create/invitation/', controller.invitation.create) // test
-router.delete('/reject/invitation/', controller.invitation.reject) // test
+router.get('/get/invitation/', controller.invitation.get)
+router.post('/create/invitation/', controller.invitation.create)
+router.delete('/reject/invitation/', controller.invitation.reject)
 
 // Group
-router.get('/get/group/', controller.group.get) // test
-router.delete('/delete/group/', controller.group.remove) // test
-router.post('/add/group/', controller.group.add) // test
+router.get('/get/group/', controller.group.get)
+router.delete('/delete/group/', controller.group.remove)
+router.post('/add/group/', controller.group.add)
 
 export default router

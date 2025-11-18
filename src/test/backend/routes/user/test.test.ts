@@ -543,10 +543,57 @@ describe('/user/v1/', () => {
           .post(endpoint)
           .send({
             account: secondUser.account,
-            role: 'developer',
+            role: 'techLead',
             _id: group._id
           })
-        console.log(res.body)
+
+        expect(res.body.complete).toEqual(true)
+      })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await agent
+                .post(endpoint)
+                .send({
+                  account: user.account,
+                  role: 'techLead',
+                  _id: group._id
+                })
+            },
+            error: {
+              code: 403,
+              msg: 'Access denied',
+              description: 'You can not invite yourself to one group',
+              complete: false
+            }
+          },
+          {
+            fn: async function () {
+              return await agent
+                .post(endpoint)
+                .send({
+                  account: secondUser.account,
+                  role: 'techLead'
+                })
+            },
+            error: {
+              code: 400,
+              msg: 'Missing data',
+              description: 'You did not send the _id for the group you want to invite the user to',
+              complete: false
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
       })
     })
   })

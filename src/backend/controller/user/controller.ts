@@ -7,8 +7,7 @@ const controller = {
   get: async function (req: Request, res: Response) {
     try {
       const result = await fn.get(req, res)
-      result.complete = true
-      res.json(result)
+      res.json({ complete: true, ...result })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
@@ -89,14 +88,48 @@ const controller = {
         ErrorHandler.user(res, e as CustomError)
       }
     },
-    create: async function (req: Request, res: Response) {},
-    accept: async function (req: Request, res: Response) {},
-    reject: async function (req: Request, res: Response) {}
+    create: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.invitation.create(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    },
+    reject: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.invitation.reject(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    }
   },
   group: {
-    get: async function (req: Request, res: Response) {},
-    remove: async function (req: Request, res: Response) {},
-    add: async function (req: Request, res: Response) {}
+    get: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.group.get(req, res)
+        res.json({ complete: true, group: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    },
+    remove: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.group.remove(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    },
+    add: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.group.add(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    }
   }
 }
 

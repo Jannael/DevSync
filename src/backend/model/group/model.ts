@@ -178,6 +178,8 @@ const model = {
     add: async function (groupId: Types.ObjectId, member: NonNullable<IGroup['member']>[number]): Promise<boolean> {
       try {
         const currentMembers = await dbModel.findOne({ _id: groupId }, { member: 1, _id: 0 })
+        if (currentMembers === null) throw new NotFound('Group not found', 'The group you are trying to access was not found')
+        if (currentMembers?.member !== undefined && currentMembers.member.find(m => m.account === member.account) !== undefined) return true
 
         if (currentMembers?.member?.length !== undefined &&
           currentMembers?.member?.length >= config.group.maxMembers

@@ -349,8 +349,8 @@ const model = {
         await groupModel.exists(group._id)
 
         const currentGroup = await dbModel.findOne(
-          { account }, { group: 1, _id: 1 }
-        )
+          { account }, { group: 1, _id: 1, fullName: 1 }
+        ).lean()
 
         if (currentGroup === null) throw new NotFound('User not found', `The user with the account ${account} was not found`)
 
@@ -364,7 +364,13 @@ const model = {
         ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
 
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
-        if (isInvitation !== null && isInvitation !== undefined) await model.invitation.remove(account, group._id)
+        if (isInvitation !== null && isInvitation !== undefined) {
+          await model.invitation.remove(account, group._id)
+          const res = await dbModel.updateOne({ account }, { $push: { group } })
+          return res.acknowledged
+        }
+
+        await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: 'developer' })
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

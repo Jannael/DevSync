@@ -283,7 +283,7 @@ to add a group to the user
 ## Remove
 to remove a group from the user
 - if the group you are trying to remove is an invitation it will remove it as well
-- removeMember indicates if you want to remove the user from the group, ik its sound weird, but this function its called by the delete group fn, that means its no the same, removing a group from the user, because the user wants out and because the group its been deleted
+- removeMember: indicates if you want to remove the user from the group, ik its sound weird, but this function its called by the delete group fn, that means its no the same, removing a group from the user, because the user wants out and because the group its been deleted
 
 ### Functions
 - model.invitation.remove()

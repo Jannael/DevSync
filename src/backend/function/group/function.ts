@@ -22,7 +22,7 @@ const functions = {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want')
     return await model.get(req.body._id)
   },
-  create: async function (req: Request, res: Response) {
+  create: async function (req: Request, res: Response): Promise<IGroup> {
     // body = name, color, repository?, member?: [{ account, role }], techLead: [account]
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // techLead
     if (req.body?.name === undefined || req.body?.color === undefined) {

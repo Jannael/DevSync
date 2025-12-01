@@ -103,6 +103,9 @@ const controller = {
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
+    },
+    accept: async function (req: Request, res: Response) {
+
     }
   },
   group: {

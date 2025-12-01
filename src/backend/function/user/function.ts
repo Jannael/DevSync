@@ -163,6 +163,13 @@ const functions = {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
       return await model.invitation.reject(accessToken.account, req.body._id)
+    },
+    accept: async function (req: Request, res: Response): Promise<boolean> {
+      if (req.body._id === undefined) throw new UserBadRequest('Invalid credentials', 'You need to send the _id for the group you want to accept')
+      const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+      const { _id, color, name } = await groupModel.get(req.body._id)
+
+      return await model.group.add(accessToken.account, { _id, color, name }, false)
     }
   },
   group: {

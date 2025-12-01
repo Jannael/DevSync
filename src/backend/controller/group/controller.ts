@@ -28,7 +28,14 @@ const controller = {
       ErrorHandler.user(res, e as CustomError)
     }
   },
-  delete: async function (req: Request, res: Response) {},
+  delete: async function (req: Request, res: Response) {
+    try {
+      const result = await fn.delete(req, res)
+      res.json({ complete: result })
+    } catch (e) {
+      ErrorHandler.user(res, e as CustomError)
+    }
+  },
   member: {
     remove: async function (req: Request, res: Response) {}
   }

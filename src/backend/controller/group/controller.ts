@@ -37,7 +37,14 @@ const controller = {
     }
   },
   member: {
-    remove: async function (req: Request, res: Response) {}
+    remove: async function (req: Request, res: Response) {
+      try {
+        const result = await fn.member.remove(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
+    }
   }
 }
 

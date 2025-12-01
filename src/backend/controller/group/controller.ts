@@ -6,7 +6,6 @@ const controller = {
   update: async function (req: Request, res: Response) {},
   delete: async function (req: Request, res: Response) {},
   member: {
-    add: async function (req: Request, res: Response) {},
     remove: async function (req: Request, res: Response) {}
   }
 }

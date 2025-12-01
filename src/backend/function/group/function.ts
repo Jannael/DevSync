@@ -77,7 +77,12 @@ const functions = {
     return await model.delete(accessToken.account, req.body._id)
   },
   member: {
-    add: async function (req: Request, res: Response) {},
+    add: async function (req: Request, res: Response) {
+      // body = _id, member: { account, role }
+      // const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
+      // if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to add the member')
+
+    },
     remove: async function (req: Request, res: Response) {}
   }
 

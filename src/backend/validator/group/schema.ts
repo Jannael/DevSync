@@ -35,6 +35,14 @@ const validator = {
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
+  },
+  member: function (obj: IGroup['member']) {
+    try {
+      const result = schema.shape.member.parse(obj)
+      return result
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
+    }
   }
 }
 

@@ -256,6 +256,7 @@ to get all the groups the user is in
 
 ## Add
 to add a group to the user
+[!NOTE] this function its to add a group to the user if its an invitation or not
 - if its an invitation it will remove it
 ### Functions
 - groupModel.exists()
@@ -268,6 +269,9 @@ to add a group to the user
   color: string
   name: string
 ```
+-addToTheGroup: boolean 
+  this is the parameter that indicates if its an invitation or not,
+  if its an invitation you need to say 'false', this parameter what actually its if you want to add it to the group, but remember a user belongs to the group unless he rejects the invitation
 ### Output:
 - boolean
 ### Errors

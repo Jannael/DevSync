@@ -191,6 +191,8 @@ it adds a member to the groups, remember user's belong to the group unless they 
 
 ## Remove
 to remove a user in group schema
+> [!WARNING]
+> It does not validate that a techLead is removing the member
 
 ### Functions:
 - authModel.exists()

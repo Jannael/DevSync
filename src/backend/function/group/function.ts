@@ -71,7 +71,11 @@ const functions = {
     validator.group.partial(req.body.data)
     return await model.update(accessToken._id, req.body._id, req.body.data)
   },
-  delete: async function (req: Request, res: Response) {},
+  delete: async function (req: Request, res: Response) {
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
+    if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to delete')
+    return await model.delete(accessToken.account, req.body._id)
+  },
   member: {
     add: async function (req: Request, res: Response) {},
     remove: async function (req: Request, res: Response) {}

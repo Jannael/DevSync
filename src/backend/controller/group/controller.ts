@@ -20,7 +20,14 @@ const controller = {
       ErrorHandler.user(res, e as CustomError)
     }
   },
-  update: async function (req: Request, res: Response) {},
+  update: async function (req: Request, res: Response) {
+    try {
+      const result = await fn.update(req, res)
+      res.json({ complete: true, result })
+    } catch (e) {
+      ErrorHandler.user(res, e as CustomError)
+    }
+  },
   delete: async function (req: Request, res: Response) {},
   member: {
     remove: async function (req: Request, res: Response) {}

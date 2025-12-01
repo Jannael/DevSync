@@ -105,7 +105,12 @@ const controller = {
       }
     },
     accept: async function (req: Request, res: Response) {
-
+      try {
+        const result = await fn.invitation.accept(req, res)
+        res.json({ complete: result })
+      } catch (e) {
+        ErrorHandler.user(res, e as CustomError)
+      }
     }
   },
   group: {

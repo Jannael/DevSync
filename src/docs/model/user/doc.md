@@ -256,8 +256,9 @@ to get all the groups the user is in
 
 ## Add
 to add a group to the user
-> .[!TIP].
->  this function its to add a group to the user if its an invitation or not.
+> [!TIP]
+> This function adds a group to the user if it’s an invitation or not.
+
 - if its an invitation it will remove it
 ### Functions
 - groupModel.exists()

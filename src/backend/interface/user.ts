@@ -19,6 +19,7 @@ export interface IUser {
   group?: IUserGroup[] | null
 }
 
+// refreshToken and accessToken have the same information
 export interface IRefreshToken extends Omit<IUser, 'refreshToken' | 'pwd'> {
   _id: Types.ObjectId
 }

@@ -63,7 +63,13 @@ const functions = {
       { fullName: accessToken.fullName, account: accessToken.account })
   },
   update: async function (req: Request, res: Response) {
-    // const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
+    // _id, data: { name?, color?, repository? }
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
+    if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to update')
+    if (req.body.data.techLead !== undefined || req.body.data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You only can update the name, color and repository')
+
+    validator.group.partial(req.body.data)
+    return await model.update(accessToken._id, req.body._id, req.body.data)
   },
   delete: async function (req: Request, res: Response) {},
   member: {

@@ -107,9 +107,10 @@ const model = {
       const user = await userDbModel.findOne({ _id: techLeadId }, { _id: 0, account: 1 }).lean()
       if (user === null) throw new NotFound('User not found')
 
+      await model.exists(groupId, user.account) // it validates the user its asking to update its actually a techLead
+
       const group = await dbModel.findOne({ _id: groupId }, { _id: 1, name: 1, color: 1 }).lean()
       if (group === null) throw new NotFound('Group not found')
-      await model.exists(group._id, user.account)
 
       validator.group.partial(data)
 

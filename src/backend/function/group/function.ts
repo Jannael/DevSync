@@ -62,7 +62,9 @@ const functions = {
     return await model.create(groupData,
       { fullName: accessToken.fullName, account: accessToken.account })
   },
-  update: async function (req: Request, res: Response) {},
+  update: async function (req: Request, res: Response) {
+    // const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
+  },
   delete: async function (req: Request, res: Response) {},
   member: {
     add: async function (req: Request, res: Response) {},

@@ -208,7 +208,7 @@ describe('group model', () => {
           fn: async function () {
             await model.update(user._id, new mongoose.Types.ObjectId(), { name: 'test' })
           },
-          error: new NotFound('Group not found')
+          error: new NotFound('Group not found', 'The group you are trying to access does not exist')
         }
       ]
 

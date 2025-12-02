@@ -39,6 +39,7 @@ const model = {
     try {
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
       if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
+      if (verifyEmail(data.account)) throw new UserBadRequest('Invalid credentials', `The account ${data.account} is invalid`)
       validator.user.create(data)
 
       const exists = await dbModel.exists({ account: data.account })
@@ -154,9 +155,7 @@ const model = {
     update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
       try {
         if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-
-        const isValidAccount = verifyEmail(account)
-        if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
 
         const newAccountExists = await dbModel.exists({ account })
         if (newAccountExists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')
@@ -235,9 +234,8 @@ const model = {
     },
     create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadAccount: string): Promise<boolean> {
       try {
-        if (!verifyEmail(user.account)) {
-          throw new UserBadRequest('Invalid credentials', 'The account must match example@service.com')
-        }
+        if (!verifyEmail(user.account)) throw new UserBadRequest('Invalid credentials', `The account ${user.account} is invalid`)
+        if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
 
         validator.user.invitation.add(invitation)
         await groupModel.exists(invitation._id, techLeadAccount)
@@ -282,6 +280,7 @@ const model = {
     },
     reject: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
 
         const exists = await dbModel.exists({ account: userAccount })
@@ -306,6 +305,7 @@ const model = {
     },
     remove: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
 
         const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
@@ -339,6 +339,7 @@ const model = {
     },
     add: async function (account: string, group: IUserGroup, addToTheGroup: boolean = false): Promise<boolean> {
       try {
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
         validator.user.group.add(group)
         await groupModel.exists(group._id)
 
@@ -398,6 +399,7 @@ const model = {
     },
     update: async function (userAccount: string, groupId: Types.ObjectId, data: { name: string, color: string }): Promise<boolean> {
       try {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
         const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': groupId })
         if (isInvitation !== null) {

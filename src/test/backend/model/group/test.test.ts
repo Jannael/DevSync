@@ -26,7 +26,6 @@ afterAll(async () => {
 let user: IRefreshToken
 let group: IGroup
 let secondUser: IRefreshToken
-let secondGroup: IGroup
 const users: IRefreshToken[] = []
 
 beforeAll(async () => {
@@ -53,11 +52,6 @@ beforeAll(async () => {
     pwd: 'test',
     nickName: 'test'
   })
-
-  secondGroup = await model.create({
-    name: 'test',
-    color: '#000000'
-  }, { account: user.account, fullName: user.fullName })
 })
 
 describe('group model', () => {

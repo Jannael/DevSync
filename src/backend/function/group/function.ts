@@ -69,7 +69,8 @@ const functions = {
     if (req.body?.data.techLead !== undefined || req.body?.data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You only can update the name, color and repository')
 
     validator.group.partial(req.body?.data)
-    return await model.update(accessToken._id, req.body?._id, req.body?.data)
+    await model.exists(req.body?._id, accessToken.account)
+    return await model.update(req.body?._id, req.body?.data)
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead

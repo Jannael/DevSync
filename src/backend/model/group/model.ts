@@ -104,18 +104,12 @@ const model = {
       throw new DatabaseError('Failed to save', 'The group was not created, something went wrong please try again')
     }
   },
-  update: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
+  update: async function (groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
     try {
-      if (!Types.ObjectId.isValid(techLeadId)) throw new UserBadRequest('Invalid credentials', 'The techLeadId is invalid')
       if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The groupId is invalid')
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
       if (data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the member')
       if (data.techLead !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the techLead')
-
-      const user = await userDbModel.findOne({ _id: techLeadId }, { _id: 0, account: 1 }).lean()
-      if (user === null) throw new NotFound('User not found')
-
-      await model.exists(groupId, user.account) // it validates the user its asking to update its actually a techLead
 
       const group = await dbModel.findOne({ _id: groupId }, { _id: 1, name: 1, color: 1 }).lean()
       if (group === null) throw new NotFound('Group not found')

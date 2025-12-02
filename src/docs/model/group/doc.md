@@ -21,7 +21,6 @@ gets the whole group information
     role: string
   }>
 ```
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -49,9 +48,14 @@ it has two different uses
 
 ## Create
 to create a group
-- if you do not add the techLead who is creating the group, it will add it for you
-- for each techLead/member you add, it will send an invitation
-- adds the group to user schema
+> [!TIP]
+> if you do not add the techLead who is creating the group, it will add it for you
+
+> [!IMPORTANT]
+> for each techLead/member you add, it will send an invitation
+
+> [!CAUTION]
+> it adds the group to user schema
 
 ### Functions
 this function uses some other functions
@@ -106,6 +110,8 @@ this function uses some other functions
 ## Update
 to update a group, you only can update the name, color or repository
 - it updates the group on user schema
+> [!CAUTION]
+> it does not validate who is making the operation
 
 ### Functions:
 this function uses some other functions

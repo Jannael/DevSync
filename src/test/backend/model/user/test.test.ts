@@ -565,8 +565,18 @@ describe('user model', () => {
 
     describe('reject user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.reject(secondUser.account, group[group.length - 1]._id)
+        const res = await model.invitation.reject(secondUser.account, group[group.length - 2]._id)
         expect(res).toEqual(true)
+
+        await model.invitation.create({
+          account: secondUser.account,
+          fullName: secondUser.fullName,
+          role: 'techLead'
+        }, {
+          _id: group[group.length - 2]._id,
+          name: group[group.length - 2].name,
+          color: group[group.length - 2].color
+        }, user.account)
       })
 
       test('error', async () => {

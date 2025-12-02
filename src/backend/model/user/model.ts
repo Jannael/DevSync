@@ -293,8 +293,10 @@ const model = {
         if (!Types.ObjectId.isValid(invitationId)) {
           throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
         }
+        const exists = await dbModel.exists({ account: userAccount })
+        if (exists === null) throw new NotFound('User not found')
 
-        const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': invitationId })
+        const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': invitationId }).lean()
         if (isInvitation === null) throw new UserBadRequest('Invalid credentials', 'You do not have an invitation for the group you want to reject')
 
         await groupModel.member.remove(invitationId, userAccount)

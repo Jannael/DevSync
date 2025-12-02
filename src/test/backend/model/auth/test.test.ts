@@ -196,7 +196,7 @@ describe('auth model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.exists('notExists')
+            await model.exists('notExists@gmail.com')
           },
           error: new NotFound('User not found')
         }

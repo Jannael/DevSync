@@ -349,7 +349,7 @@ describe('group model', () => {
 
   describe('delete', () => {
     test('', async () => {
-      const res = await model.delete(user.account, group._id)
+      const res = await model.delete(group._id)
       expect(res).toEqual(true)
     })
 
@@ -357,13 +357,7 @@ describe('group model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.delete(secondUser.account, secondGroup._id)
-          },
-          error: new Forbidden('Access denied', 'Only tech leads can delete a group')
-        },
-        {
-          fn: async function () {
-            await model.delete(user.account, new mongoose.Types.ObjectId())
+            await model.delete(new mongoose.Types.ObjectId())
           },
           error: new NotFound('Group not found', 'The group you are trying to delete does not exist')
         }

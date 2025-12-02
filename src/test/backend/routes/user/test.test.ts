@@ -682,6 +682,34 @@ describe('/user/v1/', () => {
 
         expect(res.body.complete).toEqual(true)
       })
+
+      test('error', async () => {
+        const cases = [
+          {
+            fn: async function () {
+              return await agent
+                .post(endpoint)
+                .send({
+                  _id: new mongoose.Types.ObjectId()
+                })
+            },
+            error: {
+              code: 404,
+              complete: false,
+              msg: 'Group not found',
+              description: 'The group you are trying to access does not exist'
+            }
+          }
+        ]
+
+        for (const { fn, error } of cases) {
+          const res = await fn()
+          expect(res.statusCode).toEqual(error.code)
+          expect(res.body.msg).toEqual(error.msg)
+          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.description).toEqual(error.description)
+        }
+      })
     })
 
     describe('/reject/invitation/', () => {

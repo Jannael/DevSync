@@ -39,7 +39,7 @@ const model = {
     try {
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
       if (data.refreshToken !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
-      if (verifyEmail(data.account)) throw new UserBadRequest('Invalid credentials', `The account ${data.account} is invalid`)
+      if (!verifyEmail(data.account)) throw new UserBadRequest('Invalid credentials', `The account ${data.account} is invalid`)
       validator.user.create(data)
 
       const exists = await dbModel.exists({ account: data.account })

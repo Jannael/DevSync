@@ -167,7 +167,7 @@ describe('user model', () => {
 
             await model.create(obj)
           },
-          error: new UserBadRequest('Invalid credentials', 'Invalid email address')
+          error: new UserBadRequest('Invalid credentials', 'The account test is invalid')
         }
       ]
 

@@ -271,6 +271,17 @@ const model = {
         )
         return false
       }
+    },
+    role: async function (account: string, role: string) {
+      try {
+
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The user was not updated')
+        )
+        return false
+      }
     }
   }
 }

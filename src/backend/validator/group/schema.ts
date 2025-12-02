@@ -13,8 +13,8 @@ const schema = z.object({
   member: z.array(z.object({
     account: z.string('member.account is required').email(),
     fullName: z.string('member.fullName is required').min(3).max(255),
-    role: z.enum(['techLead', 'developer', 'documenter'], {
-      message: 'member.role is required and must be one of: techLead, developer, documenter'
+    role: z.enum(['developer', 'documenter'], {
+      message: 'member.role is required and must be one of: developer, documenter'
     })
   })).optional()
 })
@@ -40,6 +40,14 @@ const validator = {
     try {
       const result = schema.shape.member.parse(obj)
       return result
+    } catch (e) {
+      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
+    }
+  },
+  role: function (role: string) {
+    try {
+      const roles = ['techLead', 'documenter', 'developer']
+      return roles.includes(role)
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }

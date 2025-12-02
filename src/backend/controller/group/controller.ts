@@ -44,6 +44,9 @@ const controller = {
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
+    },
+    update: {
+      role: async function (req: Request, res: Response) {}
     }
   }
 }

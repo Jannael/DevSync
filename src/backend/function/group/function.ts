@@ -83,9 +83,13 @@ const functions = {
       if (req.body.account === undefined) throw new UserBadRequest('Missing data', 'You need to send the account of the member you want to remove')
       await model.exists(req.body._id, accessToken.account)
       return await model.member.remove(req.body._id, req.body.account)
+    },
+    update: {
+      role: async function (req: Request, res: Response) {
+
+      }
     }
   }
-
 }
 
 export default functions

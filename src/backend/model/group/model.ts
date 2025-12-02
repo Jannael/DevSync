@@ -112,7 +112,7 @@ const model = {
       if (data.techLead !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the techLead')
 
       const group = await dbModel.findOne({ _id: groupId }, { _id: 1, name: 1, color: 1 }).lean()
-      if (group === null) throw new NotFound('Group not found')
+      if (group === null) throw new NotFound('Group not found', 'The group you are trying to update does not exist')
 
       validator.group.partial(data)
 

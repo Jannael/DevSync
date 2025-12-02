@@ -181,7 +181,7 @@ describe('group model', () => {
 
   describe('update', () => {
     test('', async () => {
-      const res = await model.update(user._id, group._id, { color: '#111111' })
+      const res = await model.update(group._id, { color: '#111111' })
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
         name: 'test',
@@ -200,15 +200,9 @@ describe('group model', () => {
       const cases = [
         {
           fn: async function () {
-            await model.update(new mongoose.Types.ObjectId(), group._id, { name: 'test' })
+            return await model.update(new mongoose.Types.ObjectId(), { name: 'test' })
           },
-          error: new NotFound('User not found')
-        },
-        {
-          fn: async function () {
-            return await model.update(user._id, new mongoose.Types.ObjectId(), { name: 'test' })
-          },
-          error: new NotFound('Group not found', 'The group you are trying to access does not exist')
+          error: new NotFound('Group not found', 'The group you are trying to update does not exist')
         }
       ]
 

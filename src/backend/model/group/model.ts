@@ -6,16 +6,15 @@ import { CustomError, DatabaseError, Forbidden, NotFound, UserBadRequest } from 
 import UserModel from '../user/model'
 import errorHandler from '../../error/handler'
 import config from '../../config/config'
-import { omit } from '../../utils/utils'
+import { omit, verifyEmail } from '../../utils/utils'
 import userDbModel from '../../database/schemas/node/user'
 import authModel from './../../../backend/model/auth/model'
 
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
     try {
-      if (!Types.ObjectId.isValid(id)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      if (!Types.ObjectId.isValid(id)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+
       const res = await dbModel.findOne({ _id: id }, { member: 0, techLead: 0 }).lean()
       if (res === null) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
       return res
@@ -29,14 +28,13 @@ const model = {
   },
   exists: async function (groupId: Types.ObjectId, techLeadAccount?: string): Promise<boolean> {
     try {
-      if (!Types.ObjectId.isValid(groupId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
       const res = await dbModel.exists({ _id: groupId })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
 
       if (techLeadAccount !== undefined) {
+        if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
         const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': techLeadAccount })
         if (isTechLead === null || isTechLead === undefined) throw new Forbidden('Access denied', 'The group exists but the user is not a techLead')
       }
@@ -52,6 +50,7 @@ const model = {
   },
   create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
     try {
+      if (!verifyEmail(techLead.account)) throw new UserBadRequest('Invalid credentials', `The account ${techLead.account} is invalid`)
       if (data.techLead === undefined) data.techLead = []
       if (!data.techLead.includes(techLead)) data.techLead.push(techLead)
 
@@ -154,6 +153,7 @@ const model = {
   },
   delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
     try {
+      if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
       if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
       await authModel.exists(techLeadAccount)
@@ -189,6 +189,7 @@ const model = {
   member: {
     add: async function (groupId: Types.ObjectId, member: NonNullable<IGroup['member']>[number]): Promise<boolean> {
       try {
+        if (!verifyEmail(member.account)) throw new UserBadRequest('Invalid credentials', `The account ${member.account} is invalid`)
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const currentMembers = await dbModel.findOne({ _id: groupId }, { member: 1, _id: 0 })
@@ -225,6 +226,7 @@ const model = {
     },
     remove: async function (groupId: Types.ObjectId, account: string): Promise<boolean> {
       try {
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
         await authModel.exists(account)
 
@@ -259,6 +261,8 @@ const model = {
     ): Promise<boolean> {
       try {
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+        if (!verifyEmail(data.account)) throw new UserBadRequest('Invalid credentials', `The account ${data.account} is invalid`)
+        if (!verifyEmail(updateData.account)) throw new UserBadRequest('Invalid credentials', `The account ${updateData.account} is invalid`)
 
         const exists = await dbModel.exists({ _id: groupId })
         if (exists === null) throw new NotFound('Group not found')

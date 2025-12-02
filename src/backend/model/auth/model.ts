@@ -10,8 +10,7 @@ import errorHandler from '../../error/handler'
 const model = {
   login: async function (account: string, pwd: string): Promise<IRefreshToken> {
     try {
-      const isValidAccount = verifyEmail(account)
-      if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
+      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
 
       const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
 
@@ -38,6 +37,7 @@ const model = {
   },
   exists: async function (account: string): Promise<boolean> {
     try {
+      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
       const exists = await dbModel.exists({ account })
       if (exists === null) throw new NotFound('User not found')
       return true
@@ -52,9 +52,7 @@ const model = {
   refreshToken: {
     save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const exists = await dbModel.exists({ _id: userId })
         if (exists == null) throw new NotFound('User not found')
@@ -81,9 +79,7 @@ const model = {
     },
     remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const exists = await dbModel.exists({ _id: userId })
         if (exists == null) throw new NotFound('User not found')
@@ -104,9 +100,7 @@ const model = {
     },
     verify: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const result = await dbModel.findOne(
           { _id: userId },

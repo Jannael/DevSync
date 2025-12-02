@@ -151,12 +151,12 @@ to delete a group
 - it removes the group from user schema
 > [!CAUTION]
 > it does not validate who is making the operation
+
 ### Functions:
 this functions uses some other functions
 - UserModel.group.remove()
 
 ### Parameters:
-- techLeadAccount string
 - groupId ObjectId
 
 ### Output
@@ -173,7 +173,11 @@ this functions uses some other functions
 # Member
 
 ## Add
-it adds a member to the groups, remember user's belong to the group unless they reject the invitation
+it adds a member to the groups, 
+> [!TIP]
+> remember user's belong to the group unless they reject the invitation
+> [!CAUTION]
+> this function does not validates who is making the operation, only the data for it
 
 ### Parameters:
 - groupId ObjectId
@@ -219,6 +223,8 @@ to remove a user in group schema
 
 ## Update
 to update a user in group schema
+> [!CAUTION]
+> it does not validate who is making the operation
 
 ### Parameters:
 - groupId ObjectId

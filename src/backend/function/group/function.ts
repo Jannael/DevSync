@@ -85,8 +85,20 @@ const functions = {
       return await model.member.remove(req.body._id, req.body.account)
     },
     update: {
-      role: async function (req: Request, res: Response) {
+      role: async function (req: Request, res: Response): Promise<boolean> {
+        // body = _idGroup, role, account
+        const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+        if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group')
+        if (req.body?.role === undefined) throw new UserBadRequest('Missing data', 'You need to send the role for the user')
+        validator.group.role(req.body.role)
+        if (req.body?.account === undefined) throw new UserBadRequest('Missing data', 'You need to send the account for the user you want to change the role')
 
+        const { _id, role, account } = req.body
+        await model.exists(_id, accessToken.account)
+        const { fullName } = await userModel.get(account, { fullName: 1 })
+
+        await model.member.remove(_id, account)
+        return await model.member.add(_id, { role, account, fullName })
       }
     }
   }

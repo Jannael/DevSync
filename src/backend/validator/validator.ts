@@ -14,7 +14,8 @@ const validator = {
   group: {
     create: group.create,
     partial: group.partial,
-    member: group.member
+    member: group.member,
+    role: group.role
   }
 }
 

@@ -45,12 +45,9 @@ const validator = {
     }
   },
   role: function (role: string) {
-    try {
-      const roles = ['techLead', 'documenter', 'developer']
-      return roles.includes(role)
-    } catch (e) {
-      throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
-    }
+    const roles = ['techLead', 'documenter', 'developer']
+    if (!roles.includes(role)) throw new UserBadRequest('Invalid credentials', 'The role must be one of: techLead, documenter, developer')
+    return true
   }
 }
 

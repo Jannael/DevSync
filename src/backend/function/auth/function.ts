@@ -41,11 +41,11 @@ const functions = {
 
       if (req.body?.TEST_PWD !== undefined &&
         req.body?.TEST_PWD === TEST_PWD_ENV
-      ) code = generateCode(req.body.TEST_PWD)
+      ) code = generateCode(req.body?.TEST_PWD)
 
-      if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
+      if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
-      const jwtEncrypt = encrypt({ code, account: req.body.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
+      const jwtEncrypt = encrypt({ code, account: req.body?.account }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
       res.cookie('code', jwtEncrypt, config.cookies.code)
       return true
     },
@@ -90,11 +90,11 @@ const functions = {
 
         if (req.body?.TEST_PWD !== undefined &&
           req.body?.TEST_PWD === TEST_PWD_ENV
-        ) code = generateCode(req.body.TEST_PWD)
+        ) code = generateCode(req.body?.TEST_PWD)
 
-        const user = await model.login(req.body.account, req.body.pwd)
+        const user = await model.login(req.body?.account, req.body?.pwd)
 
-        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body.account, code)
+        if (req.body?.TEST_PWD === undefined) await sendEmail(req.body?.account, code)
 
         const token = encrypt(user, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
         const hashCode = encrypt({ code }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
@@ -115,7 +115,7 @@ const functions = {
 
         const code = jwt.verify(jwtCode, JWT_AUTH_ENV)
         if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re code token is invalid')
-        if (code.code !== req.body.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
+        if (code.code !== req.body?.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
 
         const user = jwt.verify(jwtToken, JWT_AUTH_ENV)
         if (typeof user === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re')
@@ -194,15 +194,15 @@ const functions = {
 
         if (req.body?.TEST_PWD === undefined) {
           await sendEmail(accessToken.account, code)
-          await sendEmail(req.body.newAccount, code)
+          await sendEmail(req.body?.newAccount, code)
         }
 
-        if (accessToken.account === req.body.newAccount) {
+        if (accessToken.account === req.body?.newAccount) {
           throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')
         }
 
         const codeEncrypted = encrypt({ code }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
-        const codeNewAccountEncrypted = encrypt({ code: codeNewAccount, account: req.body.newAccount }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.codeNewAccount)
+        const codeNewAccountEncrypted = encrypt({ code: codeNewAccount, account: req.body?.newAccount }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.codeNewAccount)
 
         res.cookie('currentAccount', codeEncrypted, config.cookies.code)
         res.cookie('newAccount', codeNewAccountEncrypted, config.cookies.codeNewAccount)
@@ -232,8 +232,8 @@ const functions = {
           typeof accessToken === 'string'
         ) throw new UserBadRequest('Invalid credentials', 'The codes, or you\'re session token are invalid')
 
-        if (code.code !== req.body.codeCurrentAccount) throw new UserBadRequest('Invalid credentials', 'Current account code is wrong')
-        if (codeNewAccount.code !== req.body.codeNewAccount) throw new UserBadRequest('Invalid credentials', 'New account code is wrong')
+        if (code.code !== req.body?.codeCurrentAccount) throw new UserBadRequest('Invalid credentials', 'Current account code is wrong')
+        if (codeNewAccount.code !== req.body?.codeNewAccount) throw new UserBadRequest('Invalid credentials', 'New account code is wrong')
 
         res.clearCookie('currentAccount')
         res.clearCookie('newAccount')
@@ -252,7 +252,7 @@ const functions = {
           !verifyEmail(req.body?.account)
         ) throw new UserBadRequest('Missing data', 'Missing or invalid account it must match example@service.ext')
 
-        const dbValidation = await model.exists(req.body.account)
+        const dbValidation = await model.exists(req.body?.account)
         if (!dbValidation) throw new NotFound('User not found')
 
         let code = generateCode()

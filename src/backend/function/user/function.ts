@@ -46,7 +46,7 @@ const functions = {
 
     const decoded = getToken(req, 'account', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
-    if (decoded.account !== req.body.account) throw new UserBadRequest('Invalid credentials', 'Verified account does not match the sent account')
+    if (decoded.account !== req.body?.account) throw new UserBadRequest('Invalid credentials', 'Verified account does not match the sent account')
 
     req.body.account = decoded.account
 
@@ -147,9 +147,9 @@ const functions = {
         req.body?.role === undefined
       ) throw new UserBadRequest('Missing data', 'You need to send the _id for the group, account to invite and role')
 
-      const { _id, color, name } = await groupModel.get(req.body._id)
+      const { _id, color, name } = await groupModel.get(req.body?._id)
       const { account, role } = req.body
-      const { fullName } = await model.get(req.body.account, { fullName: 1 })
+      const { fullName } = await model.get(req.body?.account, { fullName: 1 })
 
       return await model.invitation.create(
         { account, fullName, role },
@@ -162,12 +162,12 @@ const functions = {
       if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the invitation you want to reject')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
-      return await model.invitation.reject(accessToken.account, req.body._id)
+      return await model.invitation.reject(accessToken.account, req.body?._id)
     },
     accept: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.body._id === undefined) throw new UserBadRequest('Invalid credentials', 'You need to send the _id for the group you want to accept')
+      if (req.body?._id === undefined) throw new UserBadRequest('Invalid credentials', 'You need to send the _id for the group you want to accept')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
-      const { _id, color, name } = await groupModel.get(req.body._id)
+      const { _id, color, name } = await groupModel.get(req.body?._id)
 
       return await model.group.add(accessToken.account, { _id, color, name }, false)
     }
@@ -183,14 +183,14 @@ const functions = {
 
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
-      return await model.group.remove(accessToken.account, req.body._id, true)
+      return await model.group.remove(accessToken.account, req.body?._id, true)
     },
     add: async function (req: Request, res: Response): Promise<boolean> {
       // body = _id(group you want to add)
       if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You did not send the _id for the group you want to add')
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
-      const { _id, color, name } = await groupModel.get(req.body._id)
+      const { _id, color, name } = await groupModel.get(req.body?._id)
 
       return await model.group.add(accessToken.account, { _id, color, name }, true)
     }

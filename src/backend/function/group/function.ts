@@ -20,7 +20,7 @@ const {
 const functions = {
   get: async function (req: Request, res: Response): Promise<IGroup> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want')
-    return await model.get(req.body._id)
+    return await model.get(req.body?._id)
   },
   create: async function (req: Request, res: Response): Promise<IGroup> {
     // body = name, color, repository?, member?: [{ account, role }], techLead: [account]
@@ -31,8 +31,8 @@ const functions = {
 
     const member: Array<{ account: string, fullName: string, role: string }> = []
     if (req.body?.member !== undefined &&
-      Array.isArray(req.body.member)) {
-      for (const { account, role } of req.body.member) {
+      Array.isArray(req.body?.member)) {
+      for (const { account, role } of req.body?.member) {
         if (account === undefined || role === undefined) continue
         const user = await userModel.get(account, { fullName: 1 })
         member.push({ account, fullName: user.fullName, role })
@@ -41,8 +41,8 @@ const functions = {
 
     const techLead: Array<{ account: string, fullName: string }> = []
     if (req.body?.techLead !== undefined &&
-      Array.isArray(req.body.techLead)) {
-      for (const account of req.body.techLead) {
+      Array.isArray(req.body?.techLead)) {
+      for (const account of req.body?.techLead) {
         if (account === undefined) continue
         const user = await userModel.get(account, { fullName: 1 })
         techLead.push({ account, fullName: user.fullName })
@@ -50,9 +50,9 @@ const functions = {
     }
 
     const groupData = {
-      name: req.body.name,
-      color: req.body.color,
-      repository: req.body.repository ?? undefined,
+      name: req.body?.name,
+      color: req.body?.color,
+      repository: req.body?.repository ?? undefined,
       member,
       techLead
     }
@@ -65,24 +65,24 @@ const functions = {
   update: async function (req: Request, res: Response): Promise<IGroup> {
     // _id, data: { name?, color?, repository? }
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
-    if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to update')
-    if (req.body.data.techLead !== undefined || req.body.data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You only can update the name, color and repository')
+    if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to update')
+    if (req.body?.data.techLead !== undefined || req.body?.data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You only can update the name, color and repository')
 
-    validator.group.partial(req.body.data)
-    return await model.update(accessToken._id, req.body._id, req.body.data)
+    validator.group.partial(req.body?.data)
+    return await model.update(accessToken._id, req.body?._id, req.body?.data)
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
-    if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to delete')
-    return await model.delete(accessToken.account, req.body._id)
+    if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to delete')
+    return await model.delete(accessToken.account, req.body?._id)
   },
   member: {
     remove: async function (req: Request, res: Response): Promise<boolean> {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
-      if (req.body._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id of the group to remove the user')
-      if (req.body.account === undefined) throw new UserBadRequest('Missing data', 'You need to send the account of the member you want to remove')
-      await model.exists(req.body._id, accessToken.account)
-      return await model.member.remove(req.body._id, req.body.account)
+      if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id of the group to remove the user')
+      if (req.body?.account === undefined) throw new UserBadRequest('Missing data', 'You need to send the account of the member you want to remove')
+      await model.exists(req.body?._id, accessToken.account)
+      return await model.member.remove(req.body?._id, req.body?.account)
     },
     update: {
       role: async function (req: Request, res: Response): Promise<boolean> {
@@ -90,7 +90,7 @@ const functions = {
         const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
         if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group')
         if (req.body?.role === undefined) throw new UserBadRequest('Missing data', 'You need to send the role for the user')
-        validator.group.role(req.body.role)
+        validator.group.role(req.body?.role)
         if (req.body?.account === undefined) throw new UserBadRequest('Missing data', 'You need to send the account for the user you want to change the role')
 
         const { _id, role, account } = req.body

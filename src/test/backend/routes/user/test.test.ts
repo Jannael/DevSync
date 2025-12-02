@@ -18,6 +18,7 @@ let agent: ReturnType<typeof request.agent>
 let user: IRefreshToken
 let group: IGroup
 let secondUser: IRefreshToken
+let secondGroup: IGroup
 
 beforeAll(async () => {
   app = await createApp()
@@ -38,7 +39,12 @@ beforeAll(async () => {
   })
 
   group = await groupModel.create({
-    name: 'test',
+    name: 'first group',
+    color: '#000000'
+  }, { account: user.account, fullName: user.fullName })
+
+  secondGroup = await groupModel.create({
+    name: 'second group',
     color: '#000000'
   }, { account: user.account, fullName: user.fullName })
 })
@@ -620,7 +626,7 @@ describe('/user/v1/', () => {
         expect(res.body).toStrictEqual({
           complete: true,
           invitation: [
-            { name: 'test', _id: expect.any(String), color: '#000000' }
+            { name: 'first group', _id: expect.any(String), color: '#000000' }
           ]
         })
       })
@@ -681,24 +687,32 @@ describe('/user/v1/', () => {
     describe('/reject/invitation/', () => {
       const endpoint = path + '/reject/invitation/'
       test('', async () => {
-        const agent = request.agent(app)
         await agent
+          .post(path + '/create/invitation/')
+          .send({
+            account: secondUser.account,
+            role: 'techLead',
+            _id: secondGroup._id
+          })
+
+        const secondUserAgent = request.agent(app)
+        await secondUserAgent
           .post('/auth/v1/request/refreshToken/code/')
           .send({
             account: secondUser.account,
             pwd: 'test',
             TEST_PWD: TEST_PWD_ENV
           })
-        await agent
+        await secondUserAgent
           .post('/auth/v1/request/refreshToken/')
           .send({
             code: '1234'
           })
 
-        const res = await agent
+        const res = await secondUserAgent
           .delete(endpoint)
           .send({
-            _id: group._id
+            _id: secondGroup._id
           })
 
         expect(res.body.complete).toEqual(true)
@@ -741,7 +755,16 @@ describe('/user/v1/', () => {
         expect(res.body).toStrictEqual({
           complete: true,
           group: [
-            { name: 'test', _id: expect.any(String), color: '#000000' }
+            {
+              name: 'first group',
+              _id: expect.any(String),
+              color: '#000000'
+            },
+            {
+              name: 'second group',
+              _id: expect.any(String),
+              color: '#000000'
+            }
           ]
         })
       })
@@ -788,12 +811,22 @@ describe('/user/v1/', () => {
           .send({
             _id: group._id
           })
+
         expect(res.body.complete).toEqual(true)
 
         const guard = await agent
           .get(path + '/get/group/')
 
-        expect(guard.body).toStrictEqual({ complete: true, group: [] })
+        expect(guard.body).toStrictEqual({
+          complete: true,
+          group: [
+            {
+              name: 'second group',
+              _id: expect.any(String),
+              color: '#000000'
+            }
+          ]
+        })
       })
 
       test('error', async () => {
@@ -830,6 +863,7 @@ describe('/user/v1/', () => {
           .send({
             _id: group._id
           })
+
         expect(res.body.complete).toEqual(true)
 
         const guard = await agent
@@ -838,7 +872,12 @@ describe('/user/v1/', () => {
         expect(guard.body).toStrictEqual({
           complete: true,
           group: [
-            { name: 'test', _id: expect.any(String), color: '#000000' }
+            { name: 'second group', _id: expect.any(String), color: '#000000' },
+            {
+              name: 'first group',
+              _id: expect.any(String),
+              color: '#000000'
+            }
           ]
         })
       })
@@ -879,6 +918,13 @@ describe('/user/v1/', () => {
           account: secondUser.account,
           role: 'techLead',
           _id: group._id
+        })
+      await agent
+        .post(path + '/create/invitation/')
+        .send({
+          account: secondUser.account,
+          role: 'techLead',
+          _id: secondGroup._id
         })
 
       await agent

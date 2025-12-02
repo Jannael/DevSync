@@ -294,6 +294,9 @@ const model = {
           throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
         }
 
+        const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': invitationId })
+        if (isInvitation === null) throw new UserBadRequest('Invalid credentials', 'You do not have an invitation for the group you want to reject')
+
         await groupModel.member.remove(invitationId, userAccount)
 
         const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })

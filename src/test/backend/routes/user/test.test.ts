@@ -651,6 +651,33 @@ describe('/user/v1/', () => {
       })
     })
 
+    describe('/accept/invitation/', () => {
+      const endpoint = path + '/accept/invitation/'
+      test('', async () => {
+        const agent = request.agent(app)
+        await agent
+          .post('/auth/v1/request/refreshToken/code/')
+          .send({
+            account: secondUser.account,
+            pwd: 'test',
+            TEST_PWD: TEST_PWD_ENV
+          })
+        await agent
+          .post('/auth/v1/request/refreshToken/')
+          .send({
+            code: '1234'
+          })
+
+        const res = await agent
+          .post(endpoint)
+          .send({
+            _id: group._id
+          })
+
+        expect(res.body.complete).toEqual(true)
+      })
+    })
+
     describe('/reject/invitation/', () => {
       const endpoint = path + '/reject/invitation/'
       test('', async () => {
@@ -761,7 +788,6 @@ describe('/user/v1/', () => {
           .send({
             _id: group._id
           })
-
         expect(res.body.complete).toEqual(true)
 
         const guard = await agent

@@ -118,7 +118,6 @@ this function uses some other functions
 - UserModel.group.update()
 
 ### Parameters
-- techLeadId: ObjectId
 - groupId: ObjectId
 - data: 
 ```TypeScript
@@ -150,7 +149,8 @@ this function uses some other functions
 ## Delete
 to delete a group
 - it removes the group from user schema
-
+> [!CAUTION]
+> it does not validate who is making the operation
 ### Functions:
 this functions uses some other functions
 - UserModel.group.remove()

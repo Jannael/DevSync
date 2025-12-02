@@ -145,17 +145,12 @@ const model = {
       throw new DatabaseError('Failed to save', 'The group was not updated, something went wrong please try again')
     }
   },
-  delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
+  delete: async function (groupId: Types.ObjectId): Promise<boolean> {
     try {
-      if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
       if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
-      await authModel.exists(techLeadAccount)
       const members = await dbModel.findOne({ _id: groupId }, { member: 1, techLead: 1 }).lean()
       if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
-
-      const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': techLeadAccount })
-      if (isTechLead === null) throw new Forbidden('Access denied', 'Only tech leads can delete a group')
 
       if (members.member !== undefined) {
         for (const member of members.member) {

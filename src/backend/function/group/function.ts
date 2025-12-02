@@ -75,7 +75,8 @@ const functions = {
   delete: async function (req: Request, res: Response): Promise<boolean> {
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV) // it must be techLead
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want to delete')
-    return await model.delete(accessToken.account, req.body?._id)
+    await model.exists(req.body?._id, accessToken.account)
+    return await model.delete(req.body?._id)
   },
   member: {
     remove: async function (req: Request, res: Response): Promise<boolean> {

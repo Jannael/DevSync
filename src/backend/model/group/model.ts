@@ -13,6 +13,9 @@ import authModel from './../../../backend/model/auth/model'
 const model = {
   get: async function (id: Types.ObjectId): Promise<IGroup> {
     try {
+      if (!Types.ObjectId.isValid(id)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
       const res = await dbModel.findOne({ _id: id }, { member: 0, techLead: 0 }).lean()
       if (res === null) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
       return res
@@ -26,6 +29,10 @@ const model = {
   },
   exists: async function (groupId: Types.ObjectId, techLeadAccount?: string): Promise<boolean> {
     try {
+      if (!Types.ObjectId.isValid(groupId)) {
+        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+      }
+
       const res = await dbModel.exists({ _id: groupId })
       if (res === null || res === undefined) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
 
@@ -100,6 +107,8 @@ const model = {
   },
   update: async function (techLeadId: Types.ObjectId, groupId: Types.ObjectId, data: Partial<IGroup>): Promise<IGroup> {
     try {
+      if (!Types.ObjectId.isValid(techLeadId)) throw new UserBadRequest('Invalid credentials', 'The techLeadId is invalid')
+      if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The groupId is invalid')
       if (data._id !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the _id')
       if (data.member !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the member')
       if (data.techLead !== undefined) throw new UserBadRequest('Invalid credentials', 'You can not change the techLead')
@@ -145,6 +154,8 @@ const model = {
   },
   delete: async function (techLeadAccount: string, groupId: Types.ObjectId): Promise<boolean> {
     try {
+      if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+
       await authModel.exists(techLeadAccount)
       const members = await dbModel.findOne({ _id: groupId }, { member: 1, techLead: 1 }).lean()
       if (members === null) throw new NotFound('Group not found', 'The group you are trying to delete does not exist')
@@ -178,6 +189,8 @@ const model = {
   member: {
     add: async function (groupId: Types.ObjectId, member: NonNullable<IGroup['member']>[number]): Promise<boolean> {
       try {
+        if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+
         const currentMembers = await dbModel.findOne({ _id: groupId }, { member: 1, _id: 0 })
         if (currentMembers === null) throw new NotFound('Group not found', 'The group you are trying to access was not found')
         if (currentMembers?.member !== undefined && currentMembers.member.find(m => m.account === member.account) !== undefined) return true
@@ -212,6 +225,7 @@ const model = {
     },
     remove: async function (groupId: Types.ObjectId, account: string): Promise<boolean> {
       try {
+        if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
         await authModel.exists(account)
 
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': account }, { techLead: 1, _id: 0 })
@@ -244,6 +258,8 @@ const model = {
       updateData: { fullName: string, account: string }
     ): Promise<boolean> {
       try {
+        if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
+
         const exists = await dbModel.exists({ _id: groupId })
         if (exists === null) throw new NotFound('Group not found')
 

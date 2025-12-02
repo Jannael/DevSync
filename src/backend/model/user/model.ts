@@ -65,9 +65,7 @@ const model = {
   },
   update: async function (data: Partial<IUser>, userId: Types.ObjectId): Promise<IRefreshToken> {
     try {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
       if (data.pwd !== undefined) {
         const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
@@ -123,9 +121,7 @@ const model = {
   },
   delete: async function (userId: Types.ObjectId): Promise<boolean> {
     try {
-      if (!Types.ObjectId.isValid(userId)) {
-        throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-      }
+      if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
       const groupParticipation = await dbModel.findOne({ _id: userId }, { _id: 0, group: 1, invitation: 1, account: 1 })
       if (groupParticipation === null) throw new NotFound('User not found')
@@ -157,9 +153,7 @@ const model = {
   account: {
     update: async function (userId: Types.ObjectId, account: string): Promise<IRefreshToken> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const isValidAccount = verifyEmail(account)
         if (!isValidAccount) throw new UserBadRequest('Invalid credentials', 'The account must match example@service.ext')
@@ -226,9 +220,7 @@ const model = {
   invitation: {
     get: async function (userId: Types.ObjectId): Promise<IUserInvitation[] | undefined | null> {
       try {
-        if (!Types.ObjectId.isValid(userId)) {
-          throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
         const user = await dbModel.findOne({ _id: userId }, { invitation: 1, _id: 0 }).lean()
         if (user === null) throw new NotFound('User not found')
@@ -290,9 +282,8 @@ const model = {
     },
     reject: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(invitationId)) {
-          throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+
         const exists = await dbModel.exists({ account: userAccount })
         if (exists === null) throw new NotFound('User not found')
 
@@ -315,9 +306,7 @@ const model = {
     },
     remove: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(invitationId)) {
-          throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
-        }
+        if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
 
         const res = await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
@@ -387,13 +376,8 @@ const model = {
     },
     remove: async function (account: string, groupId: Types.ObjectId, removeMember: boolean = false): Promise<boolean> {
       try {
-        if (!verifyEmail(account)) {
-          throw new UserBadRequest('Invalid credentials', 'The account is invalid')
-        }
-        if (!Types.ObjectId.isValid(groupId)) {
-          throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
-        }
-
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account is invalid')
+        if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
         if (removeMember) await groupModel.member.remove(groupId, account)
 
         const isInvitation = await dbModel.exists({ account, 'invitation._id': groupId })
@@ -414,6 +398,7 @@ const model = {
     },
     update: async function (userAccount: string, groupId: Types.ObjectId, data: { name: string, color: string }): Promise<boolean> {
       try {
+        if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
         const isInvitation = await dbModel.exists({ account: userAccount, 'invitation._id': groupId })
         if (isInvitation !== null) {
           const res = await dbModel.updateOne({ account: userAccount, 'invitation._id': groupId },

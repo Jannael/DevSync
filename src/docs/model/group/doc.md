@@ -176,6 +176,7 @@ this functions uses some other functions
 it adds a member to the groups, 
 > [!TIP]
 > remember user's belong to the group unless they reject the invitation
+
 > [!CAUTION]
 > this function does not validates who is making the operation, only the data for it
 

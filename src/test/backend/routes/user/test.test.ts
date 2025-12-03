@@ -679,6 +679,7 @@ describe('/user/v1/', () => {
           .send({
             _id: group._id
           })
+        console.log(res.body)
 
         expect(res.body.complete).toEqual(true)
       })

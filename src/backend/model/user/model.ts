@@ -337,7 +337,7 @@ const model = {
         return null
       }
     },
-    add: async function (account: string, group: IUserGroup, addToTheGroup: boolean = false): Promise<boolean> {
+    add: async function (account: string, group: IUserGroup): Promise<boolean> {
       try {
         if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
         validator.user.group.add(group)
@@ -361,7 +361,7 @@ const model = {
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
         if (isInvitation !== null && isInvitation !== undefined) throw new UserBadRequest('Invalid credentials', `The user with the account ${account} has an invitation for the group and should be accept to be part of it`)
 
-        if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: config.user.defaultRole })
+        await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: config.user.defaultRole })
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

@@ -169,7 +169,7 @@ const functions = {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
       const { _id, color, name } = await groupModel.get(req.body?._id)
 
-      return await model.group.add(accessToken.account, { _id, color, name }, false)
+      return await model.group.add(accessToken.account, { _id, color, name })
     }
   },
   group: {
@@ -192,7 +192,7 @@ const functions = {
 
       const { _id, color, name } = await groupModel.get(req.body?._id)
 
-      return await model.group.add(accessToken.account, { _id, color, name }, true)
+      return await model.group.add(accessToken.account, { _id, color, name })
     }
   }
 }

@@ -319,6 +319,26 @@ const model = {
         )
         return false
       }
+    },
+    accept: async function (userAccount: string, invitationId: Types.ObjectId): Promise<boolean> {
+      try {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
+        if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+        const group = await dbModel.findOne(
+          { account: userAccount },
+          { invitation: { $elemMatch: { _id: new Types.ObjectId(invitationId) } } }
+        ).lean()
+
+        await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
+        const res = await dbModel.updateOne({ account: userAccount }, { $push: { group } })
+        return res.acknowledged
+      } catch (e) {
+        errorHandler.allErrors(
+          e as CustomError,
+          new DatabaseError('Failed to save', 'The invitation was not accepted please try again')
+        )
+        return false
+      }
     }
   },
   group: {

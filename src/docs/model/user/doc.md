@@ -263,7 +263,10 @@ to get all the groups the user is in
 ## Add
 to add a group to the user
 > [!TIP]
-> This function adds a group to the user if it’s an invitation or not.
+> This function its to add a group with the id of it without invitation
+
+> [!IMPORTANT]
+> The user that are added with this function will by default be add as teh config file says
 
 - if its an invitation it will remove it
 ### Functions
@@ -294,8 +297,9 @@ to add a group to the user
 
 ## Remove
 to remove a group from the user
-- if the group you are trying to remove is an invitation it will remove it as well
-- removeMember: indicates if you want to remove the user from the group, ik its sound weird, but this function its called by the delete group fn, that means its no the same, removing a group from the user, because the user wants out and because the group its been deleted
+
+> [!IMPORTANT]
+> removeMember: indicates if you want to remove the user from the group, ik its sound weird, but this function its called by the delete group fn, that means its not the same, removing a group from the user, because the user wants to quit and because the group its been deleted
 
 ### Functions
 - model.invitation.remove()
@@ -315,7 +319,8 @@ to remove a group from the user
 
 ## Update
 to update a group the user is in 
-- if the group you are trying to update it is still an invitation it will update it as well
+> [!TIP]
+> if the group you are trying to update it is still an invitation it will update it as well
 ### Parameters
 - userAccount string
 - groupId ObjectId

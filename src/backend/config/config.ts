@@ -25,7 +25,8 @@ export default {
   },
   user: {
     maxInvitations: 5,
-    maxGroups: 5
+    maxGroups: 5,
+    defaultRole: 'developer'
   },
   group: {
     maxMembers: 5

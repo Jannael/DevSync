@@ -361,7 +361,7 @@ const model = {
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
         if (isInvitation !== null && isInvitation !== undefined) throw new UserBadRequest('Invalid credentials', `The user with the account ${account} has an invitation for the group and should be accept to be part of it`)
 
-        if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: 'developer' })
+        if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: config.user.defaultRole })
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 
@@ -380,11 +380,6 @@ const model = {
         if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account is invalid')
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The group _id is invalid')
         if (removeMember) await groupModel.member.remove(groupId, account)
-
-        const isInvitation = await dbModel.exists({ account, 'invitation._id': groupId })
-        if (isInvitation !== null && isInvitation !== undefined) {
-          return await model.invitation.remove(account, groupId)
-        }
 
         const res = await dbModel.updateOne({ account }, { $pull: { group: { _id: groupId } } })
         if (res.matchedCount === 0) throw new NotFound('User not found', `The user with the account ${account} was not found`)

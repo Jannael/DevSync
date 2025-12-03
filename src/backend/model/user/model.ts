@@ -329,7 +329,8 @@ const model = {
           { account: userAccount },
           { invitation: { $elemMatch: { _id: new Types.ObjectId(invitationId) } } }
         ).lean()
-        if (group === null || group.invitation === null || group.invitation === undefined) throw new NotFound('Invitation not found')
+        if (group === null) throw new NotFound('User not found')
+        if (group.invitation === null || group.invitation === undefined) throw new NotFound('Invitation not found')
 
         await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
         const res = await dbModel.updateOne({ account: userAccount }, { $push: { group: group.invitation[0] } })

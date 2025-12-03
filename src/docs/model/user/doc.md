@@ -241,6 +241,22 @@ to remove an invitation
 |NotFound|User not found||
 |DatabaseError|Failed to remove|The invitation was not removed from the user, something went wrong please try again|
 
+## Accept
+to accept an invitation
+### Parameters
+- userAccount string
+- invitationId ObjectId
+### Output 
+- boolean
+### Errors
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The invitation _id is invalid|
+|UserBadRequest|Invalid credentials|The account is invalid|
+|NotFound|User not found|
+|NotFound|Invitation not found||
+|DatabaseError|Failed to save|The invitation was not accepted please try again|
+
 # Group
 ## Get
 to get all the groups the user is in

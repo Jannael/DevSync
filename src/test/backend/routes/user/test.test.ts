@@ -679,7 +679,6 @@ describe('/user/v1/', () => {
           .send({
             _id: group._id
           })
-        console.log(res.body)
 
         expect(res.body.complete).toEqual(true)
       })
@@ -697,8 +696,8 @@ describe('/user/v1/', () => {
             error: {
               code: 404,
               complete: false,
-              msg: 'Group not found',
-              description: 'The group you are trying to access does not exist'
+              msg: 'Invitation not found',
+              description: undefined
             }
           }
         ]

@@ -324,13 +324,15 @@ const model = {
       try {
         if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         if (!Types.ObjectId.isValid(invitationId)) throw new UserBadRequest('Invalid credentials', 'The invitation _id is invalid')
+
         const group = await dbModel.findOne(
           { account: userAccount },
           { invitation: { $elemMatch: { _id: new Types.ObjectId(invitationId) } } }
         ).lean()
+        if (group === null || group.invitation === null || group.invitation === undefined) throw new NotFound('Invitation not found')
 
         await dbModel.updateOne({ account: userAccount }, { $pull: { invitation: { _id: invitationId } } })
-        const res = await dbModel.updateOne({ account: userAccount }, { $push: { group } })
+        const res = await dbModel.updateOne({ account: userAccount }, { $push: { group: group.invitation[0] } })
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(

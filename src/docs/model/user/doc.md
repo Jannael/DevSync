@@ -263,10 +263,10 @@ to get all the groups the user is in
 ## Add
 to add a group to the user
 > [!TIP]
-> This function its to add a group with the id of it without invitation
+> This function its to join a group with the id of it without invitation
 
 > [!IMPORTANT]
-> The user that are added with this function will by default be add as teh config file says
+> The user that are added with this function will by default be add as the config file says
 
 - if its an invitation it will remove it
 ### Functions

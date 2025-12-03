@@ -202,7 +202,7 @@ it adds a member to the groups,
 
 ## Remove
 to remove a user in group schema
-> [!WARNING]
+> [!CAUTION]
 > It does not validate that a techLead is removing the member
 
 ### Functions:

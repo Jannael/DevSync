@@ -1,6 +1,5 @@
 # User Model
 
-
 ## Get
 to get specific fields of the user with the _id
 
@@ -172,6 +171,9 @@ to get user's invitations
 
 ## Create
 to create an invitation to an specific user
+> [!WARNING]
+> Remember a user belongs to group unless it rejects the invitation so this function actually adds the user to the group
+
 ### Functions
 - groupModel.exists()
 - groupModel.member.add()
@@ -205,6 +207,8 @@ to create an invitation to an specific user
 
 ## Reject
 to reject an invitation
+> [!CAUTION]
+> remember a user belongs to the group unless it rejects the invitation so this function deletes the user, from the group
 
 ### Functions
 - groupModel.member.remove()
@@ -221,8 +225,10 @@ to reject an invitation
 |DatabaseError|Failed to remove|The invitation was not removed from the user, something went wrong please try again|
 
 ## Remove
-
 to remove an invitation
+> [!IMPORTANT]
+> This function its made to be call for other models in order to keep the data sync, which means it does not delete the user from the group the invitation came from
+
 ### Parameters
 - userAccount string
 - invitationId ObjectId

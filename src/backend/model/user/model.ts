@@ -359,7 +359,7 @@ const model = {
         ) throw new Forbidden('Access denied', `The user with the account ${account} has reached the maximum number of groups`)
 
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
-        if (isInvitation !== null && isInvitation !== undefined) await model.invitation.remove(account, group._id)
+        if (isInvitation !== null && isInvitation !== undefined) throw new UserBadRequest('Invalid credentials', `The user with the account ${account} has an invitation for the group and should be accept to be part of it`)
 
         if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: 'developer' })
 

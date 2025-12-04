@@ -82,7 +82,7 @@ describe('/group/v1/', () => {
           techLead: ['secondUser@gmail.com']
         })
 
-      group = res.body
+      group = res.body.result
 
       expect(res.body).toStrictEqual({
         complete: true,
@@ -120,7 +120,15 @@ describe('/group/v1/', () => {
   })
 
   describe('/get/', () => {
-    test('', async () => {})
+    const endpoint = path + '/get/'
+    test('', async () => {
+      const res = await request(app)
+        .post(endpoint)
+        .send({
+          _id: group._id
+        })
+      console.log(res.body.result)
+    })
     test('error', async () => {})
   })
 

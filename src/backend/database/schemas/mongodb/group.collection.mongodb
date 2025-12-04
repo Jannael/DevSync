@@ -10,7 +10,8 @@ db.createCollection('group', {
         },
         techLead: {
           bsonType: 'array',
-          maxItems: 5, 
+          maxItems: 5,
+          uniqueItems: true,
           items: {
             bsonType: 'object',
             description: 'tech lead',
@@ -32,6 +33,7 @@ db.createCollection('group', {
         },
         member: {
           bsonType: 'array',
+          uniqueItems: true,
           items: {
             bsonType: 'object',
             description: 'member',

@@ -232,7 +232,7 @@ const model = {
         return null
       }
     },
-    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadAccount: string): Promise<boolean> {
+    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadAccount: string, addMember: boolean = false): Promise<boolean> {
       try {
         if (!verifyEmail(user.account)) throw new UserBadRequest('Invalid credentials', `The account ${user.account} is invalid`)
         if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
@@ -264,7 +264,7 @@ const model = {
           currentInvitation?.invitation?.length >= config.user.maxInvitations
         ) throw new Forbidden('Access denied', `The user with the account ${user.account} has reached the maximum number of invitations`)
 
-        await groupModel.member.add(invitation._id, { ...user })
+        if (addMember) await groupModel.member.add(invitation._id, { ...user })
 
         const res = await dbModel.updateOne({ account: user.account }, { $push: { invitation } })
         if (res.matchedCount === 0) throw new NotFound('User not found')
@@ -360,7 +360,7 @@ const model = {
         return null
       }
     },
-    add: async function (account: string, group: IUserGroup): Promise<boolean> {
+    add: async function (account: string, group: IUserGroup, addToTheGroup: boolean = false): Promise<boolean> {
       try {
         if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
         validator.user.group.add(group)
@@ -384,7 +384,7 @@ const model = {
         const isInvitation = await dbModel.exists({ account, 'invitation._id': group._id })
         if (isInvitation !== null && isInvitation !== undefined) throw new UserBadRequest('Invalid credentials', `The user with the account ${account} has an invitation for the group and should be accept to be part of it`)
 
-        await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: config.user.defaultRole })
+        if (addToTheGroup) await groupModel.member.add(group._id, { account, fullName: currentGroup.fullName, role: config.user.defaultRole })
 
         const res = await dbModel.updateOne({ account }, { $push: { group } })
 

@@ -150,7 +150,8 @@ const functions = {
       return await model.invitation.create(
         { account, fullName, role },
         { _id, color, name },
-        accessToken.account
+        accessToken.account,
+        true
       )
     },
     reject: async function (req: Request, res: Response): Promise<boolean> {

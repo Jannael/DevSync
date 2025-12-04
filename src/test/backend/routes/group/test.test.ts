@@ -127,7 +127,17 @@ describe('/group/v1/', () => {
         .send({
           _id: group._id
         })
-      console.log(res.body.result)
+      expect(res.body.complete).toEqual(true)
+      expect(res.body.result).toStrictEqual({
+        _id: expect.any(String),
+        techLead: [
+          { fullName: 'test', account: 'secondUser@gmail.com' },
+          { fullName: 'test', account: 'firstUser@gmail.com' }
+        ],
+        name: 'firstGroup',
+        color: '#000000',
+        member: []
+      })
     })
     test('error', async () => {})
   })

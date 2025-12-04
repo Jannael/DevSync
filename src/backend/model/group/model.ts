@@ -50,7 +50,6 @@ const model = {
   },
   create: async function (data: Omit<IGroup, '_id'>, techLead: { fullName: string, account: string }): Promise<IGroup & Required<Pick<IGroup, '_id'>>> {
     try {
-      console.log(data)
       if (!verifyEmail(techLead.account)) throw new UserBadRequest('Invalid credentials', `The account ${techLead.account} is invalid`)
       if (data.techLead === undefined) data.techLead = []
       if (!data.techLead.includes(techLead)) data.techLead.push(techLead)

@@ -3,6 +3,11 @@ import { Express } from 'express'
 import request from 'supertest'
 import { Server } from 'node:http'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import { IEnv } from '../../../../backend/interface/env'
+
+dotenv.config({ quiet: true })
+const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
 
 afterAll(async () => {
   await mongoose.connection.close()
@@ -13,7 +18,7 @@ describe('auth router', () => {
   let server: Server
 
   beforeAll(async () => {
-    app = await createApp()
+    app = await createApp(DB_URL_ENV_TEST)
     server = app.listen(3000)
   })
 

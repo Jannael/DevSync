@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit'
 dotenv.config({ quiet: true })
 
 const PORT = process.env.PORT as string
+const dbUrl = process.env.DB_URL_ENV as string
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -14,7 +15,7 @@ const limiter = rateLimit({
 })
 
 async function init (PORT: string): Promise<void> {
-  const app = await createApp()
+  const app = await createApp(dbUrl)
   app.use(limiter)
   app.listen(PORT, () => console.log('server at PORT: ' + PORT))
 }

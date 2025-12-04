@@ -11,7 +11,7 @@ import { IGroup } from '../../../../backend/interface/group'
 import groupModel from '../../../../backend/model/group/model'
 
 dotenv.config({ quiet: true })
-const { TEST_PWD_ENV } = process.env as unknown as IEnv
+const { TEST_PWD_ENV, DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'TEST_PWD_ENV' | 'DB_URL_ENV_TEST'>
 
 let app: Express
 let agent: ReturnType<typeof request.agent>
@@ -21,7 +21,7 @@ let secondUser: IRefreshToken
 let secondGroup: IGroup
 
 beforeAll(async () => {
-  app = await createApp()
+  app = await createApp(DB_URL_ENV_TEST)
   agent = await request.agent(app)
 
   user = await userModel.create({

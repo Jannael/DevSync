@@ -2,16 +2,10 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import router from './../backend/routes/merge'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import { IEnv } from './interface/env'
 import middleware from './middleware/merge'
 
-dotenv.config({ quiet: true })
-
-const { DB_URL_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV'>
-
-export async function createApp (): Promise<express.Express> {
-  await mongoose.connect(DB_URL_ENV)
+export async function createApp (dbEnv: string): Promise<express.Express> {
+  await mongoose.connect(dbEnv)
     .then(() => console.log('connected to mongoose'))
     .catch(e => console.error('something went wrong connecting to mongoose', e))
 

@@ -8,14 +8,14 @@ import userModel from './../../../../backend/model/user/model'
 import { IRefreshToken } from '../../../../backend/interface/user'
 
 dotenv.config({ quiet: true })
-const { TEST_PWD_ENV } = process.env as unknown as IEnv
+const { TEST_PWD_ENV, DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'TEST_PWD_ENV' | 'DB_URL_ENV_TEST'>
 
 let app: Express
 let agent: ReturnType<typeof request.agent>
 let user: IRefreshToken
 
 beforeAll(async () => {
-  app = await createApp()
+  app = await createApp(DB_URL_ENV_TEST)
   agent = await request.agent(app)
 
   user = await userModel.create({

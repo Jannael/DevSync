@@ -71,7 +71,7 @@ const model = {
             _id: created._id,
             name: created.name,
             color: created.color
-          }, techLead.account)
+          })
         }
       }
 
@@ -81,7 +81,7 @@ const model = {
             _id: created._id,
             name: created.name,
             color: created.color
-          }, techLead.account)
+          })
         }
       }
 

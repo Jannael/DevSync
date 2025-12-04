@@ -369,7 +369,7 @@ describe('user model', () => {
           _id: group[0]._id,
           name: group[0].name,
           color: group[0].color
-        }, user.account)
+        }, true)
 
         expect(res).toBe(true)
       })
@@ -386,9 +386,9 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '#000000'
-              }, user.account)
+              }, true)
             },
-            error: new NotFound('Group not found', 'The group you are trying to access does not exist')
+            error: new NotFound('Group not found', 'The group you are trying to access was not found')
           },
           {
             fn: async function () {
@@ -400,7 +400,7 @@ describe('user model', () => {
                 _id: notExistUser,
                 name: 'no group',
                 color: '1234567'
-              }, user.account)
+              }, true)
             },
             error: new UserBadRequest('Invalid credentials', 'Color must be a valid hex code')
           },
@@ -414,7 +414,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, user.account)
+              }, true)
             },
             error: new NotFound('User not found')
           },
@@ -428,7 +428,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, user.account)
+              }, true)
             },
             error: new Forbidden('Access denied', 'The user with the account test2@gmail.com already belongs to the group')
           },
@@ -442,7 +442,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, user.account)
+              }, true)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
           },
@@ -456,7 +456,7 @@ describe('user model', () => {
                 _id: group[0]._id,
                 name: group[0].name,
                 color: group[0].color
-              }, user.account)
+              }, true)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
           },
@@ -472,7 +472,7 @@ describe('user model', () => {
                   _id: el._id,
                   name: el.name,
                   color: el.color
-                }, user.account)
+                }, true)
               }
 
               await model.invitation.create({
@@ -483,7 +483,7 @@ describe('user model', () => {
                 _id: group[group.length - 1]._id,
                 name: group[group.length - 1].name,
                 color: group[group.length - 1].color
-              }, secondTechLead.account)
+              }, true)
             },
             error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com has reached the maximum number of invitations')
           }
@@ -512,6 +512,11 @@ describe('user model', () => {
             color: '#000000'
           },
           {
+            name: 'test-5',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
             name: 'test-1',
             _id: expect.any(Types.ObjectId),
             color: '#000000'
@@ -523,11 +528,6 @@ describe('user model', () => {
           },
           {
             name: 'test-3',
-            _id: expect.any(Types.ObjectId),
-            color: '#000000'
-          },
-          {
-            name: 'test-4',
             _id: expect.any(Types.ObjectId),
             color: '#000000'
           }
@@ -565,7 +565,7 @@ describe('user model', () => {
 
     describe('reject user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.reject(secondUser.account, group[group.length - 2]._id)
+        const res = await model.invitation.reject(secondUser.account, group[group.length - 3]._id)
         expect(res).toEqual(true)
 
         await model.invitation.create({
@@ -576,7 +576,7 @@ describe('user model', () => {
           _id: group[group.length - 2]._id,
           name: group[group.length - 2].name,
           color: group[group.length - 2].color
-        }, user.account)
+        })
       })
 
       test('error', async () => {

@@ -232,16 +232,11 @@ const model = {
         return null
       }
     },
-    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, techLeadAccount: string, addMember: boolean = false): Promise<boolean> {
+    create: async function (user: NonNullable<IGroup['member']>[number], invitation: IUserInvitation, addMember: boolean = false): Promise<boolean> {
       try {
         if (!verifyEmail(user.account)) throw new UserBadRequest('Invalid credentials', `The account ${user.account} is invalid`)
-        if (!verifyEmail(techLeadAccount)) throw new UserBadRequest('Invalid credentials', `The account ${techLeadAccount} is invalid`)
 
         validator.user.invitation.add(invitation)
-        await groupModel.exists(invitation._id, techLeadAccount)
-
-        const techLeadExists = await dbModel.findOne({ account: techLeadAccount }, { _id: 1 })
-        if (techLeadExists === null) throw new NotFound('User not found', 'TechLead does not exists')
 
         const currentInvitation = await dbModel.findOne(
           { account: user.account }, { invitation: 1, _id: 0, group: 1 }

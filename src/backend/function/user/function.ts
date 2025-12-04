@@ -147,10 +147,10 @@ const functions = {
       const { account, role } = req.body
       const { fullName } = await model.get(req.body?.account, { fullName: 1 })
 
+      await groupModel.exists(_id, accessToken.account)
       return await model.invitation.create(
         { account, fullName, role },
         { _id, color, name },
-        accessToken.account,
         true
       )
     },

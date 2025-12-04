@@ -7,14 +7,62 @@ import { IEnv } from '../../../../backend/interface/env'
 import userModel from './../../../../backend/model/user/model'
 import userDbModel from './../../../../backend/database/schemas/node/user'
 import groupDbModel from './../../../../backend/database/schemas/node/group'
-import { IRefreshToken } from '../../../../backend/interface/user'
 
 dotenv.config({ quiet: true })
-const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>
+const { DB_URL_ENV_TEST, TEST_PWD_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST' | 'TEST_PWD_ENV'>
 
 let app: Express
+let agent: ReturnType<typeof request.agent>
+let secondAgent: ReturnType<typeof request.agent>
+
 beforeAll(async () => {
   app = await createApp(DB_URL_ENV_TEST)
+
+  // get two agents tokens
+  await userModel.create({
+    fullName: 'test',
+    account: 'firstUser@gmail.com',
+    pwd: 'test',
+    nickName: 'test'
+  })
+
+  await userModel.create({
+    fullName: 'test',
+    account: 'secondUser@gmail.com',
+    pwd: 'test',
+    nickName: 'test'
+  })
+
+  agent = await request.agent(app)
+  secondAgent = await request.agent(app)
+
+  await agent
+    .post('/auth/v1/request/refreshToken/code/')
+    .send({
+      account: 'firstUser@gmail.com',
+      pwd: 'test',
+      TEST_PWD: TEST_PWD_ENV
+    })
+
+  await agent
+    .post('/auth/v1/request/refreshToken/')
+    .send({
+      code: '1234'
+    })
+
+  await secondAgent
+    .post('/auth/v1/request/refreshToken/code/')
+    .send({
+      account: 'secondUser@gmail.com',
+      pwd: 'test',
+      TEST_PWD: TEST_PWD_ENV
+    })
+
+  await secondAgent
+    .post('/auth/v1/request/refreshToken/')
+    .send({
+      code: '1234'
+    })
 })
 
 afterAll(async () => {

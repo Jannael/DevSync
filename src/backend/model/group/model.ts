@@ -234,6 +234,7 @@ const model = {
         })
 
         if (res.matchedCount === 0) throw new NotFound('Group not found', 'The group was not found')
+        if (res.modifiedCount === 0) throw new NotFound('User not found', 'The user is not in the group')
 
         return res.acknowledged
       } catch (e) {

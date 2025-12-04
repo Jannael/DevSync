@@ -24,12 +24,12 @@ afterAll(async () => {
 })
 
 describe('/group/v1/', () => {
-  describe('/get/', () => {
+  describe('/create/', () => {
     test('', async () => {})
     test('error', async () => {})
   })
 
-  describe('/create/', () => {
+  describe('/get/', () => {
     test('', async () => {})
     test('error', async () => {})
   })
@@ -45,6 +45,11 @@ describe('/group/v1/', () => {
   })
 
   describe('/member/remove/', () => {
+    test('', async () => {})
+    test('error', async () => {})
+  })
+
+  describe('/delete/', () => {
     test('', async () => {})
     test('error', async () => {})
   })

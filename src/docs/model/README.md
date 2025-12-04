@@ -1,13 +1,13 @@
 # Model
 
-This are the rules the models are based on and should followed to create a new model
+This are the rules the models are based on and should be followed to create a new model
 
 ## Rules
 ### Keep data sync
 > [!IMPORTANT]
-> A model fn does not necessarily has to make only one query, in order to keep the data sync it can make as much queries as need. 
+> A model fn does not necessarily has to make only one query, in order to keep the data sync it can make as much queries as needed.
 
-Example when you are deleting a user and this user belongs to a group, the model fn delete user have to be able to remove,the user from the groups, with a single model fn, putting less work on functions
+Example when you are deleting a user and this user belongs to a group, the model fn delete user have to be able to remove, the user from the groups, with a single model fn, putting less work on functions
 
 ### Different uses
 > [!IMPORTANT]

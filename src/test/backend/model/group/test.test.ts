@@ -148,9 +148,7 @@ describe('group model', () => {
         techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
         name: 'test',
         color: '#000000',
-        member: [
-          { account: 'test@gmail.com', fullName: 'test', role: 'developer' }
-        ]
+        member: []
       })
     })
 
@@ -192,9 +190,7 @@ describe('group model', () => {
         techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
         name: 'test',
         color: '#111111',
-        member: [
-          { account: 'test@gmail.com', fullName: 'test', role: 'developer' }
-        ]
+        member: []
       })
     })
 

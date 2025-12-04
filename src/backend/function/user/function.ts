@@ -1,7 +1,3 @@
-/***
-  User's CRUD
-***/
-
 import { IRefreshToken, IUser, IUserGroup, IUserInvitation } from '../../interface/user'
 import model from './../../model/user/model'
 import authModel from './../../model/auth/model'

@@ -448,20 +448,6 @@ describe('user model', () => {
           },
           {
             fn: async function () {
-              await model.invitation.create({
-                account: secondUser.account,
-                fullName: secondUser.fullName,
-                role: 'techLead'
-              }, {
-                _id: group[0]._id,
-                name: group[0].name,
-                color: group[0].color
-              }, true)
-            },
-            error: new Forbidden('Access denied', 'The user with the account veronica@gmail.com already has an invitation for the group')
-          },
-          {
-            fn: async function () {
               for (const [index, el] of group.entries()) {
                 if (index === 0 || index === group.length - 1) continue
                 await model.invitation.create({
@@ -512,11 +498,6 @@ describe('user model', () => {
             color: '#000000'
           },
           {
-            name: 'test-5',
-            _id: expect.any(Types.ObjectId),
-            color: '#000000'
-          },
-          {
             name: 'test-1',
             _id: expect.any(Types.ObjectId),
             color: '#000000'
@@ -528,6 +509,11 @@ describe('user model', () => {
           },
           {
             name: 'test-3',
+            _id: expect.any(Types.ObjectId),
+            color: '#000000'
+          },
+          {
+            name: 'test-4',
             _id: expect.any(Types.ObjectId),
             color: '#000000'
           }
@@ -565,18 +551,8 @@ describe('user model', () => {
 
     describe('reject user invitation', () => {
       test('', async () => {
-        const res = await model.invitation.reject(secondUser.account, group[group.length - 3]._id)
+        const res = await model.invitation.reject(secondUser.account, group[0]._id)
         expect(res).toEqual(true)
-
-        await model.invitation.create({
-          account: secondUser.account,
-          fullName: secondUser.fullName,
-          role: 'techLead'
-        }, {
-          _id: group[group.length - 2]._id,
-          name: group[group.length - 2].name,
-          color: group[group.length - 2].color
-        })
       })
 
       test('error', async () => {

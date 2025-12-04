@@ -145,8 +145,12 @@ describe('group model', () => {
       const res = await model.get(group._id)
       expect(res).toStrictEqual({
         _id: expect.any(Types.ObjectId),
+        techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
         name: 'test',
-        color: '#000000'
+        color: '#000000',
+        member: [
+          { account: 'test@gmail.com', fullName: 'test', role: 'developer' }
+        ]
       })
     })
 
@@ -185,8 +189,12 @@ describe('group model', () => {
       const guard = await model.get(group._id)
       expect(guard).toStrictEqual({
         _id: expect.any(Types.ObjectId),
+        techLead: [{ fullName: 'test', account: 'test@gmail.com' }],
         name: 'test',
-        color: '#111111'
+        color: '#111111',
+        member: [
+          { account: 'test@gmail.com', fullName: 'test', role: 'developer' }
+        ]
       })
     })
 

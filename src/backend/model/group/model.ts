@@ -15,7 +15,7 @@ const model = {
     try {
       if (!Types.ObjectId.isValid(id)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
 
-      const res = await dbModel.findOne({ _id: id }, { member: 0, techLead: 0 }).lean()
+      const res = await dbModel.findOne({ _id: id }).lean()
       if (res === null) throw new NotFound('Group not found', 'The group you are trying to access does not exist')
       return res
     } catch (e) {

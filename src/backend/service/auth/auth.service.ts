@@ -1,8 +1,3 @@
-/***
-  This function its to the auth-flow, first you request a code, then you verified it, with that cookie
-  you are able to create a user, also here we generate the accessTokens you need
-***/
-
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { decrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
@@ -31,7 +26,7 @@ const {
 'CRYPTO_ACCESS_TOKEN_ENV' |
 'CRYPTO_REFRESH_TOKEN_ENV'>
 
-const functions = {
+const service = {
   request: {
     code: async function (req: Request, res: Response): Promise<boolean> {
       let code = generateCode()
@@ -292,4 +287,4 @@ const functions = {
   }
 }
 
-export default functions
+export default service

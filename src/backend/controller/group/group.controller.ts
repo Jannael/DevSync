@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import fn from '../../function/group/function'
+import service from '../../service/group/group.service'
 import ErrorHandler from '../../error/handler'
 import { CustomError } from '../../error/error'
 
 const controller = {
   get: async function (req: Request, res: Response) {
     try {
-      const result = await fn.get(req, res)
+      const result = await service.get(req, res)
       res.json({ complete: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
@@ -14,7 +14,7 @@ const controller = {
   },
   create: async function (req: Request, res: Response) {
     try {
-      const result = await fn.create(req, res)
+      const result = await service.create(req, res)
       res.json({ complete: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
@@ -22,7 +22,7 @@ const controller = {
   },
   update: async function (req: Request, res: Response) {
     try {
-      const result = await fn.update(req, res)
+      const result = await service.update(req, res)
       res.json({ complete: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
@@ -30,7 +30,7 @@ const controller = {
   },
   delete: async function (req: Request, res: Response) {
     try {
-      const result = await fn.delete(req, res)
+      const result = await service.delete(req, res)
       res.json({ complete: result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
@@ -39,7 +39,7 @@ const controller = {
   member: {
     remove: async function (req: Request, res: Response) {
       try {
-        const result = await fn.member.remove(req, res)
+        const result = await service.member.remove(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -48,7 +48,7 @@ const controller = {
     update: {
       role: async function (req: Request, res: Response) {
         try {
-          const result = await fn.member.update.role(req, res)
+          const result = await service.member.update.role(req, res)
           res.json({ complete: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)

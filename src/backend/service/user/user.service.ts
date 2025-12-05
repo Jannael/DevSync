@@ -27,7 +27,7 @@ const {
 'CRYPTO_AUTH_ENV' |
 'CRYPTO_REFRESH_TOKEN_ENV'>
 
-const functions = {
+const service = {
   get: async function (req: Request, res: Response): Promise<IRefreshToken> {
     const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
@@ -193,4 +193,4 @@ const functions = {
   }
 }
 
-export default functions
+export default service

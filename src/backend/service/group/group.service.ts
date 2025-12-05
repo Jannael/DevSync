@@ -17,7 +17,7 @@ const {
 'CRYPTO_ACCESS_TOKEN_ENV'
 >
 
-const functions = {
+const service = {
   get: async function (req: Request, res: Response): Promise<IGroup> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want')
     return await model.get(req.body?._id)
@@ -106,4 +106,4 @@ const functions = {
   }
 }
 
-export default functions
+export default service

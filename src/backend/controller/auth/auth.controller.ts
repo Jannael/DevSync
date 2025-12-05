@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import fn from '../../function/auth/function'
+import service from '../../service/auth/auth.service'
 import ErrorHandler from './../../error/handler'
 import { CustomError } from '../../error/error'
 
@@ -7,7 +7,7 @@ const controller = {
   request: {
     code: async function (req: Request, res: Response) {
       try {
-        const result = await fn.request.code(req, res)
+        const result = await service.request.code(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -15,7 +15,7 @@ const controller = {
     },
     accessToken: async function (req: Request, res: Response) {
       try {
-        const result = await fn.request.accessToken(req, res)
+        const result = await service.request.accessToken(req, res)
         res.json({ complete: result })
       } catch (e) {
         (e as CustomError).link = [
@@ -29,7 +29,7 @@ const controller = {
     refreshToken: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.request.refreshToken.code(req, res)
+          const result = await service.request.refreshToken.code(req, res)
           res.json({ complete: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)
@@ -37,7 +37,7 @@ const controller = {
       },
       confirm: async function (req: Request, res: Response) {
         try {
-          const result = await fn.request.refreshToken.confirm(req, res)
+          const result = await service.request.refreshToken.confirm(req, res)
           res.json({ complete: result })
         } catch (e) {
           (e as CustomError).link = [
@@ -49,7 +49,7 @@ const controller = {
     },
     logout: async function (req: Request, res: Response) {
       try {
-        const result = await fn.request.logout(req, res)
+        const result = await service.request.logout(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -59,7 +59,7 @@ const controller = {
   verify: {
     code: async function (req: Request, res: Response) {
       try {
-        const result = await fn.verify.code(req, res)
+        const result = await service.verify.code(req, res)
         res.json({ complete: result })
       } catch (e) {
         (e as CustomError).link = [
@@ -73,7 +73,7 @@ const controller = {
     request: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.account.request.code(req, res)
+          const result = await service.account.request.code(req, res)
           res.json({ complete: result })
         } catch (e) {
           (e as CustomError).link = [
@@ -88,7 +88,7 @@ const controller = {
     verify: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.account.verify.code(req, res)
+          const result = await service.account.verify.code(req, res)
           res.json({ complete: result })
         } catch (e) {
           (e as CustomError).link = [
@@ -107,7 +107,7 @@ const controller = {
     request: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.pwd.request.code(req, res)
+          const result = await service.pwd.request.code(req, res)
           res.json({ complete: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)
@@ -117,7 +117,7 @@ const controller = {
     verify: {
       code: async function (req: Request, res: Response) {
         try {
-          const result = await fn.pwd.verify.code(req, res)
+          const result = await service.pwd.verify.code(req, res)
           res.json({ complete: result })
         } catch (e) {
           (e as CustomError).link = [

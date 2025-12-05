@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import fn from '../../function/user/function'
+import service from '../../service/user/user.service'
 import ErrorHandler from '../../error/handler'
 import { CustomError } from '../../error/error'
 
 const controller = {
   get: async function (req: Request, res: Response) {
     try {
-      const result = await fn.get(req, res)
+      const result = await service.get(req, res)
       res.json({ complete: true, ...result })
     } catch (e) {
       (e as CustomError).link = [
@@ -17,7 +17,7 @@ const controller = {
   },
   create: async function (req: Request, res: Response) {
     try {
-      const result = await fn.create(req, res)
+      const result = await service.create(req, res)
       res.status(201).json({ ...result, complete: true })
     } catch (e) {
       (e as CustomError).link = [
@@ -29,7 +29,7 @@ const controller = {
   },
   update: async function (req: Request, res: Response) {
     try {
-      const result = await fn.update(req, res)
+      const result = await service.update(req, res)
       res.json({ complete: true, user: result })
     } catch (e) {
       (e as CustomError).link = [
@@ -41,7 +41,7 @@ const controller = {
   },
   delete: async function (req: Request, res: Response) {
     try {
-      const result = await fn.delete(req, res)
+      const result = await service.delete(req, res)
       if (result) res.json({ complete: true })
     } catch (e) {
       (e as CustomError).link = [
@@ -54,7 +54,7 @@ const controller = {
   account: {
     update: async function (req: Request, res: Response) {
       try {
-        const result = await fn.account.update(req, res)
+        const result = await service.account.update(req, res)
         res.json({ complete: true, user: result })
       } catch (e) {
         (e as CustomError).link = [
@@ -68,7 +68,7 @@ const controller = {
   password: {
     update: async function (req: Request, res: Response) {
       try {
-        const result = await fn.password.update(req, res)
+        const result = await service.password.update(req, res)
         res.json({ complete: result })
       } catch (e) {
         (e as CustomError).link = [
@@ -82,7 +82,7 @@ const controller = {
   invitation: {
     get: async function (req: Request, res: Response) {
       try {
-        const result = await fn.invitation.get(req, res)
+        const result = await service.invitation.get(req, res)
         res.json({ complete: true, invitation: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -90,7 +90,7 @@ const controller = {
     },
     create: async function (req: Request, res: Response) {
       try {
-        const result = await fn.invitation.create(req, res)
+        const result = await service.invitation.create(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -98,7 +98,7 @@ const controller = {
     },
     reject: async function (req: Request, res: Response) {
       try {
-        const result = await fn.invitation.reject(req, res)
+        const result = await service.invitation.reject(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -106,7 +106,7 @@ const controller = {
     },
     accept: async function (req: Request, res: Response) {
       try {
-        const result = await fn.invitation.accept(req, res)
+        const result = await service.invitation.accept(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -116,7 +116,7 @@ const controller = {
   group: {
     get: async function (req: Request, res: Response) {
       try {
-        const result = await fn.group.get(req, res)
+        const result = await service.group.get(req, res)
         res.json({ complete: true, group: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -124,7 +124,7 @@ const controller = {
     },
     remove: async function (req: Request, res: Response) {
       try {
-        const result = await fn.group.remove(req, res)
+        const result = await service.group.remove(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
@@ -132,7 +132,7 @@ const controller = {
     },
     add: async function (req: Request, res: Response) {
       try {
-        const result = await fn.group.add(req, res)
+        const result = await service.group.add(req, res)
         res.json({ complete: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)

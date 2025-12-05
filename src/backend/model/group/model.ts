@@ -219,6 +219,8 @@ const model = {
         if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
         await authModel.exists(account)
 
+        const group = await dbModel.findOne({ _id: groupId })
+        console.log(group)
         const isTechLead = await dbModel.findOne({ _id: groupId, 'techLead.account': account }, { techLead: 1, _id: 0 })
         if (isTechLead !== null && isTechLead !== undefined) {
           if (isTechLead.techLead?.length !== undefined && isTechLead.techLead?.length <= 1) throw new Forbidden('Access denied', 'You can not remove the last techLead')
@@ -228,7 +230,6 @@ const model = {
 
           return res.acknowledged
         }
-
         const res = await dbModel.updateOne({ _id: groupId }, {
           $pull: { member: { account } }
         })

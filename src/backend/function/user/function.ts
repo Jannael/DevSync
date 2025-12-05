@@ -188,7 +188,7 @@ const functions = {
 
       const { _id, color, name } = await groupModel.get(req.body?._id)
 
-      return await model.group.add(accessToken.account, { _id, color, name })
+      return await model.group.add(accessToken.account, { _id, color, name }, true)
     }
   }
 }

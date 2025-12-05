@@ -6,7 +6,8 @@ import dotenv from 'dotenv'
 import { IEnv } from '../../../../backend/interface/env'
 import userModel from './../../../../backend/model/user/model'
 import { IRefreshToken } from '../../../../backend/interface/user'
-import dbModel from './../../../../backend/database/schemas/node/user'
+import dbUserModel from './../../../../backend/database/schemas/node/user'
+import dbGroupModel from './../../../../backend/database/schemas/node/group'
 import { IGroup } from '../../../../backend/interface/group'
 import groupModel from '../../../../backend/model/group/model'
 
@@ -29,7 +30,7 @@ beforeAll(async () => {
     account: 'test@gmail.com',
     pwd: 'test',
     nickName: 'test'
-  })
+  }) // user that it's all around in the test as the main user
 
   secondUser = await userModel.create({
     fullName: 'second test',
@@ -50,7 +51,8 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await dbModel.deleteMany({})
+  await dbUserModel.deleteMany({})
+  await dbGroupModel.deleteMany({})
   await mongoose.connection.close()
 })
 
@@ -826,14 +828,6 @@ describe('/user/v1/', () => {
     describe('/delete/group/', () => {
       const endpoint = path + '/delete/group/'
       test('', async () => {
-        await agent
-          .post(path + '/create/invitation/')
-          .send({
-            account: secondUser.account,
-            role: 'techLead',
-            _id: group._id
-          })
-
         const res = await agent
           .delete(endpoint)
           .send({
@@ -945,13 +939,6 @@ describe('/user/v1/', () => {
         .send({
           account: secondUser.account,
           role: 'techLead',
-          _id: group._id
-        })
-      await agent
-        .post(path + '/create/invitation/')
-        .send({
-          account: secondUser.account,
-          role: 'techLead',
           _id: secondGroup._id
         })
 
@@ -972,6 +959,7 @@ describe('/user/v1/', () => {
       const res = await agent
         .delete(endpoint)
 
+      console.log(res.body)
       expect(res.body.complete).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
@@ -998,7 +986,7 @@ describe('/user/v1/', () => {
 
             user = await userModel.create({
               fullName: 'test',
-              account: 'test@gmail.com',
+              account: 'errorCase@gmail.com',
               pwd: 'test',
               nickName: 'test'
             })

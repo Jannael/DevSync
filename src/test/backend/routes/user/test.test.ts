@@ -959,7 +959,6 @@ describe('/user/v1/', () => {
       const res = await agent
         .delete(endpoint)
 
-      console.log(res.body)
       expect(res.body.complete).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)

@@ -66,7 +66,6 @@ to update a user the next fields are the ones you can update here
 - data 
 ```TypeScript
   fullName: string
-  account: string
   pwd: string
   nickName: string
 ```
@@ -190,7 +189,10 @@ to create an invitation to an specific user
   color: string
   name: string
 ```
-- techLeadAccount string
+- addMember boolean
+> [!TIP]
+> if you want to call the groupModel to add the user to the group document, set it to true
+
 ### Output
 - boolean
 ### Errors
@@ -296,6 +298,9 @@ to add a group to the user
   color: string
   name: string
 ```
+-- addToTheGroup boolean
+> [!TIP]
+> if you want to call the groupModel to add the user to the group document then set it to true
 ### Output:
 - boolean
 ### Errors

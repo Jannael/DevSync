@@ -5,8 +5,8 @@ const router = Router()
 
 router.post('/get/', controller.get)
 router.post('/create/', controller.create)
-router.post('/update/', controller.update) // test
-router.post('/delete/', controller.delete) // test
+router.post('/update/', controller.update)
+router.delete('/delete/', controller.delete)
 
 // Members
 router.patch('/member/update/role/', controller.member.update.role) // test

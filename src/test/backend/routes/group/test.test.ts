@@ -434,7 +434,41 @@ describe('/group/v1/', () => {
   })
 
   describe('/delete/', () => {
-    test('', async () => {})
-    test('error', async () => {})
+    const endpoint = path + '/delete/'
+    test('', async () => {
+      const res = await agent
+        .delete(endpoint)
+        .send({
+          _id: group._id
+        })
+
+      expect(res.body.complete).toBe(true)
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            return await agent
+              .delete(endpoint)
+              .send({ _id: group._id })
+          },
+          error: {
+            code: 404,
+            msg: 'Group not found',
+            description: 'The group you are trying to access does not exist',
+            complete: false
+          }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.description).toEqual(error.description)
+      }
+    })
   })
 })

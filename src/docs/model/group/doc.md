@@ -24,6 +24,7 @@ gets the whole group information
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |NotFound|Group not found|The group you are trying to access does not exist|
 |DatabaseError|Failed to access data|The group was not retrieved, something went wrong please try again|
 
@@ -35,18 +36,18 @@ it has two different uses
 ### Parameters:
 - groupId ObjectId
 - techLeadAccount? string
-
 ### Output:
 - boolean
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
 |NotFound|Group not found|The group you are trying to access does not exist|
 |Forbidden|Access denied|The group exists but the user is not a techLead|
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 
-## Create
+## Create %
 to create a group
 > [!TIP]
 > if you do not add the techLead who is creating the group, it will add it for you
@@ -61,7 +62,6 @@ to create a group
 this function uses some other functions
 - UserModel.invitation.create()
 - UserModel.group.add()
-
 ### Parameters:
 - data 
    ```TypeScript
@@ -82,7 +82,6 @@ this function uses some other functions
   ```TypeScript
     { fullName: string, account: string }
   ```
-
 ### Output:
 ```TypeScript
   _id: Types.ObjectId
@@ -99,15 +98,19 @@ this function uses some other functions
     role: string
   }>
 ```
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${techLead.account} is invalid|
 |NotFound|User not found||
 |Forbidden|Access denied|The user has reached the max number of groups|
+
+- UserModel.invitation.create()
+- UserModel.group.add()
+
 |DatabaseError|Failed to save|The group was not created, something went wrong please try again|
 
-## Update
+## Update %
 to update a group, you only can update the name, color or repository
 - it updates the group on user schema
 > [!CAUTION]
@@ -116,7 +119,6 @@ to update a group, you only can update the name, color or repository
 ### Functions:
 this function uses some other functions
 - UserModel.group.update()
-
 ### Parameters
 - groupId: ObjectId
 - data: 
@@ -125,7 +127,6 @@ this function uses some other functions
   color: string // hexadecimal
   repository: string //url
 ```
-
 ### Output
 ```TypeScript
   _id: ObjectId
@@ -133,20 +134,20 @@ this function uses some other functions
   color: string
   repository?: string
 ```
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The groupId is invalid|
 |UserBadRequest|Invalid credentials|You can not change the _id|
 |UserBadRequest|Invalid credentials|You can not change the member|
 |UserBadRequest|Invalid credentials|You can not change the techLead|
-|NotFound|User not found||
-|NotFound|Group not found||
 |NotFound|Group not found|The group you are trying to update does not exist|
-|NotFound|Group not found|The group you are trying to update does not exist|
+
+- UserModel.group.update()
+
 |DatabaseError|Failed to save|The group was not updated, something went wrong please try again|
 
-## Delete
+## Delete %
 to delete a group
 - it removes the group from user schema
 > [!CAUTION]
@@ -155,19 +156,20 @@ to delete a group
 ### Functions:
 this functions uses some other functions
 - UserModel.group.remove()
-
 ### Parameters:
 - groupId ObjectId
-
 ### Output
 - boolean
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |NotFound|Group not found|The group you are trying to delete does not exist|
 |Forbidden|Access denied|Only tech leads can delete a group|
 |NotFound|Group not found|The group you are trying to delete does not exist|
+
+- UserModel.group.remove()
+
 |DatabaseError|Failed to remove|The group was not deleted, something went wrong please try again|
 
 # Member
@@ -188,10 +190,8 @@ it adds a member to the groups,
   fullName: string
   role: string
 ```
-
 ### Output
 - boolean
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -209,19 +209,21 @@ to remove a user in group schema
 
 ### Functions:
 - authModel.exists()
-
 ### Parameters:
 - groupId ObjectId
 - account string
-
 ### Output:
 - boolean
-
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
 |NotFound|User not found|The user is not in the group|
@@ -242,16 +244,14 @@ to update a user in group schema
 ```TypeScript
 { fullName: string, account: string }
 ```
-
 ### Output
 - boolean
-
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|NotFound|Group not found||
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|NotFound|Group not found||
 |NotFound|User not found||
 |DatabaseError|Failed to save|The user was not updated|

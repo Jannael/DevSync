@@ -93,6 +93,7 @@ describe('/group/v1/', () => {
         }
       })
     })
+
     test('error', async () => {
       const cases = [
         {
@@ -142,19 +143,90 @@ describe('/group/v1/', () => {
     })
 
     test('error', async () => {
-      // const cases = [
-      //   {
-      //     fn: async function () {
-      //     }
-      //   }
-      // ]
-      //       for (const { fn, error } of cases) {
-      //   const res = await fn()
-      //   expect(res.statusCode).toEqual(error.code)
-      //   expect(res.body.complete).toEqual(error.complete)
-      //   expect(res.body.msg).toEqual(error.msg)
-      //   expect(res.body.description).toEqual(error.description)
-      // }
+      const cases = [
+        {
+          fn: async function () {
+            const agent = await request.agent(app)
+            await userModel.create({
+              fullName: 'test',
+              account: 'errorTestCase1@gmail.com',
+              pwd: 'test',
+              nickName: 'test'
+            })
+            await agent
+              .post('/auth/v1/request/refreshToken/code/')
+              .send({
+                account: 'errorTestCase1@gmail.com',
+                pwd: 'test',
+                TEST_PWD: TEST_PWD_ENV
+              })
+            await agent
+              .post('/auth/v1/request/refreshToken/')
+              .send({
+                code: '1234'
+              })
+            return await agent
+              .post(endpoint)
+              .send({
+                _id: group._id
+              })
+          },
+          error: {
+            code: 403,
+            msg: 'Access denied',
+            description: 'You do not belong to any group',
+            complete: false
+          }
+        },
+        {
+          fn: async function () {
+            const agent = await request.agent(app)
+            await agent
+              .post('/auth/v1/request/refreshToken/code/')
+              .send({
+                account: 'errorTestCase1@gmail.com',
+                pwd: 'test',
+                TEST_PWD: TEST_PWD_ENV
+              })
+            await agent
+              .post('/auth/v1/request/refreshToken/')
+              .send({
+                code: '1234'
+              })
+            await agent
+              .post('/user/v1/add/group')
+              .send({
+                _id: group._id
+              })
+
+            const res = await agent
+              .post(endpoint)
+              .send({
+                _id: new mongoose.Types.ObjectId()
+              })
+
+            await agent
+              .delete('/user/v1/delete/group/')
+              .send({
+                _id: group._id
+              })
+            return res
+          },
+          error: {
+            code: 403,
+            msg: 'Access denied',
+            description: 'You do not belong to the group you are trying to access',
+            complete: false
+          }
+        }
+      ]
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.description).toEqual(error.description)
+      }
     })
   })
 

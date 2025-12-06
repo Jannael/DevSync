@@ -122,11 +122,12 @@ describe('/group/v1/', () => {
   describe('/get/', () => {
     const endpoint = path + '/get/'
     test('', async () => {
-      const res = await request(app)
+      const res = await agent
         .post(endpoint)
         .send({
           _id: group._id
         })
+
       expect(res.body.complete).toEqual(true)
       expect(res.body.result).toStrictEqual({
         _id: expect.any(String),
@@ -139,7 +140,22 @@ describe('/group/v1/', () => {
         member: []
       })
     })
-    test('error', async () => {})
+
+    test('error', async () => {
+      // const cases = [
+      //   {
+      //     fn: async function () {
+      //     }
+      //   }
+      // ]
+      //       for (const { fn, error } of cases) {
+      //   const res = await fn()
+      //   expect(res.statusCode).toEqual(error.code)
+      //   expect(res.body.complete).toEqual(error.complete)
+      //   expect(res.body.msg).toEqual(error.msg)
+      //   expect(res.body.description).toEqual(error.description)
+      // }
+    })
   })
 
   describe('/update/', () => {

@@ -1,4 +1,4 @@
-import { UserBadRequest } from '../../error/error'
+import { Forbidden, UserBadRequest } from '../../error/error'
 import { Request, Response } from 'express'
 import model from './../../model/group/model'
 import { IGroup } from '../../interface/group'
@@ -20,6 +20,18 @@ const {
 const service = {
   get: async function (req: Request, res: Response): Promise<IGroup> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the group you want')
+    const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
+    const groups = await userModel.group.get(accessToken._id)
+    const invitations = await userModel.invitation.get(accessToken._id)
+
+    if (groups === null || groups === undefined ||
+      invitations === null || invitations === undefined
+    ) throw new Forbidden('Access denied', 'You do not belong to any group')
+
+    const isGroup = groups?.some(item => item._id.toString() === req.body?._id)
+    const isInvitation = invitations?.some(item => item._id.toString() === req.body?._id)
+
+    if (!isGroup && !isInvitation) throw new Forbidden('Access denied', 'You do not belong to the group you are trying to access')
     return await model.get(req.body?._id)
   },
   create: async function (req: Request, res: Response): Promise<IGroup> {

@@ -61,6 +61,7 @@ to create a user
 
 ## Update
 to update a user the next fields are the ones you can update here
+
 ### Functions:
 - groupModel.member.update()
 ### Parameters:
@@ -89,13 +90,13 @@ to update a user the next fields are the ones you can update here
 |UserBadRequest|Invalid credentials|You can not change the _id|
 |UserBadRequest|Invalid credentials|You can not update the refreshToken|
 |NotFound|User not found||
-|NotFound|Group not found||
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|NotFound|Group not found||
 |NotFound|User not found||
-|DatabaseError|Failed to save|The user was not updated|
-|DatabaseError|Failed to save|The user was not updated, something went wrong please try again|
+|DatabaseError|Failed to save|The user was not updated||
+|DatabaseError|Failed to save|The user was not updated|something went wrong please try again|
 
 ## Delete
 to eliminate a user
@@ -112,6 +113,11 @@ to eliminate a user
 |NotFound|User not found||
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
 |NotFound|User not found|The user is not in the group|
@@ -143,10 +149,10 @@ to update user account
 |UserBadRequest|Invalid credentials|The account must match example@service.ext|
 |DuplicateData|User already exists|This account belongs to an existing user|
 |NotFound|User not found||
-|NotFound|Group not found||
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|NotFound|Group not found||
 |NotFound|User not found||
 |DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The account was not updated, something went wrong please try again|
@@ -226,7 +232,6 @@ to create an invitation to an specific user
 |NotFound|Group not found|The group you are trying to access was not found|
 |Forbidden|Access denied|The group has reached the max number of members|
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
-|NotFound|User not found||
 |DatabaseError|Failed to save|The user was not invited, something went wrong please try again|
 
 ## Reject
@@ -244,8 +249,21 @@ to reject an invitation
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${userAccount} is invalid|
 |UserBadRequest|Invalid credentials|The invitation _id is invalid|
-|NotFound|User not found|
+|NotFound|User not found||
+|UserBadRequest|Invalid credentials|You do not have an invitation for the group you want to reject|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
+|Forbidden|Access denied|You can not remove the last techLead|
+|NotFound|Group not found|The group was not found|
+|NotFound|User not found|The user is not in the group|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The invitation was not removed from the user, something went wrong please try again|
 
 ## Remove
@@ -263,6 +281,7 @@ to remove an invitation
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The invitation _id is invalid|
 |NotFound|User not found||
+|UserBadRequest|Invalid credentials|The invitation _id is invalid|
 |DatabaseError|Failed to remove|The invitation was not removed from the user, something went wrong please try again|
 
 ## Accept
@@ -275,9 +294,9 @@ to accept an invitation
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${userAccount} is invalid|
 |UserBadRequest|Invalid credentials|The invitation _id is invalid|
-|UserBadRequest|Invalid credentials|The account is invalid|
-|NotFound|User not found|
+|NotFound|User not found||
 |NotFound|Invitation not found||
 |DatabaseError|Failed to save|The invitation was not accepted please try again|
 
@@ -328,11 +347,22 @@ to add a group to the user
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|NotFound|User not found|The user with the account ${account} was not found|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|x|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
+|NotFound|User not found|The user with the account ${account} was not found|
 |Forbidden|Access denied|The user with the account ${account} already belongs to the group|
 |Forbidden|Access denied|The user with the account ${account} has reached the maximum number of groups|
-|NotFound|User not found|The user with the account ${account} was not found|
+|UserBadRequest|Invalid credentials|The user with the account ${account} has an invitation for the group and should be accept to be part of it|
+|UserBadRequest|Invalid credentials|The account ${member.account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|NotFound|Group not found|The group you are trying to access was not found|
+|Forbidden|Access denied|The group has reached the max number of members|
+|DatabaseError|Failed to save|the member with the account ${member.account} was not added|
 |DatabaseError|Failed to save|The group was not added to the user, something went wrong please try again|
 
 ## Remove
@@ -354,6 +384,17 @@ to remove a group from the user
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The account is invalid|
 |UserBadRequest|Invalid credentials|The group _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
+|Forbidden|Access denied|You can not remove the last techLead|
+|NotFound|Group not found|The group was not found|
+|NotFound|User not found|The user is not in the group|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |NotFound|User not found|The user with the account ${account} was not found|
 |DatabaseError|Failed to remove|The group was not removed from the user, something went wrong please try again|
 
@@ -373,5 +414,7 @@ to update a group the user is in
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|NotFound|Group not found|The user it\'s in the group|
+|UserBadRequest|Invalid credentials|The account ${userAccount} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|NotFound|Group not found|The user it\'s not in the group|
 |DatabaseError|Failed to save|The user was not updated|

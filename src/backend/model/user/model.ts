@@ -426,7 +426,7 @@ const model = {
           { 'group.$.name': data.name, 'group.$.color': data.color }
         )
 
-        if (res.matchedCount === 0) throw new NotFound('Group not found', 'The user it\'s in the group')
+        if (res.matchedCount === 0) throw new NotFound('Group not found', 'The user it\'s not in the group')
         return res.acknowledged
       } catch (e) {
         errorHandler.allErrors(

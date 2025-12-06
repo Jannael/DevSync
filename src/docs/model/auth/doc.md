@@ -6,7 +6,6 @@ it validates the given pwd, and if it match with the one in the database
 ### Parameters:
 - account string
 - pwd string
-
 ### Output:
 ```TypeScript
   _id: Types.ObjectId
@@ -17,11 +16,10 @@ it validates the given pwd, and if it match with the one in the database
   invitation?: IUserInvitation[] | null
   group?: IUserGroup[] | null
 ```
-
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|UserBadRequest|Invalid credentials|The account must match example@gmail.com|
+|UserBadRequest|Invalid credentials|The account must match example@service.ext|
 |NotFound|User not found||
 |UserBadRequest|Invalid credentials|Incorrect password|
 |DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
@@ -32,10 +30,10 @@ Validates if the user exists
 - account string
 ### Output:
 - boolean
-
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |NotFound|User not found||
 |DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
 
@@ -47,10 +45,8 @@ This function tells you if the token is saved in the db, to get more protection,
 ### Parameters:
 - token string
 - userId ObjectId
-
 ### Output:
 - boolean
-
 ### Errors:
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -64,10 +60,8 @@ it removes a refreshToken from user's sessions
 ### Parameters:
 - token string
 - userId ObjectId
-
 ### Output: 
 - boolean
-
 ### Errors:
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -82,10 +76,8 @@ it saves a session in the database
 ### Parameters:
 - token string
 - userId ObjectId
-
 ### Output:
 - boolean
-
 ### Errors:
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|

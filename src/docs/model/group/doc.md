@@ -195,8 +195,10 @@ it adds a member to the groups,
 ### Error
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|Forbidden|Access denied|The group has reached the max number of members|
+|UserBadRequest|Invalid credentials|The account ${member.account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |NotFound|Group not found|The group you are trying to access was not found|
+|Forbidden|Access denied|The group has reached the max number of members|
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
 
 
@@ -218,8 +220,11 @@ to remove a user in group schema
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
+|NotFound|User not found|The user is not in the group|
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
 
 ## Update
@@ -245,5 +250,8 @@ to update a user in group schema
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|Group not found||
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
 |NotFound|User not found||
 |DatabaseError|Failed to save|The user was not updated|

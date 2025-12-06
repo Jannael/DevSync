@@ -24,8 +24,8 @@ returns the fields tou asked for
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
 |NotFound|User not found||
-|DatabaseError|Failed to access data||
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|DatabaseError|Failed to access data||
 
 ## Create
 to create a user
@@ -53,6 +53,7 @@ to create a user
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|You can not put the _id yourself|
 |UserBadRequest|Invalid credentials|You can not put the refreshToken yourself|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |DuplicateData|User already exists|This account belongs to an existing user|
 |NotFound|User not found|The user appears to be created but it was not found|
 |UserBadRequest|Invalid credentials|x|
@@ -88,6 +89,12 @@ to update a user the next fields are the ones you can update here
 |UserBadRequest|Invalid credentials|You can not change the _id|
 |UserBadRequest|Invalid credentials|You can not update the refreshToken|
 |NotFound|User not found||
+|NotFound|Group not found||
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|NotFound|User not found||
+|DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The user was not updated, something went wrong please try again|
 
 ## Delete
@@ -103,6 +110,12 @@ to eliminate a user
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |NotFound|User not found||
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|Forbidden|Access denied|You can not remove the last techLead|
+|NotFound|Group not found|The group was not found|
+|NotFound|User not found|The user is not in the group|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The user was not deleted, something went wrong please try again|
 
 ## Account Update
@@ -129,7 +142,13 @@ to update user account
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account must match example@service.ext|
 |DuplicateData|User already exists|This account belongs to an existing user|
-|NotFound|User not found|
+|NotFound|User not found||
+|NotFound|Group not found||
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|NotFound|User not found||
+|DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The account was not updated, something went wrong please try again|
 
 ## Password Update
@@ -174,7 +193,6 @@ to create an invitation to an specific user
 > Remember a user belongs to group unless it rejects the invitation so this function actually adds the user to the group
 
 ### Functions
-- groupModel.exists()
 - groupModel.member.add()
 ### Parameters:
 - user
@@ -192,18 +210,22 @@ to create an invitation to an specific user
 - addMember boolean
 > [!TIP]
 > if you want to call the groupModel to add the user to the group document, set it to true
-
 ### Output
 - boolean
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|UserBadRequest|Invalid credentials|The account must match example@service.com|
-|NotFound|User not found|TechLead does not exists|
+|UserBadRequest|Invalid credentials|The account ${user.account} is invalid|
+|UserBadRequest|Invalid credentials|x|
 |NotFound|User not found||
 |Forbidden|Access denied|The user with the account ${user.account} already belongs to the group|
 |Forbidden|Access denied|The user with the account ${user.account} already has an invitation for the group|
 |Forbidden|Access denied|The user with the account ${user.account} has reached the maximum number of invitations|
+|UserBadRequest|Invalid credentials|The account ${member.account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|NotFound|Group not found|The group you are trying to access was not found|
+|Forbidden|Access denied|The group has reached the max number of members|
+|DatabaseError|Failed to save|the member with the account ${member.account} was not added|
 |NotFound|User not found||
 |DatabaseError|Failed to save|The user was not invited, something went wrong please try again|
 

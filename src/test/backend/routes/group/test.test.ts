@@ -231,8 +231,71 @@ describe('/group/v1/', () => {
   })
 
   describe('/update/', () => {
-    test('', async () => {})
-    test('error', async () => {})
+    const endpoint = path + '/update/'
+    test('', async () => {
+      const res = await agent
+        .post(endpoint)
+        .send({
+          _id: group._id,
+          data: {
+            name: 'newGroupName'
+          }
+        })
+
+      expect(res.body).toStrictEqual({
+        complete: true,
+        result: {
+          _id: expect.any(String),
+          name: 'newGroupName',
+          color: '#000000'
+        }
+      })
+    })
+
+    test('error', async () => {
+      const cases = [
+        {
+          fn: async function () {
+            const agent = await request.agent(app)
+            await agent
+              .post('/auth/v1/request/refreshToken/code/')
+              .send({
+                account: 'errorTestCase1@gmail.com',
+                pwd: 'test',
+                TEST_PWD: TEST_PWD_ENV
+              })
+            await agent
+              .post('/auth/v1/request/refreshToken/')
+              .send({
+                code: '1234'
+              })
+
+            return await agent
+              .post(endpoint)
+              .send({
+                _id: group._id,
+                data: {
+                  name: 'newGroupName'
+                }
+              })
+          },
+          error: {
+            code: 403,
+            msg: 'Access denied',
+            description: 'The group exists but the user is not a techLead',
+            complete: false
+          }
+        }
+      ]
+
+      for (const { fn, error } of cases) {
+        const res = await fn()
+        expect(res.statusCode).toEqual(error.code)
+        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.msg).toEqual(error.msg)
+        expect(res.body.description).toEqual(error.description)
+      }
+    })
   })
 
   describe('/member/update/role/', () => {

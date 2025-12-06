@@ -3,7 +3,7 @@ import controller from '../../controller/group/group.controller'
 
 const router = Router()
 
-router.post('/get/', controller.get) // test
+router.post('/get/', controller.get)
 router.post('/create/', controller.create)
 router.post('/update/', controller.update) // test
 router.post('/delete/', controller.delete) // test

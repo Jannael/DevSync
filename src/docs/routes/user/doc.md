@@ -448,13 +448,15 @@ _Method: POST_
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The account ${userAccount} is invalid|
 |UserBadRequest|Invalid credentials|The invitation _id is invalid|
+|||
 |NotFound|User not found||
 |NotFound|Invitation not found||
+|||
 |DatabaseError|Failed to save|The invitation was not accepted please try again|
 ### Explanation
 to accept an invitation xd
 
-## /reject/invitation 
+## /reject/invitation
 _Method: DELETE_
 ### Input
 ```json
@@ -504,6 +506,47 @@ _Method: DELETE_
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The invitation was not removed from the user, something went wrong please try again|
-
-
 ### Explanation
+to reject an invitation xd
+
+## /get/group/
+_Method: GET_
+### Input
+> [!IMPORTANT]
+> this endpoint does not actually need an input but accessToken, so make sure to ask for one
+
+> [!TIP]
+> if you already have a refreshToken you can get an accessToken from __/auth/v1/request/accessToken/__
+### Output
+```json
+{
+  "complete": true,
+  "group": [
+    {
+      "name": "",
+      "_id": "",
+      "color": "#------"
+    }
+  ]
+}
+```
+### Error
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+### Explanation
+to get the groups you are in

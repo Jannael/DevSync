@@ -13,10 +13,10 @@ router.patch('/update/account/', controller.account.update)
 router.patch('/update/password/', controller.password.update)
 
 // Invitation
-router.get('/get/invitation/', controller.invitation.get) // doc
-router.post('/create/invitation/', controller.invitation.create) // doc
-router.post('/accept/invitation/', controller.invitation.accept) // doc
-router.delete('/reject/invitation/', controller.invitation.reject) // doc
+router.get('/get/invitation/', controller.invitation.get)
+router.post('/create/invitation/', controller.invitation.create)
+router.post('/accept/invitation/', controller.invitation.accept)
+router.delete('/reject/invitation/', controller.invitation.reject)
 
 // Group
 router.get('/get/group/', controller.group.get) // doc

@@ -40,9 +40,7 @@ this endpoint returns the public user info containing in the accessToken
 _Method: POST_
 ### Input
 > [!IMPORTANT]
-> first you need to verify your account,
-> get code: /auth/v1/request/code/
-> verify code: /auth/v1/verify/code/
+> first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 
 - `fullName`
 - `account`
@@ -95,10 +93,7 @@ this endpoint returns an accessToken and refreshToken, none of them are availabl
 _Method: PUT_
 ### Input
 > [!IMPORTANT]
-> first you need to verify your account,
-
-- get code: /auth/v1/request/code/
-- verify code: /auth/v1/verify/code/
+> first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 
 Here you only can update this fields
 - `fullName`
@@ -152,14 +147,11 @@ Here you only can update this fields
 ### Explanation
 this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again, if you want to ensure the data has been updated, you can use the /get/ route
 
-## /delete/ 
+## /delete/
 _Method: DELETE_
 ### Input
 > [!IMPORTANT]
-> first you need to verify your account,
-
-- get code: /auth/v1/request/code/
-- verify code: /auth/v1/verify/code/
+> first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ### Output
 - `complete`: boolean
 
@@ -212,10 +204,7 @@ this endpoint has a simple output, but remember that you need to ask for a code,
 _Method: PATCH_
 ### Input
 > [!IMPORTANT]
-> first you need to verify your account,
-
-- get code: /auth/v1/account/request/code/
-- verify code: /auth/v1/account/verify/code/
+> first you need to verify your account: **/auth/v1/account/request/code/** -> **/auth/v1/account/verify/code/**
 ### Output
 - `user`
     - `fullName`
@@ -265,10 +254,7 @@ this endpoint only executes the update-account fn, does not authorized or authen
 _Method: PATCH_
 ### Input
 > [!IMPORTANT]
-> first you need to verify your account,
-
-- get code: /auth/v1/password/request/code/
-- verify code: /auth/v1/password/verify/code/
+> first you need to verify your account: **/auth/v1/password/request/code/** -> **/auth/v1/password/verify/code/**
 ### Output
 - `complete`: boolean
 
@@ -298,6 +284,5 @@ _Method: PATCH_
 |NotFound|User not found|
 |||
 |DatabaseError|Failed to save|The password was not updated, something went wrong please try again|
-
 ### Explanation
 this is the endpoint that will update your password in case you forgot yours

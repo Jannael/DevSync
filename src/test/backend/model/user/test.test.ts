@@ -724,7 +724,7 @@ describe('user model', () => {
             fn: async function () {
               await model.group.update(user.account, new mongoose.Types.ObjectId(), { name: 'not Found', color: '#000000' })
             },
-            error: new NotFound('Group not found', 'The user it\'s in the group')
+            error: new NotFound('Group not found', 'The user it\'s not in the group')
           }
         ]
 

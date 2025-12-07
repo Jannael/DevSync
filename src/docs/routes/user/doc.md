@@ -16,13 +16,14 @@ _Method: GET_
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing {token}|
@@ -54,13 +55,14 @@ _Method: POST_
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|You did not send any information|
@@ -107,13 +109,14 @@ Here you only can update this fields
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Invalid credentials|You can not update _id, account, refreshToken|
@@ -157,13 +160,14 @@ _Method: DELETE_
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |StatusCode|Instance|Message|Description|
@@ -214,13 +218,14 @@ _Method: PATCH_
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing {token}|
@@ -250,7 +255,7 @@ _Method: PATCH_
 this endpoint only executes the update-account fn, does not authorized or authenticates, it only makes the operation
 
 
-## /update/password/ 
+## /update/password/
 _Method: PATCH_
 ### Input
 > [!IMPORTANT]
@@ -260,13 +265,14 @@ _Method: PATCH_
 
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
-`output`
-
-    _body: 
-        msg: '',
-        complete: false,
-        `link`: here you will get all the routes you need to make the operation correctly in case something is missing
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing {token}|

@@ -183,8 +183,6 @@ _Method: DELETE_
 ```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|StatusCode|Instance|Message|Description|
-|:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing {token}|
 |400|UserBadRequest|Invalid credentials|Invalid {token}|
 |400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
@@ -215,7 +213,6 @@ _Method: DELETE_
 |DatabaseError|Failed to remove|The user was not deleted, something went wrong please try again|
 ### Explanation
 this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same as update
-
 
 ## /update/account/
 _Method: PATCH_
@@ -308,3 +305,46 @@ _Method: PATCH_
 |DatabaseError|Failed to save|The password was not updated, something went wrong please try again|
 ### Explanation
 this is the endpoint that will update your password in case you forgot yours
+
+## /get/invitation/
+_Method: GET_
+### Input
+> [!IMPORTANT]
+> this endpoint does not actually need an input but accessToken, so make sure to ask for one
+
+> [!TIP]
+> if you already have a refreshToken you can get an accessToken from __/auth/v1/request/accessToken/__
+### Output
+```json
+{
+  "complete": true,
+  "invitation": [
+    {
+      "name": "name",
+      "_id": "",
+      "color": "#------"
+    }
+  ]
+}
+```
+### Error
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+### Explanation
+this endpoints returns an array for the invitations you have
+

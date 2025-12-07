@@ -9,12 +9,12 @@ _Method: GET_
 > [!TIP]
 > if you already have a refreshToken you can get an accessToken from __/auth/v1/request/accessToken/__
 ### Output
-- `fullName`
-- `account`
-- `nickName`
-- `complete`: boolean
-
-`complete` field its to help frontend developer to handle the response its in error output as well
+```json
+"fullName": ""
+"account": ""
+"nickName": ""
+"complete": true
+```
 ### Error
 ```json
 {
@@ -48,12 +48,12 @@ _Method: POST_
 - `pwd`
 - `nickName`
 ### Output
-- `fullName`
-- `account`
-- `nickName`
-- `complete`: boolean
-
-`complete` field its to help frontend developer to handle the response its in error output as well
+```json
+"fullName": ""
+"account": ""
+"nickName": ""
+"complete": true
+```
 ### Error
 ```json
 {
@@ -101,13 +101,13 @@ Here you only can update this fields
 - `fullName`
 - `nickName`
 ### Output
-- `user`:
+```json
+"user"
   - `fullName`
   - `account`
   - `nickName`
-- `complete`: boolean
-
-`complete` field its to help frontend developer to handle the response its in error output as well
+"complete": true
+```
 ### Error
 ```json
 {
@@ -156,9 +156,9 @@ _Method: DELETE_
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ### Output
-- `complete`: boolean
-
-`complete` field its to help frontend developer to handle the response its in error output as well
+```json
+"complete": true
+```
 ### Error
 ```json
 {
@@ -210,12 +210,13 @@ _Method: PATCH_
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/account/request/code/** -> **/auth/v1/account/verify/code/**
 ### Output
-- `user`
+```json
+"user"
     - `fullName`
     - `account`
     - `nickName`
-- `complete`: boolean
-
+"complete": true
+```
 `complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
 ```json
@@ -261,9 +262,9 @@ _Method: PATCH_
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/password/request/code/** -> **/auth/v1/password/verify/code/**
 ### Output
-- `complete`: boolean
-
-`complete` field its to help frontend developer to handle the response its in error output as well
+```json
+"complete": true
+```
 ### Error
 ```json
 {

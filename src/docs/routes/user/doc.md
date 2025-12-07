@@ -42,11 +42,12 @@ _Method: POST_
 ### Input
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
-
-- `fullName`
-- `account`
-- `pwd`
-- `nickName`
+```json
+"fullName": ""
+"account": ""
+"pwd": ""
+"nickName": ""
+```
 ### Output
 ```json
 "fullName": ""
@@ -96,10 +97,11 @@ _Method: PUT_
 ### Input
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
-
-Here you only can update this fields
-- `fullName`
-- `nickName`
+```json
+// Here you only can update this fields
+"fullName":""
+"nickName":""
+```
 ### Output
 ```json
 "user"

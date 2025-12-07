@@ -10,10 +10,12 @@ _Method: GET_
 > if you already have a refreshToken you can get an accessToken from __/auth/v1/request/accessToken/__
 ### Output
 ```json
-"fullName": ""
-"account": ""
-"nickName": ""
-"complete": true
+{
+    "fullName": "",
+    "account": "",
+    "nickName": "",
+    "complete": true
+}
 ```
 ### Error
 ```json
@@ -43,17 +45,21 @@ _Method: POST_
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ```json
-"fullName": ""
-"account": ""
-"pwd": ""
-"nickName": ""
+{
+    "fullName": "",
+    "account": "",
+    "pwd": "",
+    "nickName": ""
+}
 ```
 ### Output
 ```json
-"fullName": ""
-"account": ""
-"nickName": ""
-"complete": true
+{
+    "fullName": "",
+    "account": "",
+    "nickName": "",
+    "complete": true
+}
 ```
 ### Error
 ```json
@@ -98,17 +104,22 @@ _Method: PUT_
 > [!IMPORTANT]
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ```json
-// Here you only can update this fields
-"fullName":""
-"nickName":""
+{
+    // Here you only can update this fields
+    "fullName":"",
+    "nickName":""
+}
 ```
 ### Output
 ```json
-"user"
-  - `fullName`
-  - `account`
-  - `nickName`
-"complete": true
+{
+    "user": {
+        "fullName": "",
+        "account": "",
+        "nickName": ""
+    },
+    "complete": true
+}
 ```
 ### Error
 ```json
@@ -159,7 +170,7 @@ _Method: DELETE_
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ### Output
 ```json
-"complete": true
+{ "complete": true }
 ```
 ### Error
 ```json
@@ -213,13 +224,15 @@ _Method: PATCH_
 > first you need to verify your account: **/auth/v1/account/request/code/** -> **/auth/v1/account/verify/code/**
 ### Output
 ```json
-"user"
-    - `fullName`
-    - `account`
-    - `nickName`
-"complete": true
+{
+    "user":{
+        "fullName":"",
+        "account":"",
+        "nickName":""
+    },
+    "complete": true
+}
 ```
-`complete` field its to help frontend developer to handle the response its in error output as well
 ### Error
 ```json
 {
@@ -265,7 +278,7 @@ _Method: PATCH_
 > first you need to verify your account: **/auth/v1/password/request/code/** -> **/auth/v1/password/verify/code/**
 ### Output
 ```json
-"complete": true
+{ "complete": true }
 ```
 ### Error
 ```json

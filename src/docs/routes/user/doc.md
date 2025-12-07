@@ -36,14 +36,13 @@ _Method: GET_
 this endpoint returns the public user info containing in the accessToken
 
 
-## /create/ 
+## /create/
 _Method: POST_
 ### Input
 > [!IMPORTANT]
 > first you need to verify your account,
-
-- get code: /auth/v1/request/code/
-- verify code: /auth/v1/verify/code/
+> get code: /auth/v1/request/code/
+> verify code: /auth/v1/verify/code/
 
 - `fullName`
 - `account`

@@ -233,6 +233,7 @@ to create an invitation to an specific user
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
 |DatabaseError|Failed to save|The user was not invited, something went wrong please try again|
 
+
 ## Reject
 to reject an invitation
 > [!CAUTION]

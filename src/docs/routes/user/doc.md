@@ -348,7 +348,7 @@ _Method: GET_
 ### Explanation
 this endpoints returns an array for the invitations you have
 
-## /create/invitation/ 
+## /create/invitation/
 _Method: POST_
 ### Input
 ```json
@@ -413,3 +413,43 @@ _Method: POST_
 |DatabaseError|Failed to access data|The group was not retrieved, something went wrong please try again|
 ### Explanation
 To invite a user to an existing group
+
+## /accept/invitation/
+_Method: POST_
+### Input
+```json
+{ "_id": "group._id" }
+```
+### Output
+```json
+{ "complete": true }
+```
+### Error
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Invalid credentials|You need to send the _id for the group you want to accept|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${userAccount} is invalid|
+|UserBadRequest|Invalid credentials|The invitation _id is invalid|
+|NotFound|User not found||
+|NotFound|Invitation not found||
+|DatabaseError|Failed to save|The invitation was not accepted please try again|
+### Explanation
+to accept an invitation xd

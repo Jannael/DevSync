@@ -372,7 +372,7 @@ to remove a group from the user
 > removeMember: indicates if you want to remove the user from the group, ik its sound weird, but this function its called by the delete group fn, that means its not the same, removing a group from the user, because the user wants to quit and because the group its been deleted
 
 ### Functions
-- model.invitation.remove()
+- groupModel.member.remove()
 ### Parameters
 - account string
 - groupId ObjectId
@@ -394,8 +394,8 @@ to remove a group from the user
 |Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
 |NotFound|User not found|The user is not in the group|
-|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |NotFound|User not found|The user with the account ${account} was not found|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The group was not removed from the user, something went wrong please try again|
 
 ## Update

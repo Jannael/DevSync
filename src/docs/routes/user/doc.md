@@ -161,7 +161,7 @@ _Method: PUT_
 |DatabaseError|Failed to save|The user was not updated||
 |DatabaseError|Failed to save|The user was not updated|something went wrong please try again|
 ### Explanation
-this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can use it again, if you want to ensure the data has been updated, you can use the /get/ route
+this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can not use it again, if you want to ensure the data has been updated, you can use the /get/ route
 
 ## /delete/
 _Method: DELETE_
@@ -214,7 +214,7 @@ _Method: DELETE_
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The user was not deleted, something went wrong please try again|
 ### Explanation
-this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same update
+this endpoint has a simple output, but remember that you need to ask for a code, then verify that code, and then you can delete the account, works the same as update
 
 
 ## /update/account/

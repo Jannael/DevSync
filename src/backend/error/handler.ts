@@ -14,12 +14,12 @@ function jwtHandler (e: CustomError):
   } else if (e.name === 'JsonWebTokenError') {
     isNull = false
     status.code = 400
-    status.msg = 'Invalid token'
+    status.msg = 'Invalid credentials'
     status.description = 'The token is malformed or has been tampered with'
   } else if (e.name === 'NotBeforeError') {
     isNull = false
     status.code = 403
-    status.msg = 'Invalid token'
+    status.msg = 'Access denied'
     status.description = 'The token is not active yet; check the "nbf" claim'
   }
 

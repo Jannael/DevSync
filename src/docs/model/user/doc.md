@@ -89,7 +89,6 @@ to update a user the next fields are the ones you can update here
 |UserBadRequest|Invalid credentials|You can not change the account here|
 |UserBadRequest|Invalid credentials|You can not change the _id|
 |UserBadRequest|Invalid credentials|You can not update the refreshToken|
-|NotFound|User not found||
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|

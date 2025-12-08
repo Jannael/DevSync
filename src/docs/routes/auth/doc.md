@@ -32,61 +32,82 @@ this endpoint send and email to verify the account, and make some operations lik
 ## /verify/code/
 _Method: POST_
 ### Input
-    first you need to ask for a code
-    /auth/v1/request/code/
+> [!IMPORTANT]
+> First you need to ask for a code -> __/auth/v1/request/code/__
 
-    `account`
-    `code`: if you used the correct TEST_PWD, it always will be '1234'
+```json
+{
+    "account": "",
+    "code": "" // If you used the correct TEST_PWD, it always will be '1234'
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if the user account was verified
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing code you need to ask for one|
 |400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Invalid credentials|The code you asked for is invalid|
 |400|UserBadRequest|Invalid credentials|Wrong code|
 |400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
+|||
 |500|ServerError||My bad|
 ### Explanation
 this endpoint verify the code you're sending its the same the server sent and the account also must match with the one you asked to verify for
 
-## /request/refreshToken/code/ 
+## /request/refreshToken/code/
 _Method: POST_
 ### Input
-    `account`
-    `pwd`
-    `TEST_PWD`: this endpoint ask for a code to the user email, to MFA, if the TEST_PWD, its the correct one, it wont send the code, and the code will always be '1234',if its wrong it wont send it but the code to verify will be random
-
+```json
+{
+    "account": "",
+    "pwd": "",
+    "TEST_PWD": "" // this endpoint ask for a code to the user email, to MFA, if the TEST_PWD, its the correct one, it wont send the code, and the code will always be '1234',if its wrong it wont send it but the code to verify will be random
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if the code was sent and saved to verify it
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Invalid credentials|Missing or invalid data the account must match the following pattern example@service.ext|
 |400|UserBadRequest|Invalid credentials|Incorrect password|
+|||
 |404|NotFound|User not found|undefined|
+|||
 |500|ServerError||My bad|
 
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account must match example@service.ext|
+|UserBadRequest|Invalid credentials|Incorrect password|
+|||
+|NotFound|User not found||
+|||
+|DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
 ### Explanation
 this endpoint its the first step to log in
-
 
 ## /request/refreshToken/ 
 _Method: POST_

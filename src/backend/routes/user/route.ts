@@ -19,8 +19,8 @@ router.post('/accept/invitation/', controller.invitation.accept)
 router.delete('/reject/invitation/', controller.invitation.reject)
 
 // Group
-router.get('/get/group/', controller.group.get) // doc
-router.delete('/delete/group/', controller.group.remove) // doc
-router.post('/add/group/', controller.group.add) // doc
+router.get('/get/group/', controller.group.get)
+router.delete('/delete/group/', controller.group.remove)
+router.post('/add/group/', controller.group.add)
 
 export default router

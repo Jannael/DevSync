@@ -471,7 +471,7 @@ _Method: POST_
 ### Explanation
 to accept an invitation xd
 
-## /reject/invitation
+## /reject/invitation/
 _Method: DELETE_
 ### Input
 ```json

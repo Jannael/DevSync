@@ -1,32 +1,35 @@
 # /auth/v1/
 
-## /request/code/ 
+## /request/code/
 _Method: POST_
 ### Input
-    `account`
-    `TEST_PWD`: this is pwd for test env, it avoids no send the emails, and the code to 'verify', it always will be '1234'
-
+```json
+{
+    "account":"",
+    "TEST_PWD": "" // this is pwd for test env, it avoids no send the emails, and the code to 'verify', it always will be '1234'
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: this say if the email was send and the info to verify it its saved
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Invalid credentials|Missing or invalid account, the account must match the following pattern example@service.ext|
 |500|ServerError||My bad|
-
 ### Explanation
 this endpoint send and email to verify the account, and make some operations like delete or update de user, check the doc for user-routes
 
-## /verify/code/ 
+## /verify/code/
 _Method: POST_
 ### Input
     first you need to ask for a code
@@ -34,12 +37,10 @@ _Method: POST_
 
     `account`
     `code`: if you used the correct TEST_PWD, it always will be '1234'
-
 ### Output
 - `complete`: boolean
 
 `complete`: it says if the user account was verified
-
 ### Error
 `output`
 
@@ -54,7 +55,6 @@ _Method: POST_
 |400|UserBadRequest|Invalid credentials|Wrong code|
 |400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
 |500|ServerError||My bad|
-
 ### Explanation
 this endpoint verify the code you're sending its the same the server sent and the account also must match with the one you asked to verify for
 

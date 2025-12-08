@@ -154,11 +154,14 @@ _Method: PUT_
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |||
 |NotFound|Group not found||
 |NotFound|User not found||
+|NotFound|User not found||
 |||
-|DatabaseError|Failed to save|The user was not updated||
+|DatabaseError|Failed to save|The session was not saved, something went wrong please try again|
+|DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The user was not updated|something went wrong please try again|
 ### Explanation
 this endpoint returns a new accessToken and refreshToken with the new data, and updates it as well, and the account cookie is clear so you can not use it again, if you want to ensure the data has been updated, you can use the /get/ route
@@ -201,12 +204,12 @@ _Method: DELETE_
 |UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
 |||
 |Forbidden|Access denied|The group exists but the user is not a techLead|
-|Forbidden|Access denied|You can not remove the last techLead||
+|Forbidden|Access denied|You can not remove the last techLead|
 |||
-|NotFound|Group not found|The group was not found|
-|NotFound|Group not found|The group you are trying to access does not exist|
-|NotFound|User not found|The user is not in the group|
 |NotFound|User not found||
+|NotFound|User not found|The user is not in the group|
+|NotFound|Group not found|The group you are trying to access does not exist|
+|NotFound|Group not found|The group was not found|
 |||
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
@@ -255,15 +258,19 @@ _Method: PATCH_
 |:-----------|:-----------|-----------:|
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account must match example@service.ext|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
+|UserBadRequest|Invalid credentials|The _id is invalid|
 |||
 |DuplicateData|User already exists|This account belongs to an existing user|
-|||
-|NotFound|Group not found||
 |NotFound|User not found||
+|NotFound|Group not found||
 |||
 |DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The account was not updated, something went wrong please try again|
+|DatabaseError|Failed to save|The session was not saved, something went wrong please try again|
+
 ### Explanation
 this endpoint only executes the update-account fn, does not authorized or authenticates, it only makes the operation
 
@@ -345,6 +352,15 @@ _Method: GET_
 |401|Unauthorized|Expired token|The token has expired and is no longer valid|
 |||
 |403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|||
+|NotFound|User not found|
+|||
+|DatabaseError|Failed to access data|The invitations were not retrieved, something went wrong please try again|
+
 ### Explanation
 this endpoints returns an array for the invitations you have
 
@@ -401,16 +417,15 @@ _Method: POST_
 |Forbidden|Access denied|The group has reached the max number of members|
 |||
 |NotFound|Group not found|The group you are trying to access does not exist|
-|NotFound|User not found||
-|NotFound|Group not found|The group you are trying to access does not exist|
-|NotFound|User not found||
 |NotFound|Group not found|The group you are trying to access was not found|
+|NotFound|User not found||
 |||
-|DatabaseError|Failed to access data||
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
-|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to save|The user was not invited, something went wrong please try again|
+|DatabaseError|Failed to access data||
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to access data|The group was not retrieved, something went wrong please try again|
+
 ### Explanation
 To invite a user to an existing group
 
@@ -548,6 +563,14 @@ _Method: GET_
 |401|Unauthorized|Expired token|The token has expired and is no longer valid|
 |||
 |403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|||
+|NotFound|User not found|
+|||
+|DatabaseError|Failed to access data|The groups were not retrieved, something went wrong please try again|
 ### Explanation
 to get the groups you are in
 
@@ -588,15 +611,17 @@ _Method: DELETE_
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|
+|||
 |NotFound|Group not found|The group you are trying to access does not exist|
-|Forbidden|Access denied|The group exists but the user is not a techLead|
-|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
-|Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
 |NotFound|User not found|The user is not in the group|
 |NotFound|User not found|The user with the account ${account} was not found|
+|||
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|Forbidden|Access denied|You can not remove the last techLead|
+|||
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The group was not removed from the user, something went wrong please try again|
-
 ### Explanation
 to quit a group

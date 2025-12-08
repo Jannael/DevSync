@@ -551,7 +551,7 @@ _Method: GET_
 ### Explanation
 to get the groups you are in
 
-## /delete/group/ 
+## /delete/group/
 _Method: DELETE_
 ### Input
 ```json

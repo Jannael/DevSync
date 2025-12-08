@@ -94,7 +94,7 @@ to update a user the next fields are the ones you can update here
 |UserBadRequest|Invalid credentials|The account ${updateData.account} is invalid|
 |NotFound|Group not found||
 |NotFound|User not found||
-|DatabaseError|Failed to save|The user was not updated||
+|DatabaseError|Failed to save|The user was not updated|
 |DatabaseError|Failed to save|The user was not updated|something went wrong please try again|
 
 ## Delete
@@ -330,7 +330,7 @@ to add a group to the user
 - if its an invitation it will remove it
 ### Functions
 - groupModel.exists()
-- model.invitation.remove()
+- groupModel.member.add()
 ### Parameters:
 - account string
 - group
@@ -339,7 +339,7 @@ to add a group to the user
   color: string
   name: string
 ```
--- addToTheGroup boolean
+- addToTheGroup boolean
 > [!TIP]
 > if you want to call the groupModel to add the user to the group document then set it to true
 ### Output:
@@ -363,6 +363,7 @@ to add a group to the user
 |NotFound|Group not found|The group you are trying to access was not found|
 |Forbidden|Access denied|The group has reached the max number of members|
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
+|NotFound|User not found|The user with the account ${account} was not found|
 |DatabaseError|Failed to save|The group was not added to the user, something went wrong please try again|
 
 ## Remove

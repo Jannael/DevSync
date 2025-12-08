@@ -132,6 +132,7 @@ this function uses some other functions
 |NotFound|Group not found|The group you are trying to access was not found|
 |Forbidden|Access denied|The group has reached the max number of members|
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
+|NotFound|User not found|The user with the account ${account} was not found|
 |DatabaseError|Failed to save|The group was not added to the user, something went wrong please try again|
 |DatabaseError|Failed to save|The group was not created, something went wrong please try again|
 
@@ -205,10 +206,10 @@ this functions uses some other functions
 |Forbidden|Access denied|You can not remove the last techLead|
 |NotFound|Group not found|The group was not found|
 |NotFound|User not found|The user is not in the group|
-|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |NotFound|User not found|The user with the account ${account} was not found|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
 |DatabaseError|Failed to remove|The group was not removed from the user, something went wrong please try again|
-|DatabaseError|Failed to remove|The group was not deleted, something went wrong please try again|
+|DatabaseError|Failed to save|The group was not updated, something went wrong please try again|
 
 # Member
 

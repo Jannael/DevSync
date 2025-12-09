@@ -361,24 +361,41 @@ _Method: PATCH_
 with this endpoint you verify the account its yours, and you can change the pwd in /user/v1/update/password/
 
 ## /request/logout/
-_Method: PATCH_
+_Method: POST_
 ### Input
-
+> [!NOTE]
+> If you do not have a refreshToken it returns an error
 ### Output
-- `complete`: boolean
-
-`complete`: it says if you are logout
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|500|ServerError||My bad|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+|||
+|500|ServerError|||
 
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|||
+|NotFound|User not found||
+|||
+|DataBaseError|Failed to remove|The session was not removed, something went wrong please try again|
 ### Explanation
 to logout xd

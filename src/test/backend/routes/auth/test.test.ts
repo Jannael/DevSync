@@ -601,7 +601,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'You need to ask for verification codes',
+            description: 'You need to send the verification codes',
             complete: false
           }
         },

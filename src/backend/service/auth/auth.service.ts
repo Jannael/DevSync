@@ -186,7 +186,7 @@ const service = {
       code: async function (req: Request, res: Response): Promise<boolean> {
         if (req.body?.codeCurrentAccount === undefined ||
           req.body?.codeNewAccount === undefined
-        ) throw new UserBadRequest('Invalid credentials', 'You need to ask for verification codes')
+        ) throw new UserBadRequest('Invalid credentials', 'You need to send the verification codes')
 
         const code = getToken(req, 'currentAccount', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
         const codeNewAccount = getToken(req, 'newAccount', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)

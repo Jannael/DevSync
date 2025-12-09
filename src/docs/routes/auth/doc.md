@@ -239,32 +239,35 @@ this endpoint it helps when you want to change your account but you need to be l
 ## /account/verify/code/
 _Method: PATCH_
 ### Input
-    you need an accessToken 
-    /auth/v1/request/accessToken/
-    you also need to ask for a code
-    /auth/v1/account/request/code/
-    `codeCurrentAccount`
-    `codeNewAccount`
+> [!IMPORTANT]
+> You need an accessToken: __/auth/v1/request/accessToken/__
+ 
+> [!TIP]
+> You need to ask for a code: __/auth/v1/account/request/code/__
 
+```json
+{
+    "codeCurrentAccount": "",
+    "codeNewAccount": ""
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if the both account were verified
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Invalid credentials|You need to ask for verification codes|
-|400|UserBadRequest|Invalid credentials|The token is invalid|
-|400|UserBadRequest|Invalid credentials|Current account code is wrong|
-|400|UserBadRequest|Invalid credentials|New account code is wrong|
-|500|Server Error||My bad|
+
 
 ### Explanation
 this endpoint its the second step to change the account, once you get the complete true, from here you can ask for change it, in /user/v1/update/account/

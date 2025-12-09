@@ -160,30 +160,42 @@ this endpoint its the second and last step to log in
 ## /request/accessToken/
 _Method: GET_
 ### Input
-    doesn't need an input but you to have a valid refreshToken
-    ask code for refreshToken: /request/refreshToken/code/
-    verify code for refreshToken: /request/refreshToken/
-
+> [!IMPORTANT]
+> You need a refreshToken for this: get code -> __/request/refreshToken/code/__, verify code: __/request/refreshToken/__
 ### Output
-- `complete`: boolean
-
-`complete`: it says if you got a new accessToken the server handles all the tokens, so you wont get them but this field tells you if everything went right
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Missing data|You need to login|
-|500|Server Error||My bad|
+|400|UserBadRequest|Missing data|Missing refreshToken|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|400|UserBadRequest|Invalid credentials||
+|400|UserBadRequest|Invalid credentials|You need to log in|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|||
+|NotFound|User not found||
+|||
+|DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
 ### Explanation
 this endpoint it's to keep the access to server resource with an accessToken
-
 
 ## /account/request/code/
 _Method: PATCH_

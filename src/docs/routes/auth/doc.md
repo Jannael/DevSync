@@ -97,11 +97,8 @@ _Method: POST_
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Invalid credentials|Missing or invalid data the account must match the following pattern example@service.ext|
-|400|UserBadRequest|Invalid credentials|Incorrect password|
 |||
-|404|NotFound|User not found|undefined|
-|||
-|500|ServerError||My bad|
+|500|ServerError|||
 
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
@@ -111,6 +108,7 @@ _Method: POST_
 |NotFound|User not found||
 |||
 |DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
+
 ### Explanation
 this endpoint its the first step to log in
 

@@ -322,32 +322,41 @@ this endpoint its for when you want to change the password of the account withou
 ## /password/verify/code/
 _Method: PATCH_
 ### Input
-    you need to ask for a code
-    /auth/v1/password/request/code/
-    `code`
-    `account`
-    `newPwd`
+> [!TIP]
+> You need to ask for a code: __/auth/v1/password/request/code/__
 
+```json
+{
+    "code": "",
+    "account": "",
+    "newPwd": ""
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if you can change the pwd
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Missing data|undefined|
-|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Missing data|You need to send code, newPwd and account|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
 |400|UserBadRequest|Invalid credentials|Wrong code|
 |400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
-|500|Server Error|My bad|
-
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 ### Explanation
 with this endpoint you verify the account its yours, and you can change the pwd in /user/v1/update/password/
 

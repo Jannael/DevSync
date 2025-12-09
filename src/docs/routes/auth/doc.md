@@ -118,7 +118,7 @@ _Method: POST_
 > [!IMPORTANT]
 > first you need to ask for a code -> __/auth/v1/request/refreshToken/code/__
 ```json
-    { "code": 1234 }
+    { "code": "1234" }
 ```
 ### Output
 ```json
@@ -135,11 +135,25 @@ _Method: POST_
 ```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Missing data|You need to use MFA for login|
-|400|UserBadRequest|Invalid credentials|Your code token is invalid|
-|400|UserBadRequest|Invalid credentials|The token is invalid|
+|400|UserBadRequest|Missing data|You need to send the code|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
 |400|UserBadRequest|Invalid credentials|Wrong code|
-|500|Server Error||My bad|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+|||
+|500|DatabaseError|Failed to save|The session was not saved please try again|
+
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|||
+|NotFound|User not found||
+|||
+|DatabaseError|Failed to save|The session was not saved, something went wrong please try again|
+
 ### Explanation
 this endpoint its the second and last step to log in
 

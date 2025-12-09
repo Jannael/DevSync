@@ -278,34 +278,44 @@ _Method: PATCH_
 |||
 |403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 
-
 ### Explanation
 this endpoint its the second step to change the account, once you get the complete true, from here you can ask for change it, in /user/v1/update/account/
 
 ## /password/request/code/
 _Method: PATCH_
 ### Input
-    `account`
-    `TEST_PWD`: for test environment
-
+```json
+{
+    "account": "",
+    "TEST_PWD": "" // for test environment
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if the code to the account was sent
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|Missing or invalid account it must match example@service.ext|
-|404|NotFound|User not found|undefined|
-|500|Server Error|My bad|
+|||
+|500|ServerError|||
 
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|||
+|NotFound|User not found||
+|||
+|DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|
 ### Explanation
 this endpoint its for when you want to change the password of the account without been log in, `forgot password`
 

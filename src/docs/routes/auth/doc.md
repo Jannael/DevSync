@@ -25,9 +25,10 @@ _Method: POST_
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Invalid credentials|Missing or invalid account, the account must match the following pattern example@service.ext|
-|500|ServerError||My bad|
+|||
+|500|ServerError|||
 ### Explanation
-this endpoint send and email to verify the account, and make some operations like delete or update de user, check the doc for user-routes
+this endpoint send and email to verify the account, and make some operations like delete or update the user, check the doc for user-routes
 
 ## /verify/code/
 _Method: POST_
@@ -56,13 +57,17 @@ _Method: POST_
 ```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Missing data|Missing code you need to ask for one|
-|400|UserBadRequest|Invalid credentials|The token is invalid|
-|400|UserBadRequest|Invalid credentials|The code you asked for is invalid|
+|400|UserBadRequest|Missing data|You did not send the code|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
 |400|UserBadRequest|Invalid credentials|Wrong code|
 |400|UserBadRequest|Invalid credentials|You tried to change the account now your banned forever|
 |||
-|500|ServerError||My bad|
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+|||
+|500|||
 ### Explanation
 this endpoint verify the code you're sending its the same the server sent and the account also must match with the one you asked to verify for
 

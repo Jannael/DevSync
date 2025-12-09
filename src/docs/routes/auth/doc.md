@@ -200,29 +200,39 @@ this endpoint it's to keep the access to server resource with an accessToken
 ## /account/request/code/
 _Method: PATCH_
 ### Input
-    you need an accessToken 
-    /auth/v1/request/accessToken/
-    `newAccount`,
-    `TEST_PWD`: for test environment
+> [!IMPORTANT]
+> You need an accessToken: __/auth/v1/request/accessToken/__
 
+```json
+{
+    "newAccount": "",
+    "TEST_PWD": "" // for test environment
+}
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if the code for verifying the account was send and saved
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|400|UserBadRequest|Missing data|Missing or invalid data you may be not logged in|
-|400|UserBadRequest|Invalid credentials|The token is invalid|
-|500|Server Error||My bad|
-
+|400|UserBadRequest|Missing data|Missing or invalid data check the newAccount you sent|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|400|UserBadRequest|Invalid credentials|The new account can not be the same as the current one|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 ### Explanation
 this endpoint it helps when you want to change your account but you need to be log in its the only way to change the account, this is the first step
 

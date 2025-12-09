@@ -109,32 +109,34 @@ _Method: POST_
 ### Explanation
 this endpoint its the first step to log in
 
-## /request/refreshToken/ 
+## /request/refreshToken/
 _Method: POST_
 ### Input
-    first you need to ask for a code
-    /auth/v1/request/refreshToken/code/
-    'code'
-
+> [!IMPORTANT]
+> first you need to ask for a code -> __/auth/v1/request/refreshToken/code/__
+```json
+    { "code": 1234 }
+```
 ### Output
-- `complete`: boolean
-
-`complete`: it says if you got the refreshToken
-
+```json
+{ "complete": true }
+```
 ### Error
-`output`
-
-    _body: 
-        msg: ''
-        complete: boolean
-
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
 |400|UserBadRequest|Missing data|You need to use MFA for login|
+|400|UserBadRequest|Invalid credentials|Your code token is invalid|
 |400|UserBadRequest|Invalid credentials|The token is invalid|
 |400|UserBadRequest|Invalid credentials|Wrong code|
 |500|Server Error||My bad|
-
 ### Explanation
 this endpoint its the second and last step to log in
 

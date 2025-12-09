@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { decrypt, generateCode, sendEmail, verifyEmail } from '../../utils/utils'
 import { encrypt } from '../../utils/encrypt'
@@ -8,6 +8,7 @@ import config from '../../config/config'
 import { IEnv } from '../../interface/env'
 import { Types } from 'mongoose'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
+import getToken from '../../utils/token'
 
 dotenv.config({ quiet: true })
 const {
@@ -45,7 +46,7 @@ const service = {
       return true
     },
     accessToken: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('Missing data', 'You need to login')
+      if (req.cookies?.refreshToken === undefined) throw new UserBadRequest('Missing data', 'Missing refreshToken')
       let refreshToken
       const jwtRefreshToken = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV, 'refreshToken')
       const decoded = jwt.decode(jwtRefreshToken)
@@ -65,7 +66,7 @@ const service = {
       if (typeof refreshToken === 'string') throw new UserBadRequest('Invalid credentials')
 
       const dbValidation = await model.refreshToken.verify(req.cookies.refreshToken, refreshToken._id as Types.ObjectId)
-      if (!dbValidation) throw new UserBadRequest('Invalid credentials', 'You are not logged In')
+      if (!dbValidation) throw new UserBadRequest('Invalid credentials', 'You need to log in')
 
       delete refreshToken.iat
       delete refreshToken.exp
@@ -100,20 +101,11 @@ const service = {
         return true
       },
       confirm: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.cookies?.tokenR === undefined ||
-          req.cookies?.codeR === undefined ||
-          req.body?.code === undefined
-        ) throw new UserBadRequest('Missing data', 'You need to use MFA for login')
+        if (req.body?.code === undefined) throw new UserBadRequest('Missing data', 'You need to use send the code')
 
-        const jwtCode = decrypt(req.cookies.codeR, CRYPTO_AUTH_ENV, 'codeToken')
-        const jwtToken = decrypt(req.cookies.tokenR, CRYPTO_AUTH_ENV, 'infoToken')
-
-        const code = jwt.verify(jwtCode, JWT_AUTH_ENV)
-        if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re code token is invalid')
+        const code = getToken(req, 'codeR', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
+        const user = getToken(req, 'tokenR', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
         if (code.code !== req.body?.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
-
-        const user = jwt.verify(jwtToken, JWT_AUTH_ENV)
-        if (typeof user === 'string') throw new UserBadRequest('Invalid credentials', 'You\'re')
 
         delete user.iat
         delete user.exp
@@ -133,13 +125,8 @@ const service = {
       }
     },
     logout: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.cookies.refreshToken === undefined) return true
-      const token = decrypt(req.cookies.refreshToken, CRYPTO_REFRESH_TOKEN_ENV, 'refreshToken')
-
-      const decoded = jwt.verify(token, JWT_REFRESH_TOKEN_ENV)
-      if (typeof decoded === 'string') throw new UserBadRequest('Invalid credentials')
+      const decoded = getToken(req, 'refreshToken', JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV)
       await model.refreshToken.remove(req.cookies.refreshToken, decoded._id)
-
       res.clearCookie('refreshToken')
       res.clearCookie('accessToken')
       return true
@@ -147,14 +134,9 @@ const service = {
   },
   verify: {
     code: async function (req: Request, res: Response): Promise<boolean> {
-      if (req.body?.code === undefined ||
-        req.cookies?.code === undefined
-      ) throw new UserBadRequest('Missing data', 'Missing code you need to ask for one')
+      if (req.body?.code === undefined) throw new UserBadRequest('Missing data', 'You did not send the code')
 
-      const jwtCode = decrypt(req.cookies.code, CRYPTO_AUTH_ENV, 'codeToken')
-      const decodedCode = jwt.verify(jwtCode, JWT_AUTH_ENV)
-      if (typeof decodedCode === 'string') throw new UserBadRequest('Invalid credentials', 'The code you asked for is invalid')
-
+      const decodedCode = getToken(req, 'code', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
       if (req.body?.code !== decodedCode.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
       if (req.body?.account !== decodedCode.account) throw new UserBadRequest('Invalid credentials', 'You tried to change the account now your banned forever')
 
@@ -171,14 +153,11 @@ const service = {
         let code = generateCode()
         let codeNewAccount = generateCode()
 
-        if (req.cookies.accessToken === undefined ||
-          req.body?.newAccount === undefined ||
+        if (req.body?.newAccount === undefined ||
           !verifyEmail(req.body?.newAccount)
-        ) throw new UserBadRequest('Missing data', 'Missing or invalid data you may be not logged in')
+        ) throw new UserBadRequest('Missing data', 'Missing or invalid data check the newAccount you sent')
 
-        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-        const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV)
-        if (typeof accessToken === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid accessToken')
+        const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
 
         if (req.body?.TEST_PWD !== undefined &&
           req.body?.TEST_PWD === TEST_PWD_ENV
@@ -192,9 +171,7 @@ const service = {
           await sendEmail(req.body?.newAccount, code)
         }
 
-        if (accessToken.account === req.body?.newAccount) {
-          throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')
-        }
+        if (accessToken.account === req.body?.newAccount) throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')
 
         const codeEncrypted = encrypt({ code }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.code)
         const codeNewAccountEncrypted = encrypt({ code: codeNewAccount, account: req.body?.newAccount }, CRYPTO_AUTH_ENV, JWT_AUTH_ENV, config.jwt.codeNewAccount)
@@ -207,25 +184,12 @@ const service = {
     },
     verify: {
       code: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.cookies?.currentAccount === undefined ||
-          req.cookies?.newAccount === undefined ||
-          req.cookies?.accessToken === undefined ||
-          req.body?.codeCurrentAccount === undefined ||
+        if (req.body?.codeCurrentAccount === undefined ||
           req.body?.codeNewAccount === undefined
         ) throw new UserBadRequest('Invalid credentials', 'You need to ask for verification codes')
 
-        const jwtCode = decrypt(req.cookies.currentAccount, CRYPTO_AUTH_ENV, 'currentAccountToken')
-        const jwtCodeNewAccount = decrypt(req.cookies.newAccount, CRYPTO_AUTH_ENV, 'newAccountToken')
-        const jwtAccessToken = decrypt(req.cookies.accessToken, CRYPTO_ACCESS_TOKEN_ENV, 'accessToken')
-
-        const code = jwt.verify(jwtCode, JWT_AUTH_ENV) as JwtPayload
-        const codeNewAccount = jwt.verify(jwtCodeNewAccount, JWT_AUTH_ENV) as JwtPayload
-        const accessToken = jwt.verify(jwtAccessToken, JWT_ACCESS_TOKEN_ENV) as JwtPayload
-
-        if (typeof code === 'string' ||
-          typeof codeNewAccount === 'string' ||
-          typeof accessToken === 'string'
-        ) throw new UserBadRequest('Invalid credentials', 'The codes, or you\'re session token are invalid')
+        const code = getToken(req, 'currentAccount', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
+        const codeNewAccount = getToken(req, 'newAccount', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
         if (code.code !== req.body?.codeCurrentAccount) throw new UserBadRequest('Invalid credentials', 'Current account code is wrong')
         if (codeNewAccount.code !== req.body?.codeNewAccount) throw new UserBadRequest('Invalid credentials', 'New account code is wrong')
@@ -265,14 +229,11 @@ const service = {
     verify: {
       code: async function (req: Request, res: Response): Promise<boolean> {
         if (req.body?.code === undefined ||
-          req.cookies.pwdChange === undefined ||
           req.body?.newPwd === undefined ||
           req.body?.account === undefined
-        ) throw new UserBadRequest('Missing data')
+        ) throw new UserBadRequest('Missing data', 'You need to send code, newPwd and account')
 
-        const jwtPwdChange = decrypt(req.cookies.pwdChange, CRYPTO_AUTH_ENV, 'token for pwd change')
-        const code = jwt.verify(jwtPwdChange, JWT_AUTH_ENV)
-        if (typeof code === 'string') throw new UserBadRequest('Invalid credentials', 'Invalid token')
+        const code = getToken(req, 'pwdChange', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
 
         if (code.code !== req.body?.code) throw new UserBadRequest('Invalid credentials', 'Wrong code')
         if (code.account !== req.body?.account) throw new UserBadRequest('Invalid credentials', 'You tried to change the account now your banned forever')

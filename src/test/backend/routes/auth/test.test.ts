@@ -88,7 +88,6 @@ describe('/auth/v1/', () => {
 
   describe('/verify/code/', () => {
     const endpoint = '/auth/v1/verify/code/'
-
     test('', async () => {
       await agent
         .post('/auth/v1/request/code/')
@@ -119,7 +118,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing code you need to ask for one',
+            description: 'You did not send the code',
             complete: false
           }
         },
@@ -134,7 +133,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing code you need to ask for one',
+            description: 'Missing code',
             complete: false
           }
         },
@@ -150,7 +149,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The codeToken is invalid',
+            description: 'The code is invalid',
             complete: false
           }
         },
@@ -330,7 +329,6 @@ describe('/auth/v1/', () => {
 
   describe('/request/refreshToken/', () => {
     const endpoint = path + '/request/refreshToken/'
-
     test('', async () => {
       const res = await agent
         .post(endpoint)
@@ -358,7 +356,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'You need to use MFA for login',
+            description: 'Missing codeR',
             complete: false
           }
         },
@@ -371,7 +369,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'You need to use MFA for login',
+            description: 'You need to send the code',
             complete: false
           }
         },
@@ -387,7 +385,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The codeToken is invalid',
+            description: 'The codeR is invalid',
             complete: false
           }
         },
@@ -448,7 +446,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'You need to login',
+            description: 'Missing refreshToken',
             complete: false
           }
         }
@@ -494,7 +492,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing or invalid data you may be not logged in',
+            description: 'Missing or invalid data check the newAccount you sent',
             complete: false
           }
         },
@@ -507,7 +505,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing or invalid data you may be not logged in',
+            description: 'Missing or invalid data check the newAccount you sent',
             complete: false
           }
         },
@@ -522,7 +520,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing or invalid data you may be not logged in',
+            description: 'Missing or invalid data check the newAccount you sent',
             complete: false
           }
         },
@@ -538,7 +536,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: 'Missing or invalid data you may be not logged in',
+            description: 'Missing or invalid data check the newAccount you sent',
             complete: false
           }
         },
@@ -618,8 +616,8 @@ describe('/auth/v1/', () => {
           },
           error: {
             code: 400,
-            msg: 'Invalid credentials',
-            description: 'You need to ask for verification codes',
+            msg: 'Missing data',
+            description: 'Missing currentAccount',
             complete: false
           }
         },
@@ -636,7 +634,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The currentAccountToken is invalid',
+            description: 'The currentAccount is invalid',
             complete: false
           }
         },
@@ -724,7 +722,7 @@ describe('/auth/v1/', () => {
             return await request(app)
               .post(endpoint)
           },
-          error: { complete: true }
+          error: { complete: false }
         }
       ]
 
@@ -829,7 +827,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: undefined,
+            description: 'You need to send code, newPwd and account',
             complete: false
           }
         },
@@ -846,7 +844,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Missing data',
-            description: undefined,
+            description: 'Missing pwdChange',
             complete: false
           }
         },
@@ -864,7 +862,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 400,
             msg: 'Invalid credentials',
-            description: 'The token for pwd change is invalid',
+            description: 'The pwdChange is invalid',
             complete: false
           }
         },

@@ -101,7 +101,7 @@ const service = {
         return true
       },
       confirm: async function (req: Request, res: Response): Promise<boolean> {
-        if (req.body?.code === undefined) throw new UserBadRequest('Missing data', 'You need to use send the code')
+        if (req.body?.code === undefined) throw new UserBadRequest('Missing data', 'You need to send the code')
 
         const code = getToken(req, 'codeR', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)
         const user = getToken(req, 'tokenR', JWT_AUTH_ENV, CRYPTO_AUTH_ENV)

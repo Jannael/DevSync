@@ -34,7 +34,8 @@ const middleware = (roles: Array<'techLead' | 'developer' | 'documenter'>) => {
       }
 
       const member = group.member?.find(m => m.account === accessToken.account)
-      if (member !== undefined && roles.includes(member.role as any)) {
+      if (member === undefined) throw new Forbidden('Access denied', 'You do not belong to the group')
+      if (roles.includes(member.role as any)) {
         next()
         return
       }

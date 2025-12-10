@@ -109,10 +109,34 @@ describe('auth router', () => {
             error: {
               code: 403,
               msg: 'Access denied',
+              description: 'You do not belong to the group',
+              complete: false
+            }
+          },
+          {
+            fn: async function () {
+              await agent
+                .post('/user/v1/add/group/')
+                .send({
+                  _id: group._id
+                })
+
+              const res = await agent
+                .post('/utils/v1/protected/')
+                .send({
+                  groupId: group._id
+                })
+
+              return res
+            },
+            error: {
+              code: 403,
+              msg: 'Access denied',
               description: 'You do not have the required role',
               complete: false
             }
           }
+
         ]
 
         for (const { fn, error } of cases) {

@@ -12,8 +12,7 @@ const codeSchema = new Schema({
 })
 
 const schema = new Schema({
-  _id: { type: ObjectId },
-  userId: { type: ObjectId },
+  user: { type: String },
   groupId: { type: ObjectId },
   taskId: { type: ObjectId },
   feature: [{

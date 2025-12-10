@@ -12,14 +12,14 @@ const codeSchema = new Schema({
 })
 
 const schema = new Schema({
-  _id: { type: ObjectId },
   groupId: { type: ObjectId },
-  user: [{ type: ObjectId, ref: 'user' }],
+  user: [{ type: String, ref: 'user' }],
   name: { type: String, required: true },
   code: codeSchema,
   feature: [{ type: String }],
   description: { type: String },
-  isComplete: { type: Boolean }
+  isComplete: { type: Boolean },
+  priority: { type: Number }
 }, {
   ...config.database.mongodb.schemaOptions,
   collection: 'task'

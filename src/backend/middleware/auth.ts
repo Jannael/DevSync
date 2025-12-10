@@ -2,9 +2,10 @@ import { NextFunction, Request, Response } from 'express'
 import getToken from '../utils/token'
 import { IEnv } from '../interface/env'
 import groupModel from '../database/schemas/node/group'
-import { CustomError, Forbidden, UserBadRequest } from '../error/error'
+import { CustomError, Forbidden, NotFound, UserBadRequest } from '../error/error'
 import dotenv from 'dotenv'
 import handler from '../error/handler'
+import { Types } from 'mongoose'
 
 dotenv.config({ quiet: true })
 
@@ -18,12 +19,12 @@ const middleware = (roles: Array<'techLead' | 'developer' | 'documenter'>) => {
     try {
       const accessToken = getToken(req, 'accessToken', JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV)
       const { groupId } = req.body
+      if (groupId === undefined) throw new UserBadRequest('Missing data', 'The groupId is missing')
+      if (!Types.ObjectId.isValid(groupId)) throw new UserBadRequest('Invalid credentials', 'The groupId is invalid')
       req.body.accessToken = accessToken
 
-      if (groupId === undefined) throw new UserBadRequest('Missing data', 'The groupId is missing')
-
       const group = await groupModel.findOne({ _id: groupId }, { techLead: 1, member: 1 }).lean()
-      if (group === null || group.techLead === undefined) throw new Forbidden('Access denied', 'The group was not found')
+      if (group === null || group.techLead === undefined) throw new NotFound('Group not found', 'The group was not found')
 
       if (roles.includes('techLead')) {
         const isTechLead = group.techLead.some(t => t.account === accessToken.account)

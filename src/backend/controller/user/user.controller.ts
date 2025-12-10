@@ -18,7 +18,7 @@ const controller = {
   create: async function (req: Request, res: Response) {
     try {
       const result = await service.create(req, res)
-      res.status(201).json({ ...result, complete: true })
+      res.json({ ...result, complete: true })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'code', href: '/auth/v1/request/code/' },

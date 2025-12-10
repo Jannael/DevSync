@@ -151,13 +151,39 @@ _Method: POST_
 ### Explanation
 to create a group
 
-## /update/ 
-_Method: GET_
+## /update/
+_Method: PUT_
 ### Input
 ```json
+{
+  "_id": "group._id", 
+  "data": {
+    "name": "", // Optional
+    "color": "", // Optional
+    "repository": "" // Optional
+  }
+}
 ```
 ### Output
 ```json
+{
+  "complete": true,
+  "result": {
+    "_id": "",
+    "techLead": [{
+      "account": "",
+      "fullName": ""
+    }], // Optional
+    "name": "",
+    "color": "",
+    "repository": "", // Optional
+    "member": [{
+      "account": "",
+      "fullName": "",
+      "role": ""
+    }] // Optional
+  }
+}
 ```
 ### Error
 ```json
@@ -170,6 +196,32 @@ _Method: GET_
 ```
 |StatusCode|Instance|Message|Description|
 |:-----------|:-----------|:-----------|-----------:|
-|||||
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|400|UserBadRequest|Missing data|You need to send the _id for the group you want to update|
+|400|UserBadRequest|Invalid credentials|You only can update the name, color and repository|
+|400|UserBadRequest|Invalid credentials|x|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|You can not change the _id|
+|UserBadRequest|Invalid credentials|You can not change the member|
+|UserBadRequest|Invalid credentials|You can not change the techLead|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|||
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|||
+|NotFound|Group not found|The group you are trying to access does not exist|
+|NotFound|Group not found|The user it\'s not in the group|
+|||
+|DatabaseError|Failed to save|The user was not updated|
+|DatabaseError|Failed to save|The group was not updated, something went wrong please try again|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 ### Explanation
+To update a group, you need to be a techLead

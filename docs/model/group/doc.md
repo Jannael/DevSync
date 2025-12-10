@@ -240,7 +240,6 @@ it adds a member to the groups,
 |Forbidden|Access denied|The group has reached the max number of members|
 |DatabaseError|Failed to save|the member with the account ${member.account} was not added|
 
-
 ## Remove
 to remove a user in group schema
 > [!CAUTION]

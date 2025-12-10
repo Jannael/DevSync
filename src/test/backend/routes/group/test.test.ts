@@ -234,7 +234,7 @@ describe('/group/v1/', () => {
     const endpoint = path + '/update/'
     test('', async () => {
       const res = await agent
-        .post(endpoint)
+        .put(endpoint)
         .send({
           _id: group._id,
           data: {
@@ -271,7 +271,7 @@ describe('/group/v1/', () => {
               })
 
             return await agent
-              .post(endpoint)
+              .put(endpoint)
               .send({
                 _id: group._id,
                 data: {

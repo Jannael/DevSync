@@ -3,9 +3,9 @@ import controller from '../../controller/group/group.controller'
 
 const router = Router()
 
-router.post('/get/', controller.get) // doc
-router.post('/create/', controller.create) // doc
-router.post('/update/', controller.update) // doc
+router.post('/get/', controller.get)
+router.post('/create/', controller.create)
+router.put('/update/', controller.update) // doc
 router.delete('/delete/', controller.delete) // doc
 
 // Members

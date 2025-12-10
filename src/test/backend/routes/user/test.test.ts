@@ -153,7 +153,7 @@ describe('/user/v1/', () => {
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
-      expect(res.statusCode).toEqual(201)
+      expect(res.statusCode).toEqual(200)
     })
 
     test('error', async () => {

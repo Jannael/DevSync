@@ -150,3 +150,26 @@ _Method: POST_
 |DatabaseError|Failed to save|The group was not created, something went wrong please try again|
 ### Explanation
 to create a group
+
+## /update/ 
+_Method: GET_
+### Input
+```json
+```
+### Output
+```json
+```
+### Error
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|||||
+
+### Explanation

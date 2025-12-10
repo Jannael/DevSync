@@ -365,8 +365,8 @@ _Method: DELETE_
 |400|UserBadRequest|Missing data|Missing {token}|
 |400|UserBadRequest|Invalid credentials|Invalid {token}|
 |400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
-UserBadRequest('Missing data', 'You need to send the _id of the group to remove the user')
- UserBadRequest('Missing data', 'You need to send the account of the member you want to remove')
+|400|UserBadRequest|Missing data|You need to send the _id of the group to remove the user|
+|400|UserBadRequest|Missing data|You need to send the account of the member you want to remove|
 |||
 |401|Unauthorized|Expired token|The token has expired and is no longer valid|
 |||
@@ -387,6 +387,5 @@ UserBadRequest('Missing data', 'You need to send the _id of the group to remove 
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 |DatabaseError|Failed to remove|The member was not remove from the group please try again|
-
 ### Explanation
 to remove a user from the group

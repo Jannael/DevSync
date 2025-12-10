@@ -225,3 +225,56 @@ _Method: PUT_
 |DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
 ### Explanation
 To update a group, you need to be a techLead
+
+## /delete/
+_Method: DELETE_
+### Input
+```json
+{ "_id": "group._id" }
+```
+### Output
+```json
+{ "complete": true }
+```
+### Error
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+|StatusCode|Instance|Message|Description|
+|:-----------|:-----------|:-----------|-----------:|
+|400|UserBadRequest|Missing data|Missing {token}|
+|400|UserBadRequest|Invalid credentials|Invalid {token}|
+|400|UserBadRequest|Invalid credentials|The token is malformed or has been tampered with|
+|400|UserBadRequest|Missing data|You need to send the _id of the group to remove the user|
+|400|UserBadRequest|Missing data|You need to send the account of the member you want to remove|
+|||
+|401|Unauthorized|Expired token|The token has expired and is no longer valid|
+|||
+|403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
+
+|Instance|Error|Message|
+|:-----------|:-----------|-----------:|
+|UserBadRequest|Invalid credentials|The _id is invalid|
+|UserBadRequest|Invalid credentials|The account ${account} is invalid|
+|||
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|Forbidden|Access denied|Only tech leads can delete a group|
+|Forbidden|Access denied|The group exists but the user is not a techLead|
+|Forbidden|Access denied|You can not remove the last techLead|
+|||
+|NotFound|Group not found|The group you are trying to delete does not exist|
+|NotFound|Group not found|The group was not found|
+|NotFound|User not found|The user is not in the group|
+|NotFound|User not found|The user with the account ${account} was not found|
+|||
+|DatabaseError|Failed to save|The group was not updated, something went wrong please try again|
+|DatabaseError|Failed to remove|The member was not remove from the group please try again|
+|DatabaseError|Failed to remove|The group was not removed from the user, something went wrong please try again|
+|DatabaseError|Failed to access data|The group existence could not be verified, something went wrong please try again|
+### Explanation
+to delete a group

@@ -45,7 +45,10 @@ const service = {
     return await model.update(req.body?.taskId, task)
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
-    return await model.delete(req.body?.groupId)
+    if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want to delete')
+    if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
+
+    return await model.delete(req.body?.taskId)
   }
 }
 

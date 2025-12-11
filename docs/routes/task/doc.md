@@ -279,4 +279,38 @@ _Method: POST_
 
 ### Explanation
 
-this endpoint return the _id for the created task
+this endpoint return the \_id for the created task
+
+
+## /delete/
+
+_Method: DELETE_
+
+### Input
+
+```json
+
+```
+
+### Output
+
+```json
+
+```
+
+### Error
+
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+
+| StatusCode | Instance | Message | Description |
+| :--------- | :------- | :------ | ----------: |
+|            |          |         |             |
+
+### Explanation

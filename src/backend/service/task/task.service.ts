@@ -44,7 +44,7 @@ const service = {
 
     return await model.update(req.body?.taskId, task)
   },
-  delete: async function (req: Request, res: Response) {
+  delete: async function (req: Request, res: Response): Promise<boolean> {
     return await model.delete(req.body?.groupId)
   }
 }

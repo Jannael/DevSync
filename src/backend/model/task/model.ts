@@ -74,9 +74,10 @@ const model = {
       throw new DatabaseError('Failed to save', 'The task was not updated, please try again')
     }
   },
-  delete: async function (): Promise<boolean> {
+  delete: async function (taskId: Types.ObjectId): Promise<boolean> {
     try {
-      return true
+      const res = await dbModel.deleteOne({ _id: taskId })
+      return res.acknowledged
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to remove', 'The task was not deleted, please try again')

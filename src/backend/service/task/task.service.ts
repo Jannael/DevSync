@@ -5,6 +5,7 @@ import model from './../../model/task/model'
 import { Request, Response } from 'express'
 import validator from '../../validator/validator'
 import authModel from './../../model/auth/model'
+import groupModel from './../../model/group/model'
 
 const service = {
   list: async function (req: Request, res: Response): Promise<IListTask> {
@@ -18,7 +19,7 @@ const service = {
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
     return await model.get(req.body?._id)
   },
-  create: async function (req: Request, res: Response) {
+  create: async function (req: Request, res: Response): Promise<Types.ObjectId> {
     const task = validator.task.create(req.body)
 
     for (const userAccount of task.user) {
@@ -27,7 +28,21 @@ const service = {
 
     return await model.create(task)
   },
-  update: async function (req: Request, res: Response) {},
+  update: async function (req: Request, res: Response): Promise<boolean> {
+    // body = groupId, taskId, data = {...}
+    if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
+    if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'The taskId is invalid')
+
+    const task = validator.task.partial(req.body.data)
+
+    if (task.user !== undefined) {
+      for (const userAccount of task.user) {
+        await authModel.exists(userAccount)
+        await groupModel.member.exists(userAccount, req.body?.groupId)
+      }
+    }
+    return await model.update(req.body?.taskId, task)
+  },
   delete: async function (req: Request, res: Response) {}
 }
 

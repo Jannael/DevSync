@@ -280,6 +280,20 @@ const model = {
         )
         return false
       }
+    },
+    exists: async function (account: string, groupId: Types.ObjectId): Promise<boolean> {
+      try {
+        const isTechLead = await dbModel.exists({ _id: groupId, 'techLead.account': account })
+        if (isTechLead !== null || isTechLead !== undefined) { return true }
+        const isMember = await dbModel.exists({ _id: groupId, 'member.account': account })
+        if (isMember !== null || isMember !== undefined) { return true }
+        throw new UserBadRequest('Invalid credentials', `The user with the account ${account} does not belong to the group`)
+      } catch (e) {
+        errorHandler.allErrors(e as CustomError,
+          new DatabaseError('Failed to access data', 'The user may not be in the group')
+        )
+        throw new DatabaseError('Failed to access data', 'The user may not be in the group')
+      }
     }
   }
 }

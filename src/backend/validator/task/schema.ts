@@ -32,7 +32,7 @@ const validator = {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
   },
-  partial: function (task: ITask) {
+  partial: function (task: Partial<ITask>) {
     try {
       const result = schema.partial().parse(task)
       return result

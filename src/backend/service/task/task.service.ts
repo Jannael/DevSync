@@ -48,7 +48,7 @@ const service = {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want to delete')
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
 
-    return await model.delete(req.body?.taskId)
+    return await model.delete(req.body?._id)
   }
 }
 

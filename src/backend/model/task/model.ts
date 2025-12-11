@@ -52,9 +52,37 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The task was not retrieved please try again')
     }
   },
-  create: async function () {},
-  update: async function () {},
-  delete: async function () {}
+  create: async function (task: ITask): Promise<Types.ObjectId> {
+    try {
+      const res = await dbModel.insertOne(task)
+      return res._id
+    } catch (e) {
+      handler.allErrors(e as CustomError,
+        new DatabaseError('Failed to save', 'The task was not created, please try again')
+      )
+      throw new DatabaseError('Failed to save', 'The task was not created, please try again')
+    }
+  },
+  update: async function (): Promise<boolean> {
+    try {
+      return true
+    } catch (e) {
+      handler.allErrors(e as CustomError,
+        new DatabaseError('Failed to save', 'The task was not updated, please try again')
+      )
+      throw new DatabaseError('Failed to save', 'The task was not updated, please try again')
+    }
+  },
+  delete: async function (): Promise<boolean> {
+    try {
+      return true
+    } catch (e) {
+      handler.allErrors(e as CustomError,
+        new DatabaseError('Failed to remove', 'The task was not deleted, please try again')
+      )
+      throw new DatabaseError('Failed to remove', 'The task was not deleted, please try again')
+    }
+  }
 }
 
 export default model

@@ -39,7 +39,7 @@ export const UserBadRequest = createError<IUserBadRequest>(400, 'userBadRequest'
 type IDuplicateData = 'User already exists'
 export const DuplicateData = createError<IDuplicateData>(409, 'duplicateData')
 
-type INotFound = 'User not found' | 'Group not found' | 'Invitation not found'
+type INotFound = 'User not found' | 'Group not found' | 'Invitation not found' | 'Task not found'
 export const NotFound = createError<INotFound>(404, 'NotFound')
 
 type IServerError = 'Operation Failed'

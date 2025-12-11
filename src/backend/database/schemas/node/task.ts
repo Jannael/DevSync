@@ -1,9 +1,10 @@
 import { model, Schema } from 'mongoose'
 import config from '../../../config/config'
+import { ICodeSchema, ITask } from '../../../interface/task'
 
 const { ObjectId } = Schema.Types
 
-const codeSchema = new Schema({
+const codeSchema = new Schema<ICodeSchema>({
   language: { type: String, required: true },
   content: { type: String, required: true }
 }, {
@@ -11,9 +12,9 @@ const codeSchema = new Schema({
   _id: false
 })
 
-const schema = new Schema({
+const schema = new Schema<ITask>({
   groupId: { type: ObjectId },
-  user: [{ type: String, ref: 'user' }],
+  user: [{ type: String }],
   name: { type: String, required: true },
   code: codeSchema,
   feature: [{ type: String }],
@@ -25,4 +26,4 @@ const schema = new Schema({
   collection: 'task'
 })
 
-export default model('task', schema)
+export default model<ITask>('task', schema)

@@ -1,13 +1,14 @@
 import { Router } from 'express'
 import auth from './../../middleware/auth'
+import controller from './../../controller/task/task.controller'
 
 const router = Router()
 
-router.post('/get/', auth(['techLead', 'developer', 'documenter']))
-router.post('/list/', auth(['techLead', 'developer', 'documenter']))
+router.post('/get/', auth(['techLead', 'developer', 'documenter']), controller.get)
+router.post('/list/', auth(['techLead', 'developer', 'documenter']), controller.list)
 
-router.post('/create/', auth(['techLead']))
-router.put('/update/', auth(['techLead']))
-router.delete('/delete/', auth(['techLead']))
+router.put('/update/', auth(['techLead']), controller.update)
+router.post('/create/', auth(['techLead']), controller.create)
+router.delete('/delete/', auth(['techLead']), controller.delete)
 
 export default router

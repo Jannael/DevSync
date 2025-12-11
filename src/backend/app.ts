@@ -19,6 +19,7 @@ export async function createApp (dbEnv: string): Promise<express.Express> {
   app.use('/user/v1/', router.user)
   app.use('/utils/v1/', router.utils)
   app.use('/group/v1/', router.group)
+  app.use('/task/v1/', router.task)
 
   return app
 }

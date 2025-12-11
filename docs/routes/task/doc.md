@@ -1,6 +1,6 @@
 # /task/v1/
 
-## /get/
+## /list/
 
 _Method: POST_
 
@@ -64,3 +64,70 @@ _Method: POST_
 ### Explanation
 
 this endpoint lists the task from the group and in the field assign returns the \_id for those the user is assign to
+
+## /get/
+
+_Method: POST_
+
+### Input
+
+```json
+{ "_id": "taskId" }
+```
+
+### Output
+
+```json
+{
+  "complete": true,
+  "result": {
+    "_id": "",
+    "groupId": "",
+    "user": [""],
+    "name": "",
+    "code": {
+      "language": "",
+      "content": ""
+    },
+    "feature": [""],
+    "description": "",
+    "isComplete": false,
+    "priority": 0
+  }
+}
+```
+
+### Error
+
+```json
+{
+  "msg": "",
+  "complete": false,
+  "description": "",
+  "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
+}
+```
+
+| StatusCode | Instance       | Message               |                                        Description |
+| :--------- | :------------- | :-------------------- | -------------------------------------------------: |
+| 400        | UserBadRequest | Missing data          |                                    Missing {token} |
+| 400        | UserBadRequest | Missing data          |    You need to send the \_id for the task you want |
+| 400        | UserBadRequest | Invalid credentials   |                                    Invalid {token} |
+| 400        | UserBadRequest | Invalid credentials   |   The token is malformed or has been tampered with |
+| 400        | UserBadRequest | Invalid credentials   |                             The groupId is invalid |
+| 400        | UserBadRequest | Invalid credentials   |                   The \_id for the task is invalid |
+|            |                |                       |                                                    |
+| 400        | NotFound       | Task not found        |                                                    |
+| 404        | NotFound       | Group not found       |                            The group was not found |
+|            |                |                       |                                                    |
+| 401        | Unauthorized   | Expired token         |       The token has expired and is no longer valid |
+|            |                |                       |                                                    |
+| 403        | Forbidden      | Access denied         |                     You do not belong to the group |
+| 403        | Forbidden      | Access denied         |                  You do not have the required role |
+| 403        | Forbidden      | Access denied         | The token is not active yet; check the "nbf" claim |
+|            |                |                       |                                                    |
+| 500        | DatabaseError  | Failed to access data |        The task was not retrieved please try again |
+
+### Explanation
+
+it returns all the information about the task you are asking for

@@ -15,7 +15,7 @@ const service = {
     return await model.list(req.body?.groupId, req.body?.accessToken.account, req.body?.pagination)
   },
   get: async function (req: Request, res: Response): Promise<ITask> {
-    if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You to send the _id for the task you want')
+    if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want')
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
     return await model.get(req.body?._id)
   },

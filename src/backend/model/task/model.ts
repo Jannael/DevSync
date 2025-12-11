@@ -63,9 +63,10 @@ const model = {
       throw new DatabaseError('Failed to save', 'The task was not created, please try again')
     }
   },
-  update: async function (): Promise<boolean> {
+  update: async function (taskId: Types.ObjectId, data: Partial<ITask>): Promise<boolean> {
     try {
-      return true
+      const res = await dbModel.updateOne({ _id: taskId }, { ...data })
+      return res.acknowledged
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to save', 'The task was not updated, please try again')

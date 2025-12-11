@@ -52,7 +52,7 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The task was not retrieved please try again')
     }
   },
-  create: async function (task: ITask): Promise<Types.ObjectId> {
+  create: async function (task: Omit<ITask, '_id'>): Promise<Types.ObjectId> {
     try {
       const res = await dbModel.insertOne(task)
       return res._id

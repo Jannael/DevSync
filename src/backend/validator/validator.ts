@@ -4,6 +4,8 @@ import user_invitation from './user/invitation'
 
 import group from './group/schema'
 
+import task from './task/schema'
+
 const validator = {
   user: {
     create: user.create,
@@ -16,6 +18,10 @@ const validator = {
     partial: group.partial,
     member: group.member,
     role: group.role
+  },
+  task: {
+    create: task.create,
+    partial: task.partial
   }
 }
 

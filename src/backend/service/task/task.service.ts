@@ -3,6 +3,8 @@ import { UserBadRequest } from '../../error/error'
 import { IListTask, ITask } from '../../interface/task'
 import model from './../../model/task/model'
 import { Request, Response } from 'express'
+import validator from '../../validator/validator'
+import authModel from './../../model/auth/model'
 
 const service = {
   list: async function (req: Request, res: Response): Promise<IListTask> {
@@ -16,7 +18,15 @@ const service = {
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
     return await model.get(req.body?._id)
   },
-  create: async function (req: Request, res: Response) {},
+  create: async function (req: Request, res: Response) {
+    const task = validator.task.create(req.body)
+
+    for (const userAccount of task.user) {
+      await authModel.exists(userAccount)
+    }
+
+    return await model.create(task)
+  },
   update: async function (req: Request, res: Response) {},
   delete: async function (req: Request, res: Response) {}
 }

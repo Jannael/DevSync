@@ -49,13 +49,11 @@ const model = {
   refreshToken: {
     save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        const exists = await dbModel.exists({ _id: userId })
-        if (exists == null) throw new NotFound('User not found')
+        const user = await dbModel.findOne({ _id: userId }, { _id: 0, refreshToken: 1 })
 
-        const { refreshToken } = await dbModel.findOne({ _id: userId }, { _id: 0, refreshToken: 1 }) as { refreshToken: string[] }
-
-        if (Array.isArray(refreshToken) && refreshToken.length >= 3) {
-          await dbModel.updateOne({ _id: userId }, { refreshToken: refreshToken.slice(1) })
+        if (user == null) throw new NotFound('User not found')
+        if (Array.isArray(user.refreshToken) && user.refreshToken.length >= 3) {
+          await dbModel.updateOne({ _id: userId }, { refreshToken: user.refreshToken.slice(1) })
         }
 
         const result = await dbModel.updateOne(
@@ -74,14 +72,12 @@ const model = {
     },
     remove: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        const exists = await dbModel.exists({ _id: userId })
-        if (exists == null) throw new NotFound('User not found')
-
         const result = await dbModel.updateOne(
           { _id: userId },
           { $pull: { refreshToken: token } }
         )
 
+        if (result.matchedCount === 0) throw new NotFound('User not found')
         return result.matchedCount === 1 && result.modifiedCount === 1
       } catch (e) {
         errorHandler.allErrors(

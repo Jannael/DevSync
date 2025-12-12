@@ -43,14 +43,15 @@ Validates if the user exists
 
 ### Error
 
-| Instance       | Error                 |                                                           Message |
-| :------------- | :-------------------- | ----------------------------------------------------------------: |
-| NotFound       | User not found        |                                                                   |
-| DatabaseError  | Failed to access data | The user was not retrieved, something went wrong please try again |
+| Instance      | Error                 |                                                           Message |
+| :------------ | :-------------------- | ----------------------------------------------------------------: |
+| NotFound      | User not found        |                                                                   |
+| DatabaseError | Failed to access data | The user was not retrieved, something went wrong please try again |
 
 # RefreshToken
 
 ## Verify
+
 This function tells you if the token is saved in the db, to get more protection, on the information in it.
 
 ### Parameters:
@@ -64,10 +65,10 @@ This function tells you if the token is saved in the db, to get more protection,
 
 ### Errors:
 
-| Instance       | Error                 |                                                           Message |
-| :------------- | :-------------------- | ----------------------------------------------------------------: |
-| NotFound       | User not found        |                                                                   |
-| DatabaseError  | Failed to access data | The user was not retrieved, something went wrong please try again |
+| Instance      | Error                 |                                                           Message |
+| :------------ | :-------------------- | ----------------------------------------------------------------: |
+| NotFound      | User not found        |                                                                   |
+| DatabaseError | Failed to access data | The user was not retrieved, something went wrong please try again |
 
 ## Remove
 
@@ -86,7 +87,6 @@ it removes a refreshToken from user's sessions
 
 | Instance       | Error               |                                                            Message |
 | :------------- | :------------------ | -----------------------------------------------------------------: |
-| UserBadRequest | Invalid credentials |                                                The \_id is invalid |
 | NotFound       | User not found      |                                                                    |
 | DataBaseError  | Failed to remove    | The session was not removed, something went wrong please try again |
 

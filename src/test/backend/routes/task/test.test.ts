@@ -161,4 +161,37 @@ describe('/task/v1/', () => {
       })
     })
   })
+
+  describe('/update/', () => {
+    const endpoint = path + '/update/'
+    test('', async () => {
+      const res = await agent
+        .put(endpoint)
+        .send({
+          groupId: group._id,
+          taskId: task._id,
+          data: {
+            user: []
+          }
+        })
+      expect(res.body.complete).toBe(true)
+
+      const guard = await agent
+        .post(path + '/get/')
+        .send({ _id: task._id, groupId: group._id })
+
+      expect(guard.body).toStrictEqual({
+        complete: true,
+        result: {
+          _id: expect.any(String),
+          groupId: expect.any(String),
+          user: [],
+          name: 'task 1',
+          feature: [],
+          isComplete: false,
+          priority: 10
+        }
+      })
+    })
+  })
 })

@@ -10,24 +10,32 @@ const codeSchema = z.object({
   content: z.string('code.content must be str')
 })
 
-const schema = z.object({
-  groupId: z.string('groupId must be a string')
-    .refine((val) => Types.ObjectId.isValid(val), {
-      message: 'The groupId string is invalid.'
-    }),
-  user: z.array(z.string('user array must be account[]').email('Invalid account at user array')).optional(),
+const baseSchema = z.object({
+  groupId: z.string().refine((val) => Types.ObjectId.isValid(val), {
+    message: 'The groupId string is invalid.'
+  }),
+  user: z.array(z.string('user array must be account[]').email('Invalid account at user array')),
   name: z.string('name must be a string'),
-  code: codeSchema.optional(),
-  feature: z.array(z.string('feature array must be string[]')).optional(),
-  description: z.string('description must be a string, and must be < 500 length').max(500).optional(),
-  isComplete: z.boolean('isComplete must be bool').default(false),
-  priority: z.number('Priority must be a number between 0-10').min(0).max(10).default(0)
+  code: codeSchema,
+  feature: z.array(z.string('feature array must be string[]')),
+  description: z.string('description must be a string, and must be < 500 length').max(500),
+  isComplete: z.boolean('isComplete must be bool'),
+  priority: z.number('Priority must be a number between 0-10').min(0).max(10)
+})
+
+const creationSchema = baseSchema.extend({
+  isComplete: baseSchema.shape.isComplete.default(false),
+  priority: baseSchema.shape.priority.default(0),
+  user: baseSchema.shape.user.optional(),
+  description: baseSchema.shape.description.optional(),
+  code: baseSchema.shape.code.optional(),
+  feature: baseSchema.shape.feature.optional()
 })
 
 const validator = {
   create: function (task: ITask) {
     try {
-      const result = schema.parse(task)
+      const result = creationSchema.parse(task)
       return result
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
@@ -35,7 +43,7 @@ const validator = {
   },
   partial: function (task: Partial<ITask>) {
     try {
-      const result = schema.partial().parse(task)
+      const result = baseSchema.partial().parse(task)
       return result
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)

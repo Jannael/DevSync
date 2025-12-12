@@ -11,6 +11,7 @@ import { IRefreshToken } from '../../../../backend/interface/user'
 import dbUserModel from './../../../../backend/database/schemas/node/user'
 import dbGroupModel from './../../../../backend/database/schemas/node/group'
 import { ITask } from '../../../../backend/interface/task'
+import taskDbModel from './../../../../backend/database/schemas/node/task'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST, TEST_PWD_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST' | 'TEST_PWD_ENV'>
@@ -74,6 +75,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
+  await taskDbModel.deleteMany({})
   await dbUserModel.deleteMany({})
   await dbGroupModel.deleteMany({})
   await mongoose.connection.close()
@@ -192,6 +194,28 @@ describe('/task/v1/', () => {
           priority: 10
         }
       })
+    })
+  })
+
+  describe('/delete/', () => {
+    const endpoint = path + '/delete/'
+    test('', async () => {
+      const res = await agent
+        .delete(endpoint)
+        .send({
+          groupId: group._id,
+          _id: task._id
+        })
+      expect(res.body.complete).toBe(true)
+
+      const guard = await agent
+        .post(path + '/get/')
+        .send({
+          groupId: group._id,
+          _id: task._id
+        })
+
+      expect(guard.body).toEqual({ complete: false, msg: 'Task not found' })
     })
   })
 })

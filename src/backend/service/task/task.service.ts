@@ -28,7 +28,7 @@ const service = {
       }
     }
 
-    return await model.create(task as ITask)
+    return await model.create(task as unknown as Omit<ITask, '_id'>)
   },
   update: async function (req: Request, res: Response): Promise<boolean> {
     // body = groupId, taskId, data = {...}
@@ -44,7 +44,7 @@ const service = {
       }
     }
 
-    return await model.update(req.body?.taskId, task)
+    return await model.update(req.body?.taskId, task as Partial<ITask>)
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want to delete')

@@ -93,8 +93,6 @@ const model = {
     },
     verify: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-
         const result = await dbModel.findOne(
           { _id: userId },
           { refreshToken: 1, _id: 0 }

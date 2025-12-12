@@ -110,12 +110,6 @@ describe('auth model', () => {
               await model.refreshToken.verify('token', notExistUser)
             },
             error: new NotFound('User not found')
-          },
-          {
-            fn: async function () {
-              await model.refreshToken.verify('token', 'invalid' as unknown as Types.ObjectId)
-            },
-            error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
         ]
 

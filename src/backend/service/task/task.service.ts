@@ -22,11 +22,13 @@ const service = {
   create: async function (req: Request, res: Response): Promise<Types.ObjectId> {
     const task = validator.task.create(req.body)
 
-    for (const userAccount of task.user) {
-      await authModel.exists(userAccount)
+    if (task.user !== undefined) {
+      for (const userAccount of task.user) {
+        await authModel.exists(userAccount)
+      }
     }
 
-    return await model.create(task)
+    return await model.create(task as ITask)
   },
   update: async function (req: Request, res: Response): Promise<boolean> {
     // body = groupId, taskId, data = {...}

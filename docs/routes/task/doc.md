@@ -223,23 +223,27 @@ _Method: POST_
 ```json
 {
   "groupId": "",
-  "user": ["account"],
+  "user": ["account"], // Optional
   "name": "",
   "code": {
+    // Optional
     "language": "",
     "content": ""
   },
-  "feature": [""],
-  "description": "",
-  "isComplete": false,
-  "priority": 0
+  "feature": [""], // Optional
+  "description": "", // Optional
+  "isComplete": false, // Default = false
+  "priority": 0 // Default = 0
 }
 ```
 
 ### Output
 
 ```json
-{ "_id": "taskId" }
+{
+  "complete": true,
+  "_id": "taskId"
+}
 ```
 
 ### Error

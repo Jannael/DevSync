@@ -11,14 +11,15 @@ const codeSchema = z.object({
 })
 
 const schema = z.object({
-  groupId: z.instanceof(Types.ObjectId, {
-    message: 'groupId must be valid'
-  }),
-  user: z.array(z.string('user array must be account[]').email('Invalid account at user array')),
+  groupId: z.string('groupId must be a string')
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: 'The groupId string is invalid.'
+    }),
+  user: z.array(z.string('user array must be account[]').email('Invalid account at user array')).optional(),
   name: z.string('name must be a string'),
-  code: codeSchema,
-  feature: z.array(z.string('feature array must be string[]')),
-  description: z.string('description must be a string, and must be < 500 length').max(500),
+  code: codeSchema.optional(),
+  feature: z.array(z.string('feature array must be string[]')).optional(),
+  description: z.string('description must be a string, and must be < 500 length').max(500).optional(),
   isComplete: z.boolean('isComplete must be bool').default(false),
   priority: z.number('Priority must be a number between 0-10').min(0).max(10).default(0)
 })

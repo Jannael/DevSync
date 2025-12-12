@@ -140,4 +140,25 @@ describe('/task/v1/', () => {
       })
     })
   })
+
+  describe('/list/', () => {
+    const endpoint = path + '/list/'
+    test('', async () => {
+      const res = await secondAgent
+        .post(endpoint)
+        .send({ groupId: group._id, pagination: 0 })
+      expect(res.body.complete).toBe(true)
+      expect(res.body.result).toStrictEqual({
+        task: [
+          {
+            _id: task._id,
+            name: 'task 1',
+            priority: 10,
+            isComplete: false
+          }
+        ],
+        assign: [task._id]
+      })
+    })
+  })
 })

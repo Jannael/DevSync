@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import { IEnv } from '../../interface/env'
 import userModel from '../../model/user/model'
 import validator from '../../validator/validator'
+import { verifyEmail } from '../../utils/utils'
 
 dotenv.config({ quiet: true })
 const {
@@ -45,6 +46,9 @@ const service = {
       Array.isArray(req.body?.member)) {
       for (const { account, role } of req.body?.member) {
         if (account === undefined || role === undefined) continue
+        if (typeof account !== 'string') throw new UserBadRequest('Invalid credentials', 'Accounts must be strings')
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
+
         const user = await userModel.get(account, { fullName: 1 })
         member.push({ account, fullName: user.fullName, role })
       }
@@ -55,6 +59,9 @@ const service = {
       Array.isArray(req.body?.techLead)) {
       for (const account of req.body?.techLead) {
         if (account === undefined) continue
+        if (typeof account !== 'string') throw new UserBadRequest('Invalid credentials', 'Accounts must be strings')
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
+
         const user = await userModel.get(account, { fullName: 1 })
         techLead.push({ account, fullName: user.fullName })
       }
@@ -108,6 +115,9 @@ const service = {
 
         const { _id, role, account } = req.body
         await model.exists(_id, accessToken.account)
+        if (typeof account !== 'string') throw new UserBadRequest('Invalid credentials', 'Accounts must be strings')
+        if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
+
         const { fullName } = await userModel.get(account, { fullName: 1 })
 
         await model.member.remove(_id, account)

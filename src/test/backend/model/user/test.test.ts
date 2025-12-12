@@ -197,12 +197,6 @@ describe('user model', () => {
             await model.get('example@gmail.com', { _id: 0 })
           },
           error: new NotFound('User not found')
-        },
-        {
-          fn: async function () {
-            await model.get('example', { _id: 0 })
-          },
-          error: new UserBadRequest('Invalid credentials', 'The account example is invalid')
         }
       ]
 

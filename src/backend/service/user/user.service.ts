@@ -10,6 +10,7 @@ import { IEnv } from '../../interface/env'
 import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'
 import groupModel from './../../model/group/model'
+import { verifyEmail } from '../../utils/utils'
 
 dotenv.config({ quiet: true })
 const {
@@ -145,7 +146,11 @@ const service = {
 
       const { _id, color, name } = await groupModel.get(req.body?._id)
       const { account, role } = req.body
-      const { fullName } = await model.get(req.body?.account, { fullName: 1 })
+
+      if (typeof account !== 'string') throw new UserBadRequest('Invalid credentials', 'Accounts must be strings')
+      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
+
+      const { fullName } = await model.get(account, { fullName: 1 })
 
       await groupModel.exists(_id, accessToken.account)
       return await model.invitation.create(

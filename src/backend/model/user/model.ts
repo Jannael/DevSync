@@ -21,8 +21,6 @@ const model = {
     projection: Record<K, number>
   ): Promise<Pick<IRefreshToken, K>> {
     try {
-      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
-
       const user = await dbModel.findOne({ account }, { _id: 0, ...projection }).lean<Pick<IRefreshToken, K>>()
 
       if (user === null) throw new NotFound('User not found')

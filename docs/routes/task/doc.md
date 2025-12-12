@@ -189,6 +189,7 @@ _Method: PUT_
 | 400        | UserBadRequest | Invalid credentials |                                    Invalid {token} |
 | 400        | UserBadRequest | Invalid credentials |                              The taskId is invalid |
 | 400        | UserBadRequest | Invalid credentials |                             The groupId is invalid |
+| 400        | UserBadRequest | Invalid credentials |                  The account ${account} is invalid |
 | 400        | UserBadRequest | Invalid credentials |   The token is malformed or has been tampered with |
 |            |                |                     |                                                    |
 | 404        | NotFound       | Group not found     |                            The group was not found |
@@ -203,7 +204,6 @@ _Method: PUT_
 
 | Instance       | Error                                                     |                                                           Message |
 | :------------- | :-------------------------------------------------------- | ----------------------------------------------------------------: |
-| UserBadRequest | Invalid credentials                                       |                                 The account ${account} is invalid |
 | UserBadRequest | Invalid credentials                                       | The user with the account ${account} does not belong to the group |
 |                |                                                           |                                                                   |
 | NotFound       | User not found                                            |                                                                   |
@@ -264,6 +264,7 @@ _Method: POST_
 | 400        | UserBadRequest | Invalid credentials |                                    Invalid {token} |
 | 400        | UserBadRequest | Invalid credentials |   The token is malformed or has been tampered with |
 | 400        | UserBadRequest | Invalid credentials |                             The groupId is invalid |
+| 400        | UserBadRequest | Invalid credentials |              The account ${userAccount} is invalid |
 |            |                |                     |                                                    |
 | 404        | NotFound       | Group not found     |                            The group was not found |
 |            |                |                     |                                                    |
@@ -275,11 +276,10 @@ _Method: POST_
 |            |                |                     |                                                    |
 | 500        | DatabaseError  | Failed to save      |         The task was not created, please try again |
 
-| Instance       | Error                 |                                                           Message |
-| :------------- | :-------------------- | ----------------------------------------------------------------: |
-| UserBadRequest | Invalid credentials   |                                 The account ${account} is invalid |
-| NotFound       | User not found        |                                                                   |
-| DatabaseError  | Failed to access data | The user was not retrieved, something went wrong please try again |
+| Instance      | Error                 |                                                           Message |
+| :------------ | :-------------------- | ----------------------------------------------------------------: |
+| NotFound      | User not found        |                                                                   |
+| DatabaseError | Failed to access data | The user was not retrieved, something went wrong please try again |
 
 ### Explanation
 

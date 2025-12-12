@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { IRefreshToken, IUser } from '../../interface/user'
 import { CustomError, DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
-import { verifyEmail, omit } from '../../utils/utils'
+import { omit } from '../../utils/utils'
 import config from '../../config/config'
 import errorHandler from '../../error/handler'
 
@@ -35,7 +35,6 @@ const model = {
   },
   exists: async function (account: string): Promise<boolean> {
     try {
-      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', `The account ${account} is invalid`)
       const exists = await dbModel.exists({ account })
       if (exists === null) throw new NotFound('User not found')
       return true

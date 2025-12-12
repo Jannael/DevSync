@@ -6,6 +6,7 @@ import { Request, Response } from 'express'
 import validator from '../../validator/validator'
 import authModel from './../../model/auth/model'
 import groupModel from './../../model/group/model'
+import { verifyEmail } from '../../utils/utils'
 
 const service = {
   list: async function (req: Request, res: Response): Promise<IListTask> {
@@ -24,6 +25,7 @@ const service = {
 
     if (task.user !== undefined) {
       for (const userAccount of task.user) {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         await authModel.exists(userAccount)
       }
     }
@@ -39,6 +41,7 @@ const service = {
 
     if (task.user !== undefined) {
       for (const userAccount of task.user) {
+        if (!verifyEmail(userAccount)) throw new UserBadRequest('Invalid credentials', `The account ${userAccount} is invalid`)
         await authModel.exists(userAccount)
         await groupModel.member.exists(userAccount, req.body?.groupId)
       }

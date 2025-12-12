@@ -255,7 +255,6 @@ to remove a user in group schema
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|UserBadRequest|Invalid credentials|The account ${account} is invalid|
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The _id is invalid|
 |UserBadRequest|Invalid credentials|The account ${techLeadAccount} is invalid|

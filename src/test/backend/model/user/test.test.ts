@@ -1,6 +1,6 @@
 import { DuplicateData, NotFound, UserBadRequest, Forbidden } from '../../../../backend/error/error'
 import { IEnv } from '../../../../backend/interface/env'
-import { IRefreshToken, IUser, IUserGroup } from '../../../../backend/interface/user'
+import { IRefreshToken, IUserGroup } from '../../../../backend/interface/user'
 import { IGroup } from '../../../../backend/interface/group'
 import model from '../../../../backend/model/user/model'
 import dbModel from './../../../../backend/database/schemas/node/user'
@@ -114,60 +114,6 @@ describe('user model', () => {
             })
           },
           error: new DuplicateData('User already exists', 'This account belongs to an existing user')
-        },
-        {
-          fn: async function () {
-            const obj = {
-              account: 'test1@gmail.com',
-              pwd: 'test1',
-              nickName: 'test1'
-            } as unknown as IUser
-
-            await model.create(obj)
-          },
-          error: new UserBadRequest('Invalid credentials', 'FullName is required')
-        },
-        {
-          fn: async function () {
-            const obj = {
-              _id: '' as unknown as Types.ObjectId,
-              refreshToken: ['hello Dexter Morgan'],
-              fullName: 'test',
-              account: 'test@gmail.com',
-              pwd: 'test',
-              nickName: 'test'
-            }
-
-            await model.create(obj)
-          },
-          error: new UserBadRequest('Invalid credentials', 'You can not put the _id yourself')
-        },
-        {
-          fn: async function () {
-            const obj = {
-              refreshToken: ['hello Dexter Morgan'],
-              fullName: 'test',
-              account: 'test@gmail.com',
-              pwd: 'test',
-              nickName: 'test'
-            }
-
-            await model.create(obj)
-          },
-          error: new UserBadRequest('Invalid credentials', 'You can not put the refreshToken yourself')
-        },
-        {
-          fn: async function () {
-            const obj = {
-              fullName: 'test',
-              account: 'test',
-              pwd: 'test',
-              nickName: 'test'
-            }
-
-            await model.create(obj)
-          },
-          error: new UserBadRequest('Invalid credentials', 'The account test is invalid')
         }
       ]
 

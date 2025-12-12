@@ -75,12 +75,6 @@ describe('auth model', () => {
               await model.refreshToken.remove('', notExistUser)
             },
             error: new NotFound('User not found')
-          },
-          {
-            fn: async function () {
-              await model.refreshToken.remove('', '' as unknown as Types.ObjectId)
-            },
-            error: new UserBadRequest('Invalid credentials', 'The _id is invalid')
           }
         ]
 

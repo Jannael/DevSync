@@ -80,6 +80,5 @@ it saves a session in the database
 ### Errors:
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|UserBadRequest|Invalid credentials|The _id is invalid|
 |NotFound|User not found||
 |DatabaseError|Failed to save|The session was not saved, something went wrong please try again|

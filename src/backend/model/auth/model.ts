@@ -10,8 +10,6 @@ import errorHandler from '../../error/handler'
 const model = {
   login: async function (account: string, pwd: string): Promise<IRefreshToken> {
     try {
-      if (!verifyEmail(account)) throw new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
-
       const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
 
       const user = await dbModel.findOne(

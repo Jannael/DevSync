@@ -19,7 +19,6 @@ it validates the given pwd, and if it match with the one in the database
 ### Errors
 |Instance|Error|Message|
 |:-----------|:-----------|-----------:|
-|UserBadRequest|Invalid credentials|The account must match example@service.ext|
 |NotFound|User not found||
 |UserBadRequest|Invalid credentials|Incorrect password|
 |DatabaseError|Failed to access data|The user was not retrieved, something went wrong please try again|

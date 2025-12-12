@@ -155,12 +155,6 @@ describe('auth model', () => {
       const func = [
         {
           fn: async function () {
-            await model.login('account', 'pwd')
-          },
-          error: new UserBadRequest('Invalid credentials', 'The account must Match example@service.ext')
-        },
-        {
-          fn: async function () {
             await model.login('account@gmail.com', 'pwd')
           },
           error: new NotFound('User not found')

@@ -49,8 +49,6 @@ const model = {
   refreshToken: {
     save: async function (token: string, userId: Types.ObjectId): Promise<boolean> {
       try {
-        if (!Types.ObjectId.isValid(userId)) throw new UserBadRequest('Invalid credentials', 'The _id is invalid')
-
         const exists = await dbModel.exists({ _id: userId })
         if (exists == null) throw new NotFound('User not found')
 

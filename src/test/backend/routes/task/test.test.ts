@@ -10,6 +10,7 @@ import userModel from './../../../../backend/model/user/model'
 import { IRefreshToken } from '../../../../backend/interface/user'
 import dbUserModel from './../../../../backend/database/schemas/node/user'
 import dbGroupModel from './../../../../backend/database/schemas/node/group'
+import { ITask } from '../../../../backend/interface/task'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST, TEST_PWD_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST' | 'TEST_PWD_ENV'>
@@ -19,10 +20,12 @@ let secondUser: IRefreshToken
 let group: IGroup
 let agent: ReturnType<typeof request.agent>
 let app: Express
+let secondAgent: ReturnType<typeof request.agent>
 
 beforeAll(async () => {
   app = await createApp(DB_URL_ENV_TEST)
   agent = await request.agent(app)
+  secondAgent = await request.agent(app)
   secondUser = await userModel.create({
     fullName: 'second test',
     account: 'secondUser@gmail.com',
@@ -55,6 +58,19 @@ beforeAll(async () => {
     .send({
       code: '1234'
     })
+
+  await secondAgent
+    .post('/auth/v1/request/refreshToken/code/')
+    .send({
+      account: secondUser.account,
+      pwd: 'test',
+      TEST_PWD: TEST_PWD_ENV
+    })
+  await secondAgent
+    .post('/auth/v1/request/refreshToken/')
+    .send({
+      code: '1234'
+    })
 })
 
 afterAll(async () => {
@@ -65,6 +81,7 @@ afterAll(async () => {
 
 describe('/task/v1/', () => {
   const path = '/task/v1'
+  let task: ITask
   describe('/create/', () => {
     const endpoint = path + '/create/'
     test('', async () => {
@@ -86,7 +103,30 @@ describe('/task/v1/', () => {
         .post(path + '/get/')
         .send({ _id: res.body._id, groupId: group._id })
 
+      task = guard.body.result
+
       expect(guard.body).toStrictEqual({
+        complete: true,
+        result: {
+          _id: expect.any(String),
+          groupId: expect.any(String),
+          user: ['secondUser@gmail.com'],
+          name: 'task 1',
+          feature: [],
+          isComplete: false,
+          priority: 10
+        }
+      })
+    })
+  })
+
+  describe('/get/', () => {
+    test('', async () => {
+      const res = await agent
+        .post(path + '/get/')
+        .send({ _id: task._id, groupId: group._id })
+
+      expect(res.body).toStrictEqual({
         complete: true,
         result: {
           _id: expect.any(String),

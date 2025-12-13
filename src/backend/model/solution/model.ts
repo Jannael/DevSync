@@ -30,7 +30,8 @@ const model = {
   },
   update: async function (_id: Types.ObjectId, data: Partial<Omit<ISolution, '_id'>>): Promise<boolean> {
     try {
-
+      const res = await dbModel.updateOne({ _id }, { ...data })
+      return res.acknowledged
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to save', 'The solution was not updated please try again')

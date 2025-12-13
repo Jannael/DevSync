@@ -6,13 +6,21 @@ import validator from '../../validator/validator'
 import taskModel from './../../model/task/model'
 import { ISolution } from '../../interface/solution'
 
+/*
+Auth middleware guarantees this:
+  1. groupId
+  2. accessToken at req.body?.accessToken
+  3. User belongs to the group
+  4. The user have the required role to the operation
+ */
+
 const service = {
-  get: async function (req: Request, res: Response) {
+  get: async function (req: Request, res: Response): Promise<ISolution> {
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
-    return await model.get(req.body?.taskId)
+    return await model.get(req.body?.taskId) as ISolution
   },
-  create: async function (req: Request, res: Response) {
+  create: async function (req: Request, res: Response): Promise<Types.ObjectId> {
     // body = groupId, taskId, data: { feature, code, description }
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
@@ -31,8 +39,19 @@ const service = {
 
     return await model.create({ ...solution, user: req.body?.accessToken?.account } as unknown as ISolution)
   },
+  update: async function (req: Request, res: Response): Promise<boolean> {
+    // body = groupId, taskId, data: {code, feature, description}
+    if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
+    if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
 
-  update: async function (req: Request, res: Response) {},
+    const data = validator.solution.partial(req.body.data)
+    if (data === undefined) throw new UserBadRequest('Missing data', 'You did not send any data to update')
+
+    const isOwner = await model.get(req.body?.taskId, { user: 1 })
+    if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not update a solution you did not created')
+
+    return await model.update(req.body?.taskId, data)
+  },
   delete: async function (req: Request, res: Response) {}
 }
 

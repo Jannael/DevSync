@@ -8,6 +8,14 @@ import authModel from './../../model/auth/model'
 import groupModel from './../../model/group/model'
 import { verifyEmail } from '../../utils/utils'
 
+/*
+Auth middleware guarantees this:
+  1. groupId
+  2. accessToken at req.body?.accessToken
+  3. User belongs to the group
+  4. The user have the required role to the operation
+ */
+
 const service = {
   list: async function (req: Request, res: Response): Promise<IListTask> {
     if (req.body?.pagination === undefined) throw new UserBadRequest('Missing data', 'You need to send the pagination field')

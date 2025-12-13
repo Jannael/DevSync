@@ -29,6 +29,12 @@ const createSchema = schema.extend({
   code: schema.shape.feature.optional()
 })
 
+const partialSchema = schema.pick({
+  code: true,
+  description: true,
+  feature: true
+})
+
 const validator = {
   create: function (data: ISolution) {
     try {
@@ -38,9 +44,9 @@ const validator = {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)
     }
   },
-  partial: function (data: Partial<ISolution>) {
+  partial: function (data: Partial<Pick<ISolution, 'code' | 'description' | 'feature'>>) {
     try {
-      const result = createSchema.partial().parse(data)
+      const result = partialSchema.partial().parse(data)
       return result
     } catch (e) {
       throw new UserBadRequest('Invalid credentials', JSON.parse((e as Error).message)[0].message)

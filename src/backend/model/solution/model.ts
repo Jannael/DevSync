@@ -5,9 +5,9 @@ import { CustomError, DatabaseError, NotFound } from '../../error/error'
 import { ISolution } from '../../interface/solution'
 
 const model = {
-  get: async function (_id: Types.ObjectId): Promise<ISolution> {
+  get: async function (_id: Types.ObjectId, projection: { [key: string]: 0 | 1 | boolean } = {}): Promise<Partial<ISolution>> {
     try {
-      const res = await dbModel.findOne({ _id }).lean<ISolution>()
+      const res = await dbModel.findOne({ _id }, projection).lean<ISolution>()
       if (res === null) throw new NotFound('Solution not found')
       return res
     } catch (e) {

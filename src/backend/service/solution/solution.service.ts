@@ -13,6 +13,7 @@ const service = {
     return await model.get(req.body?.taskId)
   },
   create: async function (req: Request, res: Response) {
+    // body = groupId, taskId, data: { feature, code, description }
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
 
@@ -22,9 +23,15 @@ const service = {
     const isAssign = taskUsers.user.find((account) => req.body?.accessToken?.account === account)
     if (isAssign === undefined) throw new Forbidden('Access denied', 'You can not create a solution to this task')
 
-    const solution = validator.solution.create({ ...req.body.data, _id: req.body.taskId })
-    return await model.create(solution as unknown as ISolution)
+    const solution = validator.solution.create({
+      ...req.body.data, // CODE, FEATURE, DESCRIPTION
+      _id: req.body.taskId,
+      groupId: req.body?.groupId
+    })
+
+    return await model.create({ ...solution, user: req.body?.accessToken?.account } as unknown as ISolution)
   },
+
   update: async function (req: Request, res: Response) {},
   delete: async function (req: Request, res: Response) {}
 }

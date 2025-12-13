@@ -10,7 +10,6 @@ const schema = z.object({
   groupId: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: 'The groupId string is invalid.'
   }),
-  user: z.string('user field must be a valid account').email(),
   feature: z.array(z.string('feature must be valid'))
     .refine(
       (arr) => new Set(arr).size === arr.length,

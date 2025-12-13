@@ -2,24 +2,24 @@ db.createCollection('solution', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['_id', 'userId', 'groupId', 'description'],
+      required: ['_id', 'user', 'groupId', 'taskId', 'description'],
       additionalProperties: false,
       properties: {
         _id: { bsonType: 'objectId' },
-        userId: {
-          bsonType: 'objectId',
-          description: 'user that solve the task'
+        user: {
+          bsonType: 'string',
+          description: 'user that solved the task'
         },
         groupId: {
-          bsonType: 'objectId',
-          description: 'group where the solution it belongs'
+          bsonType: 'objectId'
         },
         taskId: {
           bsonType: 'objectId',
           description: 'task the solution belongs to'
-        }
+        },
         feature: {
           bsonType: 'array',
+          uniqueItems: true,
           items: {
             bsonType: 'string'
           },

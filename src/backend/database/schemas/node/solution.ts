@@ -12,12 +12,10 @@ const codeSchema = new Schema({
 })
 
 const schema = new Schema({
-  user: { type: String },
-  groupId: { type: ObjectId },
-  taskId: { type: ObjectId },
-  feature: [{
-    type: String
-  }],
+  user: { type: String, required: true },
+  groupId: { type: ObjectId, required: true },
+  taskId: { type: ObjectId, required: true },
+  feature: [{ type: String }],
   code: codeSchema,
   description: { type: String, required: true }
 }, {

@@ -17,9 +17,10 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
     }
   },
-  create: async function (_id: Types.ObjectId, data: Omit<ISolution, '_id'>): Promise<Types.ObjectId> {
+  create: async function (data: ISolution): Promise<Types.ObjectId> {
     try {
-
+      const res = await dbModel.insertOne({ data })
+      return res._id
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to save', 'The solution was not created please try again')

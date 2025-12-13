@@ -41,7 +41,8 @@ const model = {
   },
   delete: async function (_id: Types.ObjectId): Promise<boolean> {
     try {
-
+      const res = await dbModel.deleteOne({ _id })
+      return res.acknowledged
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to remove', 'The solution was not deleted please try again')

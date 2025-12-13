@@ -40,9 +40,9 @@ const model = {
       throw new DatabaseError('Failed to access data', 'The task was not retrieved please try again')
     }
   },
-  get: async function (taskId: Types.ObjectId): Promise<ITask> {
+  get: async function (taskId: Types.ObjectId, projection: { [key: string]: 0 | 1 | boolean } = {}): Promise<Partial<ITask>> {
     try {
-      const res = await dbModel.findOne({ _id: taskId }).lean<ITask>()
+      const res = await dbModel.findOne({ _id: taskId }, projection).lean<ITask>()
       if (res == null) throw new NotFound('Task not found')
       return res
     } catch (e) {

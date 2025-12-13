@@ -1,17 +1,20 @@
 import { Types } from 'mongoose'
 import dbModel from './../../database/schemas/node/solution'
 import handler from '../../error/handler'
-import { CustomError, DatabaseError } from '../../error/error'
+import { CustomError, DatabaseError, NotFound } from '../../error/error'
 import { ISolution } from '../../interface/solution'
 
 const model = {
   get: async function (_id: Types.ObjectId): Promise<ISolution> {
     try {
-
+      const res = await dbModel.findOne({ _id }).lean<ISolution>()
+      if (res === null) throw new NotFound('Solution not found')
+      return res
     } catch (e) {
       handler.allErrors(e as CustomError,
         new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
       )
+      throw new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
     }
   },
   create: async function (_id: Types.ObjectId, data: Omit<ISolution, '_id'>): Promise<Types.ObjectId> {
@@ -19,8 +22,9 @@ const model = {
 
     } catch (e) {
       handler.allErrors(e as CustomError,
-        new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
+        new DatabaseError('Failed to save', 'The solution was not created please try again')
       )
+      throw new DatabaseError('Failed to save', 'The solution was not created please try again')
     }
   },
   update: async function (_id: Types.ObjectId, data: Partial<Omit<ISolution, '_id'>>): Promise<boolean> {
@@ -28,8 +32,9 @@ const model = {
 
     } catch (e) {
       handler.allErrors(e as CustomError,
-        new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
+        new DatabaseError('Failed to save', 'The solution was not updated please try again')
       )
+      throw new DatabaseError('Failed to save', 'The solution was not updated please try again')
     }
   },
   delete: async function (_id: Types.ObjectId): Promise<boolean> {
@@ -37,8 +42,9 @@ const model = {
 
     } catch (e) {
       handler.allErrors(e as CustomError,
-        new DatabaseError('Failed to access data', 'The solution was not retrieved please try again')
+        new DatabaseError('Failed to remove', 'The solution was not deleted please try again')
       )
+      throw new DatabaseError('Failed to remove', 'The solution was not deleted please try again')
     }
   }
 }

@@ -2,7 +2,7 @@ db.createCollection('solution', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['_id', 'user', 'groupId', 'taskId', 'description'],
+      required: ['_id', 'user', 'groupId', 'description'],
       additionalProperties: false,
       properties: {
         _id: { bsonType: 'objectId' },
@@ -12,10 +12,6 @@ db.createCollection('solution', {
         },
         groupId: {
           bsonType: 'objectId'
-        },
-        taskId: {
-          bsonType: 'objectId',
-          description: 'task the solution belongs to'
         },
         feature: {
           bsonType: 'array',

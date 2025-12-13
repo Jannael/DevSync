@@ -6,7 +6,10 @@ const schema = z.object({
   techLead: z.array(z.object({
     fullName: z.string('techLead fullName is required').min(3).max(100),
     account: z.string('techLead account is required').email()
-  })).optional(),
+  })).refine(
+    (arr) => new Set(arr).size === arr.length,
+    { message: 'The feature array must contain only unique elements (no duplicates).' }
+  ).optional(),
   name: z.string('name is required').min(3).max(255),
   repository: z.string().url().optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
@@ -16,7 +19,10 @@ const schema = z.object({
     role: z.enum(['developer', 'documenter'], {
       message: 'member.role is required and must be one of: developer, documenter'
     })
-  })).optional()
+  })).refine(
+    (arr) => new Set(arr).size === arr.length,
+    { message: 'The member array must contain only unique elements (no duplicates).' }
+  ).optional()
 })
 
 const validator = {

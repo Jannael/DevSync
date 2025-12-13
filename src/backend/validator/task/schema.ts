@@ -14,10 +14,18 @@ const baseSchema = z.object({
   groupId: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: 'The groupId string is invalid.'
   }),
-  user: z.array(z.string('user array must be account[]').email('Invalid account at user array')),
+  user: z.array(z.string('user array must be account[]').email('Invalid account at user array'))
+    .refine(
+      (arr) => new Set(arr).size === arr.length,
+      { message: 'The user array must contain only unique elements (no duplicates).' }
+    ),
   name: z.string('name must be a string'),
   code: codeSchema,
-  feature: z.array(z.string('feature array must be string[]')),
+  feature: z.array(z.string('feature array must be string[]'))
+    .refine(
+      (arr) => new Set(arr).size === arr.length,
+      { message: 'The feature array must contain only unique elements (no duplicates).' }
+    ),
   description: z.string('description must be a string, and must be < 500 length').max(500),
   isComplete: z.boolean('isComplete must be bool'),
   priority: z.number('Priority must be a number between 0-10').min(0).max(10)

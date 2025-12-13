@@ -13,7 +13,7 @@ const codeSchema = new Schema<ICodeSchema>({
 })
 
 const schema = new Schema<ITask>({
-  groupId: { type: ObjectId },
+  groupId: { type: ObjectId, required: true },
   user: [{ type: String }],
   name: { type: String, required: true },
   code: codeSchema,

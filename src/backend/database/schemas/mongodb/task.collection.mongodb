@@ -2,7 +2,7 @@ db.createCollection('task', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['_id', 'groupId', 'user', 'name'],
+      required: ['_id', 'groupId', 'name'],
       additionalProperties: false,
       properties: {
         _id: { bsonType: 'objectId' },
@@ -12,8 +12,9 @@ db.createCollection('task', {
         },
         user: {
           bsonType: 'array',
+          uniqueItems: true,
           items: {
-            bsonType: 'objectId'
+            bsonType: 'string'
           },
           description: 'array of users with the task'
         },
@@ -32,10 +33,11 @@ db.createCollection('task', {
         },
         feature: {
           bsonType: 'array',
+          uniqueItems: true,
           items: {
             bsonType: 'string'
           },
-          description: 'array of features asociated to the task'
+          description: 'features for the task'
         },
         description: {
           bsonType: 'string',
@@ -44,8 +46,14 @@ db.createCollection('task', {
         isComplete: {
           bsonType: 'bool',
           description: 'to indicate the task state'
+        },
+        priority: {
+          bsonType: 'int',
+          description: 'Task priority'
         }
       }
     }
   }
 })
+
+db.task.createIndex({ groupId: 1 })

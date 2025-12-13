@@ -16,7 +16,7 @@ dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
 
 const model = {
-  get: async function <K extends keyof IRefreshToken>(
+  get: async function <K extends keyof IRefreshToken>( // refactored
     account: string,
     projection: Record<K, number>
   ): Promise<Pick<IRefreshToken, K>> {
@@ -33,7 +33,7 @@ const model = {
       throw new DatabaseError('Failed to access data')
     }
   },
-  create: async function (data: IUser): Promise<IRefreshToken> {
+  create: async function (data: IUser): Promise<IRefreshToken> { // refactored
     try {
       const exists = await dbModel.exists({ account: data.account })
       if (exists != null) throw new DuplicateData('User already exists', 'This account belongs to an existing user')

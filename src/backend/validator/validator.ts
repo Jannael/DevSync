@@ -3,8 +3,8 @@ import user_group from './user/group'
 import user_invitation from './user/invitation'
 
 import group from './group/schema'
-
 import task from './task/schema'
+import solution from './solution/schema'
 
 const validator = {
   user: {
@@ -22,6 +22,10 @@ const validator = {
   task: {
     create: task.create,
     partial: task.partial
+  },
+  solution: {
+    create: solution.create,
+    partial: solution.partial
   }
 }
 

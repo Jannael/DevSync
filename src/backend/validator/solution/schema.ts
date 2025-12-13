@@ -4,6 +4,9 @@ import { ISolution } from '../../interface/solution'
 import { UserBadRequest } from '../../error/error'
 
 const schema = z.object({
+  _id: z.string().refine((val) => Types.ObjectId.isValid(val), {
+    message: 'The _id string is invalid.'
+  }),
   groupId: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: 'The groupId string is invalid.'
   }),

@@ -21,14 +21,6 @@ it validates the given pwd, and if it match with the one in the database
   group?: IUserGroup[] | null
 ```
 
-### Errors
-
-| Instance       | Error                 |                                                           Message |
-| :------------- | :-------------------- | ----------------------------------------------------------------: |
-| NotFound       | User not found        |                                                                   |
-| UserBadRequest | Invalid credentials   |                                                Incorrect password |
-| DatabaseError  | Failed to access data | The user was not retrieved, something went wrong please try again |
-
 ## Exists
 
 Validates if the user exists
@@ -40,13 +32,6 @@ Validates if the user exists
 ### Output:
 
 - boolean
-
-### Error
-
-| Instance      | Error                 |                                                           Message |
-| :------------ | :-------------------- | ----------------------------------------------------------------: |
-| NotFound      | User not found        |                                                                   |
-| DatabaseError | Failed to access data | The user was not retrieved, something went wrong please try again |
 
 # RefreshToken
 
@@ -63,13 +48,6 @@ This function tells you if the token is saved in the db, to get more protection,
 
 - boolean
 
-### Errors:
-
-| Instance      | Error                 |                                                           Message |
-| :------------ | :-------------------- | ----------------------------------------------------------------: |
-| NotFound      | User not found        |                                                                   |
-| DatabaseError | Failed to access data | The user was not retrieved, something went wrong please try again |
-
 ## Remove
 
 it removes a refreshToken from user's sessions
@@ -83,13 +61,6 @@ it removes a refreshToken from user's sessions
 
 - boolean
 
-### Errors:
-
-| Instance       | Error               |                                                            Message |
-| :------------- | :------------------ | -----------------------------------------------------------------: |
-| NotFound       | User not found      |                                                                    |
-| DataBaseError  | Failed to remove    | The session was not removed, something went wrong please try again |
-
 ## Save
 
 it saves a session in the database
@@ -102,10 +73,3 @@ it saves a session in the database
 ### Output:
 
 - boolean
-
-### Errors:
-
-| Instance      | Error          |                                                          Message |
-| :------------ | :------------- | ---------------------------------------------------------------: |
-| NotFound      | User not found |                                                                  |
-| DatabaseError | Failed to save | The session was not saved, something went wrong please try again |

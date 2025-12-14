@@ -3,13 +3,23 @@ import cookieParser from 'cookie-parser'
 import router from './../backend/routes/merge'
 import mongoose from 'mongoose'
 import middleware from './middleware/merge'
+import rateLimit from 'express-rate-limit'
 
-export async function createApp (dbEnv: string): Promise<express.Express> {
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  message: { complete: false, msg: 'Too many request' },
+  headers: true
+})
+
+export async function createApp (dbEnv: string, env: 'production' | 'test'): Promise<express.Express> {
   await mongoose.connect(dbEnv)
     .then(() => console.log('connected to mongoose'))
     .catch(e => console.error('something went wrong connecting to mongoose', e))
 
   const app = express()
+
+  if (env === 'production') app.use(limiter)
 
   app.use(express.json())
   app.use(cookieParser())

@@ -18,7 +18,7 @@ let secondAgent: ReturnType<typeof request.agent>
 let group: IGroup
 
 beforeAll(async () => {
-  app = await createApp(DB_URL_ENV_TEST)
+  app = await createApp(DB_URL_ENV_TEST, 'test')
   agent = await request.agent(app)
   secondAgent = await request.agent(app)
 

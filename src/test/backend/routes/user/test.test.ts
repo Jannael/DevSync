@@ -22,7 +22,7 @@ let secondUser: IRefreshToken
 let secondGroup: IGroup
 
 beforeAll(async () => {
-  app = await createApp(DB_URL_ENV_TEST)
+  app = await createApp(DB_URL_ENV_TEST, 'test')
   agent = await request.agent(app)
 
   user = await userModel.create({

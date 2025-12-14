@@ -31,7 +31,7 @@ describe('auth router', () => {
   let server: Server
 
   beforeAll(async () => {
-    app = await createApp(DB_URL_ENV_TEST)
+    app = await createApp(DB_URL_ENV_TEST, 'test')
     agent = await request.agent(app)
     secondUser = await userModel.create({
       fullName: 'second test',

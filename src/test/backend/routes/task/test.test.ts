@@ -24,7 +24,7 @@ let app: Express
 let secondAgent: ReturnType<typeof request.agent>
 
 beforeAll(async () => {
-  app = await createApp(DB_URL_ENV_TEST)
+  app = await createApp(DB_URL_ENV_TEST, 'test')
   agent = await request.agent(app)
   secondAgent = await request.agent(app)
   secondUser = await userModel.create({

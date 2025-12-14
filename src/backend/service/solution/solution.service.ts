@@ -39,6 +39,8 @@ const service = {
       groupId: req.body?.groupId
     })
 
+    await taskModel.update(req.body?.taskId, { isComplete: true })
+
     return await model.create({ ...solution, user: req.body?.accessToken?.account } as unknown as ISolution)
   },
   update: async function (req: Request, res: Response): Promise<boolean> {

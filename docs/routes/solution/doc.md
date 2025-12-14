@@ -89,7 +89,7 @@ _Method: POST_
 ### Output
 
 ```json
-{ "success": true, "_id": "" }
+{ "success": true, "result": "task._id" }
 ```
 
 ### Error

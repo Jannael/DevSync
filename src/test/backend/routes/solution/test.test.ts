@@ -94,7 +94,24 @@ describe('/solution/v1/', () => {
   })
 
   describe('/get/', () => {
-    test('', async () => {})
+    const endpoint = path + '/get/'
+    test('', async () => {
+      const res = await agent
+        .post(endpoint)
+        .send({
+          groupId: group._id,
+          taskId: task._id
+        })
+
+      expect(res.body.success).toEqual(true)
+      expect(res.body.result).toEqual({
+        _id: expect.any(String),
+        user: 'test@gmail.com',
+        groupId: expect.any(String),
+        feature: [],
+        description: 'insane description for the task'
+      })
+    })
   })
 
   describe('/update/', () => {

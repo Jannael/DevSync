@@ -4,6 +4,19 @@ import router from './../backend/routes/merge'
 import mongoose from 'mongoose'
 import middleware from './middleware/merge'
 import rateLimit from 'express-rate-limit'
+import dotenv from 'dotenv'
+import cors, { CorsOptions } from 'cors'
+
+dotenv.config({ quiet: true })
+const HOST = process.env.HOST as string
+const whitelist = HOST.split(',')
+
+const corsOptions: CorsOptions = {
+  origin: (origin, cb) => {
+    if (origin !== undefined && whitelist.includes(origin)) cb(null, true)
+    else cb(new Error('Not allowed'))
+  }
+}
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -19,7 +32,10 @@ export async function createApp (dbEnv: string, env: 'production' | 'test'): Pro
 
   const app = express()
 
-  if (env === 'production') app.use(limiter)
+  if (env === 'production') {
+    app.use(limiter)
+    app.use(cors(corsOptions))
+  }
 
   app.use(express.json())
   app.use(cookieParser())

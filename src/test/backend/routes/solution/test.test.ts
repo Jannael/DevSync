@@ -115,7 +115,33 @@ describe('/solution/v1/', () => {
   })
 
   describe('/update/', () => {
-    test('', async () => {})
+    const endpoint = path + '/update/'
+    test('', async () => {
+      const res = await agent
+        .put(endpoint)
+        .send({
+          groupId: group._id,
+          taskId: task._id,
+          data: {
+            feature: ['insane new features']
+          }
+        })
+      expect(res.body.success).toEqual(true)
+      const guard = await agent
+        .post(path + '/get/')
+        .send({
+          groupId: group._id,
+          taskId: task._id
+        })
+
+      expect(guard.body.result).toStrictEqual({
+        _id: expect.any(String),
+        user: 'test@gmail.com',
+        groupId: expect.any(String),
+        feature: ['insane new features'],
+        description: 'insane description for the task'
+      })
+    })
   })
 
   describe('/delete/', () => {

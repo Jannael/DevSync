@@ -135,6 +135,9 @@ _Method: PUT_
 
 ### Input
 
+> [!IMPORTANT]
+> it overwrite the info so if you wanna add new features you should send the current ones as well
+
 ```json
 {
   "groupId": "",

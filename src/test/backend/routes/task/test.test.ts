@@ -97,13 +97,13 @@ describe('/task/v1/', () => {
         })
 
       expect(res.body.success).toEqual(true)
-      expect(res.body._id).toBeDefined()
-      expect(typeof res.body._id).toBe('string')
-      expect(mongoose.Types.ObjectId.isValid(res.body._id)).toBe(true)
+      expect(res.body.result).toBeDefined()
+      expect(typeof res.body.result).toBe('string')
+      expect(mongoose.Types.ObjectId.isValid(res.body.result)).toBe(true)
 
       const guard = await agent
         .post(path + '/get/')
-        .send({ _id: res.body._id, groupId: group._id })
+        .send({ _id: res.body.result, groupId: group._id })
 
       task = guard.body.result
 

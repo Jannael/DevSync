@@ -23,7 +23,7 @@ const controller = {
   create: async function (req: Request, res: Response) {
     try {
       const result = await service.create(req, res)
-      res.json({ success: true, _id: result })
+      res.json({ success: true, result })
     } catch (e) {
       handler.user(res, e as CustomError)
     }

@@ -17,10 +17,11 @@ const model = {
         projection
       ).lean()
 
-      if (user === null) throw new NotFound('User not found')
+      const isMatch = (user != null) && (await bcrypt.compare(pwd, user.pwd))
 
-      const pwdIsCorrect = await bcrypt.compare(pwd, user.pwd)
-      if (!pwdIsCorrect) throw new UserBadRequest('Invalid credentials', 'Incorrect password')
+      if ((user == null) || !isMatch) {
+        throw new UserBadRequest('Invalid credentials', 'Invalid account or password')
+      }
 
       delete (user as Partial<IUser>).pwd
 

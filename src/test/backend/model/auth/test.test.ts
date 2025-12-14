@@ -145,13 +145,13 @@ describe('auth model', () => {
           fn: async function () {
             await model.login('account@gmail.com', 'pwd')
           },
-          error: new NotFound('User not found')
+          error: new UserBadRequest('Invalid credentials', 'Invalid account or password')
         },
         {
           fn: async function () {
             await model.login('test@email.com', 'pwd')
           },
-          error: new UserBadRequest('Invalid credentials', 'Incorrect password')
+          error: new UserBadRequest('Invalid credentials', 'Invalid account or password')
         }
       ]
 

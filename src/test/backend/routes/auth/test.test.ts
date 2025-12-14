@@ -294,9 +294,9 @@ describe('/auth/v1/', () => {
           },
           error: {
             complete: false,
-            msg: 'User not found',
-            description: undefined,
-            code: 404
+            msg: 'Invalid credentials',
+            description: 'Invalid account or password',
+            code: 400
           }
         },
         {
@@ -311,7 +311,7 @@ describe('/auth/v1/', () => {
           error: {
             complete: false,
             msg: 'Invalid credentials',
-            description: 'Incorrect password',
+            description: 'Invalid account or password',
             code: 400
           }
         }

@@ -1,12 +1,10 @@
+import { env } from './env'
 import { createApp } from './app'
-import dotenv from 'dotenv'
 
-dotenv.config({ quiet: true })
+const PORT = env.PORT
+const dbUrl = env.DB_URL_ENV
 
-const PORT = process.env.PORT as string
-const dbUrl = process.env.DB_URL_ENV as string
-
-async function init (PORT: string): Promise<void> {
+async function init(PORT: string): Promise<void> {
   const app = await createApp(dbUrl, 'production')
   app.listen(PORT, () => console.log('server at PORT: ' + PORT))
 }

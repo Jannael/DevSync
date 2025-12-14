@@ -13,8 +13,8 @@ const whitelist = HOST.split(',')
 
 const corsOptions: CorsOptions = {
   origin: (origin, cb) => {
-    if (origin !== undefined && whitelist.includes(origin)) cb(null, true)
-    else cb(new Error('Not allowed'))
+    if (origin === undefined || whitelist.includes(origin)) cb(null, true)
+    else cb(new Error(`CORS: Origin ${origin as string} Not allowed`))
   }
 }
 

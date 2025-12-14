@@ -14,6 +14,7 @@ Auth middleware guarantees this:
   2. accessToken at req.body?.accessToken
   3. User belongs to the group
   4. The user have the required role to the operation
+  5. role at req.body.role
  */
 
 const service = {

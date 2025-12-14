@@ -12,10 +12,12 @@ Auth middleware guarantees this:
   2. accessToken at req.body?.accessToken
   3. User belongs to the group
   4. The user have the required role to the operation
+  5. role at req.body.role
  */
 
 const service = {
   get: async function (req: Request, res: Response): Promise<ISolution> {
+    // body = taskId
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
     return await model.get(req.body?.taskId) as ISolution
@@ -47,12 +49,25 @@ const service = {
     const data = validator.solution.partial(req.body.data)
     if (data === undefined) throw new UserBadRequest('Missing data', 'You did not send any data to update')
 
-    const isOwner = await model.get(req.body?.taskId, { user: 1 })
-    if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not update a solution you did not created')
+    if (req.body?.role !== 'techLead') {
+      const isOwner = await model.get(req.body?.taskId, { user: 1 })
+      if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not update a solution you did not created')
+    }
 
     return await model.update(req.body?.taskId, data)
   },
-  delete: async function (req: Request, res: Response) {}
+  delete: async function (req: Request, res: Response): Promise<boolean> {
+    // body = taskId, groupId
+    if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
+    if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
+
+    if (req.body.role !== 'techLead') {
+      const isOwner = await model.get(req.body?.taskId, { user: 1 })
+      if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not delete a solution you did not created')
+    }
+
+    return await model.delete(req.body?.taskId)
+  }
 }
 
 export default service

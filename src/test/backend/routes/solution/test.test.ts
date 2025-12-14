@@ -75,7 +75,21 @@ afterAll(async () => {
 describe('/solution/v1/', () => {
   const path = '/solution/v1'
   describe('/create/', () => {
-    test('', async () => {})
+    const endpoint = path + '/create/'
+    test('', async () => {
+      const res = await agent
+        .post(endpoint)
+        .send({
+          groupId: group._id,
+          taskId: task._id,
+          data: {
+            description: 'insane description for the task'
+          }
+        })
+      expect(res.body.success).toEqual(true)
+      expect(res.body.result).toBeDefined()
+      expect(typeof res.body.result).toBe('string')
+    })
   })
 
   describe('/get/', () => {

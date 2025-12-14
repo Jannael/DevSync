@@ -40,14 +40,25 @@ _Method: POST_
 }
 ```
 
-| StatusCode | Instance       | Message               |                                     Description |
-| :--------- | :------------- | :-------------------- | ----------------------------------------------: |
-| 404        | NotFound       | Solution not found    |                                                 |
-|            |                |                       |                                                 |
-| 400        | UserBadRequest | Invalid credentials   |                               taskId is invalid |
-| 400        | UserBadRequest | Missing data          |                     You need to send the taskId |
-|            |                |                       |                                                 |
-| 500        | DatabaseError  | Failed to access data | The solution was not retrieved please try again |
+| StatusCode | Instance       | Message               |                                        Description |
+| :--------- | :------------- | :-------------------- | -------------------------------------------------: |
+| 400        | UserBadRequest | Missing data          |                                    Missing {token} |
+| 400        | UserBadRequest | Missing data          |                             The groupId is missing |
+| 400        | UserBadRequest | Missing data          |                        You need to send the taskId |
+| 400        | UserBadRequest | Invalid credentials   |                                    Invalid {token} |
+| 400        | UserBadRequest | Invalid credentials   |                                  taskId is invalid |
+| 400        | UserBadRequest | Invalid credentials   |   The token is malformed or has been tampered with |
+|            |                |                       |                                                    |
+| 404        | NotFound       | Group not found       |                            The group was not found |
+| 404        | NotFound       | Solution not found    |                                                    |
+|            |                |                       |                                                    |
+| 401        | Unauthorized   | Expired token         |       The token has expired and is no longer valid |
+|            |                |                       |                                                    |
+| 403        | Forbidden      | Access denied         |                     You do not belong to the group |
+| 403        | Forbidden      | Access denied         |                  You do not have the required role |
+| 403        | Forbidden      | Access denied         | The token is not active yet; check the "nbf" claim |
+|            |                |                       |                                                    |
+| 500        | DatabaseError  | Failed to access data |    The solution was not retrieved please try again |
 
 ### Explanation
 
@@ -77,7 +88,7 @@ _Method: POST_
 ### Output
 
 ```json
-{ "_id": "" }
+{ "complete": true, "_id": "" }
 ```
 
 ### Error
@@ -93,14 +104,25 @@ _Method: POST_
 
 | StatusCode | Instance       | Message               |                                                              Description |
 | :--------- | :------------- | :-------------------- | -----------------------------------------------------------------------: |
+| 400        | UserBadRequest | Missing data          |                                                          Missing {token} |
 | 400        | UserBadRequest | Missing data          |                                              You need to send the taskId |
+| 400        | UserBadRequest | Invalid credentials   |                                                          Invalid {token} |
 | 400        | UserBadRequest | Invalid credentials   |                                                        taskId is invalid |
+| 400        | UserBadRequest | Invalid credentials   |                                                   The groupId is invalid |
+| 400        | UserBadRequest | Invalid credentials   |                         The token is malformed or has been tampered with |
 |            |                |                       |                                                                          |
-| 403        | Forbidden      | Access denied         | You can not create a solution to the task because no one is assign to it |
+| 403        | Forbidden      | Access denied         |                                           You do not belong to the group |
+| 403        | Forbidden      | Access denied         |                                        You do not have the required role |
 | 403        | Forbidden      | Access denied         |                               You can not create a solution to this task |
+| 403        | Forbidden      | Access denied         |                       The token is not active yet; check the "nbf" claim |
+| 403        | Forbidden      | Access denied         | You can not create a solution to the task because no one is assign to it |
 |            |                |                       |                                                                          |
-| 500        | DatabaseError  | Failed to access data |                              The task was not retrieved please try again |
+| 404        | NotFound       | Group not found       |                                                  The group was not found |
+|            |                |                       |                                                                          |
+| 401        | Unauthorized   | Expired token         |                             The token has expired and is no longer valid |
+|            |                |                       |                                                                          |
 | 500        | DatabaseError  | Failed to save        |                            The solution was not created please try again |
+| 500        | DatabaseError  | Failed to access data |                              The task was not retrieved please try again |
 
 ### Explanation
 

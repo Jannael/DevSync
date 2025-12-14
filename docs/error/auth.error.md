@@ -4,7 +4,6 @@
 | 400        | UserBadRequest | Missing data        |                             The groupId is missing |
 | 400        | UserBadRequest | Invalid credentials |                                    Invalid {token} |
 | 400        | UserBadRequest | Invalid credentials |   The token is malformed or has been tampered with |
-| 400        | UserBadRequest | Invalid credentials |                             The groupId is invalid |
 |            |                |                     |                                                    |
 | 404        | NotFound       | Group not found     |                            The group was not found |
 |            |                |                     |                                                    |

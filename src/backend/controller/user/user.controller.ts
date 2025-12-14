@@ -7,7 +7,7 @@ const controller = {
   get: async function (req: Request, res: Response) {
     try {
       const result = await service.get(req, res)
-      res.json({ success: true, ...result })
+      res.json({ success: true, result })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
@@ -18,7 +18,7 @@ const controller = {
   create: async function (req: Request, res: Response) {
     try {
       const result = await service.create(req, res)
-      res.json({ ...result, success: true })
+      res.json({ success: true, result })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'code', href: '/auth/v1/request/code/' },
@@ -30,7 +30,7 @@ const controller = {
   update: async function (req: Request, res: Response) {
     try {
       const result = await service.update(req, res)
-      res.json({ success: true, user: result })
+      res.json({ success: true, result })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'code', href: '/auth/v1/request/code/' },
@@ -42,7 +42,7 @@ const controller = {
   delete: async function (req: Request, res: Response) {
     try {
       const result = await service.delete(req, res)
-      if (result) res.json({ success: true })
+      res.json({ success: result })
     } catch (e) {
       (e as CustomError).link = [
         { rel: 'code', href: '/auth/v1/request/code/' },
@@ -55,7 +55,7 @@ const controller = {
     update: async function (req: Request, res: Response) {
       try {
         const result = await service.account.update(req, res)
-        res.json({ success: true, user: result })
+        res.json({ success: true, result })
       } catch (e) {
         (e as CustomError).link = [
           { rel: 'code', href: '/auth/v1/account/request/code/' },
@@ -83,7 +83,7 @@ const controller = {
     get: async function (req: Request, res: Response) {
       try {
         const result = await service.invitation.get(req, res)
-        res.json({ success: true, invitation: result })
+        res.json({ success: true, result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
@@ -117,7 +117,7 @@ const controller = {
     get: async function (req: Request, res: Response) {
       try {
         const result = await service.group.get(req, res)
-        res.json({ success: true, group: result })
+        res.json({ success: true, result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }

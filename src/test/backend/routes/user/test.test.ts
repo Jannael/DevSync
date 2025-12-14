@@ -79,11 +79,11 @@ describe('/user/v1/', () => {
       const res = await agent
         .get(endpoint)
 
-      expect(res.body).toStrictEqual({
+      expect(res.body.success).toStrictEqual(true)
+      expect(res.body.result).toStrictEqual({
         fullName: 'test',
         account: 'test@gmail.com',
-        nickName: 'test',
-        success: true
+        nickName: 'test'
       })
     })
 
@@ -144,12 +144,13 @@ describe('/user/v1/', () => {
           pwd: '123456',
           nickName: 'test'
         })
-      expect(res.body).toStrictEqual({
+      expect(res.body.success).toEqual(true)
+      expect(res.body.result).toStrictEqual({
         fullName: 'test',
         account: 'create@gmail.com',
-        nickName: 'test',
-        success: true
+        nickName: 'test'
       })
+
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
@@ -310,7 +311,7 @@ describe('/user/v1/', () => {
       user.fullName = 'new Name'
 
       expect(res.body.success).toEqual(true)
-      expect(res.body.user).toStrictEqual({
+      expect(res.body.result).toStrictEqual({
         fullName: 'new Name',
         account: 'test@gmail.com',
         nickName: 'test'
@@ -319,15 +320,14 @@ describe('/user/v1/', () => {
 
       const secure = await agent
         .get(path + '/get/')
-
-      expect(secure.body).toStrictEqual({
+      expect(secure.body.success).toEqual(true)
+      expect(secure.body.result).toStrictEqual({
         fullName: 'new Name',
         account: 'test@gmail.com',
-        nickName: 'test',
-        success: true
+        nickName: 'test'
       })
 
-      user = res.body.user
+      user = res.body.result
     })
 
     test('error', async () => {
@@ -437,23 +437,23 @@ describe('/user/v1/', () => {
         .patch(endpoint)
 
       expect(res.body.success).toEqual(true)
-      expect(res.body.user).toStrictEqual({
+      expect(res.body.result).toStrictEqual({
         fullName: 'new Name',
         account: 'test1@gmail.com',
         nickName: 'test'
       })
       expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*GMT$/)
 
-      user = res.body.user
+      user = res.body.result
 
       const secure = await agent
         .get('/user/v1/get/')
 
-      expect(secure.body).toStrictEqual({
+      expect(secure.body.success).toEqual(true)
+      expect(secure.body.result).toStrictEqual({
         fullName: 'new Name',
         account: 'test1@gmail.com',
-        nickName: 'test',
-        success: true
+        nickName: 'test'
       })
     })
 
@@ -627,7 +627,7 @@ describe('/user/v1/', () => {
 
         expect(res.body).toStrictEqual({
           success: true,
-          invitation: [
+          result: [
             { name: 'first group', _id: expect.any(String), color: '#000000' }
           ]
         })
@@ -784,7 +784,7 @@ describe('/user/v1/', () => {
 
         expect(res.body).toStrictEqual({
           success: true,
-          group: [
+          result: [
             {
               name: 'first group',
               _id: expect.any(String),
@@ -841,7 +841,7 @@ describe('/user/v1/', () => {
 
         expect(guard.body).toStrictEqual({
           success: true,
-          group: [
+          result: [
             {
               name: 'second group',
               _id: expect.any(String),
@@ -893,7 +893,7 @@ describe('/user/v1/', () => {
 
         expect(guard.body).toStrictEqual({
           success: true,
-          group: [
+          result: [
             { name: 'second group', _id: expect.any(String), color: '#000000' },
             {
               name: 'first group',

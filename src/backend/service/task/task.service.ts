@@ -1,5 +1,5 @@
 import { Types } from 'mongoose'
-import { UserBadRequest } from '../../error/error'
+import { Forbidden, UserBadRequest } from '../../error/error'
 import { IListTask, ITask } from '../../interface/task'
 import model from './../../model/task/model'
 import { Request, Response } from 'express'
@@ -27,7 +27,11 @@ const service = {
   get: async function (req: Request, res: Response): Promise<ITask> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want')
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
-    return await model.get(req.body?._id) as ITask
+
+    const task = await model.get(req.body?._id) as ITask
+    if (task.groupId.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You do not belong to the group')
+
+    return task
   },
   create: async function (req: Request, res: Response): Promise<Types.ObjectId> {
     const task = validator.task.create(req.body)
@@ -56,11 +60,17 @@ const service = {
       }
     }
 
+    const guard = await model.get(req.body.taskId, { groupId: 1 })
+    if (guard.groupId?.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You can not update the task')
+
     return await model.update(req.body?.taskId, task as Partial<ITask>)
   },
   delete: async function (req: Request, res: Response): Promise<boolean> {
     if (req.body?._id === undefined) throw new UserBadRequest('Missing data', 'You need to send the _id for the task you want to delete')
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
+
+    const guard = await model.get(req.body._id, { groupId: 1 })
+    if (guard.groupId?.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You can not update the task')
 
     return await model.delete(req.body?._id)
   }

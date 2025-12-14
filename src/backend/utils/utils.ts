@@ -26,7 +26,8 @@ export function verifyEmail (email: string): boolean {
 
 export function generateCode (testPwd?: string): string {
   if (testPwd === TEST_PWD_ENV) { return '1234' }
-  return (Math.floor(Math.random() * 10000).toString().padEnd(6, '0'))
+  const number = crypto.randomInt(0, 1000000)
+  return number.toString().padStart(6, '0')
 }
 
 export async function sendEmail (email: string, code: string, msg?: string): Promise<boolean> {

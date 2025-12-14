@@ -13,7 +13,7 @@ _Method: GET_
 ### Output
 
 ```json
-
+{ "complete": true }
 ```
 
 ### Error

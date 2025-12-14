@@ -86,6 +86,7 @@ describe('/solution/v1/', () => {
             description: 'insane description for the task'
           }
         })
+
       expect(res.body.success).toEqual(true)
       expect(res.body.result).toBeDefined()
       expect(typeof res.body.result).toBe('string')

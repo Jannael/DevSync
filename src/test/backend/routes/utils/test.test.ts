@@ -110,7 +110,7 @@ describe('auth router', () => {
               code: 403,
               msg: 'Access denied',
               description: 'You do not belong to the group',
-              complete: false
+              success: false
             }
           },
           {
@@ -133,7 +133,7 @@ describe('auth router', () => {
               code: 403,
               msg: 'Access denied',
               description: 'You do not have the required role',
-              complete: false
+              success: false
             }
           }
 
@@ -143,7 +143,7 @@ describe('auth router', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })

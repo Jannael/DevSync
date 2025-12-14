@@ -8,7 +8,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await service.request.code(req, res)
-        res.json({ complete: result })
+        res.json({ success: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
@@ -16,7 +16,7 @@ const controller = {
     accessToken: async function (req: Request, res: Response) {
       try {
         const result = await service.request.accessToken(req, res)
-        res.json({ complete: result })
+        res.json({ success: result })
       } catch (e) {
         (e as CustomError).link = [
           { rel: 'Code for login', href: '/auth/v1/request/refreshToken/code/' },
@@ -30,7 +30,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await service.request.refreshToken.code(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)
         }
@@ -38,7 +38,7 @@ const controller = {
       confirm: async function (req: Request, res: Response) {
         try {
           const result = await service.request.refreshToken.confirm(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           (e as CustomError).link = [
             { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
@@ -50,7 +50,7 @@ const controller = {
     logout: async function (req: Request, res: Response) {
       try {
         const result = await service.request.logout(req, res)
-        res.json({ complete: result })
+        res.json({ success: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
@@ -60,7 +60,7 @@ const controller = {
     code: async function (req: Request, res: Response) {
       try {
         const result = await service.verify.code(req, res)
-        res.json({ complete: result })
+        res.json({ success: result })
       } catch (e) {
         (e as CustomError).link = [
           { rel: 'Missing code', href: '/auth/v1/request/code' }
@@ -74,7 +74,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await service.account.request.code(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           (e as CustomError).link = [
             { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
@@ -89,7 +89,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await service.account.verify.code(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           (e as CustomError).link = [
             { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
@@ -108,7 +108,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await service.pwd.request.code(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)
         }
@@ -118,7 +118,7 @@ const controller = {
       code: async function (req: Request, res: Response) {
         try {
           const result = await service.pwd.verify.code(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           (e as CustomError).link = [
             { rel: 'get code', href: '/auth/v1/password/request/code/' }

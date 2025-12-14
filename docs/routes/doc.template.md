@@ -13,7 +13,7 @@ _Method: GET_
 ### Output
 
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 
 ### Error
@@ -21,7 +21,7 @@ _Method: GET_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

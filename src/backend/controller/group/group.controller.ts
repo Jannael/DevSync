@@ -7,7 +7,7 @@ const controller = {
   get: async function (req: Request, res: Response) {
     try {
       const result = await service.get(req, res)
-      res.json({ complete: true, result })
+      res.json({ success: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
     }
@@ -15,7 +15,7 @@ const controller = {
   create: async function (req: Request, res: Response) {
     try {
       const result = await service.create(req, res)
-      res.json({ complete: true, result })
+      res.json({ success: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
     }
@@ -23,7 +23,7 @@ const controller = {
   update: async function (req: Request, res: Response) {
     try {
       const result = await service.update(req, res)
-      res.json({ complete: true, result })
+      res.json({ success: true, result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
     }
@@ -31,7 +31,7 @@ const controller = {
   delete: async function (req: Request, res: Response) {
     try {
       const result = await service.delete(req, res)
-      res.json({ complete: result })
+      res.json({ success: result })
     } catch (e) {
       ErrorHandler.user(res, e as CustomError)
     }
@@ -40,7 +40,7 @@ const controller = {
     remove: async function (req: Request, res: Response) {
       try {
         const result = await service.member.remove(req, res)
-        res.json({ complete: result })
+        res.json({ success: result })
       } catch (e) {
         ErrorHandler.user(res, e as CustomError)
       }
@@ -49,7 +49,7 @@ const controller = {
       role: async function (req: Request, res: Response) {
         try {
           const result = await service.member.update.role(req, res)
-          res.json({ complete: result })
+          res.json({ success: result })
         } catch (e) {
           ErrorHandler.user(res, e as CustomError)
         }

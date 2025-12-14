@@ -85,7 +85,7 @@ describe('/group/v1/', () => {
       group = res.body.result
 
       expect(res.body).toStrictEqual({
-        complete: true,
+        success: true,
         result: {
           name: 'firstGroup',
           color: '#000000',
@@ -103,7 +103,7 @@ describe('/group/v1/', () => {
           },
           error: {
             code: 400,
-            complete: false,
+            success: false,
             msg: 'Missing data',
             description: 'You need to send at least the name and color for the group you want to create'
           }
@@ -113,7 +113,7 @@ describe('/group/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }
@@ -129,7 +129,7 @@ describe('/group/v1/', () => {
           _id: group._id
         })
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.body.result).toStrictEqual({
         _id: expect.any(String),
         techLead: [
@@ -175,7 +175,7 @@ describe('/group/v1/', () => {
             code: 403,
             msg: 'Access denied',
             description: 'You do not belong to any group',
-            complete: false
+            success: false
           }
         },
         {
@@ -216,14 +216,14 @@ describe('/group/v1/', () => {
             code: 403,
             msg: 'Access denied',
             description: 'You do not belong to the group you are trying to access',
-            complete: false
+            success: false
           }
         }
       ]
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }
@@ -243,7 +243,7 @@ describe('/group/v1/', () => {
         })
 
       expect(res.body).toStrictEqual({
-        complete: true,
+        success: true,
         result: {
           _id: expect.any(String),
           name: 'newGroupName',
@@ -283,7 +283,7 @@ describe('/group/v1/', () => {
             code: 403,
             msg: 'Access denied',
             description: 'The group exists but the user is not a techLead',
-            complete: false
+            success: false
           }
         }
       ]
@@ -291,7 +291,7 @@ describe('/group/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }
@@ -308,7 +308,7 @@ describe('/group/v1/', () => {
           role: 'developer',
           account: 'secondUser@gmail.com'
         })
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
 
       const guard = await agent
         .post(path + '/get/')
@@ -354,7 +354,7 @@ describe('/group/v1/', () => {
             code: 403,
             msg: 'Access denied',
             description: 'The group exists but the user is not a techLead',
-            complete: false
+            success: false
           }
         }
       ]
@@ -362,7 +362,7 @@ describe('/group/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }
@@ -379,7 +379,7 @@ describe('/group/v1/', () => {
           account: 'secondUser@gmail.com'
         })
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       const guard = await agent
         .post(path + '/get/')
         .send({
@@ -418,7 +418,7 @@ describe('/group/v1/', () => {
             code: 403,
             msg: 'Access denied',
             description: 'The group exists but the user is not a techLead',
-            complete: false
+            success: false
           }
         }
       ]
@@ -426,7 +426,7 @@ describe('/group/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }
@@ -442,7 +442,7 @@ describe('/group/v1/', () => {
           _id: group._id
         })
 
-      expect(res.body.complete).toBe(true)
+      expect(res.body.success).toBe(true)
     })
 
     test('error', async () => {
@@ -457,7 +457,7 @@ describe('/group/v1/', () => {
             code: 404,
             msg: 'Group not found',
             description: 'The group you are trying to access does not exist',
-            complete: false
+            success: false
           }
         }
       ]
@@ -465,7 +465,7 @@ describe('/group/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.msg).toEqual(error.msg)
         expect(res.body.description).toEqual(error.description)
       }

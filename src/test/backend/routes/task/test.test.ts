@@ -96,7 +96,7 @@ describe('/task/v1/', () => {
           priority: 10
         })
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.body._id).toBeDefined()
       expect(typeof res.body._id).toBe('string')
       expect(mongoose.Types.ObjectId.isValid(res.body._id)).toBe(true)
@@ -108,7 +108,7 @@ describe('/task/v1/', () => {
       task = guard.body.result
 
       expect(guard.body).toStrictEqual({
-        complete: true,
+        success: true,
         result: {
           _id: expect.any(String),
           groupId: expect.any(String),
@@ -129,7 +129,7 @@ describe('/task/v1/', () => {
         .send({ _id: task._id, groupId: group._id })
 
       expect(res.body).toStrictEqual({
-        complete: true,
+        success: true,
         result: {
           _id: expect.any(String),
           groupId: expect.any(String),
@@ -149,7 +149,7 @@ describe('/task/v1/', () => {
       const res = await secondAgent
         .post(endpoint)
         .send({ groupId: group._id, pagination: 0 })
-      expect(res.body.complete).toBe(true)
+      expect(res.body.success).toBe(true)
       expect(res.body.result).toStrictEqual({
         task: [
           {
@@ -176,14 +176,14 @@ describe('/task/v1/', () => {
             user: []
           }
         })
-      expect(res.body.complete).toBe(true)
+      expect(res.body.success).toBe(true)
 
       const guard = await agent
         .post(path + '/get/')
         .send({ _id: task._id, groupId: group._id })
 
       expect(guard.body).toStrictEqual({
-        complete: true,
+        success: true,
         result: {
           _id: expect.any(String),
           groupId: expect.any(String),
@@ -206,7 +206,7 @@ describe('/task/v1/', () => {
           groupId: group._id,
           _id: task._id
         })
-      expect(res.body.complete).toBe(true)
+      expect(res.body.success).toBe(true)
 
       const guard = await agent
         .post(path + '/get/')
@@ -215,7 +215,7 @@ describe('/task/v1/', () => {
           _id: task._id
         })
 
-      expect(guard.body).toEqual({ complete: false, msg: 'Task not found' })
+      expect(guard.body).toEqual({ success: false, msg: 'Task not found' })
     })
   })
 })

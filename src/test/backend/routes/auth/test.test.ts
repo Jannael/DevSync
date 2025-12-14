@@ -44,7 +44,7 @@ describe('/auth/v1/', () => {
         })
 
       expect(res.headers['set-cookie'][0]).toMatch(/code=.* HttpOnly$/)
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
     })
 
     test('error', async () => {
@@ -60,7 +60,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
-            complete: false
+            success: false
           }
         },
         {
@@ -71,7 +71,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
-            complete: false
+            success: false
           }
         }
       ]
@@ -79,7 +79,7 @@ describe('/auth/v1/', () => {
       for (const { fn, error } of cases) {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.msg).toEqual(error.msg)
       }
@@ -105,7 +105,7 @@ describe('/auth/v1/', () => {
 
       expect(res.headers['set-cookie'][0]).toMatch(/code=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/account=.* HttpOnly$/)
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
     })
 
     test('error', async () => {
@@ -119,7 +119,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'You did not send the code',
-            complete: false
+            success: false
           }
         },
         {
@@ -134,7 +134,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing code',
-            complete: false
+            success: false
           }
         },
         {
@@ -150,7 +150,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The code is invalid',
-            complete: false
+            success: false
           }
         },
         {
@@ -174,7 +174,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Wrong code',
-            complete: false
+            success: false
           }
         },
         {
@@ -199,7 +199,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'You tried to change the account now your banned forever',
-            complete: false
+            success: false
           }
         }
       ]
@@ -209,7 +209,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'Missing code', href: '/auth/v1/request/code' }
@@ -232,7 +232,7 @@ describe('/auth/v1/', () => {
 
       expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*HttpOnly$/)
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
     })
 
     test('error', async () => {
@@ -246,7 +246,7 @@ describe('/auth/v1/', () => {
               })
           },
           error: {
-            complete: false,
+            success: false,
             msg: 'Invalid credentials',
             description: 'Missing or invalid data the account must match the following pattern example@service.ext',
             code: 400
@@ -261,7 +261,7 @@ describe('/auth/v1/', () => {
               })
           },
           error: {
-            complete: false,
+            success: false,
             msg: 'Invalid credentials',
             description: 'Missing or invalid data the account must match the following pattern example@service.ext',
             code: 400
@@ -277,7 +277,7 @@ describe('/auth/v1/', () => {
               })
           },
           error: {
-            complete: false,
+            success: false,
             msg: 'Invalid credentials',
             description: 'Missing or invalid data the account must match the following pattern example@service.ext',
             code: 400
@@ -293,7 +293,7 @@ describe('/auth/v1/', () => {
               })
           },
           error: {
-            complete: false,
+            success: false,
             msg: 'Invalid credentials',
             description: 'Invalid account or password',
             code: 400
@@ -309,7 +309,7 @@ describe('/auth/v1/', () => {
               })
           },
           error: {
-            complete: false,
+            success: false,
             msg: 'Invalid credentials',
             description: 'Invalid account or password',
             code: 400
@@ -321,7 +321,7 @@ describe('/auth/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
       }
     })
@@ -340,7 +340,7 @@ describe('/auth/v1/', () => {
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][2]).toMatch(/tokenR=.*GMT$/)
       expect(res.headers['set-cookie'][3]).toMatch(/codeR=.*GMT$/)
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
     })
 
     test('error', async () => {
@@ -357,7 +357,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing codeR',
-            complete: false
+            success: false
           }
         },
         {
@@ -370,7 +370,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'You need to send the code',
-            complete: false
+            success: false
           }
         },
         {
@@ -386,7 +386,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The codeR is invalid',
-            complete: false
+            success: false
           }
         },
         {
@@ -408,7 +408,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Wrong code',
-            complete: false
+            success: false
           }
         }
       ]
@@ -418,7 +418,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
@@ -433,7 +433,7 @@ describe('/auth/v1/', () => {
       const res = await agent
         .get(endpoint)
 
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
     })
 
     test('error', async () => {
@@ -447,7 +447,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing refreshToken',
-            complete: false
+            success: false
           }
         }
       ]
@@ -457,7 +457,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toStrictEqual([
           { rel: 'Code for login', href: '/auth/v1/request/refreshToken/code/' },
@@ -477,7 +477,7 @@ describe('/auth/v1/', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
       expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*HttpOnly$/)
     })
@@ -493,7 +493,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing or invalid data check the newAccount you sent',
-            complete: false
+            success: false
           }
         },
         {
@@ -506,7 +506,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing or invalid data check the newAccount you sent',
-            complete: false
+            success: false
           }
         },
         {
@@ -521,7 +521,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing or invalid data check the newAccount you sent',
-            complete: false
+            success: false
           }
         },
         {
@@ -537,7 +537,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing or invalid data check the newAccount you sent',
-            complete: false
+            success: false
           }
         },
         {
@@ -553,7 +553,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The accessToken is invalid',
-            complete: false
+            success: false
           }
         }
       ]
@@ -563,7 +563,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
@@ -584,7 +584,7 @@ describe('/auth/v1/', () => {
           codeNewAccount: '1234'
         })
 
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
       expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
       expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*HttpOnly$/)
@@ -602,7 +602,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'You need to send the verification codes',
-            complete: false
+            success: false
           }
         },
         {
@@ -618,7 +618,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing currentAccount',
-            complete: false
+            success: false
           }
         },
         {
@@ -635,7 +635,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The currentAccount is invalid',
-            complete: false
+            success: false
           }
         },
         {
@@ -658,7 +658,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Current account code is wrong',
-            complete: false
+            success: false
           }
         },
         {
@@ -681,7 +681,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'New account code is wrong',
-            complete: false
+            success: false
           }
         }
       ]
@@ -691,7 +691,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
@@ -710,7 +710,7 @@ describe('/auth/v1/', () => {
       const res = await agent
         .post(endpoint)
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
     })
@@ -722,13 +722,13 @@ describe('/auth/v1/', () => {
             return await request(app)
               .post(endpoint)
           },
-          error: { complete: false }
+          error: { success: false }
         }
       ]
 
       for (const { fn, error } of cases) {
         const res = await fn()
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
       }
     })
   })
@@ -743,7 +743,7 @@ describe('/auth/v1/', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
-      expect(res.body).toEqual({ complete: true })
+      expect(res.body).toEqual({ success: true })
       expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*HttpOnly$/)
     })
 
@@ -761,7 +761,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing or invalid account it must match example@service.ext',
-            complete: false
+            success: false
           }
         },
         {
@@ -775,7 +775,7 @@ describe('/auth/v1/', () => {
           error: {
             code: 404,
             msg: 'User not found',
-            complete: false
+            success: false
           }
 
         }
@@ -786,7 +786,7 @@ describe('/auth/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
       }
     })
@@ -811,7 +811,7 @@ describe('/auth/v1/', () => {
           newPwd: 'insane pwd'
         })
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
     })
@@ -828,7 +828,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'You need to send code, newPwd and account',
-            complete: false
+            success: false
           }
         },
         {
@@ -845,7 +845,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing pwdChange',
-            complete: false
+            success: false
           }
         },
         {
@@ -863,7 +863,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The pwdChange is invalid',
-            complete: false
+            success: false
           }
         },
         {
@@ -888,7 +888,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Wrong code',
-            complete: false
+            success: false
           }
         },
         {
@@ -913,7 +913,7 @@ describe('/auth/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'You tried to change the account now your banned forever',
-            complete: false
+            success: false
           }
         }
       ]
@@ -922,7 +922,7 @@ describe('/auth/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get code', href: '/auth/v1/password/request/code/' }

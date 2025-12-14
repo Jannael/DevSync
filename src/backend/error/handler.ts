@@ -45,7 +45,7 @@ const handler = {
     if (jwtError !== undefined) status = jwtError
 
     res.status(status.code).json({
-      complete: false,
+      success: false,
       msg: status.msg,
       description: status.description,
       link: status.link

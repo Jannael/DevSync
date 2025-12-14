@@ -83,7 +83,7 @@ describe('/user/v1/', () => {
         fullName: 'test',
         account: 'test@gmail.com',
         nickName: 'test',
-        complete: true
+        success: true
       })
     })
 
@@ -98,7 +98,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing accessToken',
-            complete: false
+            success: false
           }
         }
       ]
@@ -108,7 +108,7 @@ describe('/user/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'get accessToken', href: '/auth/v1/request/accessToken/' }
@@ -148,7 +148,7 @@ describe('/user/v1/', () => {
         fullName: 'test',
         account: 'create@gmail.com',
         nickName: 'test',
-        complete: true
+        success: true
       })
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
@@ -168,7 +168,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'You did not send any information',
-            complete: false
+            success: false
           }
         },
         {
@@ -183,7 +183,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing account',
-            complete: false
+            success: false
           }
         },
         {
@@ -199,7 +199,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The account is invalid',
-            complete: false
+            success: false
           }
         },
         {
@@ -232,7 +232,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Verified account does not match the sent account',
-            complete: false
+            success: false
           }
         },
         {
@@ -264,7 +264,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'FullName is required',
-            complete: false
+            success: false
           }
         }
       ]
@@ -274,7 +274,7 @@ describe('/user/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },
@@ -309,7 +309,7 @@ describe('/user/v1/', () => {
 
       user.fullName = 'new Name'
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.body.user).toStrictEqual({
         fullName: 'new Name',
         account: 'test@gmail.com',
@@ -324,7 +324,7 @@ describe('/user/v1/', () => {
         fullName: 'new Name',
         account: 'test@gmail.com',
         nickName: 'test',
-        complete: true
+        success: true
       })
 
       user = res.body.user
@@ -341,7 +341,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing account',
-            complete: false
+            success: false
           }
         },
         {
@@ -370,7 +370,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The account verified and your account does not match',
-            complete: false
+            success: false
           }
         },
         {
@@ -396,7 +396,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'Invalid input: expected object, received undefined',
-            complete: false
+            success: false
           }
         }
       ]
@@ -405,7 +405,7 @@ describe('/user/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },
@@ -436,7 +436,7 @@ describe('/user/v1/', () => {
       const res = await agent
         .patch(endpoint)
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.body.user).toStrictEqual({
         fullName: 'new Name',
         account: 'test1@gmail.com',
@@ -453,7 +453,7 @@ describe('/user/v1/', () => {
         fullName: 'new Name',
         account: 'test1@gmail.com',
         nickName: 'test',
-        complete: true
+        success: true
       })
     })
 
@@ -468,7 +468,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing accessToken',
-            complete: false
+            success: false
           }
         }
       ]
@@ -478,7 +478,7 @@ describe('/user/v1/', () => {
 
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toStrictEqual([
           { rel: 'code', href: '/auth/v1/account/request/code/' },
@@ -509,7 +509,7 @@ describe('/user/v1/', () => {
       const res = await agent
         .patch(endpoint)
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*GMT$/)
     })
 
@@ -524,7 +524,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing newPwd',
-            complete: false
+            success: false
           }
         }
       ]
@@ -533,7 +533,7 @@ describe('/user/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toStrictEqual([
           { rel: 'code', href: '/auth/v1/password/request/code/' },
@@ -555,7 +555,7 @@ describe('/user/v1/', () => {
             _id: group._id
           })
 
-        expect(res.body.complete).toEqual(true)
+        expect(res.body.success).toEqual(true)
       })
 
       test('error', async () => {
@@ -574,7 +574,7 @@ describe('/user/v1/', () => {
               code: 403,
               msg: 'Access denied',
               description: 'You can not invite yourself to one group',
-              complete: false
+              success: false
             }
           },
           {
@@ -590,7 +590,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'You need to send the _id for the group, account to invite and role',
-              complete: false
+              success: false
             }
           }
         ]
@@ -599,7 +599,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -626,7 +626,7 @@ describe('/user/v1/', () => {
           .get(endpoint)
 
         expect(res.body).toStrictEqual({
-          complete: true,
+          success: true,
           invitation: [
             { name: 'first group', _id: expect.any(String), color: '#000000' }
           ]
@@ -644,7 +644,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'Missing accessToken',
-              complete: false
+              success: false
             }
           }
         ]
@@ -653,7 +653,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -682,7 +682,7 @@ describe('/user/v1/', () => {
             _id: group._id
           })
 
-        expect(res.body.complete).toEqual(true)
+        expect(res.body.success).toEqual(true)
       })
 
       test('error', async () => {
@@ -697,7 +697,7 @@ describe('/user/v1/', () => {
             },
             error: {
               code: 404,
-              complete: false,
+              success: false,
               msg: 'Invitation not found',
               description: undefined
             }
@@ -708,7 +708,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -745,7 +745,7 @@ describe('/user/v1/', () => {
             _id: secondGroup._id
           })
 
-        expect(res.body.complete).toEqual(true)
+        expect(res.body.success).toEqual(true)
       })
 
       test('error', async () => {
@@ -759,7 +759,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'You did not send the _id for the invitation you want to reject',
-              complete: false
+              success: false
             }
           }
         ]
@@ -768,7 +768,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -783,7 +783,7 @@ describe('/user/v1/', () => {
           .get(endpoint)
 
         expect(res.body).toStrictEqual({
-          complete: true,
+          success: true,
           group: [
             {
               name: 'first group',
@@ -810,7 +810,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'Missing accessToken',
-              complete: false
+              success: false
             }
           }
         ]
@@ -819,7 +819,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -834,13 +834,13 @@ describe('/user/v1/', () => {
             _id: group._id
           })
 
-        expect(res.body.complete).toEqual(true)
+        expect(res.body.success).toEqual(true)
 
         const guard = await agent
           .get(path + '/get/group/')
 
         expect(guard.body).toStrictEqual({
-          complete: true,
+          success: true,
           group: [
             {
               name: 'second group',
@@ -862,7 +862,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'You did not send the _id for the group you want to remove',
-              complete: false
+              success: false
             }
           }
         ]
@@ -871,7 +871,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -886,13 +886,13 @@ describe('/user/v1/', () => {
             _id: group._id
           })
 
-        expect(res.body.complete).toEqual(true)
+        expect(res.body.success).toEqual(true)
 
         const guard = await agent
           .get(path + '/get/group/')
 
         expect(guard.body).toStrictEqual({
-          complete: true,
+          success: true,
           group: [
             { name: 'second group', _id: expect.any(String), color: '#000000' },
             {
@@ -915,7 +915,7 @@ describe('/user/v1/', () => {
               code: 400,
               msg: 'Missing data',
               description: 'You did not send the _id for the group you want to add',
-              complete: false
+              success: false
             }
           }
         ]
@@ -924,7 +924,7 @@ describe('/user/v1/', () => {
           const res = await fn()
           expect(res.statusCode).toEqual(error.code)
           expect(res.body.msg).toEqual(error.msg)
-          expect(res.body.complete).toEqual(error.complete)
+          expect(res.body.success).toEqual(error.success)
           expect(res.body.description).toEqual(error.description)
         }
       })
@@ -959,7 +959,7 @@ describe('/user/v1/', () => {
       const res = await agent
         .delete(endpoint)
 
-      expect(res.body.complete).toEqual(true)
+      expect(res.body.success).toEqual(true)
       expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
       expect(res.headers['set-cookie'][2]).toMatch(/account=.*GMT$/)
@@ -976,7 +976,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Missing data',
             description: 'Missing accessToken',
-            complete: false
+            success: false
           }
         },
         {
@@ -1025,7 +1025,7 @@ describe('/user/v1/', () => {
             code: 400,
             msg: 'Invalid credentials',
             description: 'The verified account and yours does not match',
-            complete: false
+            success: false
           }
         }
       ]
@@ -1034,7 +1034,7 @@ describe('/user/v1/', () => {
         const res = await fn()
         expect(res.statusCode).toEqual(error.code)
         expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.complete).toEqual(error.complete)
+        expect(res.body.success).toEqual(error.success)
         expect(res.body.description).toEqual(error.description)
         expect(res.body.link).toEqual([
           { rel: 'code', href: '/auth/v1/request/code/' },

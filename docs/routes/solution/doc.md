@@ -14,7 +14,7 @@ _Method: POST_
 
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "_id": "",
     "user": "",
@@ -34,7 +34,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -88,7 +88,7 @@ _Method: POST_
 ### Output
 
 ```json
-{ "complete": true, "_id": "" }
+{ "success": true, "_id": "" }
 ```
 
 ### Error
@@ -96,7 +96,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -152,7 +152,7 @@ _Method: PUT_
 ### Output
 
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 
 ### Error
@@ -160,7 +160,7 @@ _Method: PUT_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -207,7 +207,7 @@ _Method: GET_
 ### Output
 
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 
 ### Error
@@ -215,7 +215,7 @@ _Method: GET_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

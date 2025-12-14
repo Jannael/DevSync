@@ -14,7 +14,7 @@ _Method: POST_
 ### Output
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "_id": "",
     "techLead": [{
@@ -36,7 +36,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -82,7 +82,7 @@ _Method: POST_
 ### Output
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "_id": "",
     "techLead": [{
@@ -104,7 +104,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -167,7 +167,7 @@ _Method: PUT_
 ### Output
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "_id": "",
     "techLead": [{
@@ -189,7 +189,7 @@ _Method: PUT_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -234,13 +234,13 @@ _Method: DELETE_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -291,13 +291,13 @@ _Method: GET_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -349,13 +349,13 @@ _Method: DELETE_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

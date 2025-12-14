@@ -17,7 +17,7 @@ _Method: POST_
 
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "task": [
       {
@@ -37,7 +37,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -83,7 +83,7 @@ _Method: POST_
 
 ```json
 {
-  "complete": true,
+  "success": true,
   "result": {
     "_id": "",
     "groupId": "",
@@ -106,7 +106,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -166,7 +166,7 @@ _Method: PUT_
 ### Output
 
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 
 ### Error
@@ -174,7 +174,7 @@ _Method: PUT_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -241,7 +241,7 @@ _Method: POST_
 
 ```json
 {
-  "complete": true,
+  "success": true,
   "_id": "taskId"
 }
 ```
@@ -251,7 +251,7 @@ _Method: POST_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -301,7 +301,7 @@ _Method: DELETE_
 ### Output
 
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 
 ### Error
@@ -309,7 +309,7 @@ _Method: DELETE_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

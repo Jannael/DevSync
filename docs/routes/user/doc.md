@@ -14,14 +14,14 @@ _Method: GET_
     "fullName": "",
     "account": "",
     "nickName": "",
-    "complete": true
+    "success": true
 }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -58,14 +58,14 @@ _Method: POST_
     "fullName": "",
     "account": "",
     "nickName": "",
-    "complete": true
+    "success": true
 }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -118,14 +118,14 @@ _Method: PUT_
         "account": "",
         "nickName": ""
     },
-    "complete": true
+    "success": true
 }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -173,13 +173,13 @@ _Method: DELETE_
 > first you need to verify your account: **/auth/v1/request/code/** -> **/auth/v1/verify/code/**
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -230,14 +230,14 @@ _Method: PATCH_
         "account":"",
         "nickName":""
     },
-    "complete": true
+    "success": true
 }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -282,13 +282,13 @@ _Method: PATCH_
 > first you need to verify your account: **/auth/v1/password/request/code/** -> **/auth/v1/password/verify/code/**
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -324,7 +324,7 @@ _Method: GET_
 ### Output
 ```json
 {
-  "complete": true,
+  "success": true,
   "invitation": [
     {
       "name": "name",
@@ -338,7 +338,7 @@ _Method: GET_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -376,13 +376,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -437,13 +437,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -479,13 +479,13 @@ _Method: DELETE_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -535,7 +535,7 @@ _Method: GET_
 ### Output
 ```json
 {
-  "complete": true,
+  "success": true,
   "group": [
     {
       "name": "",
@@ -549,7 +549,7 @@ _Method: GET_
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -582,13 +582,13 @@ _Method: DELETE_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -634,13 +634,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

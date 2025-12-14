@@ -11,13 +11,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -44,13 +44,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -83,13 +83,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -122,13 +122,13 @@ _Method: POST_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -164,13 +164,13 @@ _Method: GET_
 > You need a refreshToken for this: get code -> __/request/refreshToken/code/__, verify code: __/request/refreshToken/__
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -211,13 +211,13 @@ _Method: PATCH_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -253,13 +253,13 @@ _Method: PATCH_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -279,7 +279,7 @@ _Method: PATCH_
 |403|Forbidden|Access denied|The token is not active yet; check the "nbf" claim|
 
 ### Explanation
-this endpoint its the second step to change the account, once you get the complete true, from here you can ask for change it, in /user/v1/update/account/
+this endpoint its the second step to change the account, once you get the success true, from here you can ask for change it, in /user/v1/update/account/
 
 ## /password/request/code/
 _Method: PATCH_
@@ -292,13 +292,13 @@ _Method: PATCH_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -334,13 +334,13 @@ _Method: PATCH_
 ```
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }
@@ -367,13 +367,13 @@ _Method: POST_
 > If you do not have a refreshToken it returns an error
 ### Output
 ```json
-{ "complete": true }
+{ "success": true }
 ```
 ### Error
 ```json
 {
   "msg": "",
-  "complete": false,
+  "success": false,
   "description": "",
   "link": [] //here you will get all the routes you need to make the operation correctly in case something is missing
 }

@@ -20,7 +20,11 @@ const service = {
     // body = taskId
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
-    return await model.get(req.body?.taskId) as ISolution
+
+    const solution = await model.get(req.body?.taskId) as ISolution
+    if (solution.groupId?.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You can not get the solution')
+
+    return solution
   },
   create: async function (req: Request, res: Response): Promise<Types.ObjectId> {
     // body = groupId, taskId, data: { feature, code, description }
@@ -28,10 +32,12 @@ const service = {
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
 
     // first we need to verify the task is assign to the user
-    const taskUsers = await taskModel.get(req.body?.taskId, { user: 1 })
+    const taskUsers = await taskModel.get(req.body?.taskId, { user: 1, groupId: 1 })
     if (taskUsers.user === undefined) throw new Forbidden('Access denied', 'You can not create a solution to the task because no one is assign to it')
     const isAssign = taskUsers.user.find((account) => req.body?.accessToken?.account === account)
     if (isAssign === undefined) throw new Forbidden('Access denied', 'You can not create a solution to this task')
+
+    if (taskUsers.groupId?.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You can not create a solution')
 
     const solution = validator.solution.create({
       ...req.body.data, // CODE, FEATURE, DESCRIPTION
@@ -51,8 +57,10 @@ const service = {
     const data = validator.solution.partial(req.body.data)
     if (data === undefined) throw new UserBadRequest('Missing data', 'You did not send any data to update')
 
+    const isOwner = await model.get(req.body?.taskId, { user: 1, groupId: 1 })
+    if (isOwner.groupId?.toString() !== req.body.groupId) throw new Forbidden('Access denied', 'You can not update the solution')
+
     if (req.body?.role !== 'techLead') {
-      const isOwner = await model.get(req.body?.taskId, { user: 1 })
       if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not update a solution you did not created')
     }
 
@@ -63,8 +71,10 @@ const service = {
     if (req.body?.taskId === undefined) throw new UserBadRequest('Missing data', 'You need to send the taskId')
     if (!Types.ObjectId.isValid(req.body?.taskId)) throw new UserBadRequest('Invalid credentials', 'taskId is invalid')
 
+    const isOwner = await model.get(req.body?.taskId, { user: 1, groupId: 1 })
+    if (isOwner.groupId?.toString() !== req.body.groupId) throw new Forbidden('Access denied', 'You can not update the solution')
+
     if (req.body.role !== 'techLead') {
-      const isOwner = await model.get(req.body?.taskId, { user: 1 })
       if (isOwner.user !== req.body?.accessToken?.account) throw new Forbidden('Access denied', 'You can not delete a solution you did not created')
     }
 

@@ -29,7 +29,7 @@ const service = {
     if (!Types.ObjectId.isValid(req.body?._id)) throw new UserBadRequest('Invalid credentials', 'The _id for the task is invalid')
 
     const task = await model.get(req.body?._id) as ITask
-    if (task.groupId.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You do not belong to the group')
+    if (task.groupId.toString() !== req.body?.groupId) throw new Forbidden('Access denied', 'You can not get the task')
 
     return task
   },

@@ -145,6 +145,25 @@ describe('/solution/v1/', () => {
   })
 
   describe('/delete/', () => {
-    test('', async () => {})
+    const endpoint = path + '/delete/'
+    test('', async () => {
+      const res = await agent
+        .delete(endpoint)
+        .send({
+          taskId: task._id,
+          groupId: group._id
+        })
+      expect(res.body.success).toEqual(true)
+
+      const guard = await agent
+        .post(path + '/get/')
+        .send({
+          taskId: task._id,
+          groupId: group._id
+        })
+
+      expect(guard.body.success).toEqual(false)
+      expect(guard.statusCode).toEqual(404)
+    })
   })
 })

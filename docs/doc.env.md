@@ -14,5 +14,5 @@
 ```javascript
   // HOST = 'host,host'
   const HOST = process.env.HOST
-  const whitelist = HOST.split(',)
+  const whitelist = HOST.split(',')
 ```

@@ -134,7 +134,7 @@ to update a solution
 
 ## /delete/
 
-_Method: GET_
+_Method: DELETE_
 
 ### Input
 

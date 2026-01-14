@@ -207,7 +207,7 @@ to delete a group
 
 ## /member/update/role/
 
-_Method: GET_
+_Method: PATCH_
 
 ### Input
 

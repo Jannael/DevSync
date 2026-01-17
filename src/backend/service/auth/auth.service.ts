@@ -168,7 +168,7 @@ const service = {
 
         if (req.body?.TEST_PWD === undefined) {
           await sendEmail(accessToken.account, code)
-          await sendEmail(req.body?.newAccount, code)
+          await sendEmail(req.body?.newAccount, codeNewAccount)
         }
 
         if (accessToken.account === req.body?.newAccount) throw new UserBadRequest('Invalid credentials', 'The new account can not be the same as the current one')

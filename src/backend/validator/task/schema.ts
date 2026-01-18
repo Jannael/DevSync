@@ -7,7 +7,7 @@ const codeSchema = z.object({
   language: z.enum(['js'], {
     message: 'code.language must be one of: js'
   }),
-  content: z.string('code.content must be str')
+  content: z.string('code.content must be str').min(1, { message: 'code.content must be at least < 1 length' }).max(500, { message: 'code.content must be > 500 length' })
 })
 
 const baseSchema = z.object({

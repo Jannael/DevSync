@@ -11,13 +11,13 @@ const schema = z.object({
   groupId: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: 'The groupId string is invalid.'
   }),
-  feature: z.array(z.string('feature must be valid'))
+  feature: z.array(z.string('feature must be valid').min(3, { message: 'feature must be at least 3 characters long' }).max(255, { message: 'feature must be at most 255 characters long' }))
     .refine(
       (arr) => new Set(arr).size === arr.length,
       { message: 'The user array must contain only unique elements (no duplicates).' }
     ),
   code: codeSchema,
-  description: z.string('Description must be valid').min(3, { message: 'Description must be at least 3 characters long' }).max(1000, { message: 'Description must be at most 500 characters long' }).max(500, { message: 'Description must be at most 500 characters long' })
+  description: z.string('Description must be valid').min(3, { message: 'Description must be at least 3 characters long' }).max(500, { message: 'Description must be at most 500 characters long' })
 })
 
 const createSchema = schema.extend({

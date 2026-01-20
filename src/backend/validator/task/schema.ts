@@ -21,7 +21,7 @@ const baseSchema = z.object({
     ),
   name: z.string('name must be a string').min(1, { message: 'name must be at least < 1 length' }).max(250, { message: 'name must be > 250 length' }),
   code: codeSchema,
-  feature: z.array(z.string('feature array must be string[]'))
+  feature: z.array(z.string('feature array must be string[]').min(1, { message: 'feature must be at least < 1 length' }).max(250, { message: 'feature must be > 250 length' }))
     .refine(
       (arr) => new Set(arr).size === arr.length,
       { message: 'The feature array must contain only unique elements (no duplicates).' }

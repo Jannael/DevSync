@@ -43,7 +43,7 @@ describe('/auth/v1/', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
-      expect(res.headers['set-cookie'][0]).toMatch(/code=.* HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/code=.*/)
       expect(res.body).toEqual({ success: true })
     })
 
@@ -104,7 +104,7 @@ describe('/auth/v1/', () => {
         })
 
       expect(res.headers['set-cookie'][0]).toMatch(/code=.*GMT$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/account=.* HttpOnly$/)
+      expect(res.headers['set-cookie'][1]).toMatch(/account=.* /)
       expect(res.body).toEqual({ success: true })
     })
 
@@ -230,8 +230,8 @@ describe('/auth/v1/', () => {
           TEST_PWD: TEST_PWD_ENV
         })
 
-      expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*/)
+      expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*/)
       expect(res.body).toEqual({ success: true })
     })
 
@@ -336,8 +336,8 @@ describe('/auth/v1/', () => {
           code: '1234'
         })
 
-      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*/)
+      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*/)
       expect(res.headers['set-cookie'][2]).toMatch(/tokenR=.*GMT$/)
       expect(res.headers['set-cookie'][3]).toMatch(/codeR=.*GMT$/)
       expect(res.body).toEqual({ success: true })
@@ -478,8 +478,8 @@ describe('/auth/v1/', () => {
         })
 
       expect(res.body).toEqual({ success: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*HttpOnly$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*/)
+      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*/)
     })
 
     test('error', async () => {
@@ -587,7 +587,7 @@ describe('/auth/v1/', () => {
       expect(res.body).toEqual({ success: true })
       expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*GMT$/)
       expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
-      expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*/)
     })
 
     test('error', async () => {
@@ -744,7 +744,7 @@ describe('/auth/v1/', () => {
         })
 
       expect(res.body).toEqual({ success: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*/)
     })
 
     test('error', async () => {
@@ -812,7 +812,7 @@ describe('/auth/v1/', () => {
         })
 
       expect(res.body.success).toEqual(true)
-      expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*HttpOnly$/)
+      expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*/)
       expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
     })
 

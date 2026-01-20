@@ -8,7 +8,7 @@ const groupSchema = z.object({
     message: 'Invalid _id format'
   }),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
-  name: z.string('Name is required').min(3).max(100)
+  name: z.string('Name is required').min(3, { message: 'Name must be at least 3 characters long' }).max(100, { message: 'Name must be at most 100 characters long' })
 })
 
 const validator = {

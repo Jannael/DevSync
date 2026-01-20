@@ -10,7 +10,7 @@ const schema = z.object({
     (arr) => new Set(arr).size === arr.length,
     { message: 'The feature array must contain only unique elements (no duplicates).' }
   ).optional(),
-  name: z.string('name is required').min(3).max(255),
+  name: z.string('name is required').min(3, { message: 'name must be at least 3 characters long' }).max(100, { message: 'name must be at most 100 characters long' }),
   repository: z.string().url().optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'color must be a valid hex code'),
   member: z.array(z.object({

@@ -2,6 +2,7 @@ import z from 'zod'
 import { Types } from 'mongoose'
 import { ISolution } from '../../interface/solution'
 import { UserBadRequest } from '../../error/error'
+import { codeSchema } from '../task/schema'
 
 const schema = z.object({
   _id: z.string().refine((val) => Types.ObjectId.isValid(val), {
@@ -15,13 +16,8 @@ const schema = z.object({
       (arr) => new Set(arr).size === arr.length,
       { message: 'The user array must contain only unique elements (no duplicates).' }
     ),
-  code: z.object({
-    language: z.enum(['js'], {
-      message: 'code.language must be one of: js'
-    }),
-    content: z.string('code.content must be valid')
-  }),
-  description: z.string('Description must be valid')
+  code: codeSchema,
+  description: z.string('Description must be valid').min(3, { message: 'Description must be at least 3 characters long' }).max(1000, { message: 'Description must be at most 500 characters long' }).max(500, { message: 'Description must be at most 500 characters long' })
 })
 
 const createSchema = schema.extend({

@@ -1,12 +1,13 @@
 import z from 'zod'
 import { IUser } from '../../interface/user'
 import { UserBadRequest } from '../../error/error'
+import passwordSchema from '../pwdSchema'
 
 const create = z.object({
-  fullName: z.string('fullName is required'),
+  fullName: z.string('fullName is required').min(3, { message: 'fullName must be at least 3 characters long' }).max(100, { message: 'fullName must be at most 100 characters long' }),
   account: z.string('the Account is required').email(),
-  pwd: z.string('Password is required').min(3).max(255),
-  nickName: z.string().min(3).max(255).optional()
+  pwd: passwordSchema,
+  nickName: z.string().min(3, { message: 'nickName must be at least 3 characters long' }).max(100, { message: 'nickName must be at most 100 characters long' })
 })
 
 const validator = {

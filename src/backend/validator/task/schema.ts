@@ -3,7 +3,7 @@ import { ITask } from '../../interface/task'
 import { UserBadRequest } from '../../error/error'
 import { Types } from 'mongoose'
 
-const codeSchema = z.object({
+export const codeSchema = z.object({
   language: z.enum(['js'], {
     message: 'code.language must be one of: js'
   }),
@@ -19,16 +19,16 @@ const baseSchema = z.object({
       (arr) => new Set(arr).size === arr.length,
       { message: 'The user array must contain only unique elements (no duplicates).' }
     ),
-  name: z.string('name must be a string'),
+  name: z.string('name must be a string').min(1, { message: 'name must be at least < 1 length' }).max(250, { message: 'name must be > 250 length' }),
   code: codeSchema,
   feature: z.array(z.string('feature array must be string[]'))
     .refine(
       (arr) => new Set(arr).size === arr.length,
       { message: 'The feature array must contain only unique elements (no duplicates).' }
     ),
-  description: z.string('description must be a string, and must be < 500 length').max(500),
+  description: z.string('description must be a string, and must be < 500 length').min(1, { message: 'description must be at least < 1 length' }).max(500, { message: 'description must be > 500 length' }),
   isComplete: z.boolean('isComplete must be bool'),
-  priority: z.number('Priority must be a number between 0-10').min(0).max(10)
+  priority: z.number('Priority must be a number between 0-10').min(0, { message: 'Priority must be >= 0' }).max(10, { message: 'Priority must be <= 10' })
 })
 
 const creationSchema = baseSchema.extend({

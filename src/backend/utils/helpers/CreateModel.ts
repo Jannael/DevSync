@@ -1,18 +1,18 @@
 import type { CustomError } from '../../error/error'
 import errorHandler from '../../error/handler'
 
-function CreateModel<T>({
-	model,
-	defaultError,
+function CreateModel<T, R>({
+	Model,
+	DefaultError,
 }: {
-	model: (params: T) => Promise<unknown>
-	defaultError: CustomError
+	Model: (params: T) => Promise<R>
+	DefaultError: CustomError
 }) {
-	return async (params: T) => {
+	return async (params: T): Promise<R | undefined> => {
 		try {
-			return await model(params)
+			return await Model(params)
 		} catch (e) {
-			errorHandler.allErrors(e as CustomError, defaultError)
+			errorHandler.allErrors(e as CustomError, DefaultError)
 		}
 	}
 }

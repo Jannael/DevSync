@@ -1,8 +1,12 @@
-import { Request, Response, NextFunction } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 
-async function header (req: Request, res: Response, next: NextFunction): Promise<void> {
-  res.removeHeader('x-powered-by')
-  next()
+async function header(
+	_: Request,
+	res: Response,
+	next: NextFunction,
+): Promise<void> {
+	res.removeHeader('x-powered-by')
+	next()
 }
 
 export default header

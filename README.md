@@ -156,3 +156,7 @@ This project represents my first medium-sized application, and the greatest chal
 To address this initial architectural struggle, I recognized the need for immediate correction and applied the lessons learned to subsequent modules. The APIs for the solution and task resources, for example, were implemented with a correct and strictly separated MVC structure from the outset, ensuring clear boundaries.
 
 Additionally, I introduced an architectural enhancement: the Service Layer (/src/backend/service/). This layer abstracts all complex business logic, state management (such as cookie handling and token refreshing), and data interactions away from the controllers. A key design decision was making the service functions directly receive the req and res objects. This choice was deliberate, as it allows for a much smoother future integration with GraphQL (specifically using Apollo Server), where the Service Layer can be easily reused and adapted by the GraphQL resolvers without significant refactoring. This approach significantly improved the overall modularity and separation of concerns.
+
+## Future work
+- invitations abort
+rework in invitations logic, instead of a member been part of the group until it reject the invitation, this will be removed, its going to be added as an invitation status

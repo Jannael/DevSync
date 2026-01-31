@@ -1,933 +1,849 @@
-import { createApp } from '../../../../backend/app'
-import { Express } from 'express'
-import request from 'supertest'
-import mongoose from 'mongoose'
 import dotenv from 'dotenv'
-import { IEnv } from '../../../../backend/interface/env'
+import type { Express } from 'express'
+import mongoose from 'mongoose'
+import request from 'supertest'
+import { createApp } from '../../../../backend/app'
+import type { IEnv } from '../../../../backend/interface/env'
+import type { IRefreshToken } from '../../../../backend/interface/user'
 import userModel from './../../../../backend/model/user/model'
-import { IRefreshToken } from '../../../../backend/interface/user'
 
 dotenv.config({ quiet: true })
-const { TEST_PWD_ENV, DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'TEST_PWD_ENV' | 'DB_URL_ENV_TEST'>
+const { TEST_PWD_ENV, DB_URL_ENV_TEST } = process.env as Pick<
+	IEnv,
+	'TEST_PWD_ENV' | 'DB_URL_ENV_TEST'
+>
 
 let app: Express
 let agent: ReturnType<typeof request.agent>
 let user: IRefreshToken
 
 beforeAll(async () => {
-  app = await createApp(DB_URL_ENV_TEST, 'test')
-  agent = await request.agent(app)
+	app = await createApp(DB_URL_ENV_TEST, 'test')
+	agent = await request.agent(app)
 
-  user = await userModel.create({
-    fullName: 'test',
-    account: 'test@gmail.com',
-    pwd: 'test',
-    nickName: 'test'
-  })
+	user = await userModel.create({
+		fullName: 'test',
+		account: 'test@gmail.com',
+		pwd: 'test',
+		nickName: 'test',
+	})
 })
 
 afterAll(async () => {
-  await userModel.delete(user._id)
-  await mongoose.connection.close()
+	await userModel.delete(user._id)
+	await mongoose.connection.close()
 })
 
 describe('/auth/v1/', () => {
-  const path = '/auth/v1'
+	const path = '/auth/v1'
 
-  describe('/request/code/', () => {
-    test('', async () => {
-      const res = await agent
-        .post('/auth/v1/request/code/')
-        .send({
-          account: 'test@gmail.com',
-          TEST_PWD: TEST_PWD_ENV
-        })
+	describe('/request/code/', () => {
+		test('', async () => {
+			const res = await agent.post('/auth/v1/request/code/').send({
+				account: 'test@gmail.com',
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-      expect(res.headers['set-cookie'][0]).toMatch(/code=.*/)
-      expect(res.body).toEqual({ success: true })
-    })
+			expect(res.headers['set-cookie'][0]).toMatch(/code=.*/)
+			expect(res.body).toEqual({ success: true })
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app).post('/auth/v1/request/code')
-              .send({
-                account: 'test'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app).post('/auth/v1/request/code')
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Missing or invalid account, the account must match the following pattern example@service.ext',
-            success: false
-          }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () =>
+						await request(app).post('/auth/v1/request/code').send({
+							account: 'test',
+						}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description:
+							'Missing or invalid account, the account must match the following pattern example@service.ext',
+						success: false,
+					},
+				},
+				{
+					fn: async () => await request(app).post('/auth/v1/request/code'),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description:
+							'Missing or invalid account, the account must match the following pattern example@service.ext',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.msg).toEqual(error.msg)
-      }
-    })
-  })
+			for (const { fn, error } of cases) {
+				const res = await fn()
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.msg).toEqual(error.msg)
+			}
+		})
+	})
 
-  describe('/verify/code/', () => {
-    const endpoint = '/auth/v1/verify/code/'
-    test('', async () => {
-      await agent
-        .post('/auth/v1/request/code/')
-        .send({
-          account: 'test@gmail.com',
-          TEST_PWD: TEST_PWD_ENV
-        })
+	describe('/verify/code/', () => {
+		const endpoint = '/auth/v1/verify/code/'
+		test('', async () => {
+			await agent.post('/auth/v1/request/code/').send({
+				account: 'test@gmail.com',
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-      const res = await agent
-        .post('/auth/v1/verify/code')
-        .send({
-          account: 'test@gmail.com',
-          code: '1234'
-        })
+			const res = await agent.post('/auth/v1/verify/code').send({
+				account: 'test@gmail.com',
+				code: '1234',
+			})
 
-      expect(res.headers['set-cookie'][0]).toMatch(/code=.*GMT$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/account=.* /)
-      expect(res.body).toEqual({ success: true })
-    })
+			expect(res.headers['set-cookie'][0]).toMatch(/code=.*GMT$/)
+			expect(res.headers['set-cookie'][1]).toMatch(/account=.* /)
+			expect(res.body).toEqual({ success: true })
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'You did not send the code',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                code: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing code',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .set('Cookie', ['code=unknown'])
-              .send({
-                code: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The code is invalid',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            const agent = request.agent(app)
-            // first ask for the code
-            await agent
-              .post('/auth/v1/request/code')
-              .send({
-                account: 'test@gmail.com',
-                TEST_PWD: TEST_PWD_ENV
-              })
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () => await request(app).post(endpoint),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'You did not send the code',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							code: '1234',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing code',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.post(endpoint)
+							.set('Cookie', ['code=unknown'])
+							.send({
+								code: '1234',
+							}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'The code is invalid',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						const agent = request.agent(app)
+						// first ask for the code
+						await agent.post('/auth/v1/request/code').send({
+							account: 'test@gmail.com',
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-            return await agent
-              .post(endpoint)
-              .send({
-                code: '123'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Wrong code',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            const agent = request.agent(app)
-            // first ask for the code
-            await agent
-              .post('/auth/v1/request/code')
-              .send({
-                account: 'test@gmail.com',
-                TEST_PWD: TEST_PWD_ENV
-              })
+						return await agent.post(endpoint).send({
+							code: '123',
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'Wrong code',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						const agent = request.agent(app)
+						// first ask for the code
+						await agent.post('/auth/v1/request/code').send({
+							account: 'test@gmail.com',
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-            return await agent
-              .post(endpoint)
-              .send({
-                account: 'test',
-                code: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'You tried to change the account now your banned forever',
-            success: false
-          }
-        }
-      ]
+						return await agent.post(endpoint).send({
+							account: 'test',
+							code: '1234',
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description:
+							'You tried to change the account now your banned forever',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toEqual([
-          { rel: 'Missing code', href: '/auth/v1/request/code' }
-        ])
-      }
-    })
-  })
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toEqual([
+					{ rel: 'Missing code', href: '/auth/v1/request/code' },
+				])
+			}
+		})
+	})
 
-  describe('/request/refreshToken/code/', () => {
-    const endpoint = path + '/request/refreshToken/code/'
+	describe('/request/refreshToken/code/', () => {
+		const endpoint = `${path}/request/refreshToken/code/`
 
-    test('', async () => {
-      const res = await agent
-        .post(endpoint)
-        .send({
-          account: user.account,
-          pwd: 'test',
-          TEST_PWD: TEST_PWD_ENV
-        })
+		test('', async () => {
+			const res = await agent.post(endpoint).send({
+				account: user.account,
+				pwd: 'test',
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-      expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*/)
-      expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*/)
-      expect(res.body).toEqual({ success: true })
-    })
+			expect(res.headers['set-cookie'][0]).toMatch(/tokenR=.*/)
+			expect(res.headers['set-cookie'][1]).toMatch(/codeR=.*/)
+			expect(res.body).toEqual({ success: true })
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                account: 'test'
-              })
-          },
-          error: {
-            success: false,
-            msg: 'Invalid credentials',
-            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
-            code: 400
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                account: 'test@gmail.com'
-              })
-          },
-          error: {
-            success: false,
-            msg: 'Invalid credentials',
-            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
-            code: 400
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                account: 'test',
-                pwd: ''
-              })
-          },
-          error: {
-            success: false,
-            msg: 'Invalid credentials',
-            description: 'Missing or invalid data the account must match the following pattern example@service.ext',
-            code: 400
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                account: 'test@example.com',
-                pwd: ''
-              })
-          },
-          error: {
-            success: false,
-            msg: 'Invalid credentials',
-            description: 'Invalid account or password',
-            code: 400
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                account: user.account,
-                pwd: '1234'
-              })
-          },
-          error: {
-            success: false,
-            msg: 'Invalid credentials',
-            description: 'Invalid account or password',
-            code: 400
-          }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							account: 'test',
+						}),
+					error: {
+						success: false,
+						msg: 'Invalid credentials',
+						description:
+							'Missing or invalid data the account must match the following pattern example@service.ext',
+						code: 400,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							account: 'test@gmail.com',
+						}),
+					error: {
+						success: false,
+						msg: 'Invalid credentials',
+						description:
+							'Missing or invalid data the account must match the following pattern example@service.ext',
+						code: 400,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							account: 'test',
+							pwd: '',
+						}),
+					error: {
+						success: false,
+						msg: 'Invalid credentials',
+						description:
+							'Missing or invalid data the account must match the following pattern example@service.ext',
+						code: 400,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							account: 'test@example.com',
+							pwd: '',
+						}),
+					error: {
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid account or password',
+						code: 400,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							account: user.account,
+							pwd: '1234',
+						}),
+					error: {
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid account or password',
+						code: 400,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-      }
-    })
-  })
+			for (const { fn, error } of cases) {
+				const res = await fn()
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+			}
+		})
+	})
 
-  describe('/request/refreshToken/', () => {
-    const endpoint = path + '/request/refreshToken/'
-    test('', async () => {
-      const res = await agent
-        .post(endpoint)
-        .send({
-          code: '1234'
-        })
+	describe('/request/refreshToken/', () => {
+		const endpoint = `${path}/request/refreshToken/`
+		test('', async () => {
+			const res = await agent.post(endpoint).send({
+				code: '1234',
+			})
 
-      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*/)
-      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*/)
-      expect(res.headers['set-cookie'][2]).toMatch(/tokenR=.*GMT$/)
-      expect(res.headers['set-cookie'][3]).toMatch(/codeR=.*GMT$/)
-      expect(res.body).toEqual({ success: true })
-    })
+			expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*/)
+			expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*/)
+			expect(res.headers['set-cookie'][2]).toMatch(/tokenR=.*GMT$/)
+			expect(res.headers['set-cookie'][3]).toMatch(/codeR=.*GMT$/)
+			expect(res.body).toEqual({ success: true })
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .send({
-                code: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing codeR',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'You need to send the code',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-              .set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
-              .send({
-                code: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The codeR is invalid',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            await agent
-              .post(endpoint + 'code/')
-              .send({
-                account: user.account,
-                pwd: 'test',
-                TEST_PWD: TEST_PWD_ENV
-              })
-            return await agent
-              .post(endpoint)
-              .send({
-                code: '0000'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Wrong code',
-            success: false
-          }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () =>
+						await request(app).post(endpoint).send({
+							code: '1234',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing codeR',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.post(endpoint)
+							.set('Cookie', ['codeR=unknown', 'tokenR=unknown']),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'You need to send the code',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.post(endpoint)
+							.set('Cookie', ['codeR=unknown', 'tokenR=unknown'])
+							.send({
+								code: '1234',
+							}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'The codeR is invalid',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toEqual([
-          { rel: 'You need to use MFA for login', href: '/auth/v1/request/refreshToken/code/' }
-        ])
-      }
-    })
-  })
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toEqual([
+					{
+						rel: 'You need to use MFA for login',
+						href: '/auth/v1/request/refreshToken/code/',
+					},
+				])
+			}
+		})
+	})
 
-  describe('/request/accessToken/', () => {
-    const endpoint = path + '/request/accessToken/'
-    test('', async () => {
-      const res = await agent
-        .get(endpoint)
+	describe('/request/accessToken/', () => {
+		const endpoint = `${path}/request/accessToken/`
+		test('', async () => {
+			const res = await agent.get(endpoint)
 
-      expect(res.body).toEqual({ success: true })
-    })
+			expect(res.body).toEqual({ success: true })
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .get(endpoint)
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing refreshToken',
-            success: false
-          }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () => await request(app).get(endpoint),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing refreshToken',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toStrictEqual([
-          { rel: 'Code for login', href: '/auth/v1/request/refreshToken/code/' },
-          { rel: 'Verify code for login', href: '/auth/v1/request/refreshToken/' }
-        ])
-      }
-    })
-  })
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toStrictEqual([
+					{
+						rel: 'Code for login',
+						href: '/auth/v1/request/refreshToken/code/',
+					},
+					{
+						rel: 'Verify code for login',
+						href: '/auth/v1/request/refreshToken/',
+					},
+				])
+			}
+		})
+	})
 
-  describe('/account/request/code/', () => {
-    const endpoint = path + '/account/request/code/'
-    test('', async () => {
-      const res = await agent
-        .patch(endpoint)
-        .send({
-          newAccount: 'test1@gmail.com',
-          TEST_PWD: TEST_PWD_ENV
-        })
+	describe('/account/request/code/', () => {
+		const endpoint = `${path}/account/request/code/`
+		test('', async () => {
+			const res = await agent.patch(endpoint).send({
+				newAccount: 'test1@gmail.com',
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-      expect(res.body).toEqual({ success: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*/)
-      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*/)
-    })
+			expect(res.body).toEqual({ success: true })
+			expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*/)
+			expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*/)
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing or invalid data check the newAccount you sent',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['accessToken=token'])
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing or invalid data check the newAccount you sent',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .send({
-                newAccount: 'account'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing or invalid data check the newAccount you sent',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['accessToken=token'])
-              .send({
-                newAccount: 'account'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing or invalid data check the newAccount you sent',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['accessToken=token'])
-              .send({
-                newAccount: 'account@gmail.com'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The accessToken is invalid',
-            success: false
-          }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () => await request(app).patch(endpoint),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description:
+							'Missing or invalid data check the newAccount you sent',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', ['accessToken=token']),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description:
+							'Missing or invalid data check the newAccount you sent',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).patch(endpoint).send({
+							newAccount: 'account',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description:
+							'Missing or invalid data check the newAccount you sent',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', ['accessToken=token'])
+							.send({
+								newAccount: 'account',
+							}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description:
+							'Missing or invalid data check the newAccount you sent',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', ['accessToken=token'])
+							.send({
+								newAccount: 'account@gmail.com',
+							}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'The accessToken is invalid',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toEqual([
-          { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
-          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
-          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' }
-        ])
-      }
-    })
-  })
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toEqual([
+					{
+						rel: 'get accessToken with refreshToken',
+						href: '/auth/v1/request/accessToken/',
+					},
+					{
+						rel: 'get refreshToken',
+						href: '/auth/v1/request/refreshToken/code',
+					},
+					{ rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' },
+				])
+			}
+		})
+	})
 
-  describe('/account/verify/code/', () => {
-    const endpoint = path + '/account/verify/code/'
-    test('', async () => {
-      const res = await agent
-        .patch(endpoint)
-        .send({
-          codeCurrentAccount: '1234',
-          codeNewAccount: '1234'
-        })
+	describe('/account/verify/code/', () => {
+		const endpoint = `${path}/account/verify/code/`
+		test('', async () => {
+			const res = await agent.patch(endpoint).send({
+				codeCurrentAccount: '1234',
+				codeNewAccount: '1234',
+			})
 
-      expect(res.body).toEqual({ success: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*GMT$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
-      expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*/)
-    })
+			expect(res.body).toEqual({ success: true })
+			expect(res.headers['set-cookie'][0]).toMatch(/currentAccount=.*GMT$/)
+			expect(res.headers['set-cookie'][1]).toMatch(/newAccount=.*GMT$/)
+			expect(res.headers['set-cookie'][2]).toMatch(/newAccount_account=.*/)
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['currentAccount=val', 'newAccount=val', 'accessToken=val'])
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'You need to send the verification codes',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .send({
-                codeCurrentAccount: '0000',
-                codeNewAccount: '0000'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing currentAccount',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['currentAccount=val', 'newAccount=val', 'accessToken=val'])
-              .send({
-                codeCurrentAccount: '0000',
-                codeNewAccount: '0000'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The currentAccount is invalid',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            await agent
-              .patch(path + '/account/request/code/')
-              .send({
-                newAccount: 'test1@gmail.com',
-                TEST_PWD: TEST_PWD_ENV
-              })
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', [
+								'currentAccount=val',
+								'newAccount=val',
+								'accessToken=val',
+							]),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'You need to send the verification codes',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).patch(endpoint).send({
+							codeCurrentAccount: '0000',
+							codeNewAccount: '0000',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing currentAccount',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', [
+								'currentAccount=val',
+								'newAccount=val',
+								'accessToken=val',
+							])
+							.send({
+								codeCurrentAccount: '0000',
+								codeNewAccount: '0000',
+							}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'The currentAccount is invalid',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						await agent.patch(`${path}/account/request/code/`).send({
+							newAccount: 'test1@gmail.com',
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-            return await agent
-              .patch(endpoint)
-              .send({
-                codeCurrentAccount: '0000',
-                codeNewAccount: '1234'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Current account code is wrong',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            await agent
-              .patch(path + '/account/request/code/')
-              .send({
-                newAccount: 'test1@gmail.com',
-                TEST_PWD: TEST_PWD_ENV
-              })
+						return await agent.patch(endpoint).send({
+							codeCurrentAccount: '0000',
+							codeNewAccount: '1234',
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'Current account code is wrong',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						await agent.patch(`${path}/account/request/code/`).send({
+							newAccount: 'test1@gmail.com',
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-            return await agent
-              .patch(endpoint)
-              .send({
-                codeCurrentAccount: '1234',
-                codeNewAccount: '0000'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'New account code is wrong',
-            success: false
-          }
-        }
-      ]
+						return await agent.patch(endpoint).send({
+							codeCurrentAccount: '1234',
+							codeNewAccount: '0000',
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'New account code is wrong',
+						success: false,
+					},
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toEqual([
-          { rel: 'get accessToken with refreshToken', href: '/auth/v1/request/accessToken/' },
-          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/code' },
-          { rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' },
-          { rel: 'get verification code for account change', href: '/auth/v1/account/request/code/' },
-          { rel: 'validate code', href: '/auth/v1/account/verify/code/' }
-        ])
-      }
-    })
-  })
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toEqual([
+					{
+						rel: 'get accessToken with refreshToken',
+						href: '/auth/v1/request/accessToken/',
+					},
+					{
+						rel: 'get refreshToken',
+						href: '/auth/v1/request/refreshToken/code',
+					},
+					{ rel: 'get refreshToken', href: '/auth/v1/request/refreshToken/' },
+					{
+						rel: 'get verification code for account change',
+						href: '/auth/v1/account/request/code/',
+					},
+					{ rel: 'validate code', href: '/auth/v1/account/verify/code/' },
+				])
+			}
+		})
+	})
 
-  describe('/request/logout/', () => {
-    const endpoint = path + '/request/logout/'
-    test('', async () => {
-      const res = await agent
-        .post(endpoint)
+	describe('/request/logout/', () => {
+		const endpoint = `${path}/request/logout/`
+		test('', async () => {
+			const res = await agent.post(endpoint)
 
-      expect(res.body.success).toEqual(true)
-      expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
-      expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
-    })
+			expect(res.body.success).toEqual(true)
+			expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=.*GMT$/)
+			expect(res.headers['set-cookie'][1]).toMatch(/accessToken=.*GMT$/)
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .post(endpoint)
-          },
-          error: { success: false }
-        }
-      ]
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () => await request(app).post(endpoint),
+					error: { success: false },
+				},
+			]
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
-        expect(res.body.success).toEqual(error.success)
-      }
-    })
-  })
+			for (const { fn, error } of cases) {
+				const res = await fn()
+				expect(res.body.success).toEqual(error.success)
+			}
+		})
+	})
 
-  describe('/password/request/code/', () => {
-    const endpoint = path + '/password/request/code/'
-    test('', async () => {
-      const res = await request(app)
-        .patch(endpoint)
-        .send({
-          account: user.account,
-          TEST_PWD: TEST_PWD_ENV
-        })
+	describe('/password/request/code/', () => {
+		const endpoint = `${path}/password/request/code/`
+		test('', async () => {
+			const res = await request(app).patch(endpoint).send({
+				account: user.account,
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-      expect(res.body).toEqual({ success: true })
-      expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*/)
-    })
+			expect(res.body).toEqual({ success: true })
+			expect(res.headers['set-cookie'][0]).toMatch(/pwdChange=.*/)
+		})
 
-    test('error', async () => {
-      const cases = [
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .send({
-                account: 'test'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing or invalid account it must match example@service.ext',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .send({
-                account: 'test@service.ext'
-              })
-          },
-          error: {
-            code: 404,
-            msg: 'User not found',
-            success: false
-          }
+		test('error', async () => {
+			const cases = [
+				{
+					fn: async () =>
+						await request(app).patch(endpoint).send({
+							account: 'test',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description:
+							'Missing or invalid account it must match example@service.ext',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).patch(endpoint).send({
+							account: 'test@service.ext',
+						}),
+					error: {
+						code: 404,
+						msg: 'User not found',
+						success: false,
+					},
+				},
+			]
 
-        }
-      ]
+			for (const { fn, error } of cases) {
+				const res = await fn()
 
-      for (const { fn, error } of cases) {
-        const res = await fn()
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+			}
+		})
+	})
 
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-      }
-    })
-  })
+	describe('/password/verify/code/', () => {
+		const endpoint = `${path}/password/verify/code/`
+		test('', async () => {
+			const agent = request.agent(app)
+			await agent.patch(`${path}/password/request/code/`).send({
+				account: user.account,
+				TEST_PWD: TEST_PWD_ENV,
+			})
 
-  describe('/password/verify/code/', () => {
-    const endpoint = path + '/password/verify/code/'
-    test('', async () => {
-      const agent = request.agent(app)
-      await agent
-        .patch(path + '/password/request/code/')
-        .send({
-          account: user.account,
-          TEST_PWD: TEST_PWD_ENV
-        })
+			const res = await agent.patch(endpoint).send({
+				code: '1234',
+				account: user.account,
+				newPwd: 'insane pwd',
+			})
 
-      const res = await agent
-        .patch(endpoint)
-        .send({
-          code: '1234',
-          account: user.account,
-          newPwd: 'insane pwd'
-        })
+			expect(res.body.success).toEqual(true)
+			expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*/)
+			expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
+		})
 
-      expect(res.body.success).toEqual(true)
-      expect(res.headers['set-cookie'][0]).toMatch(/newPwd=.*/)
-      expect(res.headers['set-cookie'][1]).toMatch(/pwdChange=.*GMT$/)
-    })
+		test('error', async () => {
+			const func = [
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', ['pwdChange=value']),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'You need to send code, newPwd and account',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app).patch(endpoint).send({
+							code: 'test',
+							newPwd: 'test',
+							account: 'test',
+						}),
+					error: {
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing pwdChange',
+						success: false,
+					},
+				},
+				{
+					fn: async () =>
+						await request(app)
+							.patch(endpoint)
+							.set('Cookie', ['pwdChange=value'])
+							.send({
+								code: 'test',
+								newPwd: 'test',
+								account: 'test',
+							}),
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'The pwdChange is invalid',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						const agent = request.agent(app)
+						await agent.patch(`${path}/password/request/code/`).send({
+							account: user.account,
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-    test('error', async () => {
-      const func = [
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['pwdChange=value'])
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'You need to send code, newPwd and account',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .send({
-                code: 'test',
-                newPwd: 'test',
-                account: 'test'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Missing data',
-            description: 'Missing pwdChange',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            return await request(app)
-              .patch(endpoint)
-              .set('Cookie', ['pwdChange=value'])
-              .send({
-                code: 'test',
-                newPwd: 'test',
-                account: 'test'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'The pwdChange is invalid',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            const agent = request.agent(app)
-            await agent
-              .patch(path + '/password/request/code/')
-              .send({
-                account: user.account,
-                TEST_PWD: TEST_PWD_ENV
-              })
+						return await agent.patch(endpoint).send({
+							code: '0000',
+							newPwd: 'test',
+							account: user.account,
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description: 'Wrong code',
+						success: false,
+					},
+				},
+				{
+					fn: async () => {
+						const agent = request.agent(app)
+						await agent.patch(`${path}/password/request/code/`).send({
+							account: user.account,
+							TEST_PWD: TEST_PWD_ENV,
+						})
 
-            return await agent
-              .patch(endpoint)
-              .send({
-                code: '0000',
-                newPwd: 'test',
-                account: user.account
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'Wrong code',
-            success: false
-          }
-        },
-        {
-          fn: async function () {
-            const agent = request.agent(app)
-            await agent
-              .patch(path + '/password/request/code/')
-              .send({
-                account: user.account,
-                TEST_PWD: TEST_PWD_ENV
-              })
+						return await agent.patch(endpoint).send({
+							code: '1234',
+							newPwd: 'test',
+							account: 'account',
+						})
+					},
+					error: {
+						code: 400,
+						msg: 'Invalid credentials',
+						description:
+							'You tried to change the account now your banned forever',
+						success: false,
+					},
+				},
+			]
 
-            return await agent
-              .patch(endpoint)
-              .send({
-                code: '1234',
-                newPwd: 'test',
-                account: 'account'
-              })
-          },
-          error: {
-            code: 400,
-            msg: 'Invalid credentials',
-            description: 'You tried to change the account now your banned forever',
-            success: false
-          }
-        }
-      ]
-
-      for (const { fn, error } of func) {
-        const res = await fn()
-        expect(res.statusCode).toEqual(error.code)
-        expect(res.body.msg).toEqual(error.msg)
-        expect(res.body.success).toEqual(error.success)
-        expect(res.body.description).toEqual(error.description)
-        expect(res.body.link).toEqual([
-          { rel: 'get code', href: '/auth/v1/password/request/code/' }
-        ])
-      }
-    })
-  })
+			for (const { fn, error } of func) {
+				const res = await fn()
+				expect(res.statusCode).toEqual(error.code)
+				expect(res.body.msg).toEqual(error.msg)
+				expect(res.body.success).toEqual(error.success)
+				expect(res.body.description).toEqual(error.description)
+				expect(res.body.link).toEqual([
+					{ rel: 'get code', href: '/auth/v1/password/request/code/' },
+				])
+			}
+		})
+	})
 })

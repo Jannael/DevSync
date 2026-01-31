@@ -9,7 +9,7 @@ import dbUserModel from './../../../../backend/database/schemas/node/user'
 import type { IEnv } from '../../../../backend/interface/env'
 import type { IGroup } from '../../../../backend/interface/group'
 import type { IRefreshToken } from '../../../../backend/interface/user'
-import groupModel from '../../../../backend/model/group/model'
+import groupModel from '../../../../backend/model/group/Group.model'
 import userModel from './../../../../backend/model/user/model'
 
 dotenv.config({ quiet: true })

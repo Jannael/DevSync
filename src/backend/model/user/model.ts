@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { Types } from 'mongoose'
-import config from '../../config/config'
+import config from '../../config/Config'
 import dbModel from './../../database/schemas/node/user'
 import {
 	type CustomError,
@@ -22,7 +22,7 @@ import type {
 } from './../../interface/user'
 import { verifyEmail } from '../../utils/utils'
 import validator from '../../validator/validator'
-import groupModel from '../group/model'
+import groupModel from '../group/Group.model'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>

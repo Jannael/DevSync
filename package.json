@@ -8,7 +8,7 @@
 		"test:w": "pnpm jest --verbose --detectOpenHandles src/test/backend/routes/auth/test.test.ts",
 		"build": "pnpm tsc",
 		"start": "node ./dist/backend/server.js",
-		"lint": "pnpm eslint",
+		"lint": "pnpm biome check",
 		"type-check": "pnpm tsc -noEmit"
 	},
 	"keywords": [],

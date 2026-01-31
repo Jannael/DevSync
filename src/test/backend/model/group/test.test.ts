@@ -10,7 +10,7 @@ import {
 import type { IEnv } from '../../../../backend/interface/env'
 import type { IGroup } from '../../../../backend/interface/group'
 import type { IRefreshToken } from '../../../../backend/interface/user'
-import model from './../../../../backend/model/group/model'
+import model from '../../../../backend/model/group/Group.model'
 import userModel from './../../../../backend/model/user/model'
 
 dotenv.config({ quiet: true })

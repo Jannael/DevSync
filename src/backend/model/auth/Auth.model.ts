@@ -1,31 +1,34 @@
 import bcrypt from 'bcrypt'
 import type { Types } from 'mongoose'
-import config from '../../config/config'
-import dbModel from './../../database/schemas/node/user'
+import Config from '../../config/Config'
+import dbModel from '../../database/schemas/node/user'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
-
-import type { IRefreshToken, IUser } from '../../interface/user'
+import type { IRefreshToken } from '../../interface/user'
 import CreateModel from '../../utils/helpers/CreateModel'
-import { omit } from '../../utils/utils'
 
-const model = {
+const AuthModel = {
 	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken>({
 		Model: async ({ account, pwd }: { account: string; pwd: string }) => {
-			const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
+			const user = await dbModel
+				.findOne(
+					{ account },
+					{ ...Config.database.projection.IRefreshToken, pwd: 1 },
+				)
+				.lean<IRefreshToken & { pwd?: string }>()
 
-			const user = await dbModel.findOne({ account }, projection).lean()
+			const isMatch =
+				user != null &&
+				user.pwd !== undefined &&
+				(await bcrypt.compare(pwd, user.pwd))
 
-			const isMatch = user != null && (await bcrypt.compare(pwd, user.pwd))
-
-			if (user == null || !isMatch) {
+			if (!user || !isMatch) {
 				throw new UserBadRequest(
 					'Invalid credentials',
 					'Invalid account or password',
 				)
 			}
 
-			delete (user as Partial<IUser>).pwd
-
+			delete user?.pwd
 			return user
 		},
 		DefaultError: new DatabaseError(
@@ -36,7 +39,7 @@ const model = {
 	Exists: CreateModel<{ account: string }, boolean>({
 		Model: async ({ account }: { account: string }) => {
 			const exists = await dbModel.exists({ account })
-			if (exists === null) throw new NotFound('User not found')
+			if (!exists) throw new NotFound('User not found')
 			return true
 		},
 		DefaultError: new DatabaseError(
@@ -47,19 +50,6 @@ const model = {
 	RefreshToken: {
 		Save: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
 			Model: async ({ token, userId }) => {
-				const user = await dbModel.findOne(
-					{ _id: userId },
-					{ _id: 0, refreshToken: 1 },
-				)
-
-				if (user == null) throw new NotFound('User not found')
-				if (Array.isArray(user.refreshToken) && user.refreshToken.length >= 3) {
-					await dbModel.updateOne(
-						{ _id: userId },
-						{ refreshToken: user.refreshToken.slice(1) },
-					)
-				}
-
 				const result = await dbModel.updateOne(
 					{ _id: userId },
 					{ $push: { refreshToken: token } },
@@ -88,12 +78,12 @@ const model = {
 			),
 		}),
 		Verify: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
-				Model: async ({ token, userId }) => {
+			Model: async ({ token, userId }) => {
 				const result = await dbModel
 					.findOne({ _id: userId }, { refreshToken: 1, _id: 0 })
 					.lean()
 
-				if (result === null) throw new NotFound('User not found')
+				if (!result) throw new NotFound('User not found')
 
 				const tokens = result?.refreshToken
 				return Array.isArray(tokens) && tokens.includes(token)
@@ -106,4 +96,4 @@ const model = {
 	},
 }
 
-export default model
+export default AuthModel

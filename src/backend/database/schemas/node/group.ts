@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from './../../../config/config'
+import config from '../../../config/Config'
 import type { IGroup } from '../../../interface/group'
 
 const techLeadSchema = new Schema<NonNullable<IGroup['techLead']>[number]>(

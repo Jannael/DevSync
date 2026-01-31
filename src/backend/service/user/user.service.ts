@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
-import config from './../../config/config'
+import config from '../../config/Config'
 import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
 import type { IEnv } from '../../interface/env'
 import type {
@@ -9,8 +9,8 @@ import type {
 	IUserGroup,
 	IUserInvitation,
 } from '../../interface/user'
-import authModel from './../../model/auth/model'
-import groupModel from './../../model/group/model'
+import authModel from '../../model/auth/Auth.model'
+import groupModel from '../../model/group/Group.model'
 import model from './../../model/user/model'
 import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'

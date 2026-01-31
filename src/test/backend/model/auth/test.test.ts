@@ -8,7 +8,7 @@ import {
 } from '../../../../backend/error/error'
 import type { IEnv } from '../../../../backend/interface/env'
 import type { IRefreshToken } from '../../../../backend/interface/user'
-import model from './../../../../backend/model/auth/model'
+import model from '../../../../backend/model/auth/Auth.model'
 import userModel from './../../../../backend/model/user/model'
 
 dotenv.config({ quiet: true })

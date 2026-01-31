@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../../config/config'
+import config from '../../../config/Config'
 import type { ICodeSchema, ITask } from '../../../interface/task'
 
 const { ObjectId } = Schema.Types

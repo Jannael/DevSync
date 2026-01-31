@@ -15,7 +15,7 @@ import type {
 	IRefreshToken,
 	IUserGroup,
 } from '../../../../backend/interface/user'
-import groupModel from '../../../../backend/model/group/model'
+import groupModel from '../../../../backend/model/group/Group.model'
 import model from '../../../../backend/model/user/model'
 
 dotenv.config({ quiet: true })

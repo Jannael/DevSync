@@ -47,6 +47,7 @@ export default {
 		maxInvitations: 5,
 		maxGroups: 5,
 		defaultRole: 'developer',
+		maxSessions: 3
 	},
 	group: {
 		maxMembers: 5,

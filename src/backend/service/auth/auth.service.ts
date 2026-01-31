@@ -130,7 +130,10 @@ const service = {
 				)
 					code = generateCode(req.body?.TEST_PWD)
 
-				const user = await model.login(req.body?.account, req.body?.pwd)
+				const user = await model.login({
+					account: req.body?.account,
+					pwd: req.body?.pwd,
+				})
 
 				if (req.body?.TEST_PWD === undefined)
 					await sendEmail(req.body?.account, code)

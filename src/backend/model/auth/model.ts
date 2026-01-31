@@ -10,11 +10,12 @@ import {
 } from '../../error/error'
 import errorHandler from '../../error/handler'
 import type { IRefreshToken, IUser } from '../../interface/user'
+import CreateModel from '../../utils/helpers/createModel'
 import { omit } from '../../utils/utils'
 
 const model = {
-	login: async (account: string, pwd: string): Promise<IRefreshToken> => {
-		try {
+	login: CreateModel<{ account: string; pwd: string }>({
+		model: async ({account, pwd}: { account: string; pwd: string }) => {
 			const projection = omit(config.database.projection.IRefreshToken, ['pwd'])
 
 			const user = await dbModel.findOne({ account }, projection).lean()
@@ -31,20 +32,12 @@ const model = {
 			delete (user as Partial<IUser>).pwd
 
 			return user
-		} catch (e) {
-			errorHandler.allErrors(
-				e as CustomError,
-				new DatabaseError(
-					'Failed to access data',
-					'The user was not retrieved, something went wrong please try again',
-				),
-			)
-			throw new DatabaseError(
+		},
+		defaultError: new DatabaseError(
 				'Failed to access data',
 				'The user was not retrieved, something went wrong please try again',
-			)
-		}
-	},
+			),
+	}),
 	exists: async (account: string): Promise<boolean> => {
 		try {
 			const exists = await dbModel.exists({ account })

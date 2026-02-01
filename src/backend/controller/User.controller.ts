@@ -4,7 +4,11 @@ import config from '../../config/Config'
 import authModel from '../../model/auth/Auth.model'
 import groupModel from '../../model/group/Group.model'
 import model from '../../model/user/User.model'
-import { DatabaseError, Forbidden, UserBadRequest } from '../error/error'
+import {
+	DatabaseError,
+	Forbidden,
+	UserBadRequest,
+} from '../error/Error.constructor'
 import type { IEnv } from '../interface/Env'
 import type {
 	IRefreshToken,

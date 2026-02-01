@@ -4,7 +4,11 @@ import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
 import cookiesConfig from '../config/Cookies.config'
 import jwtConfig from '../config/Jwt.config'
-import { DatabaseError, NotFound, UserBadRequest } from '../error/error'
+import {
+	DatabaseError,
+	NotFound,
+	UserBadRequest,
+} from '../error/Error.constructor'
 import type { IEnv } from '../interface/Env'
 import model from '../model/Auth.model'
 import { encrypt } from '../utils/EncryptToken.utils'

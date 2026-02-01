@@ -1,5 +1,5 @@
-import type { CustomError } from '../../error/error'
-import errorHandler from '../../error/handler'
+import type { CustomError } from '../../error/Error.constructor'
+import ErrorHandler from '../../error/Error.handler'
 
 function CreateModel<T, R>({
 	Model,
@@ -12,7 +12,7 @@ function CreateModel<T, R>({
 		try {
 			return await Model(params)
 		} catch (e) {
-			errorHandler.allErrors(e as CustomError, DefaultError)
+			ErrorHandler.Model(e as CustomError, DefaultError)
 		}
 	}
 }

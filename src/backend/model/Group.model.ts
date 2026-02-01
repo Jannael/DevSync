@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/Group'
-import { DatabaseError } from '../error/error'
+import { DatabaseError } from '../error/Error.instances'
 import type { IGroup } from '../interface/Group'
 import CreateModel from '../utils/helpers/CreateModel.helper'
 

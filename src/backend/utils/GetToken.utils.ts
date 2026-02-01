@@ -1,6 +1,6 @@
 import type { Request } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
-import { UserBadRequest } from '../error/error'
+import { UserBadRequest } from '../error/Error.instances'
 import Decrypt from './Decrypt.utils'
 
 function GetToken({

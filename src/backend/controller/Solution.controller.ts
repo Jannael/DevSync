@@ -2,7 +2,7 @@ import type { Request, Response } from 'express'
 import { Types } from 'mongoose'
 import model from '../../model/solution/Solution.model'
 import taskModel from './../../model/task/model'
-import { Forbidden, UserBadRequest } from '../error/error'
+import { Forbidden, UserBadRequest } from '../error/Error.constructor'
 import type { ISolution } from '../interface/Solution'
 import validator from '../validator/Merge.validator'
 

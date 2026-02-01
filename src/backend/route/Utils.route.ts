@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from 'express'
-import auth from '../middleware/auth'
+import auth from '../middleware/Auth.middleware'
 
 const router = Router()
 

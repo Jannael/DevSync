@@ -25,6 +25,21 @@ const MemberModel = {
 			'The group users were not retrieved, something went wrong please try again',
 		),
 	}),
+	GetRole: CreateModel<
+		{ groupId: Types.ObjectId; account: string },
+		string | null
+	>({
+		Model: async ({ groupId, account }) => {
+			const member = await dbModel
+				.findOne({ groupId, account }, { role: 1 })
+				.lean()
+			return member ? member.role : null
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The user role was not retrieved, something went wrong please try again',
+		),
+	}),
 	Create: CreateModel<{ data: IMember }, IMember>({
 		Model: async ({ data }) => {
 			const created = await dbModel.create(data)

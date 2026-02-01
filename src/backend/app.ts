@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import mongoose from 'mongoose'
-import router from './../backend/routes/merge'
+import router from './routes/Merge.route'
 import middleware from './middleware/merge'
 
 dotenv.config({ quiet: true })

@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import Config from '../../config/Projection.config'
-import dbModel from './../../database/node/task'
+import dbModel from './../../database/node/Task'
 import { DatabaseError } from '../../error/error'
 import type { ITask } from '../../interface/Task'
 import type { ITaskListItem } from '../../interface/TaskList'

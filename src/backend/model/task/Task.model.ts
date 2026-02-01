@@ -5,7 +5,7 @@ import { DatabaseError } from '../../error/error'
 import type { ITask, ITaskListItem } from '../../interface/task'
 import CreateModel from '../../utils/helpers/CreateModel'
 
-const model = {
+const TaskModel = {
 	List: CreateModel<
 		{ groupId: Types.ObjectId; skip: number; limit: number },
 		ITaskListItem[]
@@ -72,4 +72,4 @@ const model = {
 	}),
 }
 
-export default model
+export default TaskModel

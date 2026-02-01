@@ -7,7 +7,7 @@ import groupDbModel from './../../../../backend/database/schemas/node/group'
 import userDbModel from './../../../../backend/database/schemas/node/user'
 import type { IEnv } from '../../../../backend/interface/env'
 import type { IGroup } from '../../../../backend/interface/group'
-import userModel from './../../../../backend/model/user/model'
+import userModel from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST, TEST_PWD_ENV } = process.env as Pick<

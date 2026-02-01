@@ -5,7 +5,7 @@ import request from 'supertest'
 import { createApp } from '../../../../backend/app'
 import type { IEnv } from '../../../../backend/interface/env'
 import type { IRefreshToken } from '../../../../backend/interface/user'
-import userModel from './../../../../backend/model/user/model'
+import userModel from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })
 const { TEST_PWD_ENV, DB_URL_ENV_TEST } = process.env as Pick<

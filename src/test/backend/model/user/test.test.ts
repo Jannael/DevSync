@@ -16,7 +16,7 @@ import type {
 	IUserGroup,
 } from '../../../../backend/interface/user'
 import groupModel from '../../../../backend/model/group/Group.model'
-import model from '../../../../backend/model/user/model'
+import model from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>

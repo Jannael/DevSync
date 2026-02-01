@@ -11,7 +11,7 @@ import type { IEnv } from '../../../../backend/interface/env'
 import type { IGroup } from '../../../../backend/interface/group'
 import type { IRefreshToken } from '../../../../backend/interface/user'
 import model from '../../../../backend/model/group/Group.model'
-import userModel from './../../../../backend/model/user/model'
+import userModel from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV_TEST } = process.env as Pick<IEnv, 'DB_URL_ENV_TEST'>

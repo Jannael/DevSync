@@ -11,7 +11,7 @@ import type {
 } from '../../interface/user'
 import authModel from '../../model/auth/Auth.model'
 import groupModel from '../../model/group/Group.model'
-import model from './../../model/user/model'
+import model from '../../model/user/User.model'
 import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'
 import { verifyEmail } from '../../utils/utils'

@@ -1,13 +1,13 @@
 import type { Types } from 'mongoose'
-import dbModel from '../database/node/UserGroup'
+import dbModel from '../database/node/Member'
 import { DatabaseError } from '../error/error'
-import type { IUserGroup } from '../interface/UserGroup'
+import type { IMember } from '../interface/Member'
 import CreateModel from '../utils/helpers/CreateModel.helper'
 
-const UserGroupModel = {
-	GetByUser: CreateModel<{ account: string }, IUserGroup[]>({
+const MemberModel = {
+	GetByUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }) => {
-			const groups = await dbModel.find({ account }).lean<IUserGroup[]>()
+			const groups = await dbModel.find({ account }).lean<IMember[]>()
 			return groups
 		},
 		DefaultError: new DatabaseError(
@@ -15,9 +15,9 @@ const UserGroupModel = {
 			'The user groups were not retrieved, something went wrong please try again',
 		),
 	}),
-	GetByGroup: CreateModel<{ groupId: Types.ObjectId }, IUserGroup[]>({
+	GetByGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }) => {
-			const users = await dbModel.find({ groupId }).lean<IUserGroup[]>()
+			const users = await dbModel.find({ groupId }).lean<IMember[]>()
 			return users
 		},
 		DefaultError: new DatabaseError(
@@ -25,7 +25,7 @@ const UserGroupModel = {
 			'The group users were not retrieved, something went wrong please try again',
 		),
 	}),
-	Create: CreateModel<{ data: IUserGroup }, IUserGroup>({
+	Create: CreateModel<{ data: IMember }, IMember>({
 		Model: async ({ data }) => {
 			const created = await dbModel.create(data)
 			return created.toObject()
@@ -89,4 +89,4 @@ const UserGroupModel = {
 	}),
 }
 
-export default UserGroupModel
+export default MemberModel

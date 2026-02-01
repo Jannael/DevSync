@@ -1,4 +1,4 @@
-db.createCollection('userGroup', {
+db.createCollection('member', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',

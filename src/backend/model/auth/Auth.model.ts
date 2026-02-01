@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import type { Types } from 'mongoose'
-import Config from '../../config/Config'
+import Config from '../../config/Projection.config'
 import dbModel from '../../database/node/user'
 import { DatabaseError } from '../../error/error'
 import type { IRefreshToken } from '../../interface/User'
@@ -12,7 +12,7 @@ const AuthModel = {
 			const user = await dbModel
 				.findOne(
 					{ account },
-					{ ...Config.database.projection.IRefreshToken, pwd: 1 },
+					{ ...Config.IRefreshToken, pwd: 1 },
 				)
 				.lean<IRefreshToken & { pwd?: string }>()
 

@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { IGroup } from '../../interface/Group'
 
 const techLeadSchema = new Schema<IGroup['techLead'][number]>(
@@ -8,7 +8,7 @@ const techLeadSchema = new Schema<IGroup['techLead'][number]>(
 		account: { type: String, required: true },
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		_id: false,
 	},
 )
@@ -20,7 +20,7 @@ const memberSchema = new Schema<IGroup['member']>(
 		role: { type: String, required: true },
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		_id: false,
 	},
 )
@@ -34,7 +34,7 @@ const schema = new Schema<IGroup>(
 		member: [memberSchema],
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		collection: 'group',
 	},
 )

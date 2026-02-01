@@ -1,5 +1,5 @@
 import type { Types } from 'mongoose'
-import Config from '../../config/Config'
+import Config from '../../config/Projection.config'
 import dbModel from './../../database/node/task'
 import { DatabaseError } from '../../error/error'
 import type { ITask } from '../../interface/Task'
@@ -13,7 +13,7 @@ const TaskModel = {
 	>({
 		Model: async ({ groupId, skip, limit }) => {
 			const response = await dbModel
-				.find({ groupId }, Config.database.projection.ITaskListItem)
+				.find({ groupId }, Config.ITaskListItem)
 				.skip(skip)
 				.limit(limit)
 				.lean<ITaskListItem[]>()

@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { ITask } from '../../interface/Task'
 import CodeSchema from './CodeField'
 
@@ -17,7 +17,7 @@ const schema = new Schema<ITask>(
 		priority: { type: Number, required: true }, // => default 0
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		collection: 'task',
 	},
 )

@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { ICodeSchema } from '../../interface/CodeField'
 
 const CodeSchema = new Schema<ICodeSchema>(
@@ -8,7 +8,7 @@ const CodeSchema = new Schema<ICodeSchema>(
 		content: { type: String, required: true },
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		_id: false,
 	},
 )

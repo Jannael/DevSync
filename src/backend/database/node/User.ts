@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { IUser } from '../../interface/User'
 
 const schema = new Schema<IUser>(
@@ -11,7 +11,7 @@ const schema = new Schema<IUser>(
 		refreshToken: [{ type: String }],
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		collection: 'user',
 	},
 )

@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { ISolution } from '../../interface/Solution'
 import CodeSchema from './CodeField'
 
@@ -15,7 +15,7 @@ const schema = new Schema<ISolution>(
 		description: { type: String, required: true },
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		collection: 'solution',
 	},
 )

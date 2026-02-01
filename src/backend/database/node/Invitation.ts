@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import config from '../../config/Config'
+import config from '../../config/Database.config'
 import type { IInvitation } from '../../interface/Invitation'
 
 const schema = new Schema<IInvitation>(
@@ -10,7 +10,7 @@ const schema = new Schema<IInvitation>(
 		name: { type: String, required: true },
 	},
 	{
-		...config.database.mongodb.schemaOptions,
+		...config.schemaOptions,
 		_id: false,
 	},
 )

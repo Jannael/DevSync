@@ -1,6 +1,6 @@
 import z from 'zod'
 import { UserBadRequest } from '../../error/error'
-import type { IGroup } from '../../interface/group'
+import type { IGroup } from '../../interface/Group'
 
 const schema = z.object({
 	techLead: z

@@ -7,9 +7,9 @@ import {
 	Forbidden,
 	NotFound,
 } from '../../../../backend/error/error'
-import type { IEnv } from '../../../../backend/interface/env'
-import type { IGroup } from '../../../../backend/interface/group'
-import type { IRefreshToken } from '../../../../backend/interface/user'
+import type { IEnv } from '../../../../backend/interface/Env'
+import type { IGroup } from '../../../../backend/interface/Group'
+import type { IRefreshToken } from '../../../../backend/interface/User'
 import model from '../../../../backend/model/group/Group.model'
 import userModel from '../../../../backend/model/user/User.model'
 

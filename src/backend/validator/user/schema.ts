@@ -1,6 +1,6 @@
 import z from 'zod'
 import { UserBadRequest } from '../../error/error'
-import type { IUser } from '../../interface/user'
+import type { IUser } from '../../interface/User'
 import passwordSchema from '../pwdSchema'
 
 const create = z.object({

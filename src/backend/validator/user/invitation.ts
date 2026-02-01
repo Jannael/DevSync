@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import z from 'zod'
 import { UserBadRequest } from '../../error/error'
-import type { IUserGroup } from '../../interface/user'
+import type { IUserGroup } from '../../interface/User'
 
 const groupSchema = z.object({
 	_id: z.instanceof(Types.ObjectId, {

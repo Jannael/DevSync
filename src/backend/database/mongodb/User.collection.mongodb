@@ -1,0 +1,24 @@
+db.createCollection('user', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['_id', 'fullName', 'account', 'pwd'],
+      additionalProperties: false,
+      properties: {
+        _id: { bsonType: 'objectId' },
+        fullName: { bsonType: 'string' },
+        account: { bsonType: 'string' },
+        pwd: { bsonType: 'string' },
+        nickName: { bsonType: 'string' },
+        refreshToken: {
+          bsonType: 'array',
+          uniqueItems: true,
+          maxItems: 3,
+          items: { bsonType: 'string' },
+        }
+      }
+    }
+  }
+})
+
+db.user.createIndex({account: 1}, {unique: true})

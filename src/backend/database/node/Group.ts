@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose'
-import config from '../../../config/Config'
-import type { IGroup } from '../../../interface/group'
+import config from '../../config/Config'
+import type { IGroup } from '../../interface/Group'
 
-const techLeadSchema = new Schema<NonNullable<IGroup['techLead']>[number]>(
+const techLeadSchema = new Schema<IGroup['techLead'][number]>(
 	{
 		fullName: { type: String, required: true },
 		account: { type: String, required: true },
@@ -13,7 +13,7 @@ const techLeadSchema = new Schema<NonNullable<IGroup['techLead']>[number]>(
 	},
 )
 
-const memberSchema = new Schema<NonNullable<IGroup['member']>[number]>(
+const memberSchema = new Schema<IGroup['member']>(
 	{
 		account: { type: String, required: true },
 		fullName: { type: String, required: true },

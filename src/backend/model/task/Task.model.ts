@@ -2,7 +2,7 @@ import type { Types } from 'mongoose'
 import Config from '../../config/Config'
 import dbModel from './../../database/schemas/node/task'
 import { DatabaseError } from '../../error/error'
-import type { ITask, ITaskListItem } from '../../interface/task'
+import type { ITask, ITaskListItem } from '../../interface/Task'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const TaskModel = {

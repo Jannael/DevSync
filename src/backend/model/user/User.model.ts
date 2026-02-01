@@ -3,8 +3,8 @@ import dotenv from 'dotenv'
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/user'
 import { DatabaseError } from '../../error/error'
-import type { IEnv } from '../../interface/env'
-import type { IRefreshToken, IUser } from '../../interface/user'
+import type { IEnv } from '../../interface/Env'
+import type { IRefreshToken, IUser } from '../../interface/User'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 dotenv.config({ quiet: true })

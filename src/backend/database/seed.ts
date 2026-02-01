@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-import type { IEnv } from '../interface/env'
+import type { IEnv } from '../interface/Env'
 
 dotenv.config({ quiet: true })
 const { DB_URL_ENV } = process.env as Pick<IEnv, 'DB_URL_ENV'>

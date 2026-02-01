@@ -1,7 +1,7 @@
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/group'
 import { DatabaseError } from '../../error/error'
-import type { IGroup } from '../../interface/group'
+import type { IGroup } from '../../interface/Group'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const MemberGroupModel = {

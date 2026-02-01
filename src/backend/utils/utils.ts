@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 import { ServerError, UserBadRequest } from '../error/error'
-import type { IEnv } from '../interface/env'
+import type { IEnv } from '../interface/Env'
 
 dotenv.config({ quiet: true })
 const { EMAIL_ENV, PASSWORD_ENV, TEST_PWD_ENV } = process.env as Pick<

@@ -9,12 +9,12 @@ import {
 	NotFound,
 	UserBadRequest,
 } from '../../../../backend/error/error'
-import type { IEnv } from '../../../../backend/interface/env'
-import type { IGroup } from '../../../../backend/interface/group'
+import type { IEnv } from '../../../../backend/interface/Env'
+import type { IGroup } from '../../../../backend/interface/Group'
 import type {
 	IRefreshToken,
 	IUserGroup,
-} from '../../../../backend/interface/user'
+} from '../../../../backend/interface/User'
 import groupModel from '../../../../backend/model/group/Group.model'
 import model from '../../../../backend/model/user/User.model'
 

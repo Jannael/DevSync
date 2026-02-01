@@ -3,8 +3,8 @@ import type { Express } from 'express'
 import mongoose from 'mongoose'
 import request from 'supertest'
 import { createApp } from '../../../../backend/app'
-import type { IEnv } from '../../../../backend/interface/env'
-import type { IRefreshToken } from '../../../../backend/interface/user'
+import type { IEnv } from '../../../../backend/interface/Env'
+import type { IRefreshToken } from '../../../../backend/interface/User'
 import userModel from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })

@@ -3,7 +3,7 @@ import type { Types } from 'mongoose'
 import Config from '../../config/Config'
 import dbModel from '../../database/schemas/node/user'
 import { DatabaseError } from '../../error/error'
-import type { IRefreshToken } from '../../interface/user'
+import type { IRefreshToken } from '../../interface/User'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const AuthModel = {

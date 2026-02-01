@@ -2,13 +2,13 @@ import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
 import config from '../../config/Config'
 import { DatabaseError, Forbidden, UserBadRequest } from '../../error/error'
-import type { IEnv } from '../../interface/env'
+import type { IEnv } from '../../interface/Env'
 import type {
 	IRefreshToken,
 	IUser,
 	IUserGroup,
 	IUserInvitation,
-} from '../../interface/user'
+} from '../../interface/User'
 import authModel from '../../model/auth/Auth.model'
 import groupModel from '../../model/group/Group.model'
 import model from '../../model/user/User.model'

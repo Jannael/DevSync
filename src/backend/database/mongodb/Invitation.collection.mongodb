@@ -1,0 +1,15 @@
+db.createCollection('invitation', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['_id', 'account', 'color', 'name'],
+      additionalProperties: false,
+      properties: {
+        _id: { bsonType: 'objectId' },
+        account: { bsonType: 'string' },
+        color: { bsonType: 'string' },
+        name: { bsonType: 'string' }
+      }
+    }
+  }
+})

@@ -1,0 +1,38 @@
+db.createCollection('task', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['_id', 'groupId', 'name', 'description'],
+      additionalProperties: false,
+      properties: {
+        _id: { bsonType: 'objectId' },
+        groupId: { bsonType: 'objectId' },
+        user: {
+          bsonType: 'array',
+          uniqueItems: true,
+          items: { bsonType: 'string' }
+        },
+        name: { bsonType: 'string' },
+        code: {
+          bsonType: 'object',
+          required: ['language', 'content'],
+          additionalProperties: false,
+          properties: {
+            language: { bsonType: 'string' },
+            content: { bsonType: 'string' }
+          }
+        },
+        feature: {
+          bsonType: 'array',
+          uniqueItems: true,
+          items: { bsonType: 'string' }
+        },
+        description: { bsonType: 'string' },
+        isComplete: { bsonType: 'bool' },
+        priority: { bsonType: 'int' }
+      }
+    }
+  }
+})
+
+db.task.createIndex({ groupId: 1 })

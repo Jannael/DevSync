@@ -6,5 +6,5 @@
 	"[markdown]": {
 		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
-	"cSpell.words": ["HATEOS", "mongosh"]
+	"cSpell.words": ["HATEOS", "mongosh", "bson"]
 }

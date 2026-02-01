@@ -6,20 +6,14 @@ db.createCollection('solution', {
       additionalProperties: false,
       properties: {
         _id: { bsonType: 'objectId' },
-        user: {
-          bsonType: 'string',
-          description: 'user that solved the task'
-        },
-        groupId: {
-          bsonType: 'objectId'
-        },
+        user: { bsonType: 'string' },
+        groupId: { bsonType: 'objectId' },
         feature: {
           bsonType: 'array',
           uniqueItems: true,
           items: {
             bsonType: 'string'
           },
-          description: 'array of features associated to the solution'
         },
         code: {
           bsonType: 'object',

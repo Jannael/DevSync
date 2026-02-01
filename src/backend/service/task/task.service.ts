@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { Types } from 'mongoose'
 import { Forbidden, UserBadRequest } from '../../error/error'
-import type { IListTask, ITask } from '../../interface/task'
+import type { IListTask, ITask } from '../../interface/Task'
 import authModel from '../../model/auth/Auth.model'
 import groupModel from '../../model/group/Group.model'
 import model from './../../model/task/model'

@@ -1,20 +1,9 @@
 import { model, Schema } from 'mongoose'
-import config from '../../../config/Config'
-import type { ISolution } from '../../../interface/solution'
-import type { ICodeSchema } from '../../../interface/task'
+import config from '../../config/Config'
+import type { ISolution } from '../../interface/Solution'
+import CodeSchema from './CodeField'
 
 const { ObjectId } = Schema.Types
-
-const codeSchema = new Schema<ICodeSchema>(
-	{
-		language: { type: String, required: true },
-		content: { type: String, required: true },
-	},
-	{
-		...config.database.mongodb.schemaOptions,
-		_id: false,
-	},
-)
 
 const schema = new Schema<ISolution>(
 	{
@@ -22,7 +11,7 @@ const schema = new Schema<ISolution>(
 		user: { type: String, required: true },
 		groupId: { type: ObjectId, required: true },
 		feature: [{ type: String }],
-		code: codeSchema,
+		code: CodeSchema,
 		description: { type: String, required: true },
 	},
 	{

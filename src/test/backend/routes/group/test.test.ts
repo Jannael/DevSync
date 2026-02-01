@@ -5,8 +5,8 @@ import request from 'supertest'
 import { createApp } from '../../../../backend/app'
 import groupDbModel from './../../../../backend/database/schemas/node/group'
 import userDbModel from './../../../../backend/database/schemas/node/user'
-import type { IEnv } from '../../../../backend/interface/env'
-import type { IGroup } from '../../../../backend/interface/group'
+import type { IEnv } from '../../../../backend/interface/Env'
+import type { IGroup } from '../../../../backend/interface/Group'
 import userModel from '../../../../backend/model/user/User.model'
 
 dotenv.config({ quiet: true })

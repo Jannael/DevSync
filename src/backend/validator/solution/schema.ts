@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import z from 'zod'
 import { UserBadRequest } from '../../error/error'
-import type { ISolution } from '../../interface/solution'
+import type { ISolution } from '../../interface/Solution'
 import { codeSchema } from '../task/schema'
 
 const schema = z.object({

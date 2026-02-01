@@ -4,10 +4,10 @@ export interface ISolution {
 	_id: Types.ObjectId
 	user: string
 	groupId: Types.ObjectId
-	feature: string[]
+	feature: string[] | null
 	code: {
 		language: string
 		content: string
-	}
+	} | null
 	description: string
 }

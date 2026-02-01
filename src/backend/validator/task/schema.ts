@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import z from 'zod'
 import { UserBadRequest } from '../../error/error'
-import type { ITask } from '../../interface/task'
+import type { ITask } from '../../interface/Task'
 
 export const codeSchema = z.object({
 	language: z.enum(['js'], {

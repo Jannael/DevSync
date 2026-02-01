@@ -9,7 +9,7 @@ import {
 	UserBadRequest,
 } from '../error/error'
 import handler from '../error/handler'
-import type { IEnv } from '../interface/env'
+import type { IEnv } from '../interface/Env'
 import getToken from '../utils/token'
 
 dotenv.config({ quiet: true })

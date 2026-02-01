@@ -1,7 +1,7 @@
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/user'
 import { DatabaseError } from '../../error/error'
-import type { IUserGroup } from '../../interface/user'
+import type { IUserGroup } from '../../interface/User'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const GroupUserModel = {

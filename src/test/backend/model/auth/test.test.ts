@@ -6,8 +6,8 @@ import {
 	NotFound,
 	UserBadRequest,
 } from '../../../../backend/error/error'
-import type { IEnv } from '../../../../backend/interface/env'
-import type { IRefreshToken } from '../../../../backend/interface/user'
+import type { IEnv } from '../../../../backend/interface/Env'
+import type { IRefreshToken } from '../../../../backend/interface/User'
 import model from '../../../../backend/model/auth/Auth.model'
 import userModel from '../../../../backend/model/user/User.model'
 

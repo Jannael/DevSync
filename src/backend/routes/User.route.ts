@@ -1,14 +1,14 @@
 import { Router } from 'express'
-import controller from '../adapter/user/user.controller'
+import Adapter from '../adapter/User.adapter'
 
 const router = Router()
 
-router.get('/get/', controller.get)
-router.put('/update/', controller.update)
-router.post('/create/', controller.create)
-router.delete('/delete/', controller.delete)
+router.get('/get/', Adapter.get)
+router.put('/update/', Adapter.update)
+router.post('/create/', Adapter.create)
+router.delete('/delete/', Adapter.delete)
 
-router.patch('/update/account/', controller.account.update)
-router.patch('/update/password/', controller.password.update)
+router.patch('/update/account/', Adapter.account.update)
+router.patch('/update/password/', Adapter.password.update)
 
 export default router

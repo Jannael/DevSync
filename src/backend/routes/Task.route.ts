@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import controller from '../adapter/task/task.controller'
+import Adapter from '../adapter/Task.adapter'
 import auth from '../middleware/auth'
 
 const router = Router()
@@ -7,16 +7,16 @@ const router = Router()
 router.post(
 	'/get/',
 	auth(['techLead', 'developer', 'documenter']),
-	controller.get,
+	Adapter.get,
 )
 router.post(
 	'/list/',
 	auth(['techLead', 'developer', 'documenter']),
-	controller.list,
+	Adapter.list,
 )
 
-router.put('/update/', auth(['techLead']), controller.update)
-router.post('/create/', auth(['techLead']), controller.create)
-router.delete('/delete/', auth(['techLead']), controller.delete)
+router.put('/update/', auth(['techLead']), Adapter.update)
+router.post('/create/', auth(['techLead']), Adapter.create)
+router.delete('/delete/', auth(['techLead']), Adapter.delete)
 
 export default router

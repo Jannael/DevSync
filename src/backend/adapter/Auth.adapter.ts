@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import service from '../../controller/auth/auth.service'
+import service from '../../controller/Auth.controller'
 import type { CustomError } from '../../error/error'
 import ErrorHandler from '../../error/handler'
 

@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
-import { Forbidden, UserBadRequest } from '../../error/error'
-import type { IEnv } from '../../interface/Env'
-import type { IGroup } from '../../interface/Group'
 import model from '../../model/group/Group.model'
 import userModel from '../../model/user/User.model'
-import getToken from '../../utils/token'
-import { verifyEmail } from '../../utils/utils'
-import validator from '../../validator/validator'
+import { Forbidden, UserBadRequest } from '../error/error'
+import type { IEnv } from '../interface/Env'
+import type { IGroup } from '../interface/Group'
+import getToken from '../utils/token'
+import { verifyEmail } from '../utils/utils'
+import validator from '../validator/validator'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV } = process.env as Pick<

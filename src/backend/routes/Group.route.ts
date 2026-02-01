@@ -1,13 +1,13 @@
 import { Router } from 'express'
-import controller from '../adapter/group/group.controller'
+import Adapter from '../adapter/Group.adapter'
 
 const router = Router()
 
 //CRUD for Group collection
-router.post('/get/', controller.get)
-router.post('/create/', controller.create)
-router.put('/update/', controller.update)
-router.delete('/delete/', controller.delete)
+router.post('/get/', Adapter.get)
+router.post('/create/', Adapter.create)
+router.put('/update/', Adapter.update)
+router.delete('/delete/', Adapter.delete)
 
 router.post('/get/user/') // groups of a user
 

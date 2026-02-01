@@ -2,19 +2,14 @@ import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
-import cookiesConfig from '../../config/Cookies.config'
-import jwtConfig from '../../config/Jwt.config'
-import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
-import type { IEnv } from '../../interface/Env'
-import model from '../../model/Auth.model'
-import { encrypt } from '../../utils/encrypt'
-import getToken from '../../utils/token'
-import {
-	decrypt,
-	generateCode,
-	sendEmail,
-	verifyEmail,
-} from '../../utils/utils'
+import cookiesConfig from '../config/Cookies.config'
+import jwtConfig from '../config/Jwt.config'
+import { DatabaseError, NotFound, UserBadRequest } from '../error/error'
+import type { IEnv } from '../interface/Env'
+import model from '../model/Auth.model'
+import { encrypt } from '../utils/encrypt'
+import getToken from '../utils/token'
+import { decrypt, generateCode, sendEmail, verifyEmail } from '../utils/utils'
 
 dotenv.config({ quiet: true })
 const {

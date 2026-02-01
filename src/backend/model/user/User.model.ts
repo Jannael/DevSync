@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import type { Types } from 'mongoose'
-import dbModel from '../../database/schemas/node/user'
+import dbModel from '../../database/node/user'
 import { DatabaseError } from '../../error/error'
 import type { IEnv } from '../../interface/Env'
 import type { IRefreshToken, IUser } from '../../interface/User'

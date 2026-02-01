@@ -2,10 +2,11 @@ import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
-import config from '../../config/Config'
+import cookiesConfig from '../../config/Cookies.config'
+import jwtConfig from '../../config/Jwt.config'
 import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
 import type { IEnv } from '../../interface/Env'
-import model from '../../model/auth/Auth.model'
+import model from '../../model/Auth.model'
 import { encrypt } from '../../utils/encrypt'
 import getToken from '../../utils/token'
 import {
@@ -58,9 +59,9 @@ const service = {
 				{ code, account: req.body?.account },
 				CRYPTO_AUTH_ENV,
 				JWT_AUTH_ENV,
-				config.jwt.code,
+				jwtConfig.code,
 			)
-			res.cookie('code', jwtEncrypt, config.cookies.code)
+			res.cookie('code', jwtEncrypt, cookiesConfig.code)
 			return true
 		},
 		accessToken: async (req: Request, res: Response): Promise<boolean> => {
@@ -83,7 +84,10 @@ const service = {
 					typeof decoded !== 'string' &&
 					decoded._id !== undefined
 				) {
-					await model.refreshToken.remove(jwtRefreshToken, decoded._id)
+					await model.RefreshToken.Remove({
+						token: jwtRefreshToken,
+						userId: decoded._id,
+					})
 				}
 				throw e
 			}
@@ -91,10 +95,11 @@ const service = {
 			if (typeof refreshToken === 'string')
 				throw new UserBadRequest('Invalid credentials')
 
-			const dbValidation = await model.refreshToken.verify(
-				req.cookies.refreshToken,
-				refreshToken._id as Types.ObjectId,
-			)
+			const dbValidation = await model.RefreshToken.Verify({
+				token: req.cookies.refreshToken,
+				userId: refreshToken._id as Types.ObjectId,
+			})
+
 			if (!dbValidation)
 				throw new UserBadRequest('Invalid credentials', 'You need to log in')
 
@@ -105,9 +110,9 @@ const service = {
 				refreshToken,
 				CRYPTO_ACCESS_TOKEN_ENV,
 				JWT_ACCESS_TOKEN_ENV,
-				config.jwt.accessToken,
+				jwtConfig.accessToken,
 			)
-			res.cookie('accessToken', accessToken, config.cookies.accessToken)
+			res.cookie('accessToken', accessToken, cookiesConfig.accessToken)
 			return true
 		},
 		refreshToken: {
@@ -130,7 +135,7 @@ const service = {
 				)
 					code = generateCode(req.body?.TEST_PWD)
 
-				const user = await model.login({
+				const user = await model.Login({
 					account: req.body?.account,
 					pwd: req.body?.pwd,
 				})
@@ -142,17 +147,17 @@ const service = {
 					user as unknown as Record<string, unknown>,
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
 				const hashCode = encrypt(
 					{ code },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
 
-				res.cookie('tokenR', token, config.cookies.code)
-				res.cookie('codeR', hashCode, config.cookies.code)
+				res.cookie('tokenR', token, cookiesConfig.code)
+				res.cookie('codeR', hashCode, cookiesConfig.code)
 
 				return true
 			},
@@ -172,24 +177,27 @@ const service = {
 					user,
 					CRYPTO_REFRESH_TOKEN_ENV,
 					JWT_REFRESH_TOKEN_ENV,
-					config.jwt.refreshToken,
+					jwtConfig.refreshToken,
 				)
 				const accessToken = encrypt(
 					user,
 					CRYPTO_ACCESS_TOKEN_ENV,
 					JWT_ACCESS_TOKEN_ENV,
-					config.jwt.accessToken,
+					jwtConfig.accessToken,
 				)
 
-				const savedInDB = await model.refreshToken.save(refreshToken, user._id)
+				const savedInDB = await model.RefreshToken.Save({
+					token: refreshToken,
+					userId: user._id,
+				})
 				if (!savedInDB)
 					throw new DatabaseError(
 						'Failed to save',
 						'The session was not saved please try again',
 					)
 
-				res.cookie('refreshToken', refreshToken, config.cookies.refreshToken)
-				res.cookie('accessToken', accessToken, config.cookies.accessToken)
+				res.cookie('refreshToken', refreshToken, cookiesConfig.refreshToken)
+				res.cookie('accessToken', accessToken, cookiesConfig.accessToken)
 				res.clearCookie('tokenR')
 				res.clearCookie('codeR')
 
@@ -203,7 +211,10 @@ const service = {
 				JWT_REFRESH_TOKEN_ENV,
 				CRYPTO_REFRESH_TOKEN_ENV,
 			)
-			await model.refreshToken.remove(req.cookies.refreshToken, decoded._id)
+			await model.RefreshToken.Remove({
+				token: req.cookies.refreshToken,
+				userId: decoded._id,
+			})
 			res.clearCookie('refreshToken')
 			res.clearCookie('accessToken')
 			return true
@@ -229,9 +240,9 @@ const service = {
 				{ account: decodedCode.account },
 				CRYPTO_AUTH_ENV,
 				JWT_AUTH_ENV,
-				config.jwt.code,
+				jwtConfig.code,
 			)
-			res.cookie('account', encrypted, config.cookies.code)
+			res.cookie('account', encrypted, cookiesConfig.code)
 			return true
 		},
 	},
@@ -280,20 +291,20 @@ const service = {
 					{ code },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
 				const codeNewAccountEncrypted = encrypt(
 					{ code: codeNewAccount, account: req.body?.newAccount },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.codeNewAccount,
+					jwtConfig.codeNewAccount,
 				)
 
-				res.cookie('currentAccount', codeEncrypted, config.cookies.code)
+				res.cookie('currentAccount', codeEncrypted, cookiesConfig.code)
 				res.cookie(
 					'newAccount',
 					codeNewAccountEncrypted,
-					config.cookies.codeNewAccount,
+					cookiesConfig.codeNewAccount,
 				)
 
 				return true
@@ -341,10 +352,10 @@ const service = {
 					{ account: codeNewAccount.account },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
 
-				res.cookie('newAccount_account', account, config.cookies.code)
+				res.cookie('newAccount_account', account, cookiesConfig.code)
 				return true
 			},
 		},
@@ -358,7 +369,7 @@ const service = {
 						'Missing or invalid account it must match example@service.ext',
 					)
 
-				const dbValidation = await model.exists(req.body?.account)
+				const dbValidation = await model.Exists({ account: req.body?.account })
 				if (!dbValidation) throw new NotFound('User not found')
 
 				let code = generateCode()
@@ -375,9 +386,9 @@ const service = {
 					{ code, account: req.body?.account },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
-				res.cookie('pwdChange', hashCode, config.cookies.code)
+				res.cookie('pwdChange', hashCode, cookiesConfig.code)
 				return true
 			},
 		},
@@ -407,10 +418,10 @@ const service = {
 					{ pwd: req.body?.newPwd, account: code.account },
 					CRYPTO_AUTH_ENV,
 					JWT_AUTH_ENV,
-					config.jwt.code,
+					jwtConfig.code,
 				)
 
-				res.cookie('newPwd', hash, config.cookies.code)
+				res.cookie('newPwd', hash, cookiesConfig.code)
 				res.clearCookie('pwdChange')
 				return true
 			},

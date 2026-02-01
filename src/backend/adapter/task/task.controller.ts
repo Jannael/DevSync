@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import service from '../../controller/task/task.service'
 import type { CustomError } from '../../error/error'
 import handler from '../../error/handler'
-import service from '../../service/task/task.service'
 
 const controller = {
 	list: async (req: Request, res: Response) => {

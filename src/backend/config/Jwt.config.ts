@@ -3,4 +3,4 @@ export default {
 	accessToken: { expiresIn: '15m' },
 	refreshToken: { expiresIn: '365d' },
 	codeNewAccount: { expiresIn: '10m' },
-}
+} as const

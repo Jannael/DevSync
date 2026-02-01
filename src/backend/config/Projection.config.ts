@@ -7,4 +7,4 @@ export default {
 		isComplete: 1,
 		user: 1,
 	},
-}
+} as const

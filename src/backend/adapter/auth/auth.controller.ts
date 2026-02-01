@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import service from '../../controller/auth/auth.service'
 import type { CustomError } from '../../error/error'
-import ErrorHandler from './../../error/handler'
-import service from '../../service/auth/auth.service'
+import ErrorHandler from '../../error/handler'
 
 const controller = {
 	request: {

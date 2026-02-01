@@ -4,4 +4,4 @@ export default {
 		strict: true,
 		minimize: false,
 	},
-}
+} as const

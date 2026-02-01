@@ -23,4 +23,4 @@ export default {
 		sameSite: 'lax',
 		secure: false,
 	},
-}
+} as const

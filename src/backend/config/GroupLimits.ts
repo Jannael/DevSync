@@ -3,4 +3,4 @@ export default {
   maxTechLead: 5,
   maxTask: 20,
   maxInvitation: 10,
-}
+} as const

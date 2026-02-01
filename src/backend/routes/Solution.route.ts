@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import controller from '../controller/solution/solution.controller'
+import controller from '../adapter/solution/solution.controller'
 import auth from '../middleware/auth'
 
 const router = Router()

@@ -1,9 +1,9 @@
 import type { Types } from 'mongoose'
-import GroupLimits from '../../config/GroupLimits'
-import dbModel from '../../database/node/Invitation'
-import { DatabaseError } from '../../error/error'
-import type { IInvitation } from '../../interface/Invitation'
-import CreateModel from '../../utils/helpers/CreateModel'
+import GroupLimits from '../config/GroupLimits'
+import dbModel from '../database/node/Invitation'
+import { DatabaseError } from '../error/error'
+import type { IInvitation } from '../interface/Invitation'
+import CreateModel from '../utils/helpers/CreateModel'
 
 const InvitationModel = {
 	GetByGroup: CreateModel<{ _id: Types.ObjectId }, IInvitation[]>({

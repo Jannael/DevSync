@@ -1,8 +1,8 @@
 import type { Types } from 'mongoose'
-import dbModel from '../../database/node/solution'
-import { DatabaseError } from '../../error/error'
-import type { ISolution } from '../../interface/Solution'
-import CreateModel from '../../utils/helpers/CreateModel'
+import dbModel from '../database/node/Solution'
+import { DatabaseError } from '../error/error'
+import type { ISolution } from '../interface/Solution'
+import CreateModel from '../utils/helpers/CreateModel'
 
 const SolutionModel = {
 	Get: CreateModel<

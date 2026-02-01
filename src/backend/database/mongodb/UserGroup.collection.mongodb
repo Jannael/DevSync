@@ -2,13 +2,12 @@ db.createCollection('userGroup', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['_id', 'account', 'name', 'color'],
+      required: ['groupId', 'account', 'role'],
       additionalProperties: false,
       properties: {
-        _id: { bsonType: 'objectId' },
+        groupId: { bsonType: 'objectId' },
         account: { bsonType: 'string' },
-        name: { bsonType: 'string' },
-        color: { bsonType: 'string' }
+        role: { bsonType: 'string' }
       }
     }
   }

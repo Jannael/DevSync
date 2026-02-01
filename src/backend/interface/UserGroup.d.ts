@@ -1,8 +1,7 @@
 import type { Types } from 'mongoose'
 
 export interface IUserGroup {
-	_id: Types.ObjectId // => groupId
+	groupId: Types.ObjectId
 	account: string
-	name: string
-	color: string
+	role: string
 }

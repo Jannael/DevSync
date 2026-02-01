@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt'
 import type { Types } from 'mongoose'
-import Config from '../../config/Projection.config'
-import dbModel from '../../database/node/user'
-import { DatabaseError } from '../../error/error'
-import type { IRefreshToken } from '../../interface/User'
-import CreateModel from '../../utils/helpers/CreateModel'
+import Config from '../config/Projection.config'
+import dbModel from '../database/node/User'
+import { DatabaseError } from '../error/error'
+import type { IRefreshToken } from '../interface/User'
+import CreateModel from '../utils/helpers/CreateModel'
 
 const AuthModel = {
 	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken | null>({

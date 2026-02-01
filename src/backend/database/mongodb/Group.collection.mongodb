@@ -8,21 +8,6 @@ db.createCollection('group', {
         _id: {
           bsonType: 'objectId'
         },
-        techLead: {
-          bsonType: 'array',
-          maxItems: 5,
-          uniqueItems: true,
-          items: {
-            bsonType: 'object',
-            description: 'tech lead',
-            required: ['fullName', 'account'],
-            additionalProperties: false,
-            properties: {
-              fullName: { bsonType: 'string' },
-              account: { bsonType: 'string' }
-            }
-          }
-        },
         name: {
           bsonType: 'string',
           description: 'group name'
@@ -30,22 +15,6 @@ db.createCollection('group', {
         repository: {
           bsonType: 'string',
           description: 'project repository'
-        },
-        member: {
-          bsonType: 'array',
-          uniqueItems: true,
-          items: {
-            bsonType: 'object',
-            description: 'member',
-            required: ['account', 'fullName', 'role'],
-            additionalProperties: false,
-            properties: {
-              account: { bsonType: 'string' },
-              fullName: { bsonType: 'string' },
-              role: { bsonType: 'string' }
-            }
-          },
-          description: 'members array'
         },
         color: {
           bsonType: 'string',

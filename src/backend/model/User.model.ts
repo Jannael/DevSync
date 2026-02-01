@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import type { Types } from 'mongoose'
-import dbModel from '../../database/node/user'
-import { DatabaseError } from '../../error/error'
-import type { IEnv } from '../../interface/Env'
-import type { IRefreshToken, IUser } from '../../interface/User'
-import CreateModel from '../../utils/helpers/CreateModel'
+import dbModel from '../database/node/User'
+import { DatabaseError } from '../error/error'
+import type { IEnv } from '../interface/Env'
+import type { IRefreshToken, IUser } from '../interface/User'
+import CreateModel from '../utils/helpers/CreateModel'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>

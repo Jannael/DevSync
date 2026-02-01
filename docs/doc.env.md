@@ -9,7 +9,9 @@
 ```javascript
   require('crypto').randomBytes(32).toString('base64')
 ```
+
 ## Host var
+must separate with coma each host
 
 ```javascript
   // HOST = 'host,host'

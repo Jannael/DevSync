@@ -10,7 +10,7 @@ import {
 } from '../error/Error.constructor'
 import handler from '../error/Error.handler'
 import type { IEnv } from '../interface/Env'
-import getToken from '../utils/GetToken.utils'
+import getToken from '../utils/auth/GetToken.utils'
 
 dotenv.config({ quiet: true })
 

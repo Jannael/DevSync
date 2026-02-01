@@ -4,7 +4,7 @@ import dbModel from '../database/node/Task'
 import { DatabaseError } from '../error/Error.instances'
 import type { ITask } from '../interface/Task'
 import type { ITaskListItem } from '../interface/TaskList'
-import CreateModel from '../utils/helpers/CreateModel.helper'
+import CreateModel from '../utils/helper/CreateModel.helper'
 
 const TaskModel = {
 	List: CreateModel<

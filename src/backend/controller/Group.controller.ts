@@ -5,7 +5,7 @@ import userModel from '../../model/user/User.model'
 import { Forbidden, UserBadRequest } from '../error/Error.constructor'
 import type { IEnv } from '../interface/Env'
 import type { IGroup } from '../interface/Group'
-import getToken from '../utils/GetToken.utils'
+import getToken from '../utils/auth/GetToken.utils'
 import { verifyEmail } from '../utils/Omit.utils'
 import validator from '../validator/Merge.validator'
 

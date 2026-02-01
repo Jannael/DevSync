@@ -11,8 +11,8 @@ import {
 } from '../error/Error.constructor'
 import type { IEnv } from '../interface/Env'
 import model from '../model/Auth.model'
-import { encrypt } from '../utils/EncryptToken.utils'
-import getToken from '../utils/GetToken.utils'
+import { encrypt } from '../utils/auth/EncryptToken.utils'
+import getToken from '../utils/auth/GetToken.utils'
 import {
 	decrypt,
 	generateCode,

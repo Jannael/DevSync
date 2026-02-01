@@ -4,7 +4,7 @@ import Config from '../config/Projection.config'
 import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/Error.instances'
 import type { IRefreshToken } from '../interface/User'
-import CreateModel from '../utils/helpers/CreateModel.helper'
+import CreateModel from '../utils/helper/CreateModel.helper'
 
 const AuthModel = {
 	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken | null>({

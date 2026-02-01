@@ -2,7 +2,7 @@ import type { Types } from 'mongoose'
 import dbModel from '../database/node/UserGroup'
 import { DatabaseError } from '../error/error'
 import type { IUserGroup } from '../interface/UserGroup'
-import CreateModel from '../utils/helpers/CreateModel'
+import CreateModel from '../utils/helpers/CreateModel.helper'
 
 const UserGroupModel = {
 	GetByUser: CreateModel<{ account: string }, IUserGroup[]>({

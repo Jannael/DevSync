@@ -2,7 +2,7 @@ import type { Types } from 'mongoose'
 import dbModel from '../database/node/Group'
 import { DatabaseError } from '../error/error'
 import type { IGroup } from '../interface/Group'
-import CreateModel from '../utils/helpers/CreateModel'
+import CreateModel from '../utils/helpers/CreateModel.helper'
 
 const GroupModel = {
 	Get: CreateModel<{ _id: Types.ObjectId }, IGroup | null>({

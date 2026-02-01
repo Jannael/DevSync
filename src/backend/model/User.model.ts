@@ -5,7 +5,7 @@ import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/error'
 import type { IEnv } from '../interface/Env'
 import type { IRefreshToken, IUser } from '../interface/User'
-import CreateModel from '../utils/helpers/CreateModel'
+import CreateModel from '../utils/helpers/CreateModel.helper'
 
 dotenv.config({ quiet: true })
 const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>

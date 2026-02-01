@@ -12,9 +12,9 @@ import type {
 	IUserGroup,
 	IUserInvitation,
 } from '../interface/User'
-import { encrypt } from '../utils/encrypt'
-import getToken from '../utils/token'
-import { verifyEmail } from '../utils/utils'
+import { encrypt } from '../utils/EncryptToken.utils'
+import getToken from '../utils/GetToken.utils'
+import { verifyEmail } from '../utils/Omit.utils'
 import validator from '../validator/validator'
 
 dotenv.config({ quiet: true })

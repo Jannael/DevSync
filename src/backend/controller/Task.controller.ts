@@ -5,7 +5,7 @@ import groupModel from '../../model/group/Group.model'
 import model from './../../model/task/model'
 import { Forbidden, UserBadRequest } from '../error/error'
 import type { IListTask, ITask } from '../interface/Task'
-import { verifyEmail } from '../utils/utils'
+import { verifyEmail } from '../utils/Omit.utils'
 import validator from '../validator/validator'
 
 /*

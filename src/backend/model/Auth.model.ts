@@ -4,16 +4,13 @@ import Config from '../config/Projection.config'
 import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/error'
 import type { IRefreshToken } from '../interface/User'
-import CreateModel from '../utils/helpers/CreateModel'
+import CreateModel from '../utils/helpers/CreateModel.helper'
 
 const AuthModel = {
 	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken | null>({
 		Model: async ({ account, pwd }: { account: string; pwd: string }) => {
 			const user = await dbModel
-				.findOne(
-					{ account },
-					{ ...Config.IRefreshToken, pwd: 1 },
-				)
+				.findOne({ account }, { ...Config.IRefreshToken, pwd: 1 })
 				.lean<IRefreshToken & { pwd?: string }>()
 
 			const isMatch =

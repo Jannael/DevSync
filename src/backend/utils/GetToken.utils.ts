@@ -1,14 +1,19 @@
 import type { Request } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { UserBadRequest } from '../error/error'
-import { decrypt } from './utils'
+import { decrypt } from './Omit.utils'
 
-function getToken(
-	req: Request,
-	tokenName: string,
-	jwtPwd: string,
-	cryptoPwd: string,
-): JwtPayload {
+function GetToken({
+	req,
+	tokenName,
+	jwtPwd,
+	cryptoPwd,
+}: {
+	req: Request
+	tokenName: string
+	jwtPwd: string
+	cryptoPwd: string
+}): JwtPayload {
 	if (req.cookies[tokenName] === undefined)
 		throw new UserBadRequest('Missing data', `Missing ${tokenName}`)
 	const jwtToken = decrypt(req.cookies[tokenName], cryptoPwd, tokenName)
@@ -18,4 +23,4 @@ function getToken(
 	return token
 }
 
-export default getToken
+export default GetToken

@@ -7,9 +7,14 @@ import jwtConfig from '../config/Jwt.config'
 import { DatabaseError, NotFound, UserBadRequest } from '../error/error'
 import type { IEnv } from '../interface/Env'
 import model from '../model/Auth.model'
-import { encrypt } from '../utils/encrypt'
-import getToken from '../utils/token'
-import { decrypt, generateCode, sendEmail, verifyEmail } from '../utils/utils'
+import { encrypt } from '../utils/EncryptToken.utils'
+import getToken from '../utils/GetToken.utils'
+import {
+	decrypt,
+	generateCode,
+	sendEmail,
+	verifyEmail,
+} from '../utils/Omit.utils'
 
 dotenv.config({ quiet: true })
 const {

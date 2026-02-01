@@ -1,18 +1,14 @@
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/group'
-import { DatabaseError, NotFound } from '../../error/error'
+import { DatabaseError } from '../../error/error'
 import type { IGroup } from '../../interface/group'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const GroupModel = {
-	Get: CreateModel<{ _id: Types.ObjectId }, IGroup>({
+	Get: CreateModel<{ _id: Types.ObjectId }, IGroup | null>({
 		Model: async ({ _id }) => {
 			const res = await dbModel.findOne({ _id }).lean<IGroup>()
-			if (!res)
-				throw new NotFound(
-					'Group not found',
-					'The group you are trying to access does not exist',
-				)
+			if (!res) return null
 			return res
 		},
 		DefaultError: new DatabaseError(
@@ -23,12 +19,7 @@ const GroupModel = {
 	Exists: CreateModel<{ _id: Types.ObjectId }, boolean>({
 		Model: async ({ _id }) => {
 			const res = await dbModel.exists({ _id })
-			if (!res)
-				throw new NotFound(
-					'Group not found',
-					'The group you are trying to access does not exist',
-				)
-
+			if (!res) return false
 			return true
 		},
 		DefaultError: new DatabaseError(
@@ -50,18 +41,9 @@ const GroupModel = {
 			'The group was not created, something went wrong please try again',
 		),
 	}),
-	Update: CreateModel<
-		{ _id: Types.ObjectId; data: Partial<IGroup> },
-		boolean
-	>({
+	Update: CreateModel<{ _id: Types.ObjectId; data: Partial<IGroup> }, boolean>({
 		Model: async ({ _id, data }) => {
 			const updated = await dbModel.updateOne({ _id }, data)
-			if (updated.matchedCount === 0)
-				throw new NotFound(
-					'Group not found',
-					'The group you are trying to update does not exist',
-				)
-
 			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -72,12 +54,6 @@ const GroupModel = {
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
 		Model: async ({ _id }) => {
 			const deleted = await dbModel.deleteOne({ _id })
-			if (deleted.deletedCount === 0)
-				throw new NotFound(
-					'Group not found',
-					'The group you are trying to delete does not exist',
-				)
-
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(

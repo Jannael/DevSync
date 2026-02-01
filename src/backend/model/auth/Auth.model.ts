@@ -2,12 +2,12 @@ import bcrypt from 'bcrypt'
 import type { Types } from 'mongoose'
 import Config from '../../config/Config'
 import dbModel from '../../database/schemas/node/user'
-import { DatabaseError, NotFound, UserBadRequest } from '../../error/error'
+import { DatabaseError } from '../../error/error'
 import type { IRefreshToken } from '../../interface/user'
 import CreateModel from '../../utils/helpers/CreateModel'
 
 const AuthModel = {
-	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken>({
+	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken | null>({
 		Model: async ({ account, pwd }: { account: string; pwd: string }) => {
 			const user = await dbModel
 				.findOne(
@@ -21,12 +21,7 @@ const AuthModel = {
 				user.pwd !== undefined &&
 				(await bcrypt.compare(pwd, user.pwd))
 
-			if (!user || !isMatch) {
-				throw new UserBadRequest(
-					'Invalid credentials',
-					'Invalid account or password',
-				)
-			}
+			if (!user || !isMatch) return null
 
 			delete user?.pwd
 			return user
@@ -39,7 +34,7 @@ const AuthModel = {
 	Exists: CreateModel<{ account: string }, boolean>({
 		Model: async ({ account }: { account: string }) => {
 			const exists = await dbModel.exists({ account })
-			if (!exists) throw new NotFound('User not found')
+			if (!exists) return false
 			return true
 		},
 		DefaultError: new DatabaseError(
@@ -69,7 +64,6 @@ const AuthModel = {
 					{ $pull: { refreshToken: token } },
 				)
 
-				if (result.matchedCount === 0) throw new NotFound('User not found')
 				return result.matchedCount === 1 && result.modifiedCount === 1
 			},
 			DefaultError: new DatabaseError(
@@ -82,8 +76,6 @@ const AuthModel = {
 				const result = await dbModel
 					.findOne({ _id: userId }, { refreshToken: 1, _id: 0 })
 					.lean()
-
-				if (!result) throw new NotFound('User not found')
 
 				const tokens = result?.refreshToken
 				return Array.isArray(tokens) && tokens.includes(token)

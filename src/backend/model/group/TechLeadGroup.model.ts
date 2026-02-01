@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/group'
-import { DatabaseError, NotFound } from '../../error/error'
+import { DatabaseError } from '../../error/error'
 import type { IGroup } from '../../interface/group'
 import CreateModel from '../../utils/helpers/CreateModel'
 
@@ -27,9 +27,6 @@ const techLeadGroupModel = {
 					},
 				},
 			)
-
-			if (res.matchedCount === 0)
-				throw new NotFound('Group not found', "The user it's not in the group")
 
 			return res.acknowledged
 		},
@@ -59,11 +56,6 @@ const techLeadGroupModel = {
 				{ $pull: { techLead: { account } } },
 			)
 
-			if (res.matchedCount === 0)
-				throw new NotFound('Group not found', 'The group was not found')
-			if (res.modifiedCount === 0)
-				throw new NotFound('User not found', 'The user is not in the group')
-
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -83,13 +75,6 @@ const techLeadGroupModel = {
 				{ _id: groupId },
 				{ $push: { techLead } },
 			)
-
-			if (res.matchedCount === 0)
-				throw new NotFound(
-					'Group not found',
-					'The group you are trying to access was not found',
-				)
-
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

@@ -1,0 +1,60 @@
+import type { Types } from 'mongoose'
+import dbModel from '../../database/schemas/node/solution'
+import { DatabaseError, NotFound } from '../../error/error'
+import type { ISolution } from '../../interface/solution'
+import CreateModel from '../../utils/helpers/CreateModel'
+
+const SolutionModel = {
+	Get: CreateModel<
+		{
+			_id: Types.ObjectId
+			projection?: { [key: string]: 0 | 1 | boolean }
+		},
+		Partial<ISolution>
+	>({
+		Model: async ({ _id, projection = {} }) => {
+			const res = await dbModel.findOne({ _id }, projection).lean<ISolution>()
+			if (res === null) throw new NotFound('Solution not found')
+			return res
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The solution was not retrieved please try again',
+		),
+	}),
+	Create: CreateModel<{ data: ISolution }, Types.ObjectId>({
+		Model: async ({ data }) => {
+			const res = await dbModel.create(data)
+			return res._id
+		},
+		DefaultError: new DatabaseError(
+			'Failed to save',
+			'The solution was not created please try again',
+		),
+	}),
+	Update: CreateModel<
+		{ _id: Types.ObjectId; data: Partial<Omit<ISolution, '_id'>> },
+		boolean
+	>({
+		Model: async ({ _id, data }) => {
+			const res = await dbModel.updateOne({ _id }, data)
+			return res.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to save',
+			'The solution was not updated please try again',
+		),
+	}),
+	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
+		Model: async ({ _id }) => {
+			const res = await dbModel.deleteOne({ _id })
+			return res.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to remove',
+			'The solution was not deleted please try again',
+		),
+	}),
+}
+
+export default SolutionModel

@@ -17,14 +17,15 @@ export interface ITask {
 	priority: number
 }
 
-export interface ITaskProjection {
+export interface ITaskListItem {
 	_id: Types.ObjectId
 	name: string
 	priority: number | null | undefined
 	isComplete: boolean | null | undefined
+	user: string[]
 }
 
 export interface IListTask {
-	task: ITaskProjection[]
+	task: ITaskListItem[]
 	assign: Types.ObjectId[]
 }

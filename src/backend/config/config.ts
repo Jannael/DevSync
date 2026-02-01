@@ -41,13 +41,21 @@ export default {
 		},
 		projection: {
 			IRefreshToken: { pwd: 0, refreshToken: 0, invitation: 0, group: 0 },
+			ITaskListItem: {
+				_id: 1,
+				name: 1,
+				priority: 1,
+				isComplete: 1,
+				user: 1,
+			},
 		},
+		taskPagination: 10,
 	},
 	user: {
 		maxInvitations: 5,
 		maxGroups: 5,
 		defaultRole: 'developer',
-		maxSessions: 3
+		maxSessions: 3,
 	},
 	group: {
 		maxMembers: 5,

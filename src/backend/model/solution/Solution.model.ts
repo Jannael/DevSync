@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import dbModel from '../../database/schemas/node/solution'
-import { DatabaseError, NotFound } from '../../error/error'
+import { DatabaseError } from '../../error/error'
 import type { ISolution } from '../../interface/solution'
 import CreateModel from '../../utils/helpers/CreateModel'
 
@@ -10,11 +10,10 @@ const SolutionModel = {
 			_id: Types.ObjectId
 			projection?: { [key: string]: 0 | 1 | boolean }
 		},
-		Partial<ISolution>
+		Partial<ISolution | null>
 	>({
 		Model: async ({ _id, projection = {} }) => {
 			const res = await dbModel.findOne({ _id }, projection).lean<ISolution>()
-			if (res === null) throw new NotFound('Solution not found')
 			return res
 		},
 		DefaultError: new DatabaseError(
@@ -22,10 +21,10 @@ const SolutionModel = {
 			'The solution was not retrieved please try again',
 		),
 	}),
-	Create: CreateModel<{ data: ISolution }, Types.ObjectId>({
+	Create: CreateModel<{ data: ISolution }, ISolution>({
 		Model: async ({ data }) => {
 			const res = await dbModel.create(data)
-			return res._id
+			return res.toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

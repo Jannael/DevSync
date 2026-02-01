@@ -7,7 +7,7 @@ import type { IEnv } from '../interface/Env'
 import type { IGroup } from '../interface/Group'
 import getToken from '../utils/GetToken.utils'
 import { verifyEmail } from '../utils/Omit.utils'
-import validator from '../validator/validator'
+import validator from '../validator/Merge.validator'
 
 dotenv.config({ quiet: true })
 const { JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV } = process.env as Pick<

@@ -4,7 +4,7 @@ import model from '../../model/solution/Solution.model'
 import taskModel from './../../model/task/model'
 import { Forbidden, UserBadRequest } from '../error/error'
 import type { ISolution } from '../interface/Solution'
-import validator from '../validator/validator'
+import validator from '../validator/Merge.validator'
 
 /*
 Auth middleware guarantees this:

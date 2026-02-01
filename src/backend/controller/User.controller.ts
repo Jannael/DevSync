@@ -15,7 +15,7 @@ import type {
 import { encrypt } from '../utils/EncryptToken.utils'
 import getToken from '../utils/GetToken.utils'
 import { verifyEmail } from '../utils/Omit.utils'
-import validator from '../validator/validator'
+import validator from '../validator/Merge.validator'
 
 dotenv.config({ quiet: true })
 const {

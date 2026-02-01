@@ -6,7 +6,7 @@ import model from './../../model/task/model'
 import { Forbidden, UserBadRequest } from '../error/error'
 import type { IListTask, ITask } from '../interface/Task'
 import { verifyEmail } from '../utils/Omit.utils'
-import validator from '../validator/validator'
+import validator from '../validator/Merge.validator'
 
 /*
 Auth middleware guarantees this:

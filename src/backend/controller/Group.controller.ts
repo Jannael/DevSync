@@ -36,13 +36,13 @@ const Controller = {
 		return result
 	},
 	delete: async (req: Request, _res: Response): Promise<boolean> => {
-		const result = await Model.Delete({ _id: req.body.groupId })
 		const resultDeleteMembers = await MemberModel.DeleteByGroup({
 			groupId: req.body.groupId,
 		})
 		const resultDeleteInvitations = await InvitationModel.DeleteByGroup({
 			groupId: req.body.groupId,
 		})
+		const result = await Model.Delete({ _id: req.body.groupId })
 
 		if (!result || !resultDeleteMembers || !resultDeleteInvitations)
 			throw new ServerError('Operation Failed', 'The group was not deleted')

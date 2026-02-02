@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import RoleMiddleware from '../middleware/Role.middleware'
 import Roles from '../constant/Role.constant'
+import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
@@ -13,6 +13,5 @@ router.post('/cancel/', RoleMiddleware([Roles.techLead]))
 
 router.post('/accept/')
 router.post('/reject/')
-
 
 export default router

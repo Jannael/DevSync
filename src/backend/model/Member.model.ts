@@ -7,7 +7,7 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 const MemberModel = {
 	GetByUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }) => {
-			const groups = await dbModel.find({ account }).lean<IMember[]>()
+			const groups = await dbModel.find({ account, isInvitation: false }).lean<IMember[]>()
 			return groups
 		},
 		DefaultError: new DatabaseError(
@@ -17,7 +17,7 @@ const MemberModel = {
 	}),
 	GetByGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }) => {
-			const users = await dbModel.find({ groupId }).lean<IMember[]>()
+			const users = await dbModel.find({ groupId, isInvitation: false }).lean<IMember[]>()
 			return users
 		},
 		DefaultError: new DatabaseError(
@@ -31,7 +31,7 @@ const MemberModel = {
 	>({
 		Model: async ({ groupId, account }) => {
 			const member = await dbModel
-				.findOne({ groupId, account }, { role: 1 })
+				.findOne({ groupId, account, isInvitation: false }, { role: 1 })
 				.lean()
 			return member ? member.role : null
 		},
@@ -40,9 +40,9 @@ const MemberModel = {
 			'The user role was not retrieved, something went wrong please try again',
 		),
 	}),
-	Create: CreateModel<{ data: IMember }, IMember>({
+	Create: CreateModel<{ data: Omit<IMember, 'isInvitation'> }, IMember>({
 		Model: async ({ data }) => {
-			const created = await dbModel.create(data)
+			const created = await dbModel.create({ ...data, isInvitation: false })
 			return created.toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -55,7 +55,7 @@ const MemberModel = {
 		boolean
 	>({
 		Model: async ({ groupId, account }) => {
-			const deleted = await dbModel.deleteOne({ groupId, account })
+			const deleted = await dbModel.deleteOne({ groupId, account, isInvitation: false })
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -92,7 +92,7 @@ const MemberModel = {
 			'The user account was not updated, something went wrong please try again',
 		),
 	}),
-	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
+	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({ // => if the group is deleted
 		Model: async ({ groupId }) => {
 			const deleted = await dbModel.deleteMany({ groupId })
 			return deleted.acknowledged

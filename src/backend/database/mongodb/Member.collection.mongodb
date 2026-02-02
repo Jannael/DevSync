@@ -2,12 +2,13 @@ db.createCollection('member', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['groupId', 'account', 'role'],
+      required: ['groupId', 'account', 'role', 'isInvitation],
       additionalProperties: false,
       properties: {
         groupId: { bsonType: 'objectId' },
         account: { bsonType: 'string' },
-        role: { bsonType: 'string' }
+        role: { bsonType: 'string' },
+        isInvitation: { bsonType: 'bool' }
       }
     }
   }

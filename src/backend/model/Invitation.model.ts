@@ -1,15 +1,19 @@
 import type { Types } from 'mongoose'
 import GroupLimits from '../config/GroupLimits'
-import dbModel from '../database/node/Invitation'
+import dbModel from '../database/node/Member'
 import { DatabaseError } from '../error/Error.instances'
 import type { IInvitation } from '../interface/Invitation'
 import CreateModel from '../utils/helper/CreateModel.helper'
+
+// Invitation and member are for the same collection but i created two models for them
+// because they have different purposes
+// because of this update functions and getRole function are in the Member model
 
 const InvitationModel = {
 	GetByGroup: CreateModel<{ _id: Types.ObjectId }, IInvitation[]>({
 		Model: async ({ _id }) => {
 			const res = await dbModel
-				.find({ _id })
+				.find({ _id, isInvitation: true })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -22,7 +26,7 @@ const InvitationModel = {
 	GetByUser: CreateModel<{ account: string }, IInvitation[]>({
 		Model: async ({ account }) => {
 			const res = await dbModel
-				.find({ account })
+				.find({ account, isInvitation: true })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -34,7 +38,7 @@ const InvitationModel = {
 	}),
 	Create: CreateModel<{ data: IInvitation }, IInvitation>({
 		Model: async ({ data }) => {
-			const res = await dbModel.create(data)
+			const res = await dbModel.create({ data, isInvitation: true })
 			return res.toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -42,25 +46,23 @@ const InvitationModel = {
 			'The invitation was not created, something went wrong please try again',
 		),
 	}),
-	updateUserAccount: CreateModel<
-		{ account: string; newAccount: string },
-		boolean
-	>({
-		Model: async ({ account, newAccount }) => {
-			const res = await dbModel.updateMany(
-				{ account },
-				{ $set: { account: newAccount } },
+	Accept: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
+		Model: async ({ groupId, account }) => {
+			const updated = await dbModel.updateOne(
+				{ groupId, account },
+				{ isInvitation: false },
 			)
-			return res.acknowledged
+			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',
-			'The invitations were not updated, something went wrong please try again',
+			'The user role was not updated, something went wrong please try again',
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
+		// => reject or cancel
 		Model: async ({ _id }) => {
-			const res = await dbModel.deleteOne({ _id })
+			const res = await dbModel.deleteOne({ _id, isInvitation: true })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

@@ -7,7 +7,7 @@ import {
 	GroupValidator,
 } from '../validator/schemas/Group.schema'
 
-const service = {
+const Controller = {
 	get: async (req: Request, _res: Response): Promise<IGroup> => {
 		const group = await Model.Get({ _id: req.body.groupId })
 		if (!group) throw new UserBadRequest('Invalid credentials', 'Invalid group')
@@ -46,4 +46,4 @@ const service = {
 	},
 }
 
-export default service
+export default Controller

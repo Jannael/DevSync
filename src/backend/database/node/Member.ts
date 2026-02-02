@@ -9,6 +9,7 @@ const schema = new Schema<IMember>(
 		groupId: { type: Schema.Types.ObjectId, required: true }, // groupId
 		account: { type: String, required: true },
 		role: { type: String, required: true },
+		isInvitation: { type: Boolean, required: true },
 	},
 	{
 		...config.schemaOptions,

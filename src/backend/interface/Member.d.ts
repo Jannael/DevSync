@@ -4,4 +4,5 @@ export interface IMember {
 	groupId: Types.ObjectId
 	account: string
 	role: string
+	isInvitation: boolean
 }

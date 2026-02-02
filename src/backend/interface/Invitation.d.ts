@@ -1,5 +1,6 @@
 import type { Types } from 'mongoose'
 export interface IInvitation {
-	_id: Types.ObjectId
+	groupId: Types.ObjectId
 	account: string
+	role: string
 }

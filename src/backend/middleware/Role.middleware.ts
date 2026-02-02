@@ -1,28 +1,16 @@
-import dotenv from 'dotenv'
 import type { NextFunction, Request, Response } from 'express'
 import { Types } from 'mongoose'
 import type { CustomError } from '../error/Error.constructor'
 import ErrorHandler from '../error/Error.handler'
 import { Forbidden, UserBadRequest } from '../error/Error.instances'
-import type { IEnv } from '../interface/Env'
 import type { IRole } from '../interface/Role'
 import memberModel from '../model/Member.model'
-import getToken from '../utils/auth/GetToken.utils'
+import { GetAccessToken } from '../secret/GetToken'
 
-dotenv.config({ quiet: true })
-
-const { JWT_ACCESS_TOKEN_ENV, CRYPTO_ACCESS_TOKEN_ENV } =
-	process.env as unknown as IEnv
-
-const AuthMiddleware = (roles: Array<IRole>) => {
+const RoleMiddleware = (roles: Array<IRole>) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const accessToken = getToken({
-				req,
-				tokenName: 'accessToken',
-				jwtPwd: JWT_ACCESS_TOKEN_ENV,
-				cryptoPwd: CRYPTO_ACCESS_TOKEN_ENV,
-			})
+			const accessToken = GetAccessToken({ req })
 
 			req.body.accessToken = accessToken
 
@@ -43,7 +31,7 @@ const AuthMiddleware = (roles: Array<IRole>) => {
 				account: accessToken.account,
 			})
 
-			if (memberRole === null)
+			if (!memberRole)
 				throw new Forbidden('Access denied', 'You do not belong to the group')
 
 			if (!roles.includes(memberRole as IRole))
@@ -60,4 +48,4 @@ const AuthMiddleware = (roles: Array<IRole>) => {
 	}
 }
 
-export default AuthMiddleware
+export default RoleMiddleware

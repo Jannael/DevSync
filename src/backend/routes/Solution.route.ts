@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import Adapter from '../adapter/Solution.adapter'
-import auth from '../middleware/Auth.middleware'
+import auth from '../middleware/Role.middleware'
 
 const router = Router()
 

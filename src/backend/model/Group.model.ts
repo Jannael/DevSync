@@ -5,10 +5,10 @@ import type { IGroup } from '../interface/Group'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const GroupModel = {
-	Get: CreateModel<{ _id: Types.ObjectId }, IGroup | null>({
+	Get: CreateModel<{ _id: Types.ObjectId }, IGroup>({
 		Model: async ({ _id }) => {
 			const res = await dbModel.findOne({ _id }).lean<IGroup>()
-			if (!res) return null
+			if (!res) return
 			return res
 		},
 		DefaultError: new DatabaseError(

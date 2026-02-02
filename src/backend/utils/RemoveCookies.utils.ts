@@ -1,5 +1,5 @@
 import type { Response } from 'express'
-import type CookiesKeys from '../constant/Cookies.constant'
+import type CookiesKeys from '../constant/Cookie.constant'
 
 function RemoveCookies({
 	keys,

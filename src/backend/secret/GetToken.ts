@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import type { Request } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
-import CookiesKeys from '../constant/Cookies.constant'
+import CookiesKeys from '../constant/Cookie.constant'
 import { UserBadRequest } from '../error/Error.instances'
 import type { IEnv } from '../interface/Env'
 import Decrypt from './DecryptToken.utils'

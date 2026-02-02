@@ -3,7 +3,7 @@ import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
 import cookiesConfig from '../config/Cookies.config'
-import CookiesKeys from '../constant/Cookies.constant'
+import CookiesKeys from '../constant/Cookie.constant'
 import {
 	DatabaseError,
 	NotFound,
@@ -25,10 +25,7 @@ import RemoveCookies from '../utils/RemoveCookies.utils'
 import AccountValidator from '../validator/Account.validator'
 
 dotenv.config({ quiet: true })
-const {
-	JWT_REFRESH_TOKEN_ENV,
-	CRYPTO_REFRESH_TOKEN_ENV,
-} = process.env as Pick<
+const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } = process.env as Pick<
 	IEnv,
 	| 'JWT_ACCESS_TOKEN_ENV'
 	| 'JWT_REFRESH_TOKEN_ENV'

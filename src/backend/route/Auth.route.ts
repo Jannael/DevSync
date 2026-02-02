@@ -14,7 +14,7 @@ router.patch('/account/request/code/', Adapter.account.request.code)
 router.patch('/account/verify/code/', Adapter.account.verify.code)
 
 router.patch('/password/request/code/', Adapter.pwd.request.code)
-router.patch('/password/verify/code/', Adapter.pwd.verify.code)
+router.patch('/change/password/', Adapter.pwd.verify.code)
 
 router.post('/request/logout/', Adapter.request.logout)
 

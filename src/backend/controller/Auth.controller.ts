@@ -3,10 +3,12 @@ import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
 import cookiesConfig from '../config/Cookies.config'
+import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IEnv } from '../interface/Env'
 import AuthModel from '../model/Auth.model'
+import UserModel from '../model/User.model'
 import Decrypt from '../secret/DecryptToken.utils'
 import {
 	GenerateAccessToken,
@@ -244,7 +246,7 @@ const Controller = {
 			res.cookie(CookiesKeys.pwdChange, hashCode, cookiesConfig.code)
 			return true
 		},
-		VerifyCode: async (req: Request, res: Response): Promise<boolean> => {
+		Change: async (req: Request, res: Response): Promise<boolean> => {
 			if (!req.body.code || !req.body.newPwd)
 				throw new UserBadRequest('Missing data', 'Missing code or newPwd')
 
@@ -252,15 +254,30 @@ const Controller = {
 				req,
 				tokenName: CookiesKeys.pwdChange,
 			})
-
 			if (code.code !== req.body.code)
-				throw new UserBadRequest('Invalid credentials', 'Wrong code')
+				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
-			const hash = GenerateAuth({
-				content: { pwd: req.body.newPwd, account: code.account },
+			const user = await UserModel.Get({
+				account: code.account,
+				projection: { ...ProjectionConfig.IRefreshToken },
+			})
+			if (!user || !user._id) throw new NotFound('User not found')
+
+			const savedInDB = await UserModel.Update({
+				data: { pwd: req.body.newPwd },
+				_id: user._id
+			})
+			if (!savedInDB) throw new ServerError('Operation Failed', 'The password was not updated')
+			
+			const refreshToken = GenerateRefreshToken({
+				content: user
+			})
+			const accessToken = GenerateAccessToken({
+				content: user
 			})
 
-			res.cookie(CookiesKeys.pwdChange, hash, cookiesConfig.code)
+			res.cookie(CookiesKeys.refreshToken, refreshToken, cookiesConfig.refreshToken)
+			res.cookie(CookiesKeys.accessToken, accessToken, cookiesConfig.accessToken)
 			res.clearCookie(CookiesKeys.confirmPwdChange)
 			return true
 		},

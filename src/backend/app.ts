@@ -49,6 +49,9 @@ export async function createApp(
 		if (!req.body) {
 			req.body = {}
 		}
+		if (!req.cookies) {
+			req.cookies = {}
+		}
 		next()
 	})
 	app.use(cookieParser())

@@ -7,8 +7,6 @@ db.createCollection('invitation', {
       properties: {
         _id: { bsonType: 'objectId' },
         account: { bsonType: 'string' },
-        color: { bsonType: 'string' },
-        name: { bsonType: 'string' }
       }
     }
   }

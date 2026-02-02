@@ -42,17 +42,20 @@ const InvitationModel = {
 			'The invitation was not created, something went wrong please try again',
 		),
 	}),
-	Update: CreateModel<
-		{ _id: Types.ObjectId; data: Partial<IInvitation> },
+	updateUserAccount: CreateModel<
+		{ account: string; newAccount: string },
 		boolean
 	>({
-		Model: async ({ _id, data }) => {
-			const res = await dbModel.updateOne({ _id }, data)
+		Model: async ({ account, newAccount }) => {
+			const res = await dbModel.updateMany(
+				{ account },
+				{ $set: { account: newAccount } },
+			)
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',
-			'The invitation was not updated, something went wrong please try again',
+			'The invitations were not updated, something went wrong please try again',
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({

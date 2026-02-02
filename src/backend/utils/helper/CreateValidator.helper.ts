@@ -4,7 +4,7 @@ import { UserBadRequest } from '../../error/Error.instances'
 function CreateValidator<S extends ZodSchema, T>(schema: S) {
 	return (data: T): z.infer<S> => {
 		try {
-			const result = schema.parse(data)
+			const result = schema.parse(data ?? {})
 			return result
 		} catch (e) {
 			throw new UserBadRequest(

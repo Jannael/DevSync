@@ -29,7 +29,7 @@ const GroupModel = {
 	}),
 	Create: CreateModel<
 		{ data: Omit<IGroup, '_id'> },
-		IGroup & Required<Pick<IGroup, '_id'>>
+		IGroup
 	>({
 		Model: async ({ data }) => {
 			const created = await dbModel.create(data)

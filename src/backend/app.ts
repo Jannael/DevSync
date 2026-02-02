@@ -4,8 +4,8 @@ import dotenv from 'dotenv'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import mongoose from 'mongoose'
-import router from './route/Merge.route'
 import middleware from './middleware/merge'
+import router from './route/Merge.route'
 
 dotenv.config({ quiet: true })
 const HOST = process.env.HOST as string
@@ -45,6 +45,12 @@ export async function createApp(
 	}
 
 	app.use(express.json())
+	app.use((req, _res, next) => {
+		if (!req.body) {
+			req.body = {}
+		}
+		next()
+	})
 	app.use(cookieParser())
 	app.use(middleware.header)
 

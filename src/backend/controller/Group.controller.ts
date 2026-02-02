@@ -2,6 +2,8 @@ import type { Request, Response } from 'express'
 import { ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IGroup } from '../interface/Group'
 import Model from './../model/Group.model'
+import InvitationModel from '../model/Invitation.model'
+import MemberModel from '../model/Member.model'
 import {
 	GroupPartialValidator,
 	GroupValidator,
@@ -25,10 +27,7 @@ const Controller = {
 	update: async (req: Request, _res: Response): Promise<boolean> => {
 		const group = GroupPartialValidator(req.body.data)
 		if (Object.keys(group).length === 0)
-			throw new UserBadRequest(
-				'Invalid credentials',
-				'You did not send any data',
-			)
+			throw new UserBadRequest('Missing data', 'Missing data to update')
 
 		const result = await Model.Update({ _id: req.body.groupId, data: group })
 		if (!result)
@@ -38,11 +37,17 @@ const Controller = {
 	},
 	delete: async (req: Request, _res: Response): Promise<boolean> => {
 		const result = await Model.Delete({ _id: req.body.groupId })
+		const resultDeleteMembers = await MemberModel.DeleteByGroup({
+			groupId: req.body.groupId,
+		})
+		const resultDeleteInvitations = await InvitationModel.DeleteByGroup({
+			groupId: req.body.groupId,
+		})
 
-		if (!result)
+		if (!result || !resultDeleteMembers || !resultDeleteInvitations)
 			throw new ServerError('Operation Failed', 'The group was not deleted')
 
-		return result
+		return result && resultDeleteInvitations && resultDeleteMembers
 	},
 }
 

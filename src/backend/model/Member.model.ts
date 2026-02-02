@@ -68,7 +68,7 @@ const MemberModel = {
 		boolean
 	>({
 		Model: async ({ groupId, account, role }) => {
-			const updated = await dbModel.updateOne({ groupId, account }, { role })
+			const updated = await dbModel.updateOne({ groupId, account, isInvitation: false }, { role })
 			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -82,7 +82,7 @@ const MemberModel = {
 	>({
 		Model: async ({ oldAccount, newAccount }) => {
 			const updated = await dbModel.updateMany(
-				{ account: oldAccount },
+				{ account: oldAccount, isInvitation: false },
 				{ account: newAccount },
 			)
 			return updated.acknowledged
@@ -94,7 +94,7 @@ const MemberModel = {
 	}),
 	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({ // => if the group is deleted
 		Model: async ({ groupId }) => {
-			const deleted = await dbModel.deleteMany({ groupId })
+			const deleted = await dbModel.deleteMany({ groupId, isInvitation: false })
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(

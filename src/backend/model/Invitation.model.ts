@@ -74,6 +74,38 @@ const InvitationModel = {
 			'The user role was not updated, something went wrong please try again',
 		),
 	}),
+	UpdateRole: CreateModel<
+		{ groupId: Types.ObjectId; account: string; role: string },
+		boolean
+	>({
+		Model: async ({ groupId, account, role }) => {
+			const updated = await dbModel.updateOne(
+				{ groupId, account, isInvitation: true },
+				{ role },
+			)
+			return updated.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to save',
+			'The user role was not updated, something went wrong please try again',
+		),
+	}),
+	UpdateAccount: CreateModel<
+		{ oldAccount: string; newAccount: string },
+		boolean
+	>({
+		Model: async ({ oldAccount, newAccount }) => {
+			const updated = await dbModel.updateMany(
+				{ account: oldAccount, isInvitation: true },
+				{ account: newAccount },
+			)
+			return updated.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to save',
+			'The user account was not updated, something went wrong please try again',
+		),
+	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
 		// => reject or cancel
 		Model: async ({ _id }) => {
@@ -83,6 +115,17 @@ const InvitationModel = {
 		DefaultError: new DatabaseError(
 			'Failed to remove',
 			'The invitation was not deleted, something went wrong please try again',
+		),
+	}),
+	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
+		// => if the group is deleted
+		Model: async ({ groupId }) => {
+			const deleted = await dbModel.deleteMany({ groupId, isInvitation: true })
+			return deleted.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to remove',
+			'The group users were not deleted, something went wrong please try again',
 		),
 	}),
 }

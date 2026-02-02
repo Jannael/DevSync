@@ -16,7 +16,7 @@ import type {
 	IUserGroup,
 	IUserInvitation,
 } from '../interface/User'
-import { encrypt } from '../utils/auth/EncryptToken.utils'
+import { encrypt } from '../secret/EncryptToken.utils'
 import getToken from '../utils/auth/GetToken.utils'
 import { verifyEmail } from '../utils/Omit.utils'
 import validator from '../validator/Merge.validator'

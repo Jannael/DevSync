@@ -5,7 +5,7 @@ function CreateModel<T, R>({
 	Model,
 	DefaultError,
 }: {
-	Model: (params: T) => Promise<R>
+	Model: (params: T) => Promise<R | undefined>
 	DefaultError: CustomError
 }) {
 	return async (params: T): Promise<R | undefined> => {

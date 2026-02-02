@@ -7,7 +7,7 @@ import type { IRefreshToken } from '../interface/User'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const AuthModel = {
-	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken | null>({
+	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken>({
 		Model: async ({ account, pwd }: { account: string; pwd: string }) => {
 			const user = await dbModel
 				.findOne({ account }, { ...Config.IRefreshToken, pwd: 1 })
@@ -18,7 +18,7 @@ const AuthModel = {
 				user.pwd !== undefined &&
 				(await bcrypt.compare(pwd, user.pwd))
 
-			if (!user || !isMatch) return null
+			if (!user || !isMatch) return
 
 			delete user?.pwd
 			return user

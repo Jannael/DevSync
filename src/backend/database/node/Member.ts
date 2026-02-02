@@ -1,10 +1,10 @@
 import { model, Schema } from 'mongoose'
 import config from '../../config/Database.config'
-import type { IMember } from '../../interface/Member'
+import type { IMemberCollection } from '../../interface/Member'
 
 // here i used the _id as the groupId so i the database does not create a a new _id for each document
 
-const schema = new Schema<IMember>(
+const schema = new Schema<IMemberCollection>(
 	{
 		groupId: { type: Schema.Types.ObjectId, required: true }, // groupId
 		account: { type: String, required: true },
@@ -17,4 +17,4 @@ const schema = new Schema<IMember>(
 	},
 )
 
-export default model<IMember>('member', schema)
+export default model<IMemberCollection>('member', schema)

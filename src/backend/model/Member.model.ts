@@ -5,7 +5,7 @@ import type { IMember } from '../interface/Member'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const MemberModel = {
-	GetByUser: CreateModel<{ account: string }, IMember[]>({
+	GetForUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }) => {
 			const groups = await dbModel.find({ account, isInvitation: false }).lean<IMember[]>()
 			return groups
@@ -15,7 +15,7 @@ const MemberModel = {
 			'The user groups were not retrieved, something went wrong please try again',
 		),
 	}),
-	GetByGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
+	GetForGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }) => {
 			const users = await dbModel.find({ groupId, isInvitation: false }).lean<IMember[]>()
 			return users
@@ -40,7 +40,7 @@ const MemberModel = {
 			'The user role was not retrieved, something went wrong please try again',
 		),
 	}),
-	Create: CreateModel<{ data: Omit<IMember, 'isInvitation'> }, IMember>({
+	Create: CreateModel<{ data: IMember }, IMember>({
 		Model: async ({ data }) => {
 			const created = await dbModel.create({ ...data, isInvitation: false })
 			return created.toObject()

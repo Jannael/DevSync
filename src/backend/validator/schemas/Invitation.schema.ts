@@ -1,27 +1,16 @@
-import { Types } from 'mongoose'
-import { z } from 'zod'
+import type { z } from 'zod'
 import CreateValidator from '../../utils/helper/CreateValidator.helper'
-
-export const InvitationSchema = z.object({
-	_id: z.custom<Types.ObjectId>(
-		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
-		},
-		{ message: 'Invalid invitation id' },
-	),
-	account: z.string().email('Invalid account'),
-})
+import { MemberSchema as InvitationSchema } from './Member.schema'
 
 export const InvitationSchemaPartial = InvitationSchema.partial()
 
 export type InvitationType = z.infer<typeof InvitationSchema>
 
-export const InvitationValidator = CreateValidator<
-	typeof InvitationSchema,
-	InvitationType
->(InvitationSchema)
+export const MemberValidator = CreateValidator<typeof InvitationSchema, InvitationType>(
+	InvitationSchema,
+)
 
-export const InvitationPartialValidator = CreateValidator<
+export const MemberPartialValidator = CreateValidator<
 	typeof InvitationSchemaPartial,
 	Partial<InvitationType>
 >(InvitationSchema.partial())

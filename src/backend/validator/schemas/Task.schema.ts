@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
 import { z } from 'zod'
 import CreateValidator from '../../utils/helper/CreateValidator.helper'
+import CodeFieldSchema from './CodeField.schema'
 
 export const TaskSchema = z.object({
 	_id: z.custom<Types.ObjectId>(
@@ -20,15 +21,7 @@ export const TaskSchema = z.object({
 		.string()
 		.min(1, 'name is required')
 		.max(100, 'name must be at most 100 characters'),
-	code: z
-		.object({
-			language: z
-				.string()
-				.min(1, 'language is required')
-				.max(100, 'language must be at most 100 characters'),
-			content: z.string().min(1, 'content is required'),
-		})
-		.nullable(),
+	code: CodeFieldSchema,
 	feature: z
 		.array(
 			z

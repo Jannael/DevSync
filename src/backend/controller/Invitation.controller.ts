@@ -53,20 +53,20 @@ const Controller = {
 	},
 	UpdateRole: async (req: Request, _res: Response): Promise<boolean> => {
 		// body = { groupId, account, role }
-		const { groupId, account, role } = req.body
+		const { groupId, account, newRole } = req.body
 
-		if (!role || !account) {
+		if (!newRole || !account) {
 			throw new UserBadRequest('Missing data', 'Missing account or role')
 		}
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
-		if (!ValidRoles.includes(role))
+		if (!ValidRoles.includes(newRole))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
 
 		const result = await InvitationModel.UpdateRole({
 			groupId,
 			account,
-			role,
+			role: newRole,
 		})
 
 		if (!result)

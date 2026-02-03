@@ -29,6 +29,7 @@ const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } =
 const Controller = {
 	request: {
 		Code: async (req: Request, res: Response): Promise<boolean> => {
+			// body = { account, TEST_PWD }
 			if (req.body.account === undefined)
 				throw new UserBadRequest('Missing data', 'Missing account')
 			if (!AccountValidator(req.body.account))
@@ -46,6 +47,7 @@ const Controller = {
 			return true
 		},
 		AccessToken: async (req: Request, res: Response): Promise<boolean> => {
+			// cookies = { refreshToken }
 			if (!req.cookies.refreshToken)
 				throw new UserBadRequest('Missing data', 'Missing refreshToken')
 
@@ -102,6 +104,7 @@ const Controller = {
 			return true
 		},
 		Logout: async (req: Request, res: Response): Promise<boolean> => {
+			// cookies = { refreshToken }
 			const refreshToken = GetRefreshToken({ req })
 
 			const removed = await AuthModel.RefreshToken.Remove({
@@ -121,6 +124,7 @@ const Controller = {
 		},
 	},
 	VerifyCode: async (req: Request, res: Response): Promise<boolean> => {
+		// body = { code }
 		if (!req.body.code) throw new UserBadRequest('Missing data', 'Missing code')
 
 		const decodedCode = GetAuth({
@@ -142,6 +146,7 @@ const Controller = {
 	},
 	Account: {
 		RequestCode: async (req: Request, res: Response): Promise<boolean> => {
+			// body = { newAccount, TEST_PWD }
 			if (req.body.newAccount === undefined)
 				throw new UserBadRequest('Missing data', 'Missing new account')
 			if (!AccountValidator(req.body.newAccount))
@@ -185,6 +190,7 @@ const Controller = {
 			return true
 		},
 		Change: async (req: Request, res: Response): Promise<boolean> => {
+			// cookies = { codeCurrentAccount, codeNewAccount }
 			if (!req.body.codeCurrentAccount || !req.body.codeNewAccount)
 				throw new UserBadRequest(
 					'Missing data',
@@ -249,6 +255,7 @@ const Controller = {
 	},
 	Pwd: {
 		RequestCode: async (req: Request, res: Response): Promise<boolean> => {
+			// body = { account, TEST_PWD }
 			if (!req.body.account)
 				throw new UserBadRequest('Missing data', 'Missing account')
 
@@ -274,6 +281,8 @@ const Controller = {
 			return true
 		},
 		Change: async (req: Request, res: Response): Promise<boolean> => {
+			// cookies = { pwdChange }
+			// body = { code, newPwd }
 			if (!req.body.code || !req.body.newPwd)
 				throw new UserBadRequest('Missing data', 'Missing code or newPwd')
 
@@ -323,6 +332,7 @@ const Controller = {
 	},
 	RefreshToken: {
 		Code: async (req: Request, res: Response): Promise<boolean> => {
+			// body = { account, pwd, TEST_PWD }
 			if (!req.body.account || !req.body.pwd)
 				throw new UserBadRequest('Missing data', 'Missing account or password')
 			if (!AccountValidator(req.body.account))
@@ -360,6 +370,8 @@ const Controller = {
 			return true
 		},
 		Confirm: async (req: Request, res: Response): Promise<boolean> => {
+			// cookies = { genericToken, refreshTokenRequestCode }
+			// body = { code }
 			if (!req.body.code)
 				throw new UserBadRequest('Missing data', 'Missing code')
 

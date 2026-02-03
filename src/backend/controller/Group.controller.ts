@@ -13,12 +13,14 @@ import {
 
 const Controller = {
 	Get: async (req: Request, _res: Response): Promise<IGroup> => {
+		// body = { groupId }
 		const group = await Model.Get({ _id: req.body.groupId })
 		if (!group) throw new UserBadRequest('Invalid credentials', 'Invalid group')
 
 		return group
 	},
 	Create: async (req: Request, _res: Response): Promise<IGroup> => {
+		// body = { data }
 		const group = GroupValidator(req.body.data)
 		const accessToken = GetAccessToken({ req })
 		const result = await Model.Create({ data: group })
@@ -38,6 +40,7 @@ const Controller = {
 		return result
 	},
 	Update: async (req: Request, _res: Response): Promise<boolean> => {
+		// body = { groupId, data }
 		const group = GroupPartialValidator(req.body.data)
 		if (Object.keys(group).length === 0)
 			throw new UserBadRequest('Missing data', 'Missing data to update')
@@ -49,6 +52,7 @@ const Controller = {
 		return result
 	},
 	Delete: async (req: Request, _res: Response): Promise<boolean> => {
+		// body = { groupId }
 		const resultDeleteMembers = await MemberModel.DeleteByGroup({
 			groupId: req.body.groupId,
 		})

@@ -92,13 +92,18 @@ const Controller = {
 		return result
 	},
 	Reject: async (req: Request, _res: Response): Promise<boolean> => {
-		// body = { _id } => invitationId
-		const { _id } = req.body
-		if (!_id) throw new UserBadRequest('Missing data', 'Missing invitation id')
-		if (!Types.ObjectId.isValid(_id))
+		// body = { groupId } => invitationId
+		const accessToken = GetAccessToken({ req })
+		const { groupId } = req.body
+		if (!groupId)
+			throw new UserBadRequest('Missing data', 'Missing invitation id')
+		if (!Types.ObjectId.isValid(groupId))
 			throw new UserBadRequest('Invalid credentials', 'Invalid invitation id')
 
-		const result = await InvitationModel.Delete({ _id })
+		const result = await InvitationModel.Delete({
+			groupId,
+			account: accessToken.account,
+		})
 
 		if (!result)
 			throw new ServerError(
@@ -110,12 +115,17 @@ const Controller = {
 	},
 	Cancel: async (req: Request, _res: Response): Promise<boolean> => {
 		// body = { _id } => invitationId
-		const { _id } = req.body
-		if (!_id) throw new UserBadRequest('Missing data', 'Missing invitation id')
-		if (!Types.ObjectId.isValid(_id))
+		const accessToken = GetAccessToken({ req })
+		const { groupId } = req.body
+		if (!groupId)
+			throw new UserBadRequest('Missing data', 'Missing invitation id')
+		if (!Types.ObjectId.isValid(groupId))
 			throw new UserBadRequest('Invalid credentials', 'Invalid invitation id')
 
-		const result = await InvitationModel.Delete({ _id })
+		const result = await InvitationModel.Delete({
+			groupId,
+			account: accessToken.account,
+		})
 
 		if (!result)
 			throw new ServerError(

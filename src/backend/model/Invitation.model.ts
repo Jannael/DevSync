@@ -106,10 +106,14 @@ const InvitationModel = {
 			'The user account was not updated, something went wrong please try again',
 		),
 	}),
-	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
+	Delete: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
 		// => reject or cancel
-		Model: async ({ _id }) => {
-			const res = await dbModel.deleteOne({ _id, isInvitation: true })
+		Model: async ({ groupId, account }) => {
+			const res = await dbModel.deleteOne({
+				account,
+				groupId,
+				isInvitation: true,
+			})
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

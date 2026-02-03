@@ -160,3 +160,4 @@ Additionally, I introduced an architectural enhancement: the Service Layer (/src
 ## Future work
 - invitations abort
 rework in invitations logic, instead of a member been part of the group until it reject the invitation, this will be removed, its going to be added as an invitation status
+- limitations for group and pretty much everything

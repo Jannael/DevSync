@@ -7,7 +7,7 @@ export interface ITaskListItem {
 	user: string[]
 }
 
-export interface IListTask {
+export interface ITaskList {
 	task: ITaskListItem[]
-	assign: Types.ObjectId[]
+	assign: Types.ObjectId[] // task id for the tasks the user is assigned to
 }

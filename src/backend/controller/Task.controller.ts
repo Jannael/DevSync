@@ -9,7 +9,7 @@ import {
 	UserBadRequest,
 } from '../error/Error.instances'
 import type { ITask } from '../interface/Task'
-import type { ITaskListItem } from '../interface/TaskList'
+import type { ITaskList, ITaskListItem } from '../interface/TaskList'
 import TaskModel from '../model/Task.model'
 import {
 	TaskPartialValidator,
@@ -44,7 +44,7 @@ const Controller = {
 
 		return task
 	},
-	List: async (req: Request, _res: Response): Promise<ITaskListItem[]> => {
+	List: async (req: Request, _res: Response): Promise<ITaskList> => {
 		// body = { groupId, role, accessToken, page }
 		const { groupId, role, accessToken, page } = req.body
 
@@ -72,7 +72,15 @@ const Controller = {
 		if (!tasks)
 			throw new ServerError('Operation Failed', 'The tasks were not retrieved')
 
-		return tasks
+		const assign = tasks
+			.filter((t) => t.user.includes(accessToken.account))
+			.map((t) => t._id)
+
+		return {
+			task: tasks,
+			// if the role is not techLead assign empty because all the task are assigned to the user
+			assign: role === Roles.techLead ? assign : [], 
+		}
 	},
 	Create: async (req: Request, _res: Response): Promise<ITask> => {
 		// body = { data, groupId }

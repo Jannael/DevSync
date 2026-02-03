@@ -89,8 +89,12 @@ const Controller = {
 		}
 
 		const result = await SolutionModel.Create({ data: solution })
+		const updateTaskStatus = TaskModel.Update({
+			_id: solution._id,
+			data: { isComplete: true },
+		})
 
-		if (!result)
+		if (!result || !updateTaskStatus)
 			throw new ServerError('Operation Failed', 'The solution was not created')
 
 		return result
@@ -177,8 +181,12 @@ const Controller = {
 		}
 
 		const result = await SolutionModel.Delete({ _id })
+		const updateTaskStatus = TaskModel.Update({
+			_id,
+			data: { isComplete: false },
+		})
 
-		if (!result)
+		if (!result || !updateTaskStatus)
 			throw new ServerError('Operation Failed', 'The solution was not deleted')
 
 		return result

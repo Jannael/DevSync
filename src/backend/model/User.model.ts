@@ -14,14 +14,15 @@ const UserModel = {
 	Get: CreateModel<
 		{
 			account: string
-			projection: Record<string, number>
+			projection: Record<keyof IUser, 0 | 1>
 		},
-		Partial<IRefreshToken> | null
+		IUser
 	>({
 		Model: async ({ account, projection }) => {
 			const user = await dbModel
-				.findOne({ account }, { _id: 0, ...projection })
-				.lean<Partial<IRefreshToken>>()
+				.findOne({ account }, { ...projection })
+				.lean<IUser>()
+			if (!user) return
 
 			return user
 		},

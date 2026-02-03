@@ -7,6 +7,7 @@ import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IEnv } from '../interface/Env'
+import type { IRefreshToken, IUser } from '../interface/User'
 import AuthModel from '../model/Auth.model'
 import UserModel from '../model/User.model'
 import Decrypt from '../secret/DecryptToken.utils'
@@ -88,7 +89,9 @@ const Controller = {
 			delete refreshToken.iat
 			delete refreshToken.exp
 
-			const accessToken = GenerateAccessToken({ content: refreshToken })
+			const accessToken = GenerateAccessToken({ content: refreshToken } as {
+				content: IRefreshToken
+			})
 
 			res.cookie(
 				CookiesKeys.accessToken,
@@ -181,7 +184,7 @@ const Controller = {
 
 			return true
 		},
-		VerifyCode: async (req: Request, res: Response): Promise<boolean> => {
+		Change: async (req: Request, res: Response): Promise<boolean> => {
 			if (!req.body.codeCurrentAccount || !req.body.codeNewAccount)
 				throw new UserBadRequest(
 					'Missing data',
@@ -192,7 +195,6 @@ const Controller = {
 				req,
 				tokenName: CookiesKeys.codeCurrentAccount,
 			})
-
 			const codeNewAccount = GetAuth({
 				req,
 				tokenName: CookiesKeys.codeNewAccount,
@@ -209,14 +211,39 @@ const Controller = {
 					'Invalid new account code',
 				)
 
+			const user: IUser | undefined = await UserModel.Get({
+				account: code.account,
+				projection: { ...ProjectionConfig.IRefreshToken },
+			})
+			if (!user) throw new NotFound('User not found')
+
+			const result = await UserModel.AccountUpdate({
+				_id: user._id,
+				account: codeNewAccount.account,
+			})
+			if (!result)
+				throw new ServerError('Operation Failed', 'The account was not updated')
+
+			const accessToken = GenerateAccessToken({
+				content: { ...user },
+			})
+			const refreshToken = GenerateRefreshToken({
+				content: user,
+			})
+
+			res.cookie(
+				CookiesKeys.refreshToken,
+				refreshToken,
+				cookiesConfig.refreshToken,
+			)
+			res.cookie(
+				CookiesKeys.accessToken,
+				accessToken,
+				cookiesConfig.accessToken,
+			)
 			res.clearCookie(CookiesKeys.codeCurrentAccount)
 			res.clearCookie(CookiesKeys.codeNewAccount)
 
-			const account = GenerateAuth({
-				content: { account: codeNewAccount.account },
-			})
-
-			res.cookie(CookiesKeys.confirmNewAccount, account, cookiesConfig.code)
 			return true
 		},
 	},
@@ -265,19 +292,31 @@ const Controller = {
 
 			const savedInDB = await UserModel.Update({
 				data: { pwd: req.body.newPwd },
-				_id: user._id
+				_id: user._id,
 			})
-			if (!savedInDB) throw new ServerError('Operation Failed', 'The password was not updated')
-			
+			if (!savedInDB)
+				throw new ServerError(
+					'Operation Failed',
+					'The password was not updated',
+				)
+
 			const refreshToken = GenerateRefreshToken({
-				content: user
+				content: user,
 			})
 			const accessToken = GenerateAccessToken({
-				content: user
+				content: user,
 			})
 
-			res.cookie(CookiesKeys.refreshToken, refreshToken, cookiesConfig.refreshToken)
-			res.cookie(CookiesKeys.accessToken, accessToken, cookiesConfig.accessToken)
+			res.cookie(
+				CookiesKeys.refreshToken,
+				refreshToken,
+				cookiesConfig.refreshToken,
+			)
+			res.cookie(
+				CookiesKeys.accessToken,
+				accessToken,
+				cookiesConfig.accessToken,
+			)
 			res.clearCookie(CookiesKeys.confirmPwdChange)
 			return true
 		},
@@ -339,12 +378,12 @@ const Controller = {
 			delete user.iat
 			delete user.exp
 
-			const refreshToken = GenerateRefreshToken({
-				content: user,
+			const refreshToken = GenerateRefreshToken({ content: user } as {
+				content: IRefreshToken
 			})
 
-			const accessToken = GenerateAccessToken({
-				content: user,
+			const accessToken = GenerateAccessToken({ content: user } as {
+				content: IRefreshToken
 			})
 
 			const savedInDB = await AuthModel.RefreshToken.Save({

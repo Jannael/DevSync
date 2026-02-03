@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import JwtConfig from '../config/Jwt.config'
 import type { IEnv } from '../interface/Env'
+import type { IRefreshToken } from '../interface/User'
 import EncryptToken from './EncryptToken.utils'
 
 dotenv.config({ quiet: true })
@@ -10,7 +11,7 @@ const {
 	JWT_REFRESH_TOKEN_ENV,
 	CRYPTO_AUTH_ENV,
 	CRYPTO_ACCESS_TOKEN_ENV,
-	CRYPTO_REFRESH_TOKEN_ENV
+	CRYPTO_REFRESH_TOKEN_ENV,
 } = process.env as unknown as IEnv
 
 export function GenerateAuth({
@@ -26,11 +27,7 @@ export function GenerateAuth({
 	})
 }
 
-export function GenerateAccessToken({
-	content,
-}: {
-	content: Record<string, unknown>
-}) {
+export function GenerateAccessToken({ content }: { content: IRefreshToken }) {
 	return EncryptToken({
 		text: content,
 		key: CRYPTO_ACCESS_TOKEN_ENV,
@@ -39,11 +36,7 @@ export function GenerateAccessToken({
 	})
 }
 
-export function GenerateRefreshToken({
-	content,
-}: {
-	content: Record<string, unknown>
-}) {
+export function GenerateRefreshToken({ content }: { content: IRefreshToken }) {
 	return EncryptToken({
 		text: content,
 		key: CRYPTO_REFRESH_TOKEN_ENV,

@@ -1,5 +1,13 @@
 export default {
-	IRefreshToken: { pwd: 0, refreshToken: 0, invitation: 0, group: 0 },
+	IRefreshToken: {
+		_id: 1,
+		fullName: 1,
+		account: 1,
+		nickName: 1,
+		// exclude
+		refreshToken: 0,
+		pwd: 0,
+	},
 	ITaskListItem: {
 		_id: 1,
 		name: 1,

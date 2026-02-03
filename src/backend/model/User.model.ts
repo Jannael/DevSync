@@ -8,7 +8,7 @@ import type { IRefreshToken, IUser } from '../interface/User'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 dotenv.config({ quiet: true })
-const { BCRYPT_SALT_HASH } = process.env as Pick<IEnv, 'BCRYPT_SALT_HASH'>
+const { BCRYPT_SALT_HASH } = process.env as unknown as IEnv
 
 const UserModel = {
 	Get: CreateModel<

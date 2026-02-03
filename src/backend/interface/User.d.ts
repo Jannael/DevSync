@@ -4,9 +4,10 @@ export interface IUser {
 	_id: Types.ObjectId
 	fullName: string
 	account: string
-	pwd: string
 	nickName: string | null
+	// exclude in refreshToken
 	refreshToken: string[] | null
+	pwd: string
 }
 
 // refreshToken and accessToken have the same information

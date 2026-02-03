@@ -4,6 +4,7 @@ import jwt, { type JwtPayload } from 'jsonwebtoken'
 import CookiesKeys from '../constant/Cookie.constant'
 import { UserBadRequest } from '../error/Error.instances'
 import type { IEnv } from '../interface/Env'
+import type { IRefreshToken } from '../interface/User'
 import Decrypt from './DecryptToken.utils'
 
 dotenv.config({ quiet: true })
@@ -45,22 +46,22 @@ function GetToken({
 	return token
 }
 
-export function GetRefreshToken({ req }: { req: Request }) {
+export function GetRefreshToken({ req }: { req: Request }): IRefreshToken {
 	return GetToken({
 		req,
 		tokenName: CookiesKeys.refreshToken,
 		jwtPwd: JWT_REFRESH_TOKEN_ENV,
 		cryptoPwd: CRYPTO_REFRESH_TOKEN_ENV,
-	})
+	}) as IRefreshToken
 }
 
-export function GetAccessToken({ req }: { req: Request }) {
+export function GetAccessToken({ req }: { req: Request }): IRefreshToken {
 	return GetToken({
 		req,
 		tokenName: CookiesKeys.accessToken,
 		jwtPwd: JWT_ACCESS_TOKEN_ENV,
 		cryptoPwd: CRYPTO_ACCESS_TOKEN_ENV,
-	})
+	}) as IRefreshToken
 }
 
 export function GetAuth({

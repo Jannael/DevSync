@@ -41,6 +41,17 @@ const TaskModel = {
 			'The task was not retrieved please try again',
 		),
 	}),
+	Exists: CreateModel<{ _id: Types.ObjectId }, boolean>({
+		Model: async ({ _id }) => {
+			const res = await dbModel.exists({ _id })
+			if (!res) return false
+			return true
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The task existence could not be verified, please try again',
+		),
+	}),
 	Create: CreateModel<{ task: Omit<ITask, '_id'> }, ITask>({
 		Model: async ({ task }) => {
 			const res = await dbModel.create(task)

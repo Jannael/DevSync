@@ -12,17 +12,17 @@ router.post(
 )
 router.put(
 	'/update/',
-	RoleMiddleware([Roles.techLead, Roles.developer]),
+	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
 	Adapter.update,
 )
 router.post(
 	'/create/',
-	RoleMiddleware([Roles.techLead, Roles.developer]),
+	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
 	Adapter.create,
 )
 router.delete(
 	'/delete/',
-	RoleMiddleware([Roles.techLead, Roles.developer]),
+	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
 	Adapter.delete,
 )
 

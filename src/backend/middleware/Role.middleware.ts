@@ -12,6 +12,9 @@ import { GetAccessToken } from '../secret/GetToken'
 // 3.accessToken at req.body.accessToken
 // 4.memberRole at req.body.role
 
+// !IMPORTANT:
+// do not use the field 'role': use 'newRole' or 'memberRole' instead
+
 const RoleMiddleware = (roles: Array<IRole>) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {

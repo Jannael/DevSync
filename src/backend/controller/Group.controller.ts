@@ -1,7 +1,13 @@
 import type { Request, Response } from 'express'
-import Roles from '../constant/Role.constant'
-import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
+import Roles, { DefaultRole } from '../constant/Role.constant'
+import {
+	Forbidden,
+	NotFound,
+	ServerError,
+	UserBadRequest,
+} from '../error/Error.instances'
 import type { IGroup } from '../interface/Group'
+import type { IMember } from '../interface/Member'
 import Model from './../model/Group.model'
 import InvitationModel from '../model/Invitation.model'
 import MemberModel from '../model/Member.model'
@@ -10,8 +16,6 @@ import {
 	GroupPartialValidator,
 	GroupValidator,
 } from '../validator/schemas/Group.schema'
-
-// todo join and quit group
 
 const Controller = {
 	Get: async (req: Request, _res: Response): Promise<IGroup> => {
@@ -68,6 +72,71 @@ const Controller = {
 			throw new ServerError('Operation Failed', 'The group was not deleted')
 
 		return result && resultDeleteInvitations && resultDeleteMembers
+	},
+	Join: async (req: Request, _res: Response): Promise<IMember> => {
+		// body = { groupId }
+		const { groupId } = req.body
+		const accessToken = GetAccessToken({ req })
+
+		const group = await Model.Get({ _id: groupId })
+		if (!group) throw new NotFound('Group not found')
+
+		const existingMember = await MemberModel.GetRole({
+			groupId,
+			account: accessToken.account,
+		})
+		if (existingMember)
+			throw new Forbidden(
+				'Access denied',
+				'You are already a member of this group',
+			)
+
+		const result = await MemberModel.Create({
+			data: {
+				groupId,
+				account: accessToken.account,
+				role: DefaultRole,
+			},
+		})
+
+		if (!result)
+			throw new ServerError('Operation Failed', 'Could not join the group')
+
+		return result
+	},
+	Quit: async (req: Request, _res: Response): Promise<boolean> => {
+		// body = { groupId, accessToken, role } (accessToken and role come from RoleMiddleware)
+		const { groupId, accessToken, role: userRole } = req.body
+
+		if (userRole === Roles.techLead) {
+			const allMembers = await MemberModel.GetForGroup({ groupId })
+			if (!allMembers)
+				throw new ServerError(
+					'Operation Failed',
+					'Could not verify group members',
+				)
+
+			const techLeadCount = allMembers.filter(
+				(member) => member.role === Roles.techLead,
+			).length
+
+			if (techLeadCount <= 1) {
+				throw new Forbidden(
+					'Access denied',
+					'Cannot quit as the last techLead. Transfer leadership or delete the group.',
+				)
+			}
+		}
+
+		const result = await MemberModel.RemoveUser({
+			groupId,
+			account: accessToken.account,
+		})
+
+		if (!result)
+			throw new ServerError('Operation Failed', 'Could not quit the group')
+
+		return result
 	},
 }
 

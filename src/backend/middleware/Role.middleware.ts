@@ -7,6 +7,11 @@ import type { IRole } from '../interface/Role'
 import memberModel from '../model/Member.model'
 import { GetAccessToken } from '../secret/GetToken'
 
+// 1.groupId is validated and exists
+// 2.role is validated
+// 3.accessToken at req.body.accessToken
+// 4.memberRole at req.body.role
+
 const RoleMiddleware = (roles: Array<IRole>) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {

@@ -36,10 +36,7 @@ const InvitationModel = {
 			'The invitations were not retrieved, something went wrong please try again',
 		),
 	}),
-	GetRole: CreateModel<
-		{ groupId: Types.ObjectId; account: string },
-		string
-	>({
+	GetRole: CreateModel<{ groupId: Types.ObjectId; account: string }, string>({
 		Model: async ({ groupId, account }) => {
 			const member = await dbModel
 				.findOne({ groupId, account, isInvitation: true }, { role: 1 })
@@ -130,6 +127,17 @@ const InvitationModel = {
 		DefaultError: new DatabaseError(
 			'Failed to remove',
 			'The group users were not deleted, something went wrong please try again',
+		),
+	}),
+	DeleteByUser: CreateModel<{ account: string }, boolean>({
+		// => remove all invitations sent to a user
+		Model: async ({ account }) => {
+			const deleted = await dbModel.deleteMany({ account, isInvitation: true })
+			return deleted.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to remove',
+			'The user invitations were not deleted, something went wrong please try again',
 		),
 	}),
 }

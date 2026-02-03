@@ -7,7 +7,9 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 const MemberModel = {
 	GetForUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }) => {
-			const groups = await dbModel.find({ account, isInvitation: false }).lean<IMember[]>()
+			const groups = await dbModel
+				.find({ account, isInvitation: false })
+				.lean<IMember[]>()
 			return groups || []
 		},
 		DefaultError: new DatabaseError(
@@ -17,7 +19,9 @@ const MemberModel = {
 	}),
 	GetForGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }) => {
-			const users = await dbModel.find({ groupId, isInvitation: false }).lean<IMember[]>()
+			const users = await dbModel
+				.find({ groupId, isInvitation: false })
+				.lean<IMember[]>()
 			return users || []
 		},
 		DefaultError: new DatabaseError(
@@ -25,10 +29,7 @@ const MemberModel = {
 			'The group users were not retrieved, something went wrong please try again',
 		),
 	}),
-	GetRole: CreateModel<
-		{ groupId: Types.ObjectId; account: string },
-		string
-	>({
+	GetRole: CreateModel<{ groupId: Types.ObjectId; account: string }, string>({
 		Model: async ({ groupId, account }) => {
 			const member = await dbModel
 				.findOne({ groupId, account, isInvitation: false }, { role: 1 })
@@ -55,7 +56,11 @@ const MemberModel = {
 		boolean
 	>({
 		Model: async ({ groupId, account }) => {
-			const deleted = await dbModel.deleteOne({ groupId, account, isInvitation: false })
+			const deleted = await dbModel.deleteOne({
+				groupId,
+				account,
+				isInvitation: false,
+			})
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -68,7 +73,10 @@ const MemberModel = {
 		boolean
 	>({
 		Model: async ({ groupId, account, role }) => {
-			const updated = await dbModel.updateOne({ groupId, account, isInvitation: false }, { role })
+			const updated = await dbModel.updateOne(
+				{ groupId, account, isInvitation: false },
+				{ role },
+			)
 			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -92,7 +100,8 @@ const MemberModel = {
 			'The user account was not updated, something went wrong please try again',
 		),
 	}),
-	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({ // => if the group is deleted
+	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
+		// => if the group is deleted
 		Model: async ({ groupId }) => {
 			const deleted = await dbModel.deleteMany({ groupId, isInvitation: false })
 			return deleted.acknowledged
@@ -100,6 +109,17 @@ const MemberModel = {
 		DefaultError: new DatabaseError(
 			'Failed to remove',
 			'The group users were not deleted, something went wrong please try again',
+		),
+	}),
+	DeleteByUser: CreateModel<{ account: string }, boolean>({
+		// => remove all member records for a user
+		Model: async ({ account }) => {
+			const deleted = await dbModel.deleteMany({ account, isInvitation: false })
+			return deleted.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to remove',
+			'The user memberships were not deleted, something went wrong please try again',
 		),
 	}),
 }

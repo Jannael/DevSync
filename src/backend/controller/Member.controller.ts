@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import Roles from '../constant/Role.constant'
+import Roles, { ValidRoles } from '../constant/Role.constant'
 import {
 	Forbidden,
 	ServerError,
@@ -33,8 +33,7 @@ const Controller = {
 		}
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
-		const validRoles = [Roles.developer, Roles.documenter, Roles.techLead]
-		if (!validRoles.includes(role))
+		if (!ValidRoles.includes(role))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
 
 		const result = await MemberModel.UpdateRole({
@@ -53,7 +52,7 @@ const Controller = {
 		const { groupId, account } = req.body
 
 		if (!account) {
-			throw new UserBadRequest('Missing data', 'Missing groupId or account')
+			throw new UserBadRequest('Missing data', 'Missing group id or account')
 		}
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')

@@ -4,4 +4,6 @@ const Roles = {
   techLead: 'techLead',
 } as const
 
+export const ValidRoles = [Roles.developer, Roles.documenter, Roles.techLead]
+
 export default Roles

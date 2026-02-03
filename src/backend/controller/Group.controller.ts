@@ -43,11 +43,12 @@ const Controller = {
 	},
 	Update: async (req: Request, _res: Response): Promise<boolean> => {
 		// body = { groupId, data }
-		const group = GroupPartialValidator(req.body.data)
+		const { groupId, data } = req.body
+		const group = GroupPartialValidator(data)
 		if (Object.keys(group).length === 0)
 			throw new UserBadRequest('Missing data', 'Missing data to update')
 
-		const result = await Model.Update({ _id: req.body.groupId, data: group })
+		const result = await Model.Update({ _id: groupId, data: group })
 		if (!result)
 			throw new ServerError('Operation Failed', 'The group was not updated')
 
@@ -55,13 +56,13 @@ const Controller = {
 	},
 	Delete: async (req: Request, _res: Response): Promise<boolean> => {
 		// body = { groupId }
-		const resultDeleteMembers = await MemberModel.DeleteByGroup({
-			groupId: req.body.groupId,
-		})
+		const { groupId } = req.body
+		const resultDeleteMembers = await MemberModel.DeleteByGroup({ groupId })
 		const resultDeleteInvitations = await InvitationModel.DeleteByGroup({
-			groupId: req.body.groupId,
+			groupId,
 		})
-		const result = await Model.Delete({ _id: req.body.groupId })
+
+		const result = await Model.Delete({ _id: groupId })
 
 		if (!result || !resultDeleteMembers || !resultDeleteInvitations)
 			throw new ServerError('Operation Failed', 'The group was not deleted')

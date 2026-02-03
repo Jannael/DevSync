@@ -30,18 +30,14 @@ const Controller = {
 	request: {
 		Code: async (req: Request, res: Response): Promise<boolean> => {
 			// body = { account, TEST_PWD }
-			if (req.body.account === undefined)
-				throw new UserBadRequest('Missing data', 'Missing account')
-			if (!AccountValidator(req.body.account))
+			const { account, TEST_PWD } = req.body
+			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
+			if (!AccountValidator(account))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
-			const code = GenerateCode(req.body.TEST_PWD)
+			const code = GenerateCode(TEST_PWD)
 
-			if (!req.body.TEST_PWD)
-				await SendEmail({ account: req.body.account, code })
-
-			const jwtEncrypt = GenerateAuth({
-				content: { code, account: req.body.account },
-			})
+			if (!TEST_PWD) await SendEmail({ account, code })
+			const jwtEncrypt = GenerateAuth({ content: { code, account } })
 
 			res.cookie(CookiesKeys.code, jwtEncrypt, cookiesConfig['5m'])
 			return true
@@ -228,12 +224,8 @@ const Controller = {
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 
-			const accessToken = GenerateAccessToken({
-				content: user,
-			})
-			const refreshToken = GenerateRefreshToken({
-				content: user,
-			})
+			const accessToken = GenerateAccessToken({ content: user })
+			const refreshToken = GenerateRefreshToken({ content: user })
 
 			res.cookie(
 				CookiesKeys.refreshToken,
@@ -356,9 +348,8 @@ const Controller = {
 		Confirm: async (req: Request, res: Response): Promise<boolean> => {
 			// cookies = { genericToken, refreshTokenRequestCode }
 			// body = { code }
-			const {code} = req.body
-			if (!code)
-				throw new UserBadRequest('Missing data', 'Missing code')
+			const { code } = req.body
+			if (!code) throw new UserBadRequest('Missing data', 'Missing code')
 
 			const cookieCode = GetAuth({
 				req,
@@ -367,21 +358,16 @@ const Controller = {
 			const user = GetAuth({
 				req,
 				tokenName: CookiesKeys.genericToken,
-			})
+			}) as IRefreshToken
 
 			if (cookieCode.code !== code)
 				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
-			delete user.iat
-			delete user.exp
+			delete (user as JwtPayload).iat
+			delete (user as JwtPayload).exp
 
-			const refreshToken = GenerateRefreshToken({ content: user } as {
-				content: IRefreshToken
-			})
-
-			const accessToken = GenerateAccessToken({ content: user } as {
-				content: IRefreshToken
-			})
+			const refreshToken = GenerateRefreshToken({ content: user })
+			const accessToken = GenerateAccessToken({ content: user })
 
 			const savedInDB = await AuthModel.RefreshToken.Save({
 				token: refreshToken,

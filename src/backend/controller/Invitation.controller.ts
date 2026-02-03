@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
 import { Types } from 'mongoose'
+import { ValidRoles } from '../constant/Role.constant'
 import { ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IInvitation } from '../interface/Invitation'
 import InvitationModel from '../model/Invitation.model'
@@ -37,7 +38,10 @@ const Controller = {
 	},
 	Create: async (req: Request, _res: Response): Promise<IInvitation> => {
 		// body = { account, role }
-		const invitation = InvitationValidator({ ...req.body.data, groupId: req.body.groupId })
+		const invitation = InvitationValidator({
+			...req.body.data,
+			groupId: req.body.groupId,
+		})
 		const result = await InvitationModel.Create({ data: invitation })
 		if (!result)
 			throw new ServerError(
@@ -56,6 +60,8 @@ const Controller = {
 		}
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
+		if (!ValidRoles.includes(role))
+			throw new UserBadRequest('Invalid credentials', 'Invalid role')
 
 		const result = await InvitationModel.UpdateRole({
 			groupId,
@@ -117,8 +123,8 @@ const Controller = {
 		const { groupId, account } = req.body
 
 		if (!account)
-			throw new UserBadRequest('Missing data', 'Missing invitation id')
-		if(!AccountValidator(account))
+			throw new UserBadRequest('Missing data', 'Missing account')
+		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 		const result = await InvitationModel.Delete({

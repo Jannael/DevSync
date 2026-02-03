@@ -9,7 +9,6 @@ import { InvitationValidator } from '../validator/schemas/Invitation.schema'
 
 const Controller = {
 	GetForUser: async (req: Request, _res: Response): Promise<IInvitation[]> => {
-		// Get all invitations for the current user
 		const accessToken = GetAccessToken({ req })
 		const invitations = await InvitationModel.GetByUser({
 			account: accessToken.account,
@@ -37,8 +36,8 @@ const Controller = {
 		return invitations
 	},
 	Create: async (req: Request, _res: Response): Promise<IInvitation> => {
-		// body = { data }
-		const invitation = InvitationValidator(req.body.data)
+		// body = { account, role }
+		const invitation = InvitationValidator({ ...req.body.data, groupId: req.body.groupId })
 		const result = await InvitationModel.Create({ data: invitation })
 		if (!result)
 			throw new ServerError(
@@ -53,7 +52,7 @@ const Controller = {
 		const { groupId, account, role } = req.body
 
 		if (!role || !account) {
-			throw new UserBadRequest('Missing data', 'Role is required')
+			throw new UserBadRequest('Missing data', 'Missing account or role')
 		}
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
@@ -74,9 +73,9 @@ const Controller = {
 		const accessToken = GetAccessToken({ req })
 
 		const { groupId } = req.body
-		if (!groupId) throw new UserBadRequest('Missing data', 'Missing groupId')
+		if (!groupId) throw new UserBadRequest('Missing data', 'Missing group id')
 		if (!Types.ObjectId.isValid(groupId))
-			throw new UserBadRequest('Invalid credentials', 'Invalid groupId')
+			throw new UserBadRequest('Invalid credentials', 'Invalid group id')
 
 		const result = await InvitationModel.Accept({
 			groupId,
@@ -114,17 +113,17 @@ const Controller = {
 		return result
 	},
 	Cancel: async (req: Request, _res: Response): Promise<boolean> => {
-		// body = { _id } => invitationId
-		const accessToken = GetAccessToken({ req })
-		const { groupId } = req.body
-		if (!groupId)
+		// body = { groupId, account }
+		const { groupId, account } = req.body
+
+		if (!account)
 			throw new UserBadRequest('Missing data', 'Missing invitation id')
-		if (!Types.ObjectId.isValid(groupId))
-			throw new UserBadRequest('Invalid credentials', 'Invalid invitation id')
+		if(!AccountValidator(account))
+			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 		const result = await InvitationModel.Delete({
 			groupId,
-			account: accessToken.account,
+			account,
 		})
 
 		if (!result)

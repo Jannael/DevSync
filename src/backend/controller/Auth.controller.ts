@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
-import cookiesConfig from '../config/Cookies.config'
+import cookiesConfig from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
@@ -43,7 +43,7 @@ const Controller = {
 				content: { code, account: req.body.account },
 			})
 
-			res.cookie(CookiesKeys.code, jwtEncrypt, cookiesConfig.code)
+			res.cookie(CookiesKeys.code, jwtEncrypt, cookiesConfig['5m'])
 			return true
 		},
 		AccessToken: async (req: Request, res: Response): Promise<boolean> => {
@@ -135,36 +135,34 @@ const Controller = {
 		if (req.body.code !== decodedCode.code)
 			throw new UserBadRequest('Invalid credentials', 'Wrong code')
 
-		res.clearCookie('code')
-
 		const encrypted = GenerateAuth({
 			content: { account: decodedCode.account },
 		})
 
-		res.cookie(CookiesKeys.account, encrypted, cookiesConfig.code)
+		res.cookie(CookiesKeys.account, encrypted, cookiesConfig['5m'])
+		res.clearCookie('code')
+
 		return true
 	},
 	Account: {
 		RequestCode: async (req: Request, res: Response): Promise<boolean> => {
 			// body = { newAccount, TEST_PWD }
-			if (req.body.newAccount === undefined)
+			const { newAccount, TEST_PWD } = req.body
+			if (newAccount === undefined)
 				throw new UserBadRequest('Missing data', 'Missing new account')
-			if (!AccountValidator(req.body.newAccount))
+			if (!AccountValidator(newAccount))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 			const accessToken = GetAccessToken({ req })
-			const code = GenerateCode(req.body.TEST_PWD)
-			const codeNewAccount = GenerateCode(req.body.TEST_PWD)
+			const code = GenerateCode(TEST_PWD)
+			const codeNewAccount = GenerateCode(TEST_PWD)
 
 			if (!req.body.TEST_PWD) {
 				await SendEmail({ account: accessToken.account, code })
-				await SendEmail({
-					account: req.body.newAccount,
-					code: codeNewAccount,
-				})
+				await SendEmail({ account: newAccount, code: codeNewAccount })
 			}
 
-			if (accessToken.account === req.body.newAccount)
+			if (accessToken.account === newAccount)
 				throw new UserBadRequest(
 					'Invalid credentials',
 					'The new account can not be the same as the current one',
@@ -173,45 +171,45 @@ const Controller = {
 			const codeEncrypted = GenerateAuth({ content: { code } })
 
 			const codeNewAccountEncrypted = GenerateAuth({
-				content: { code: codeNewAccount, account: req.body.newAccount },
+				content: { code: codeNewAccount, account: newAccount },
 			})
 
 			res.cookie(
 				CookiesKeys.codeCurrentAccount,
 				codeEncrypted,
-				cookiesConfig.code,
+				cookiesConfig['10m'],
 			)
 			res.cookie(
 				CookiesKeys.codeNewAccount,
 				codeNewAccountEncrypted,
-				cookiesConfig.codeNewAccount,
+				cookiesConfig['10m'],
 			)
-
 			return true
 		},
 		Change: async (req: Request, res: Response): Promise<boolean> => {
 			// cookies = { codeCurrentAccount, codeNewAccount }
-			if (!req.body.codeCurrentAccount || !req.body.codeNewAccount)
+			const { codeCurrentAccount, codeNewAccount } = req.body
+			if (!codeCurrentAccount || !codeNewAccount)
 				throw new UserBadRequest(
 					'Missing data',
-					'Missing codeNewAccount or codeCurrentAccount',
+					'Missing code new account or code current account',
 				)
 
 			const code = GetAuth({
 				req,
 				tokenName: CookiesKeys.codeCurrentAccount,
 			})
-			const codeNewAccount = GetAuth({
+			const cookieNewAccount = GetAuth({
 				req,
 				tokenName: CookiesKeys.codeNewAccount,
 			})
 
-			if (code.code !== req.body.codeCurrentAccount)
+			if (code.code !== codeCurrentAccount)
 				throw new UserBadRequest(
 					'Invalid credentials',
 					'Invalid current account code',
 				)
-			if (codeNewAccount.code !== req.body.codeNewAccount)
+			if (cookieNewAccount.code !== codeNewAccount)
 				throw new UserBadRequest(
 					'Invalid credentials',
 					'Invalid new account code',
@@ -225,13 +223,13 @@ const Controller = {
 
 			const result = await UserModel.AccountUpdate({
 				_id: user._id,
-				account: codeNewAccount.account,
+				account: cookieNewAccount.account,
 			})
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 
 			const accessToken = GenerateAccessToken({
-				content: { ...user },
+				content: user,
 			})
 			const refreshToken = GenerateRefreshToken({
 				content: user,
@@ -256,51 +254,44 @@ const Controller = {
 	Pwd: {
 		RequestCode: async (req: Request, res: Response): Promise<boolean> => {
 			// body = { account, TEST_PWD }
-			if (!req.body.account)
-				throw new UserBadRequest('Missing data', 'Missing account')
-
-			if (!AccountValidator(req.body.account))
+			const { account, TEST_PWD } = req.body
+			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
+			if (!AccountValidator(account))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
-			const dbValidation = await AuthModel.Exists({
-				account: req.body.account,
-			})
-
+			const dbValidation = await AuthModel.Exists({ account })
 			if (!dbValidation) throw new NotFound('User not found')
 
-			const code = GenerateCode(req.body.TEST_PWD)
+			const code = GenerateCode(TEST_PWD)
+			if (!TEST_PWD) await SendEmail({ account, code })
 
-			if (!req.body.TEST_PWD)
-				await SendEmail({ account: req.body.account, code })
+			const hashCode = GenerateAuth({ content: { code, account } })
 
-			const hashCode = GenerateAuth({
-				content: { code, account: req.body.account },
-			})
-
-			res.cookie(CookiesKeys.pwdChange, hashCode, cookiesConfig.code)
+			res.cookie(CookiesKeys.pwdChange, hashCode, cookiesConfig['5m'])
 			return true
 		},
 		Change: async (req: Request, res: Response): Promise<boolean> => {
 			// cookies = { pwdChange }
 			// body = { code, newPwd }
-			if (!req.body.code || !req.body.newPwd)
-				throw new UserBadRequest('Missing data', 'Missing code or newPwd')
+			const { code, newPwd } = req.body
+			if (!code || !newPwd)
+				throw new UserBadRequest('Missing data', 'Missing code or new password')
 
-			const code = GetAuth({
+			const cookieCode = GetAuth({
 				req,
 				tokenName: CookiesKeys.pwdChange,
 			})
-			if (code.code !== req.body.code)
+			if (cookieCode.code !== code)
 				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
 			const user = await UserModel.Get({
-				account: code.account,
+				account: cookieCode.account,
 				projection: { ...ProjectionConfig.IRefreshToken },
 			})
 			if (!user || !user._id) throw new NotFound('User not found')
 
 			const savedInDB = await UserModel.Update({
-				data: { pwd: req.body.newPwd },
+				data: { pwd: newPwd },
 				_id: user._id,
 			})
 			if (!savedInDB)
@@ -333,17 +324,14 @@ const Controller = {
 	RefreshToken: {
 		Code: async (req: Request, res: Response): Promise<boolean> => {
 			// body = { account, pwd, TEST_PWD }
-			if (!req.body.account || !req.body.pwd)
+			const { account, pwd, TEST_PWD } = req.body
+			if (!account || !pwd)
 				throw new UserBadRequest('Missing data', 'Missing account or password')
-			if (!AccountValidator(req.body.account))
+			if (!AccountValidator(account))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
-			const code = GenerateCode(req.body.TEST_PWD)
-
-			const user = await AuthModel.Login({
-				account: req.body.account,
-				pwd: req.body.pwd,
-			})
+			const code = GenerateCode(TEST_PWD)
+			const user = await AuthModel.Login({ account, pwd })
 
 			if (!user)
 				throw new UserBadRequest(
@@ -351,20 +339,16 @@ const Controller = {
 					'Invalid account or password',
 				)
 
-			if (!req.body.TEST_PWD)
-				await SendEmail({ account: req.body.account, code })
+			if (!TEST_PWD) await SendEmail({ account, code })
 
-			const token = GenerateAuth({
-				content: user,
-			})
-
+			const token = GenerateAuth({ content: user })
 			const hashCode = GenerateAuth({ content: { code } })
 
-			res.cookie(CookiesKeys.genericToken, token, cookiesConfig.code)
+			res.cookie(CookiesKeys.genericToken, token, cookiesConfig['5m'])
 			res.cookie(
 				CookiesKeys.refreshTokenRequestCode,
 				hashCode,
-				cookiesConfig.code,
+				cookiesConfig['5m'],
 			)
 
 			return true
@@ -372,10 +356,11 @@ const Controller = {
 		Confirm: async (req: Request, res: Response): Promise<boolean> => {
 			// cookies = { genericToken, refreshTokenRequestCode }
 			// body = { code }
-			if (!req.body.code)
+			const {code} = req.body
+			if (!code)
 				throw new UserBadRequest('Missing data', 'Missing code')
 
-			const code = GetAuth({
+			const cookieCode = GetAuth({
 				req,
 				tokenName: CookiesKeys.refreshTokenRequestCode,
 			})
@@ -384,7 +369,7 @@ const Controller = {
 				tokenName: CookiesKeys.genericToken,
 			})
 
-			if (code.code !== req.body.code)
+			if (cookieCode.code !== code)
 				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
 			delete user.iat

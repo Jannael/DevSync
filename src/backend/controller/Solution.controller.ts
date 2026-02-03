@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express'
 import { Types } from 'mongoose'
-import Roles from '../constant/Role.constant'
 import {
 	Forbidden,
 	NotFound,
@@ -8,19 +7,23 @@ import {
 	UserBadRequest,
 } from '../error/Error.instances'
 import type { ISolution } from '../interface/Solution'
-import type { ITask } from '../interface/Task'
 import SolutionModel from '../model/Solution.model'
 import TaskModel from '../model/Task.model'
+import hasTaskAccess from '../utils/hasTaskAccess.utils'
 import {
 	SolutionPartialValidator,
 	SolutionValidator,
 } from '../validator/schemas/Solution.schema'
-import hasTaskAccess from '../utils/hasTaskAccess.utils'
 
-// all the routes for this controller uses RoleMiddleware so
+// all the routes for this controller uses **RoleMiddleware** so
 // 1.groupId is validated and exists
 // 2.role is validated
 // 3.accessToken at req.body.accessToken
+
+// here is important to know the middleware only validates if the user is in group with the required role
+// but this does not mean that the _id for the task/solution the user is sending belongs to the group
+// this allows users to create solutions/tasks for other groups where they have the required role
+// so keep this in mind, for this i have the Exists function in both task and solution models
 
 const Controller = {
 	Get: async (
@@ -30,9 +33,9 @@ const Controller = {
 		// body = { _id  => solutionId }
 		const { _id, groupId } = req.body
 
-		if (!_id) throw new UserBadRequest('Missing data', 'Missing solutionId')
+		if (!_id) throw new UserBadRequest('Missing data', 'Missing solution id')
 		if (!Types.ObjectId.isValid(_id))
-			throw new UserBadRequest('Invalid credentials', 'Invalid solutionId')
+			throw new UserBadRequest('Invalid credentials', 'Invalid solution id')
 
 		const solutionBelongsToGroup = await SolutionModel.Exists({
 			_id,
@@ -57,7 +60,11 @@ const Controller = {
 		// body = { data, accessToken, role, groupId } (accessToken, groupId and role come from RoleMiddleware)
 		const { data, accessToken, role, groupId } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing solution data')
-		const solution = SolutionValidator({ ...data, groupId, user: accessToken.account })
+		const solution = SolutionValidator({
+			...data,
+			groupId,
+			user: accessToken.account,
+		})
 
 		const taskExists = await TaskModel.Exists({ _id: solution._id, groupId })
 		if (!taskExists)
@@ -89,11 +96,10 @@ const Controller = {
 		return result
 	},
 	Update: async (req: Request, _res: Response): Promise<boolean> => {
-		// body = { _id, data, accessToken, role } => solutionId
+		// body = { _id, data, accessToken, role, groupId } => solutionId
 		const { _id, data, accessToken, role, groupId } = req.body
 
-		if (!_id)
-			throw new UserBadRequest('Missing data', 'Missing solution id')
+		if (!_id) throw new UserBadRequest('Missing data', 'Missing solution id')
 		if (!Types.ObjectId.isValid(_id))
 			throw new UserBadRequest('Invalid credentials', 'Invalid solution id')
 		if (!data) throw new UserBadRequest('Missing data', 'Missing solution data')
@@ -107,7 +113,7 @@ const Controller = {
 				'Access denied',
 				'Solution does not belong to the group',
 			)
-		
+
 		const solutionData = SolutionPartialValidator(data)
 		if (Object.keys(solutionData).length === 0)
 			throw new UserBadRequest('Missing data', 'No data to update')
@@ -157,8 +163,13 @@ const Controller = {
 			projection: { user: 1 },
 		})
 		if (!task) throw new NotFound('Task not found')
-
-		if (!hasTaskAccess({task: task.user, userAccount: accessToken.account, role})) {
+		if (
+			!hasTaskAccess({
+				task: task.user,
+				userAccount: accessToken.account,
+				role,
+			})
+		) {
 			throw new Forbidden(
 				'Access denied',
 				'You must be assigned to this task or be a techLead to delete this solution',

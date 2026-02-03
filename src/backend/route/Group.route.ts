@@ -11,8 +11,10 @@ router.post(
 	Adapter.get,
 )
 router.post('/create/', Adapter.create)
-router.post('/add/', Adapter.create)
 router.put('/update/', RoleMiddleware([Roles.techLead]), Adapter.update)
 router.delete('/delete/', RoleMiddleware([Roles.techLead]), Adapter.delete)
+
+router.post('/add/', Adapter.create) // add with groupId
+router.post('/quit/', Adapter.create) // quit with groupId
 
 export default router

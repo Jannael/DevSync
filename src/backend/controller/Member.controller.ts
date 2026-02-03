@@ -1,6 +1,10 @@
 import type { Request, Response } from 'express'
 import Roles from '../constant/Role.constant'
-import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instances'
+import {
+	Forbidden,
+	ServerError,
+	UserBadRequest,
+} from '../error/Error.instances'
 import type { IMember } from '../interface/Member'
 import MemberModel from '../model/Member.model'
 import AccountValidator from '../validator/Account.validator'
@@ -25,16 +29,10 @@ const Controller = {
 		const { groupId, account, role } = req.body
 
 		if (!account || !role) {
-			throw new UserBadRequest(
-				'Missing data',
-				'Missing account or role',
-			)
+			throw new UserBadRequest('Missing data', 'Missing account or role')
 		}
-
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
-
-		// Validate that the role is valid
 		const validRoles = [Roles.developer, Roles.documenter, Roles.techLead]
 		if (!validRoles.includes(role))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
@@ -54,16 +52,14 @@ const Controller = {
 		// body = { groupId, account }
 		const { groupId, account } = req.body
 
-		if(!account) {
+		if (!account) {
 			throw new UserBadRequest('Missing data', 'Missing groupId or account')
 		}
-
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 		// Check if the user to be removed is a techLead
 		const userRole = await MemberModel.GetRole({ groupId, account })
-
 		if (userRole === Roles.techLead) {
 			// Get all members to count how many techLeads exist
 			const allMembers = await MemberModel.GetForGroup({ groupId })
@@ -74,12 +70,10 @@ const Controller = {
 					'Could not verify group members',
 				)
 
-			// Count techLeads
 			const techLeadCount = allMembers.filter(
 				(member) => member.role === Roles.techLead,
 			).length
 
-			// Prevent removal if this is the last techLead
 			if (techLeadCount <= 1) {
 				throw new Forbidden(
 					'Access denied',
@@ -88,10 +82,7 @@ const Controller = {
 			}
 		}
 
-		const result = await MemberModel.RemoveUser({
-			groupId,
-			account,
-		})
+		const result = await MemberModel.RemoveUser({ groupId, account })
 
 		if (!result)
 			throw new ServerError('Operation Failed', 'The member was not removed')

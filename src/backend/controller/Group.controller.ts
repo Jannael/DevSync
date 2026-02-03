@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import Roles from '../constant/Role.constant'
-import { ServerError, UserBadRequest } from '../error/Error.instances'
+import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IGroup } from '../interface/Group'
 import Model from './../model/Group.model'
 import InvitationModel from '../model/Invitation.model'
@@ -11,11 +11,13 @@ import {
 	GroupValidator,
 } from '../validator/schemas/Group.schema'
 
+// todo join and quit group
+
 const Controller = {
 	Get: async (req: Request, _res: Response): Promise<IGroup> => {
 		// body = { groupId }
 		const group = await Model.Get({ _id: req.body.groupId })
-		if (!group) throw new UserBadRequest('Invalid credentials', 'Invalid group')
+		if (!group) throw new NotFound('Group not found')
 
 		return group
 	},

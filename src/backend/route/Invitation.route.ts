@@ -5,10 +5,7 @@ import RoleMiddleware from '../middleware/Role.middleware'
 const router = Router()
 
 router.get('/get/user/')
-router.post(
-	'/get/group/',
-	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
-)
+router.post('/get/group/', RoleMiddleware([Roles.techLead]))
 
 router.patch('/update/role/', RoleMiddleware([Roles.techLead]))
 router.post('/create/', RoleMiddleware([Roles.techLead]))

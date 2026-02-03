@@ -18,12 +18,12 @@ const RoleMiddleware = (roles: Array<IRole>) => {
 			if (groupId === undefined)
 				throw new UserBadRequest(
 					'Missing data',
-					'You need to provide a groupId',
+					'Missing group id',
 				)
 			if (!Types.ObjectId.isValid(groupId))
 				throw new UserBadRequest(
 					'Invalid credentials',
-					'The groupId is invalid',
+					'Invalid group id',
 				)
 
 			const memberRole = await memberModel.GetRole({

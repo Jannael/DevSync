@@ -38,13 +38,13 @@ const InvitationModel = {
 	}),
 	GetRole: CreateModel<
 		{ groupId: Types.ObjectId; account: string },
-		string | null
+		string
 	>({
 		Model: async ({ groupId, account }) => {
 			const member = await dbModel
 				.findOne({ groupId, account, isInvitation: true }, { role: 1 })
 				.lean()
-			return member ? member.role : null
+			return member ? member.role : undefined
 		},
 		DefaultError: new DatabaseError(
 			'Failed to access data',

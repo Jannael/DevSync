@@ -8,7 +8,7 @@ const MemberModel = {
 	GetForUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }) => {
 			const groups = await dbModel.find({ account, isInvitation: false }).lean<IMember[]>()
-			return groups
+			return groups || []
 		},
 		DefaultError: new DatabaseError(
 			'Failed to access data',
@@ -18,7 +18,7 @@ const MemberModel = {
 	GetForGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }) => {
 			const users = await dbModel.find({ groupId, isInvitation: false }).lean<IMember[]>()
-			return users
+			return users || []
 		},
 		DefaultError: new DatabaseError(
 			'Failed to access data',

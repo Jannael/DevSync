@@ -1,4 +1,3 @@
-import { Types } from 'mongoose'
 import { z } from 'zod'
 import CreateValidator from '../../utils/helper/CreateValidator.helper'
 import PasswordSchema from './Password.schema'

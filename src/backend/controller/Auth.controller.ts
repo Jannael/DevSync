@@ -21,6 +21,7 @@ import SendEmail from '../service/SendEmail.service'
 import GenerateCode from '../utils/auth/GenerateCode.utils'
 import RemoveCookies from '../utils/RemoveCookies.utils'
 import AccountValidator from '../validator/Account.validator'
+import { PasswordValidator } from '../validator/schemas/Password.schema'
 
 dotenv.config({ quiet: true })
 const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } =
@@ -268,6 +269,7 @@ const Controller = {
 			const { code, newPwd } = req.body
 			if (!code || !newPwd)
 				throw new UserBadRequest('Missing data', 'Missing code or new password')
+			const validPwd = PasswordValidator({ password: newPwd })
 
 			const cookieCode = GetAuth({
 				req,
@@ -278,12 +280,12 @@ const Controller = {
 
 			const user = await UserModel.Get({
 				account: cookieCode.account,
-				projection: { ...ProjectionConfig.IRefreshToken },
+				projection: ProjectionConfig.IRefreshToken,
 			})
 			if (!user || !user._id) throw new NotFound('User not found')
 
 			const savedInDB = await UserModel.Update({
-				data: { pwd: newPwd },
+				data: { pwd: validPwd.password },
 				_id: user._id,
 			})
 			if (!savedInDB)

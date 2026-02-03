@@ -7,7 +7,7 @@ import type { ITaskListItem } from '../interface/TaskList'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const TaskModel = {
-	List: CreateModel<
+	ListForTechLead: CreateModel<
 		{ groupId: Types.ObjectId; skip: number; limit: number },
 		ITaskListItem[]
 	>({
@@ -23,6 +23,24 @@ const TaskModel = {
 		DefaultError: new DatabaseError(
 			'Failed to access data',
 			'The task was not retrieved please try again',
+		),
+	}),
+	ListForMember: CreateModel<
+		{ groupId: Types.ObjectId; account: string; skip: number; limit: number },
+		ITaskListItem[]
+	>({
+		Model: async ({ groupId, account, skip, limit }) => {
+			const response = await dbModel
+				.find({ groupId, user: account }, Config.ITaskListItem)
+				.skip(skip)
+				.limit(limit)
+				.lean<ITaskListItem[]>()
+
+			return response
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The tasks assigned to the user were not retrieved please try again',
 		),
 	}),
 	Get: CreateModel<

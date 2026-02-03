@@ -7,8 +7,10 @@ import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { NotFound, ServerError, UserBadRequest } from '../error/Error.instances'
 import type { IEnv } from '../interface/Env'
-import type { IRefreshToken, IUser } from '../interface/User'
+import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
+import InvitationModel from '../model/Invitation.model'
+import MemberModel from '../model/Member.model'
 import UserModel from '../model/User.model'
 import Decrypt from '../secret/DecryptToken.utils'
 import {
@@ -154,7 +156,7 @@ const Controller = {
 			const code = GenerateCode(TEST_PWD)
 			const codeNewAccount = GenerateCode(TEST_PWD)
 
-			if (!req.body.TEST_PWD) {
+			if (!TEST_PWD) {
 				await SendEmail({ account: accessToken.account, code })
 				await SendEmail({ account: newAccount, code: codeNewAccount })
 			}
@@ -185,7 +187,9 @@ const Controller = {
 		},
 		Change: async (req: Request, res: Response): Promise<boolean> => {
 			// cookies = { codeCurrentAccount, codeNewAccount }
+			const accessToken = GetAccessToken({ req })
 			const { codeCurrentAccount, codeNewAccount } = req.body
+
 			if (!codeCurrentAccount || !codeNewAccount)
 				throw new UserBadRequest(
 					'Missing data',
@@ -212,11 +216,26 @@ const Controller = {
 					'Invalid new account code',
 				)
 
-			const user: IUser | undefined = await UserModel.Get({
-				account: code.account,
-				projection: { ...ProjectionConfig.IRefreshToken },
+			const user = await UserModel.Get({
+				account: accessToken.account,
+				projection: ProjectionConfig.IRefreshToken,
 			})
 			if (!user) throw new NotFound('User not found')
+
+			const updateGroupMembership = await MemberModel.UpdateAccount({
+				oldAccount: accessToken.account,
+				newAccount: cookieNewAccount.account,
+			})
+			const updateInvitation = await InvitationModel.UpdateAccount({
+				oldAccount: accessToken.account,
+				newAccount: cookieNewAccount.account,
+			})
+
+			if (!updateGroupMembership || !updateInvitation)
+				throw new ServerError(
+					'Operation Failed',
+					'The group membership or invitation was not updated',
+				)
 
 			const result = await UserModel.Update({
 				_id: user._id,
@@ -225,7 +244,7 @@ const Controller = {
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 
-			const accessToken = GenerateAccessToken({ content: user })
+			const newAccessToken = GenerateAccessToken({ content: user })
 			const refreshToken = GenerateRefreshToken({ content: user })
 
 			res.cookie(
@@ -235,7 +254,7 @@ const Controller = {
 			)
 			res.cookie(
 				CookiesKeys.accessToken,
-				accessToken,
+				newAccessToken,
 				cookiesConfig.accessToken,
 			)
 			res.clearCookie(CookiesKeys.codeCurrentAccount)

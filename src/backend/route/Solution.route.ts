@@ -1,29 +1,13 @@
 import { Router } from 'express'
 import Adapter from '../adapter/Solution.adapter'
-import Roles from '../constant/Role.constant'
+import Roles, { ValidRoles } from '../constant/Role.constant'
 import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post(
-	'/get/',
-	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
-	Adapter.get,
-)
-router.put(
-	'/update/',
-	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
-	Adapter.update,
-)
-router.post(
-	'/create/',
-	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
-	Adapter.create,
-)
-router.delete(
-	'/delete/',
-	RoleMiddleware([Roles.techLead, Roles.developer, Roles.documenter]),
-	Adapter.delete,
-)
+router.post('/get/', RoleMiddleware(ValidRoles), Adapter.get)
+router.put('/update/', RoleMiddleware(ValidRoles), Adapter.update)
+router.post('/create/', RoleMiddleware(ValidRoles), Adapter.create)
+router.delete('/delete/', RoleMiddleware(ValidRoles), Adapter.delete)
 
 export default router

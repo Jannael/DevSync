@@ -4,12 +4,6 @@ import CreateValidator from '../../utils/helper/CreateValidator.helper'
 import CodeFieldSchema from './CodeField.schema'
 
 export const TaskSchema = z.object({
-	_id: z.custom<Types.ObjectId>(
-		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
-		},
-		{ message: 'Invalid task id' },
-	),
 	groupId: z.custom<Types.ObjectId>(
 		(val) => {
 			return Types.ObjectId.isValid(val as string | number)

@@ -1,4 +1,5 @@
 import type { Types } from 'mongoose'
+import type { IPagination } from './Pagination'
 export interface ITaskListItem {
 	_id: Types.ObjectId
 	name: string
@@ -10,4 +11,5 @@ export interface ITaskListItem {
 export interface ITaskList {
 	task: ITaskListItem[]
 	assign: Types.ObjectId[] // task id for the tasks the user is assigned to
+	metadata: IPagination
 }

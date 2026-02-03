@@ -136,7 +136,7 @@ const Controller = {
 		})
 
 		res.cookie(CookiesKeys.account, encrypted, cookiesConfig['5m'])
-		res.clearCookie('code')
+		res.clearCookie(CookiesKeys.code)
 
 		return true
 	},
@@ -217,9 +217,9 @@ const Controller = {
 			})
 			if (!user) throw new NotFound('User not found')
 
-			const result = await UserModel.AccountUpdate({
+			const result = await UserModel.Update({
 				_id: user._id,
-				account: cookieNewAccount.account,
+				data: { account: cookieNewAccount.account },
 			})
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')

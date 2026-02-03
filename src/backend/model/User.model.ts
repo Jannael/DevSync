@@ -43,7 +43,7 @@ const UserModel = {
 		),
 	}),
 	Update: CreateModel<
-		{ data: Omit<Partial<IUser>, 'account'>; _id: Types.ObjectId },
+		{ data: Partial<IUser>; _id: Types.ObjectId },
 		boolean
 	>({
 		Model: async ({ data, _id }) => {
@@ -70,19 +70,7 @@ const UserModel = {
 			'Failed to remove',
 			'The user was not deleted, something went wrong please try again',
 		),
-	}),
-	AccountUpdate: CreateModel<{ _id: Types.ObjectId; account: string }, boolean>(
-		{
-			Model: async ({ _id, account }) => {
-				const response = await dbModel.updateOne({ _id }, { account })
-				return response.acknowledged
-			},
-			DefaultError: new DatabaseError(
-				'Failed to save',
-				'The account was not updated, something went wrong please try again',
-			),
-		},
-	),
+	})
 }
 
 export default UserModel

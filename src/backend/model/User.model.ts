@@ -28,7 +28,7 @@ const UserModel = {
 		},
 		DefaultError: new DatabaseError('Failed to access data'),
 	}),
-	Create: CreateModel<{ data: IUser }, IRefreshToken>({
+	Create: CreateModel<{ data: Omit<IUser, 'refreshToken' | '_id'> }, IRefreshToken>({
 		Model: async ({ data }) => {
 			const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
 			const hashedPwd = await bcrypt.hash(data.pwd, salt)

@@ -4,12 +4,6 @@ import CreateValidator from '../../utils/helper/CreateValidator.helper'
 import PasswordSchema from './Password.schema'
 
 export const UserSchema = z.object({
-	_id: z.custom<Types.ObjectId>(
-		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
-		},
-		{ message: 'Invalid user id' },
-	),
 	fullName: z
 		.string()
 		.min(1, 'fullName is required')
@@ -25,7 +19,6 @@ export const UserSchema = z.object({
 		.min(1, 'nickName is required')
 		.max(100, 'nickName must be at most 100 characters')
 		.nullable(),
-	refreshToken: z.array(z.string()).nullable(),
 })
 
 export const UserSchemaPartial = UserSchema.partial()

@@ -28,22 +28,22 @@ const TaskModel = {
 	Get: CreateModel<
 		{
 			_id: Types.ObjectId
-			projection?: { [key: string]: 0 | 1 | boolean }
+			projection: Partial<Record<keyof ITask, 0 | 1>>
 		},
-		Partial<ITask | null>
+		ITask
 	>({
 		Model: async ({ _id, projection = {} }) => {
 			const res = await dbModel.findOne({ _id }, projection).lean<ITask>()
-			return res || null
+			return res || undefined
 		},
 		DefaultError: new DatabaseError(
 			'Failed to access data',
 			'The task was not retrieved please try again',
 		),
 	}),
-	Exists: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const res = await dbModel.exists({ _id })
+	Exists: CreateModel<{ _id: Types.ObjectId, groupId: Types.ObjectId }, boolean>({
+		Model: async ({ _id, groupId }) => {
+			const res = await dbModel.exists({ _id, groupId })
 			if (!res) return false
 			return true
 		},

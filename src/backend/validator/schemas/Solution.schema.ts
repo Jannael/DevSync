@@ -32,7 +32,11 @@ export const SolutionSchema = z.object({
 		.max(1000, 'description must be at most 1000 characters'),
 })
 
-export const SolutionSchemaPartial = SolutionSchema.partial()
+export const SolutionSchemaPartial = SolutionSchema.pick({
+	code: true,
+	description: true,
+	feature: true,
+}).partial()
 
 export type SolutionType = z.infer<typeof SolutionSchema>
 

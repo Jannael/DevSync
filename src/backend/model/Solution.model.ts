@@ -8,17 +8,32 @@ const SolutionModel = {
 	Get: CreateModel<
 		{
 			_id: Types.ObjectId
-			projection?: { [key: string]: 0 | 1 | boolean }
+			projection: Partial<Record<keyof ISolution, 0 | 1>>
 		},
-		Partial<ISolution | null>
+		ISolution
 	>({
 		Model: async ({ _id, projection = {} }) => {
 			const res = await dbModel.findOne({ _id }, projection).lean<ISolution>()
+			if (!res) return
 			return res
 		},
 		DefaultError: new DatabaseError(
 			'Failed to access data',
 			'The solution was not retrieved please try again',
+		),
+	}),
+	Exists: CreateModel<
+		{ _id: Types.ObjectId; groupId: Types.ObjectId },
+		boolean
+	>({
+		Model: async ({ _id, groupId }) => {
+			const res = await dbModel.exists({ _id, groupId })
+			if (!res) return false
+			return true
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The solution existence could not be verified, please try again',
 		),
 	}),
 	Create: CreateModel<{ data: ISolution }, ISolution>({

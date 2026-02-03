@@ -7,13 +7,16 @@ import {
 	UserBadRequest,
 } from '../error/Error.instances'
 import type { IMember } from '../interface/Member'
-import type { IRefreshToken, IUser } from '../interface/User'
+import type { IRefreshToken } from '../interface/User'
 import InvitationModel from '../model/Invitation.model'
 import MemberModel from '../model/Member.model'
 import UserModel from '../model/User.model'
 import { GetAccessToken, GetAuth } from '../secret/GetToken'
 import { PasswordValidator } from '../validator/schemas/Password.schema'
-import { UserPartialValidator, UserValidator } from '../validator/schemas/User.schema'
+import {
+	UserPartialValidator,
+	UserValidator,
+} from '../validator/schemas/User.schema'
 
 const Controller = {
 	Get: async (req: Request, _res: Response): Promise<IRefreshToken> => {
@@ -43,22 +46,10 @@ const Controller = {
 
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
 
-		// Filter allowed fields: fullName, nickName, pwd
-		const allowedFields: Partial<IUser> = {}
-		if (data.fullName !== undefined) allowedFields.fullName = data.fullName
-		if (data.nickName !== undefined) allowedFields.nickName = data.nickName
-		if (data.pwd !== undefined) {
-			PasswordValidator({ password: data.pwd })
-			allowedFields.pwd = data.pwd
-		}
-
-		const validatedData = UserPartialValidator(allowedFields)
-
+		if (data.pwd !== undefined) PasswordValidator({ password: data.pwd })
+		const validatedData = UserPartialValidator({ ...data, account: undefined }) //account always undefined so it can not be updated here
 		if (Object.keys(validatedData).length === 0) {
-			throw new UserBadRequest(
-				'Missing data',
-				'Missing data to update',
-			)
+			throw new UserBadRequest('Missing data', 'Missing data to update')
 		}
 
 		const result = await UserModel.Update({
@@ -72,13 +63,13 @@ const Controller = {
 
 		return result
 	},
-  Create: async (req: Request, _res: Response): Promise<IRefreshToken> => {
+	Create: async (req: Request, _res: Response): Promise<IRefreshToken> => {
 		GetAuth({ req, tokenName: CookiesKeys.account })
 
 		const { data } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
 
-    const validatedData = UserValidator(data)
+		const validatedData = UserValidator(data)
 		const result = await UserModel.Create({ data: validatedData })
 
 		if (!result) {

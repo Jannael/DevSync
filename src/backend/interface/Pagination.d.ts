@@ -3,8 +3,8 @@ export interface IPagination {
 	totalPages: number
 	currentPage: number
 	pageSize: number
-	nextPageUrl: string
-	prevPageUrl: string
+	nextPageUrl: string | null
+	prevPageUrl: string | null
 	hasNextPage: boolean
 	hasPrevPage: boolean
 }

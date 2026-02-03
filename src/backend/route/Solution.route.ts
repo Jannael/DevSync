@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import Adapter from '../adapter/Solution.adapter'
-import Roles, { ValidRoles } from '../constant/Role.constant'
+import { ValidRoles } from '../constant/Role.constant'
 import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()

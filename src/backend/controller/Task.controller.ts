@@ -11,6 +11,7 @@ import {
 import type { ITask } from '../interface/Task'
 import type { ITaskList, ITaskListItem } from '../interface/TaskList'
 import TaskModel from '../model/Task.model'
+import GetPaginationMetadata from '../utils/GetPaginationMetadata.utils'
 import {
 	TaskPartialValidator,
 	TaskValidator,
@@ -56,10 +57,12 @@ const Controller = {
 		const limit = PaginationConfig.taskLimit
 
 		let tasks: ITaskListItem[] | undefined
+		let count: number | undefined
 
 		// TechLead gets all tasks, other roles get only their assigned tasks
 		if (role === Roles.techLead) {
 			tasks = await TaskModel.ListForTechLead({ groupId, skip, limit })
+			count = await TaskModel.CountForTechLead({ groupId })
 		} else {
 			tasks = await TaskModel.ListForMember({
 				groupId,
@@ -67,9 +70,13 @@ const Controller = {
 				skip,
 				limit,
 			})
+			count = await TaskModel.CountForUser({
+				groupId,
+				account: accessToken.account,
+			})
 		}
 
-		if (!tasks)
+		if (!tasks || !count)
 			throw new ServerError('Operation Failed', 'The tasks were not retrieved')
 
 		const assign = tasks
@@ -79,7 +86,13 @@ const Controller = {
 		return {
 			task: tasks,
 			// if the role is not techLead assign empty because all the task are assigned to the user
-			assign: role === Roles.techLead ? assign : [], 
+			assign: role === Roles.techLead ? assign : [],
+			metadata: GetPaginationMetadata({
+				totalItems: count,
+				currentPage: page,
+				pageSize: PaginationConfig.taskLimit,
+				req,
+			}),
 		}
 	},
 	Create: async (req: Request, _res: Response): Promise<ITask> => {

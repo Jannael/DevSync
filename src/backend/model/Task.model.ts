@@ -31,7 +31,10 @@ const TaskModel = {
 	>({
 		Model: async ({ groupId, account, skip, limit }) => {
 			const response = await dbModel
-				.find({ groupId, user: account }, Config.ITaskListItem)
+				.find(
+					{ groupId, user: account, isComplete: false },
+					Config.ITaskListItem,
+				)
 				.skip(skip)
 				.limit(limit)
 				.lean<ITaskListItem[]>()
@@ -41,6 +44,33 @@ const TaskModel = {
 		DefaultError: new DatabaseError(
 			'Failed to access data',
 			'The tasks assigned to the user were not retrieved please try again',
+		),
+	}),
+	CountForTechLead: CreateModel<{ groupId: Types.ObjectId }, number>({
+		Model: async ({ groupId }) => {
+			const total = await dbModel.countDocuments({ groupId })
+			return total
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The total number of tasks could not be retrieved, please try again',
+		),
+	}),
+	CountForUser: CreateModel<
+		{ groupId: Types.ObjectId; account: string },
+		number
+	>({
+		Model: async ({ groupId, account }) => {
+			const total = await dbModel.countDocuments({
+				groupId,
+				user: account,
+				isComplete: false,
+			})
+			return total
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'The total number of user tasks could not be retrieved, please try again',
 		),
 	}),
 	Get: CreateModel<
@@ -59,7 +89,10 @@ const TaskModel = {
 			'The task was not retrieved please try again',
 		),
 	}),
-	Exists: CreateModel<{ _id: Types.ObjectId, groupId: Types.ObjectId }, boolean>({
+	Exists: CreateModel<
+		{ _id: Types.ObjectId; groupId: Types.ObjectId },
+		boolean
+	>({
 		Model: async ({ _id, groupId }) => {
 			const res = await dbModel.exists({ _id, groupId })
 			if (!res) return false

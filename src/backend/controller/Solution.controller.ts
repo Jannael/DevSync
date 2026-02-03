@@ -9,7 +9,7 @@ import {
 import type { ISolution } from '../interface/Solution'
 import SolutionModel from '../model/Solution.model'
 import TaskModel from '../model/Task.model'
-import hasTaskAccess from '../utils/hasTaskAccess.utils'
+import hasTaskAccess from '../utils/HasTaskAccess.utils'
 import {
 	SolutionPartialValidator,
 	SolutionValidator,

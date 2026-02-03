@@ -69,6 +69,12 @@ const Controller = {
 		const taskExists = await TaskModel.Exists({ _id: solution._id, groupId })
 		if (!taskExists)
 			throw new NotFound('Task not found', 'The task does not exist')
+		const solutionExists = await SolutionModel.Exists({
+			_id: solution._id,
+			groupId,
+		})
+		if (solutionExists)
+			throw new Forbidden('Access denied', 'Solution already exists')
 
 		const task = await TaskModel.Get({
 			_id: solution._id,

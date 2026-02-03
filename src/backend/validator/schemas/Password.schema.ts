@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import CreateValidator from '../../utils/helper/CreateValidator.helper'
 
 const PasswordSchema = z
 	.string()
@@ -16,5 +17,9 @@ const PasswordSchema = z
 	.refine((value) => /[!@#$%^&*(),.?":{}|<>]/.test(value), {
 		message: 'Must include at least one special character',
 	})
+
+export const PasswordValidator = CreateValidator(
+	z.object({ password: PasswordSchema }),
+)
 
 export default PasswordSchema

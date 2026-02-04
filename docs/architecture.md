@@ -2,23 +2,26 @@
 
 The flow for each request is simple and structured:
 
-**Router → Controller → Service → Model**
+Router → Controller → Service → Model
 
 ---
 
 ## 🧩 Layer Responsibilities
 
 ### 📍 Controller
+
 - response format
 - Errors are caught and propagated here.
 
 ### 🔐 service
+
 - business logic
 - Manages token operations: encryption, decryption, and JWT handling.
 - Configures options related to authentication and security.
 - Delegates data operations to the model layer.
 
 ### 🗄️ Model
+
 - Interfaces directly with the database.
 - Executes queries.
 - Handles data encryption and related errors the encryption to save in the database ONLY.

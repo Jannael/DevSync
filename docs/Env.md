@@ -1,9 +1,9 @@
-## Env variables
+# Env variables
 
 > [!IMPORTANT]
 > To obtain the **`PASSWORD_ENV`** variable for email functionality, you must generate an application-specific password (App Password) through your personal email settings, as standard passwords are often blocked.
 
-```
+```bash
 # Database
 DB_URL_ENV=''
 
@@ -48,6 +48,7 @@ HOST=''
 ```
 
 ## Host var
+
 must separate with coma each host
 
 ```javascript

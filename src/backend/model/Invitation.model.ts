@@ -91,12 +91,11 @@ const InvitationModel = {
 		{ oldAccount: string; newAccount: string },
 		boolean
 	>({
-		Model: async ({ oldAccount, newAccount }) => {
-			const updated = await dbModel.updateMany(
-				{ account: oldAccount, isInvitation: true },
-				{ account: newAccount },
-			)
-			return updated.acknowledged
+		Model: async () => {
+			//since calling this function does not make sense if you do not call MemberModel.UpdateAccount as well
+			// and both of this models refer to the same collection
+			// i will just mock this function
+			return true
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',
@@ -120,9 +119,9 @@ const InvitationModel = {
 	}),
 	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
 		// => if the group is deleted
-		Model: async ({ groupId }) => {
-			const deleted = await dbModel.deleteMany({ groupId, isInvitation: true })
-			return deleted.acknowledged
+		Model: async () => {
+			// same case that UpdateAccount
+			return true
 		},
 		DefaultError: new DatabaseError(
 			'Failed to remove',
@@ -131,9 +130,9 @@ const InvitationModel = {
 	}),
 	DeleteByUser: CreateModel<{ account: string }, boolean>({
 		// => remove all invitations sent to a user
-		Model: async ({ account }) => {
-			const deleted = await dbModel.deleteMany({ account, isInvitation: true })
-			return deleted.acknowledged
+		Model: async () => {
+			// same case that UpdateAccount and DeleteByGroup
+			return true
 		},
 		DefaultError: new DatabaseError(
 			'Failed to remove',

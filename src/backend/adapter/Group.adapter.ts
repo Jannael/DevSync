@@ -1,61 +1,13 @@
-import type { Request, Response } from 'express'
-import service from '../../controller/Group.controller'
-import type { CustomError } from '../../error/error'
-import ErrorHandler from '../../error/handler'
+import GroupController from '../controller/Group.controller'
+import CreateAdapter from '../utils/helper/CreateAdapter.helper'
 
-const controller = {
-	get: async (req: Request, res: Response) => {
-		try {
-			const result = await service.get(req, res)
-			res.json({ success: true, result })
-		} catch (e) {
-			ErrorHandler.user(res, e as CustomError)
-		}
-	},
-	create: async (req: Request, res: Response) => {
-		try {
-			const result = await service.create(req, res)
-			res.json({ success: true, result })
-		} catch (e) {
-			ErrorHandler.user(res, e as CustomError)
-		}
-	},
-	update: async (req: Request, res: Response) => {
-		try {
-			const result = await service.update(req, res)
-			res.json({ success: true, result })
-		} catch (e) {
-			ErrorHandler.user(res, e as CustomError)
-		}
-	},
-	delete: async (req: Request, res: Response) => {
-		try {
-			const result = await service.delete(req, res)
-			res.json({ success: result })
-		} catch (e) {
-			ErrorHandler.user(res, e as CustomError)
-		}
-	},
-	member: {
-		remove: async (req: Request, res: Response) => {
-			try {
-				const result = await service.member.remove(req, res)
-				res.json({ success: result })
-			} catch (e) {
-				ErrorHandler.user(res, e as CustomError)
-			}
-		},
-		update: {
-			role: async (req: Request, res: Response) => {
-				try {
-					const result = await service.member.update.role(req, res)
-					res.json({ success: result })
-				} catch (e) {
-					ErrorHandler.user(res, e as CustomError)
-				}
-			},
-		},
-	},
+const GroupAdapter = {
+	Get: CreateAdapter({ controller: GroupController.Get }),
+	Create: CreateAdapter({ controller: GroupController.Create }),
+	Update: CreateAdapter({ controller: GroupController.Update }),
+	Delete: CreateAdapter({ controller: GroupController.Delete }),
+	Join: CreateAdapter({ controller: GroupController.Join }),
+	Quit: CreateAdapter({ controller: GroupController.Quit }),
 }
 
-export default controller
+export default GroupAdapter

@@ -1,16 +1,16 @@
 import { Router } from 'express'
-import Adapter from '../adapter/Group.adapter'
+import GroupAdapter from '../adapter/Group.adapter'
 import Roles, { ValidRoles } from '../constant/Role.constant'
 import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post('/get/', RoleMiddleware(ValidRoles), Adapter.get)
-router.post('/create/', Adapter.create)
-router.put('/update/', RoleMiddleware([Roles.techLead]), Adapter.update)
-router.delete('/delete/', RoleMiddleware([Roles.techLead]), Adapter.delete)
+router.post('/get/', RoleMiddleware(ValidRoles), GroupAdapter.Get)
+router.post('/create/', GroupAdapter.Create)
+router.put('/update/', RoleMiddleware([Roles.techLead]), GroupAdapter.Update)
+router.delete('/delete/', RoleMiddleware([Roles.techLead]), GroupAdapter.Delete)
 
-router.post('/add/', Adapter.create) // add with groupId
-router.post('/quit/', RoleMiddleware(ValidRoles), Adapter.create) // quit with groupId
+router.post('/join/', RoleMiddleware(ValidRoles), GroupAdapter.Join)
+router.post('/quit/', RoleMiddleware(ValidRoles), GroupAdapter.Quit)
 
 export default router

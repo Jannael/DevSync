@@ -17,7 +17,7 @@ import {
 	GroupValidator,
 } from '../validator/schemas/Group.schema'
 
-const Controller = {
+const GroupController = {
 	Get: async (req: Request, _res: Response): Promise<IGroup> => {
 		// body = { groupId }
 		const group = await Model.Get({ _id: req.body.groupId })
@@ -140,4 +140,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default GroupController

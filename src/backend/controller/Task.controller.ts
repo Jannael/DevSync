@@ -27,7 +27,7 @@ import {
 // this allows users to create/update/delete tasks for other groups where they have the required role
 // so keep this in mind, for this i have the Exists function in task model
 
-const Controller = {
+const TaskController = {
 	Get: async (req: Request, _res: Response): Promise<ITask | undefined> => {
 		// body = { _id => taskId, groupId }
 		const { _id, groupId } = req.body
@@ -153,4 +153,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default TaskController

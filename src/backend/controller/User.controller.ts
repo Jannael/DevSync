@@ -18,7 +18,7 @@ import {
 	UserValidator,
 } from '../validator/schemas/User.schema'
 
-const Controller = {
+const UserController = {
 	Get: async (req: Request, _res: Response): Promise<IRefreshToken> => {
 		const accessToken = GetAccessToken({ req })
 		return accessToken
@@ -145,4 +145,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default UserController

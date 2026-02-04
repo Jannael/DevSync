@@ -25,7 +25,7 @@ import {
 // this allows users to create solutions/tasks for other groups where they have the required role
 // so keep this in mind, for this i have the Exists function in both task and solution models
 
-const Controller = {
+const SolutionController = {
 	Get: async (
 		req: Request,
 		_res: Response,
@@ -199,4 +199,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default SolutionController

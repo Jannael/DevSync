@@ -8,7 +8,7 @@ import { GetAccessToken } from '../secret/GetToken'
 import AccountValidator from '../validator/Account.validator'
 import { InvitationValidator } from '../validator/schemas/Invitation.schema'
 
-const Controller = {
+const InvitationController = {
 	GetForUser: async (req: Request, _res: Response): Promise<IInvitation[]> => {
 		const accessToken = GetAccessToken({ req })
 		const invitations = await InvitationModel.GetByUser({
@@ -142,4 +142,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default InvitationController

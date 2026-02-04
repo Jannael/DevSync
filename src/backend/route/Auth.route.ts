@@ -1,21 +1,21 @@
 import { Router } from 'express'
-import Adapter from '../adapter/Auth.adapter'
+import AuthAdapter from '../adapter/Auth.adapter'
 
 const router = Router()
 
-router.post('/request/code/', Adapter.request.code)
-router.post('/verify/code/', Adapter.verify.code)
+router.post('/request/code/', AuthAdapter.RequestCode)
+router.post('/verify/code/', AuthAdapter.VerifyCode)
 
-router.get('/request/accessToken/', Adapter.request.accessToken)
-router.post('/request/refreshToken/code/', Adapter.request.refreshToken.code)
-router.post('/request/refreshToken/', Adapter.request.refreshToken.confirm)
+router.get('/request/accessToken/', AuthAdapter.RequestAccessToken)
+router.post('/request/refreshToken/code/', AuthAdapter.RequestRefreshTokenCode)
+router.post('/request/refreshToken/', AuthAdapter.RequestRefreshToken)
 
-router.patch('/account/request/code/', Adapter.account.request.code)
-router.patch('/change/account/', Adapter.account.verify.code)
+router.patch('/account/request/code/', AuthAdapter.AccountRequestCode)
+router.patch('/change/account/', AuthAdapter.ChangeAccount)
 
-router.patch('/password/request/code/', Adapter.pwd.request.code)
-router.patch('/change/password/', Adapter.pwd.verify.code)
+router.patch('/password/request/code/', AuthAdapter.PasswordRequestCode)
+router.patch('/change/password/', AuthAdapter.ChangePassword)
 
-router.post('/request/logout/', Adapter.request.logout)
+router.post('/request/logout/', AuthAdapter.Logout)
 
 export default router

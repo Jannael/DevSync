@@ -9,7 +9,7 @@ import type { IMember } from '../interface/Member'
 import MemberModel from '../model/Member.model'
 import AccountValidator from '../validator/Account.validator'
 
-const Controller = {
+const MemberController = {
 	Get: async (req: Request, _res: Response): Promise<IMember[]> => {
 		// body = { groupId }
 		// Get all members of a group
@@ -89,4 +89,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default MemberController

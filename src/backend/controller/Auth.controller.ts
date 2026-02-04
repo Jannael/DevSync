@@ -29,8 +29,8 @@ dotenv.config({ quiet: true })
 const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } =
 	process.env as unknown as IEnv
 
-const Controller = {
-	request: {
+const AuthController = {
+	Request: {
 		Code: async (req: Request, res: Response): Promise<boolean> => {
 			// body = { account, TEST_PWD }
 			const { account, TEST_PWD } = req.body
@@ -419,4 +419,4 @@ const Controller = {
 	},
 }
 
-export default Controller
+export default AuthController

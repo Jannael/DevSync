@@ -12,7 +12,7 @@ function CreateModel<T, R>({
 		try {
 			return await Model(params)
 		} catch (e) {
-			ErrorHandler.Model(e as CustomError, DefaultError)
+			ErrorHandler.Model({ error: e as CustomError, DefaultError })
 		}
 	}
 }

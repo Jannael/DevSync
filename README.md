@@ -45,45 +45,6 @@ A high-level view of the source code architecture:
             └── routes
 ```
 
-## Env variables
-
-To configure the application, you must create a `.env` file based on the examples and instructions provided in **`docs/doc.env.md`**.
-
-> [!IMPORTANT]
-> To obtain the **`PASSWORD_ENV`** variable for email functionality, you must generate an application-specific password (App Password) through your personal email settings, as standard passwords are often blocked.
-
-```
-# Database
-DB_URL_ENV=''
-
-# JWT passwords
-JWT_ACCESS_TOKEN_ENV=''
-JWT_REFRESH_TOKEN_ENV=''
-JWT_DATABASE_ENV=''
-JWT_AUTH_ENV=''
-
-# For message encryption
-CRYPTO_ACCESS_TOKEN_ENV=''
-CRYPTO_REFRESH_TOKEN_ENV=''
-CRYPTO_DATABASE_ENV=''
-CRYPTO_AUTH_ENV=''
-
-# information to send emails
-EMAIL_ENV=''
-PASSWORD_ENV=''
-
-# pwd hash
-BCRYPT_SALT_HASH=''
-
-# test
-DB_URL_ENV_TEST=''
-TEST_PWD_ENV=''
-
-# Sever
-PORT=''
-HOST=''
-```
-
 ## Install
 
 The project requires **Node.js version 24.x** (developed using 24.11.0).

@@ -4,8 +4,6 @@
 
 `[POST]`
 
----
-
 ### Action
 
 [Sends an email to users account and regenerates a token with the code encrypted.]

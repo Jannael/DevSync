@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { Types } from 'mongoose'
 import Roles, { DefaultRole } from '../constant/Role.constant'
 import {
 	Forbidden,
@@ -76,6 +77,10 @@ const GroupController = {
 	Join: async (req: Request, _res: Response): Promise<IMember> => {
 		// body = { groupId }
 		const { groupId } = req.body
+		if (!groupId) throw new UserBadRequest('Missing data', 'Missing groupId')
+		if (!Types.ObjectId.isValid(groupId))
+			throw new UserBadRequest('Invalid credentials', 'Invalid groupId')
+
 		const accessToken = GetAccessToken({ req })
 
 		const group = await Model.Get({ _id: groupId })

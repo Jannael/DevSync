@@ -1,10 +1,7 @@
 # /api/v1/
-
 ## [ENDPOINT_NAME]
 
 `[HTTP_METHOD]`
-
-`[NEXT: ENDPOINT_NAME]`
 
 ### Action
 
@@ -12,25 +9,22 @@
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[NONE]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter  | Type     | Required | Description     |
+| :--------- | :------- | :------- | :-------------- |
+| `parameter`  | `String` | Yes      | Description. |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "parameter": "value"
 }
 ```

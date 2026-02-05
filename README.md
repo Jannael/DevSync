@@ -13,53 +13,26 @@ This project is built using a modern, scalable backend stack:
 | **Database**        | [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](#)           | Used for flexible and scalable data storage.                                 |
 | **Package Manager** | [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](#)                             | Ensures fast, efficient, and space-saving dependency management.             |
 
-## Folder Structure
-
-A high-level view of the source code architecture:
-
-```
-├── docs
-│   ├── database
-│   ├── error
-│   ├── model
-│   └── routes
-└── src
-    ├── backend
-    │   ├── config
-    │   ├── controller
-    │   ├── database
-    │   │   └── schemas
-    │   │       ├── mongodb
-    │   │       └── node
-    │   ├── error
-    │   ├── interface
-    │   ├── middleware
-    │   ├── model
-    │   ├── routes
-    │   ├── service
-    │   ├── utils
-    │   └── validator
-    └── test
-        └── backend
-            ├── model
-            └── routes
-```
-
 ## Install
 
 The project requires **Node.js version 24.x** (developed using 24.11.0).
 
 [![Node.js](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](#) 24.x
 
-1.  **Install dependencies:**
+1. **Install dependencies:**
+
     ```bash
     pnpm install
     ```
-2.  **Start your MongoDB service:**
+
+2. **Start your MongoDB service:**
+
     ```bash
     mongod
     ```
-3.  **Run tests (optional):**
+
+3. **Run tests (optional):**
+
     ```bash
     pnpm test
     ```
@@ -114,11 +87,13 @@ The API uses two standardized response formats for consistency:
 This project represents my first medium-sized application, and the greatest challenge was maintaining architectural coherence. I initially chose the MVC (Model-View-Controller) pattern but later struggled to maintain clear separation of concerns, especially regarding cookie management.
 
 ### Facing the Challenge
+
 To address this initial architectural struggle, I recognized the need for immediate correction and applied the lessons learned to subsequent modules. The APIs for the solution and task resources, for example, were implemented with a correct and strictly separated MVC structure from the outset, ensuring clear boundaries.
 
 Additionally, I introduced an architectural enhancement: the Service Layer (/src/backend/service/). This layer abstracts all complex business logic, state management (such as cookie handling and token refreshing), and data interactions away from the controllers. A key design decision was making the service functions directly receive the req and res objects. This choice was deliberate, as it allows for a much smoother future integration with GraphQL (specifically using Apollo Server), where the Service Layer can be easily reused and adapted by the GraphQL resolvers without significant refactoring. This approach significantly improved the overall modularity and separation of concerns.
 
 ## Future work
+
 - invitations abort
 rework in invitations logic, instead of a member been part of the group until it reject the invitation, this will be removed, its going to be added as an invitation status
 - limitations for group and pretty much everything

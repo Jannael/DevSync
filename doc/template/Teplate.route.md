@@ -4,7 +4,7 @@
 
 `[HTTP_METHOD]`
 
----
+`[NEXT: ENDPOINT_NAME]`
 
 ### Action
 

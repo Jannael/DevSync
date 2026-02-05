@@ -12,26 +12,22 @@
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+`[NONE]`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter  | Type     | Required | Description     |
+| :--------- | :------- | :------- | :-------------- |
+| `account`  | `String` | Yes      | User's account. |
+| `TEST_PWD` | `String` | No       | Test password.  |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "account": "example@gmail.com"
 }
 ```
 
@@ -43,30 +39,27 @@
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Verifies the code sent by /request/code/ and saves the account in a cookie.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[/request/code/]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter | Type     | Required | Description            |
+| :-------- | :------- | :------- | :--------------------- |
+| `code`    | `String` | Yes      | Code sent to the user. |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "code": "1234"
 }
 ```
 
@@ -74,69 +67,58 @@
 
 `[GET]`
 
----
-
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[gets a new access token with th refresh token.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[/request/refreshToken/code/]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `[No apply]`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+`[NONE]`
 
 #### Request Body
 
-```json
-{
-  "field_one": "string",
-  "field_two": 123
-}
-```
+`[NONE]`
 
 ## [/request/refreshToken/code/]
 
 `[POST]`
 
----
+`[NEXT: /request/refreshToken/]`
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[First step to login, send the code to the user.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[NONE]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter  | Type     | Required | Description      |
+| :--------- | :------- | :------- | :--------------- |
+| `account`  | `String` | Yes      | Users's account. |
+| `pwd`      | `String` | Yes      | User's password. |
+| `TEST_PWD` | `String` | No       | Test password.   |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "account": "example@gmail.com",
+  "pwd": "1234"
 }
 ```
 
@@ -144,19 +126,15 @@
 
 `[POST]`
 
----
-
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Verifies the code sent by /request/refreshToken/code/ and returns an access token and refresh token.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[/request/refreshToken/code/]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
@@ -164,14 +142,13 @@
 
 | Parameter | Type     | Required | Description                    |
 | :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| `code`    | `String` | Yes      | The unique ID of the resource. |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "code": "1234"
 }
 ```
 
@@ -179,34 +156,32 @@
 
 `[PATCH]`
 
----
+`[NEXT: /change/account/]`
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[First step to change account, send the codes to the user, both current and new account.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[NONE]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter    | Type     | Required | Description         |
+| :----------- | :------- | :------- | :------------------ |
+| `newAccount` | `String` | Yes      | User's new account. |
+| `TEST_PWD`   | `String` | No       | Test password.      |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "newAccount": "example@gmail.com"
 }
 ```
 
@@ -214,34 +189,31 @@
 
 `[PATCH]`
 
----
-
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Verifies the code sent by /account/request/code/ and updated the account in the database.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[/account/request/code/]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter            | Type     | Required | Description                       |
+| :------------------- | :------- | :------- | :-------------------------------- |
+| `codeCurrentAccount` | `String` | Yes      | Code sent to the current account. |
+| `codeNewAccount`     | `String` | Yes      | Code sent to the newAccount.      |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "codeCurrentAccount": "1234",
+  "codeNewAccount": "1234"
 }
 ```
 
@@ -249,34 +221,32 @@
 
 `[PATCH]`
 
----
+`[NEXT: /change/password/]`
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Requests a code to change the password WITHOUT begin logged in(for password reset).]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[NONE]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter  | Type     | Required | Description     |
+| :--------- | :------- | :------- | :-------------- |
+| `account`  | `String` | Yes      | User's account. |
+| `TEST_PWD` | `String` | No       | Test password.  |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "account": "example@gmail.com"
 }
 ```
 
@@ -284,52 +254,50 @@
 
 `[PATCH]`
 
----
-
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Updates the password of the user.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
-
----
+- **Endpoints required to be called first:** `[/password/request/code/]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ### Input (Request)
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+| Parameter | Type     | Required | Description                  |
+| :-------- | :------- | :------- | :--------------------------- |
+| `code`    | `String` | Yes      | Code sent to user's account. |
+| `newPwd`  | `String` | Yes      | New password.                |
 
 #### Request Body
 
 ```json
 {
-  "field_one": "string",
-  "field_two": 123
+  "code": "1234",
+  "newPwd": "1234"
 }
 ```
 
 ## [/request/logout/]
 
-`[POST]`
+> [!NOTE]
+> if you do not have a refresh token returns an unsuccessful response
 
----
+`[POST]`
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Logs out the user.]
 
 ### Credentials & Security
 
-- **Authentication Type:** `[Bearer Token / API Key / None]`
-- **Required Permissions:** `[User / Admin / Read-only]`
-- **Required Header:** `Authorization: Bearer <token>`
+- **Endpoints required to be called first:** `[NONE]`
+- **Required Permissions:** `[No apply]`
+- **Required Header:** `application/json`
 
 ---
 
@@ -337,15 +305,8 @@
 
 #### Path / Query Parameters
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
-| `id`      | `String` | Yes      | The unique ID of the resource. |
+`[NONE]`
 
 #### Request Body
 
-```json
-{
-  "field_one": "string",
-  "field_two": 123
-}
-```
+`[NONE]`

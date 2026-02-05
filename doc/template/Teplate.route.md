@@ -20,7 +20,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter | Type     | Required | Description                    |
 | :-------- | :------- | :------- | :----------------------------- |

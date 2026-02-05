@@ -16,7 +16,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter  | Type     | Required | Description     |
 | :--------- | :------- | :------- | :-------------- |
@@ -49,7 +49,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter | Type     | Required | Description            |
 | :-------- | :------- | :------- | :--------------------- |
@@ -69,7 +69,7 @@
 
 ### Action
 
-[gets a new access token with th refresh token.]
+[gets a new access token with the refresh token.]
 
 ### Credentials & Security
 
@@ -79,7 +79,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 `[NONE]`
 
@@ -105,7 +105,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter  | Type     | Required | Description      |
 | :--------- | :------- | :------- | :--------------- |
@@ -138,7 +138,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter | Type     | Required | Description                    |
 | :-------- | :------- | :------- | :----------------------------- |
@@ -170,7 +170,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter    | Type     | Required | Description         |
 | :----------- | :------- | :------- | :------------------ |
@@ -201,7 +201,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter            | Type     | Required | Description                       |
 | :------------------- | :------- | :------- | :-------------------------------- |
@@ -235,7 +235,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter  | Type     | Required | Description     |
 | :--------- | :------- | :------- | :-------------- |
@@ -266,7 +266,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 | Parameter | Type     | Required | Description                  |
 | :-------- | :------- | :------- | :--------------------------- |
@@ -303,7 +303,7 @@
 
 ### Input (Request)
 
-#### Path / Query Parameters
+#### Body fields
 
 `[NONE]`
 

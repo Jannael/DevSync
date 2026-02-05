@@ -5,9 +5,9 @@
     "source.fixAll.markdownlint": "always"
 	},
 	"[markdown]": {
-		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnPaste": true,
 		"editor.formatOnSave": true
 	},
-	"cSpell.words": ["HATEOS", "mongosh", "bson", "excalidraw"]
+	"cSpell.words": ["HATEOS", "mongosh", "bson", "excalidraw", "devsync"]
 }

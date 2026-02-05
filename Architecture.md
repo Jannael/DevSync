@@ -6,14 +6,16 @@ Router → Adapter → Controller → Model
 
 ## Folder Structure
 
-for each endpoint the flow is always the same:
-for example if you're working with the `user` route:
+for each endpoint the flow is always the same: for example if you're working
+with the `user` route:
 
 router/user/user.router.ts → Defines the route for user-related endpoints.
 
-adapter/user/user.adapter.ts → Handles request format and HATEOS for error handling.
+adapter/user/user.adapter.ts → Handles request format and HATEOS for error
+handling.
 
-controller/user/user.controller..ts → Manages token operations, encryption, and calls the model.
+controller/user/user.controller..ts → Manages token operations, encryption, and
+calls the model.
 
 model/user/user.model.ts → Interfaces directly with the database for user data.
 
@@ -48,8 +50,7 @@ model/user/user.model.ts → Interfaces directly with the database for user data
 
 I use the following naming convention for files:
 
-File.distinction.ts
-example: user.router.ts
+File.distinction.ts example: user.router.ts
 
 distinctions:
 
@@ -90,4 +91,6 @@ I use the following naming convention for variables:
 
 - Interfaces directly with the database.
 - Executes queries.
-- Handles data encryption and related errors the encryption to save in the database ONLY (like passwords, because it's something only the db needs it has no business logic related).
+- Handles data encryption and related errors the encryption to save in the
+  database ONLY (like passwords, because it's something only the db needs it has
+  no business logic related).

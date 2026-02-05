@@ -9,7 +9,10 @@
 		"build": "pnpm tsc",
 		"start": "node ./dist/backend/server.js",
 		"lint": "pnpm biome check",
-		"type-check": "pnpm tsc -noEmit"
+		"type-check": "pnpm tsc -noEmit",
+		"lint:md": "markdownlint \"**/*.md\"",
+		"format:md": "prettier --write \"**/*.md\"",
+		"check:md": "prettier --check \"**/*.md\""
 	},
 	"keywords": [],
 	"author": "",
@@ -26,7 +29,7 @@
 		"@types/nodemailer": "7.0.1",
 		"@types/supertest": "6.0.3",
 		"jest": "30.2.0",
-		"markdownlint": "0.40.0",
+		"prettier": "^3.8.1",
 		"supertest": "7.1.4",
 		"ts-jest": "29.4.4",
 		"typescript": "5.9.2"

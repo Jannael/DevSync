@@ -1,7 +1,9 @@
 # Env variables
 
-> [!IMPORTANT]
-> To obtain the **`PASSWORD_ENV`** variable for email functionality, you must generate an application-specific password (App Password) through your personal email settings, as standard passwords are often blocked.
+> [!IMPORTANT] To obtain the **`PASSWORD_ENV`** variable for email
+> functionality, you must generate an application-specific password (App
+> Password) through your personal email settings, as standard passwords are
+> often blocked.
 
 ```bash
 # Database
@@ -38,13 +40,13 @@ HOST=''
 ## Generate JWT passwords
 
 ```javascript
-  require('crypto').randomBytes(128).toString('hex')
+require('crypto').randomBytes(128).toString('hex');
 ```
 
 ## Generate CRYPTO passwords
 
 ```javascript
-  require('crypto').randomBytes(32).toString('base64')
+require('crypto').randomBytes(32).toString('base64');
 ```
 
 ## Host var
@@ -52,7 +54,7 @@ HOST=''
 must separate with coma each host
 
 ```javascript
-  // HOST = 'host,host'
-  const HOST = process.env.HOST
-  const whitelist = HOST.split(',')
+// HOST = 'host,host'
+const HOST = process.env.HOST;
+const whitelist = HOST.split(',');
 ```

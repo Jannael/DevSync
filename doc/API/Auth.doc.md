@@ -8,7 +8,7 @@
 
 ### Action
 
-[Provide a brief and clear description of what this endpoint does. Example: Authenticates a user and returns a JSON Web Token (JWT).]
+[Sends an email to users account and regenerates a token with the code encrypted.]
 
 ### Credentials & Security
 

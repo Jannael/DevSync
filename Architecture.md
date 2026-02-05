@@ -50,7 +50,7 @@ model/user/user.model.ts → Interfaces directly with the database for user data
 
 I use the following naming convention for files:
 
-File.distinction.ts example: user.router.ts
+File.distinction.ts example: user.router.ts => singular
 
 distinctions:
 
@@ -73,6 +73,7 @@ I use the following naming convention for variables:
 
 - variableName
 - SetOfFunctions example: UserController.Update
+- mostly singular, but you may find plurals in variables ONLY
 
 ## Layer Responsibilities
 

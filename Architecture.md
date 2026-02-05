@@ -58,8 +58,8 @@ distinctions:
 - controller
 - model
 - utils
-- schema
-- validator
+- schema (this also contains the validators for those schemas)
+- validator (validators that does not need a zod schema)
 - d (for typescript declarations)
 - constructor
 - handler

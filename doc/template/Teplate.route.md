@@ -2,7 +2,7 @@
 
 ## [ENDPOINT_NAME]
 
-`[HTTP_METHOD]` | `[ENDPOINT_PATH]`
+`[HTTP_METHOD]`
 
 ---
 
@@ -18,7 +18,7 @@
 
 ---
 
-### 📥 Input (Request)
+### Input (Request)
 
 #### Path / Query Parameters
 

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
-import { ServerError } from '../error/Error.instances'
+import { ServerError } from '../error/Error.instance'
 import type { IEnv } from '../interface/Env'
 
 dotenv.config({ quiet: true })

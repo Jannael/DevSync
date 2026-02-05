@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/Group'
-import { DatabaseError } from '../error/Error.instances'
+import { DatabaseError } from '../error/Error.instance'
 import type { IGroup } from '../interface/Group'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
@@ -27,10 +27,7 @@ const GroupModel = {
 			'The group existence could not be verified, something went wrong please try again',
 		),
 	}),
-	Create: CreateModel<
-		{ data: Omit<IGroup, '_id'> },
-		IGroup
-	>({
+	Create: CreateModel<{ data: Omit<IGroup, '_id'> }, IGroup>({
 		Model: async ({ data }) => {
 			const created = await dbModel.create(data)
 			const res = created.toObject()

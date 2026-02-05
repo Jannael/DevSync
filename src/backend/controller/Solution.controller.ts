@@ -5,7 +5,7 @@ import {
 	NotFound,
 	ServerError,
 	UserBadRequest,
-} from '../error/Error.instances'
+} from '../error/Error.instance'
 import type { ISolution } from '../interface/Solution'
 import SolutionModel from '../model/Solution.model'
 import TaskModel from '../model/Task.model'

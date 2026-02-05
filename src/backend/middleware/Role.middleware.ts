@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { Types } from 'mongoose'
 import type { CustomError } from '../error/Error.constructor'
 import ErrorHandler from '../error/Error.handler'
-import { Forbidden, UserBadRequest } from '../error/Error.instances'
+import { Forbidden, UserBadRequest } from '../error/Error.instance'
 import type { IRole } from '../interface/Role'
 import memberModel from '../model/Member.model'
 import { GetAccessToken } from '../secret/GetToken'
@@ -24,15 +24,9 @@ const RoleMiddleware = (roles: Array<IRole>) => {
 
 			const { groupId } = req.body
 			if (groupId === undefined)
-				throw new UserBadRequest(
-					'Missing data',
-					'Missing group id',
-				)
+				throw new UserBadRequest('Missing data', 'Missing group id')
 			if (!Types.ObjectId.isValid(groupId))
-				throw new UserBadRequest(
-					'Invalid credentials',
-					'Invalid group id',
-				)
+				throw new UserBadRequest('Invalid credentials', 'Invalid group id')
 
 			const memberRole = await memberModel.GetRole({
 				groupId,

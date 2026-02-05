@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { UserBadRequest } from '../error/Error.instances'
+import { UserBadRequest } from '../error/Error.instance'
 
 export function DecryptToken({
 	encryptedText,

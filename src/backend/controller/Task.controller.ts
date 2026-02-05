@@ -7,7 +7,7 @@ import {
 	NotFound,
 	ServerError,
 	UserBadRequest,
-} from '../error/Error.instances'
+} from '../error/Error.instance'
 import type { ITask } from '../interface/Task'
 import type { ITaskList, ITaskListItem } from '../interface/TaskList'
 import TaskModel from '../model/Task.model'

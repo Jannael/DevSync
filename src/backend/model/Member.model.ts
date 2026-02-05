@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/Member'
-import { DatabaseError } from '../error/Error.instances'
+import { DatabaseError } from '../error/Error.instance'
 import type { IMember } from '../interface/Member'
 import CreateModel from '../utils/helper/CreateModel.helper'
 

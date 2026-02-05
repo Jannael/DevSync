@@ -5,7 +5,7 @@ import {
 	NotFound,
 	ServerError,
 	UserBadRequest,
-} from '../error/Error.instances'
+} from '../error/Error.instance'
 import type { IGroup } from '../interface/Group'
 import type { IMember } from '../interface/Member'
 import Model from './../model/Group.model'

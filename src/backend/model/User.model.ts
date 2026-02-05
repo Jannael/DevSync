@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/User'
-import { DatabaseError } from '../error/Error.instances'
+import { DatabaseError } from '../error/Error.instance'
 import type { IEnv } from '../interface/Env'
 import type { IRefreshToken, IUser } from '../interface/User'
 import CreateModel from '../utils/helper/CreateModel.helper'
@@ -28,7 +28,10 @@ const UserModel = {
 		},
 		DefaultError: new DatabaseError('Failed to access data'),
 	}),
-	Create: CreateModel<{ data: Omit<IUser, 'refreshToken' | '_id'> }, IRefreshToken>({
+	Create: CreateModel<
+		{ data: Omit<IUser, 'refreshToken' | '_id'> },
+		IRefreshToken
+	>({
 		Model: async ({ data }) => {
 			const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
 			const hashedPwd = await bcrypt.hash(data.pwd, salt)
@@ -42,10 +45,7 @@ const UserModel = {
 			'The user was not created, something went wrong please try again',
 		),
 	}),
-	Update: CreateModel<
-		{ data: Partial<IUser>; _id: Types.ObjectId },
-		boolean
-	>({
+	Update: CreateModel<{ data: Partial<IUser>; _id: Types.ObjectId }, boolean>({
 		Model: async ({ data, _id }) => {
 			if (data.pwd) {
 				const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
@@ -70,7 +70,7 @@ const UserModel = {
 			'Failed to remove',
 			'The user was not deleted, something went wrong please try again',
 		),
-	})
+	}),
 }
 
 export default UserModel

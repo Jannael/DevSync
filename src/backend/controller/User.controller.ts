@@ -1,11 +1,7 @@
 import type { Request, Response } from 'express'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
-import {
-	Forbidden,
-	ServerError,
-	UserBadRequest,
-} from '../error/Error.instances'
+import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IMember } from '../interface/Member'
 import type { IRefreshToken } from '../interface/User'
 import InvitationModel from '../model/Invitation.model'

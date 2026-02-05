@@ -8,7 +8,7 @@ import {
 	NotFound,
 	ServerError,
 	UserBadRequest,
-} from './Error.instances'
+} from './Error.instance'
 import JwtErrorHandler from './Jwt.handler'
 
 const ErrorHandler = {

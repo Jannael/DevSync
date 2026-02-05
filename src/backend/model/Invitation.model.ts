@@ -1,7 +1,7 @@
 import type { Types } from 'mongoose'
 import GroupLimits from '../config/GroupLimits'
 import dbModel from '../database/node/Member'
-import { DatabaseError } from '../error/Error.instances'
+import { DatabaseError } from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
 import CreateModel from '../utils/helper/CreateModel.helper'
 

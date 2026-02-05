@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { Types } from 'mongoose'
 import { ValidRoles } from '../constant/Role.constant'
-import { ServerError, UserBadRequest } from '../error/Error.instances'
+import { ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
 import InvitationModel from '../model/Invitation.model'
 import { GetAccessToken } from '../secret/GetToken'
@@ -122,8 +122,7 @@ const InvitationController = {
 		// body = { groupId, account }
 		const { groupId, account } = req.body
 
-		if (!account)
-			throw new UserBadRequest('Missing data', 'Missing account')
+		if (!account) throw new UserBadRequest('Missing data', 'Missing account')
 		if (!AccountValidator(account))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 

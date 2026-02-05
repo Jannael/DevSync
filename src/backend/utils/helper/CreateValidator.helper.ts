@@ -1,5 +1,5 @@
 import type { ZodSchema, z } from 'zod'
-import { UserBadRequest } from '../../error/Error.instances'
+import { UserBadRequest } from '../../error/Error.instance'
 
 function CreateValidator<S extends ZodSchema, T>(schema: S) {
 	return (data: T): z.infer<S> => {

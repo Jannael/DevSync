@@ -20,8 +20,6 @@ model/user/user.model.ts → Interfaces directly with the database for user data
 ```bash
 .
 ├── docs
-│   ├── database
-│   └── error
 └── src
     ├── backend
     │   ├── adapter

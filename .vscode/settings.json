@@ -9,5 +9,5 @@
 		"editor.formatOnPaste": true,
 		"editor.formatOnSave": true
 	},
-	"cSpell.words": ["HATEOS", "mongosh", "bson"]
+	"cSpell.words": ["HATEOS", "mongosh", "bson", "excalidraw"]
 }

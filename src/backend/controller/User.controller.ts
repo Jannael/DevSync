@@ -35,9 +35,18 @@ const UserController = {
 		return groups
 	},
 	Update: async (req: Request, _res: Response): Promise<boolean> => {
-		GetAuth({ req, tokenName: CookiesKeys.account })
+		const { account: verifiedAccount } = GetAuth({
+			req,
+			tokenName: CookiesKeys.account,
+		})
 
 		const accessToken = GetAccessToken({ req })
+		if (accessToken.account !== verifiedAccount)
+			throw new Forbidden(
+				'Access denied',
+				'You are not authorized to update this user',
+			)
+
 		const { data } = req.body
 
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
@@ -60,12 +69,12 @@ const UserController = {
 		return result
 	},
 	Create: async (req: Request, _res: Response): Promise<IRefreshToken> => {
-		GetAuth({ req, tokenName: CookiesKeys.account })
+		const { account } = GetAuth({ req, tokenName: CookiesKeys.account })
 
 		const { data } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
 
-		const validatedData = UserValidator(data)
+		const validatedData = UserValidator({ ...data, account })
 		const result = await UserModel.Create({ data: validatedData })
 
 		if (!result) {
@@ -75,8 +84,16 @@ const UserController = {
 		return result
 	},
 	Delete: async (req: Request, _res: Response): Promise<boolean> => {
-		GetAuth({ req, tokenName: CookiesKeys.account })
+		const { account: verifiedAccount } = GetAuth({
+			req,
+			tokenName: CookiesKeys.account,
+		})
 		const accessToken = GetAccessToken({ req })
+		if (accessToken.account !== verifiedAccount)
+			throw new Forbidden(
+				'Access denied',
+				'You are not authorized to delete this user',
+			)
 
 		// Check if the user is the last techLead in any group
 		const userMemberships = await MemberModel.GetForUser({

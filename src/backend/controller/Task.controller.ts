@@ -10,6 +10,7 @@ import {
 } from '../error/Error.instance'
 import type { ITask } from '../interface/Task'
 import type { ITaskList, ITaskListItem } from '../interface/TaskList'
+import SolutionModel from '../model/Solution.model'
 import TaskModel from '../model/Task.model'
 import GetPaginationMetadata from '../utils/GetPaginationMetadata.utils'
 import {
@@ -144,9 +145,10 @@ const TaskController = {
 		if (!taskBelongsToGroup)
 			throw new Forbidden('Access denied', 'Task does not belong to the group')
 
+		const deleteSolution = await SolutionModel.Delete({ _id })
 		const result = await TaskModel.Delete({ _id })
 
-		if (!result)
+		if (!result || !deleteSolution)
 			throw new ServerError('Operation Failed', 'The task was not deleted')
 
 		return result

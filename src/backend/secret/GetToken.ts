@@ -1,13 +1,11 @@
-import dotenv from 'dotenv'
 import type { Request } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import CookiesKeys from '../constant/Cookie.constant'
+import { env } from '../Env.validator'
 import { UserBadRequest } from '../error/Error.instance'
-import type { IEnv } from '../interface/Env'
 import type { IRefreshToken } from '../interface/User'
 import Decrypt from './DecryptToken.utils'
 
-dotenv.config({ quiet: true })
 const {
 	JWT_ACCESS_TOKEN_ENV,
 	JWT_REFRESH_TOKEN_ENV,
@@ -15,7 +13,7 @@ const {
 	CRYPTO_ACCESS_TOKEN_ENV,
 	CRYPTO_REFRESH_TOKEN_ENV,
 	CRYPTO_AUTH_ENV,
-} = process.env as unknown as IEnv
+} = env
 
 function GetToken({
 	req,

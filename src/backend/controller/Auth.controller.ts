@@ -1,12 +1,11 @@
-import dotenv from 'dotenv'
 import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { Types } from 'mongoose'
 import cookiesConfig from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
+import { env } from '../Env.validator'
 import { NotFound, ServerError, UserBadRequest } from '../error/Error.instance'
-import type { IEnv } from '../interface/Env'
 import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
 import InvitationModel from '../model/Invitation.model'
@@ -25,9 +24,7 @@ import RemoveCookies from '../utils/RemoveCookies.utils'
 import AccountValidator from '../validator/Account.validator'
 import { PasswordValidator } from '../validator/schemas/Password.schema'
 
-dotenv.config({ quiet: true })
-const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } =
-	process.env as unknown as IEnv
+const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } = env
 
 const AuthController = {
 	Request: {

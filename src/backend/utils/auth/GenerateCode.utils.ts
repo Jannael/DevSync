@@ -1,12 +1,7 @@
 import crypto from 'node:crypto'
-import dotenv from 'dotenv'
-import type { IEnv } from '../../interface/Env'
+import { env } from '../../Env.validator'
 
-dotenv.config({ quiet: true })
-const { TEST_PWD_ENV } = process.env as Pick<
-	IEnv,
-	'EMAIL_ENV' | 'PASSWORD_ENV' | 'TEST_PWD_ENV'
->
+const { TEST_PWD_ENV } = env
 
 export function GenerateCode(data: { testPwd: string } | null): string {
 	if (data?.testPwd === TEST_PWD_ENV) {

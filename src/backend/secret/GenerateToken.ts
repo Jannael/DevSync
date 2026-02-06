@@ -1,10 +1,8 @@
-import dotenv from 'dotenv'
 import JwtConfig from '../config/Jwt.config'
-import type { IEnv } from '../interface/Env'
+import { env } from '../Env.validator'
 import type { IRefreshToken } from '../interface/User'
 import EncryptToken from './EncryptToken.utils'
 
-dotenv.config({ quiet: true })
 const {
 	JWT_AUTH_ENV,
 	JWT_ACCESS_TOKEN_ENV,
@@ -12,7 +10,7 @@ const {
 	CRYPTO_AUTH_ENV,
 	CRYPTO_ACCESS_TOKEN_ENV,
 	CRYPTO_REFRESH_TOKEN_ENV,
-} = process.env as unknown as IEnv
+} = env
 
 export function GenerateAuth({
 	content,

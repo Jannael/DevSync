@@ -1,14 +1,12 @@
 import bcrypt from 'bcrypt'
-import dotenv from 'dotenv'
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/User'
+import { env } from '../Env.validator'
 import { DatabaseError } from '../error/Error.instance'
-import type { IEnv } from '../interface/Env'
 import type { IRefreshToken, IUser } from '../interface/User'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
-dotenv.config({ quiet: true })
-const { BCRYPT_SALT_HASH } = process.env as unknown as IEnv
+const { BCRYPT_SALT_HASH } = env
 
 const UserModel = {
 	Get: CreateModel<

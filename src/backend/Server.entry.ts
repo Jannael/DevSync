@@ -1,11 +1,11 @@
-import { createApp } from './app'
-import { env } from './env'
+import { CreateApp, environments } from './CreateApp'
+import { env } from './Env.validator'
 
 const PORT = env.PORT
-const dbUrl = env.DB_URL_ENV
+const DbUrl = env.DB_URL_ENV
 
 async function init(PORT: string): Promise<void> {
-	const app = await createApp(dbUrl, 'production')
+	const app = await CreateApp({ DbUrl, environment: environments.production })
 	app.listen(PORT, () => console.log(`server at PORT: ${PORT}`))
 }
 

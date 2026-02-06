@@ -1,13 +1,8 @@
-import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
+import { env } from '../Env.validator'
 import { ServerError } from '../error/Error.instance'
-import type { IEnv } from '../interface/Env'
 
-dotenv.config({ quiet: true })
-const { EMAIL_ENV, PASSWORD_ENV } = process.env as Pick<
-	IEnv,
-	'EMAIL_ENV' | 'PASSWORD_ENV' | 'TEST_PWD_ENV'
->
+const { EMAIL_ENV, PASSWORD_ENV } = env
 
 const transporter = nodemailer.createTransport({
 	service: 'gmail',

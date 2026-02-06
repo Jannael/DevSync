@@ -133,6 +133,16 @@ const TaskModel = {
 			'The task was not deleted, please try again',
 		),
 	}),
+	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
+		Model: async ({ groupId }) => {
+			const res = await dbModel.deleteMany({ groupId })
+			return res.acknowledged
+		},
+		DefaultError: new DatabaseError(
+			'Failed to remove',
+			'The tasks for the group were not deleted, please try again',
+		),
+	}),
 }
 
 export default TaskModel

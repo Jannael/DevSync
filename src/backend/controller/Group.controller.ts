@@ -12,6 +12,8 @@ import type { IMember } from '../interface/Member'
 import Model from './../model/Group.model'
 import InvitationModel from '../model/Invitation.model'
 import MemberModel from '../model/Member.model'
+import SolutionModel from '../model/Solution.model'
+import TaskModel from '../model/Task.model'
 import { GetAccessToken } from '../secret/GetToken'
 import {
 	GroupPartialValidator,
@@ -66,10 +68,17 @@ const GroupController = {
 		const resultDeleteInvitations = await InvitationModel.DeleteByGroup({
 			groupId,
 		})
-
+		const resultDeleteSolutions = await SolutionModel.DeleteByGroup({ groupId })
+		const resultDeleteTasks = await TaskModel.DeleteByGroup({ groupId })
 		const result = await Model.Delete({ _id: groupId })
 
-		if (!result || !resultDeleteMembers || !resultDeleteInvitations)
+		if (
+			!result ||
+			!resultDeleteMembers ||
+			!resultDeleteInvitations ||
+			!resultDeleteSolutions ||
+			!resultDeleteTasks
+		)
 			throw new ServerError('Operation Failed', 'The group was not deleted')
 
 		return result && resultDeleteInvitations && resultDeleteMembers

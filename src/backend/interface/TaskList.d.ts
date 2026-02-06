@@ -8,8 +8,7 @@ export interface ITaskListItem {
 	user: string[]
 }
 
-export interface ITaskList {
+export interface ITaskList extends IPagination {
 	task: ITaskListItem[]
 	assign: Types.ObjectId[] // task id for the tasks the user is assigned to
-	metadata: IPagination
 }

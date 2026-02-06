@@ -13,18 +13,20 @@ function GetPaginationMetadata({
 	pageSize: number
 }): IPagination {
 	return {
-		totalItems: totalItems,
-		totalPages: totalItems / pageSize,
-		currentPage: currentPage,
-		pageSize: pageSize,
-		nextPageUrl:
-			currentPage < totalItems / pageSize
-				? `${req.originalUrl}?page=${currentPage + 1}`
-				: null,
-		prevPageUrl:
-			currentPage > 1 ? `${req.originalUrl}?page=${currentPage - 1}` : null,
-		hasNextPage: currentPage < totalItems / pageSize,
-		hasPrevPage: currentPage > 1,
+		metadata: {
+			totalItems: totalItems,
+			totalPages: totalItems / pageSize,
+			currentPage: currentPage,
+			pageSize: pageSize,
+			nextPageUrl:
+				currentPage < totalItems / pageSize
+					? `${req.originalUrl}?page=${currentPage + 1}`
+					: null,
+			prevPageUrl:
+				currentPage > 1 ? `${req.originalUrl}?page=${currentPage - 1}` : null,
+			hasNextPage: currentPage < totalItems / pageSize,
+			hasPrevPage: currentPage > 1,
+		},
 	}
 }
 

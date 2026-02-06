@@ -29,7 +29,7 @@ import {
 // so keep this in mind, for this i have the Exists function in task model
 
 const TaskController = {
-	Get: async (req: Request, _res: Response): Promise<ITask | undefined> => {
+	Get: async (req: Request, _res: Response): Promise<ITask> => {
 		// body = { _id => taskId, groupId }
 		const { _id, groupId } = req.body
 
@@ -84,16 +84,18 @@ const TaskController = {
 			.filter((t) => t.user.includes(accessToken.account))
 			.map((t) => t._id)
 
+		const { metadata } = GetPaginationMetadata({
+			totalItems: count,
+			currentPage: page,
+			pageSize: PaginationConfig.taskLimit,
+			req,
+		})
+
 		return {
 			task: tasks,
 			// if the role is not techLead assign empty because all the task are assigned to the user
 			assign: role === Roles.techLead ? assign : [],
-			metadata: GetPaginationMetadata({
-				totalItems: count,
-				currentPage: page,
-				pageSize: PaginationConfig.taskLimit,
-				req,
-			}),
+			metadata,
 		}
 	},
 	Create: async (req: Request, _res: Response): Promise<ITask> => {

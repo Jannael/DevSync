@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import mongoose from 'mongoose'
-import middleware from './middleware/merge'
+import HeaderMiddleware from './middleware/Header.middleware'
 import router from './route/Merge.route'
 
 dotenv.config({ quiet: true })
@@ -40,6 +40,7 @@ export async function createApp(
 	const app = express()
 
 	if (env === 'production') {
+		// because in tests the rate limit is reached so fast
 		app.use(limiter)
 		app.use(cors(corsOptions))
 	}
@@ -55,7 +56,7 @@ export async function createApp(
 		next()
 	})
 	app.use(cookieParser())
-	app.use(middleware.header)
+	app.use(HeaderMiddleware)
 
 	app.use('/auth/v1/', router.auth)
 	app.use('/user/v1/', router.user)

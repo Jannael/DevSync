@@ -1,5 +1,8 @@
 # Architecture Overview
 
+> ![NOTE]
+> To see the how error handling is done check the [Error Handling](/doc/error/ErrorHandling.doc.md) doc.
+
 The flow for each request is simple and structured:
 
 Router → Adapter → Controller → Model

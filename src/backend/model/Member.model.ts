@@ -8,7 +8,7 @@ const MemberModel = {
 	GetForUser: CreateModel<{ account: string }, IMember[]>({
 		Model: async ({ account }, session) => {
 			const groups = await dbModel
-				.find({ account, isInvitation: false }, { session })
+				.find({ account, isInvitation: false }, null, { session })
 				.lean<IMember[]>()
 			return groups || []
 		},
@@ -20,7 +20,7 @@ const MemberModel = {
 	GetForGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
 		Model: async ({ groupId }, session) => {
 			const users = await dbModel
-				.find({ groupId, isInvitation: false }, { session })
+				.find({ groupId, isInvitation: false }, null, { session })
 				.lean<IMember[]>()
 			return users || []
 		},

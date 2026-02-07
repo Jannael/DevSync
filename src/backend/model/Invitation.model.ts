@@ -13,7 +13,7 @@ const InvitationModel = {
 	GetByGroup: CreateModel<{ _id: Types.ObjectId }, IInvitation[]>({
 		Model: async ({ _id }, session) => {
 			const res = await dbModel
-				.find({ _id, isInvitation: true }, { session })
+				.find({ _id, isInvitation: true }, null, { session })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -26,7 +26,7 @@ const InvitationModel = {
 	GetByUser: CreateModel<{ account: string }, IInvitation[]>({
 		Model: async ({ account }, session) => {
 			const res = await dbModel
-				.find({ account, isInvitation: true }, { session })
+				.find({ account, isInvitation: true }, null, { session })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res

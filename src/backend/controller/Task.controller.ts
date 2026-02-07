@@ -53,7 +53,7 @@ const TaskController = {
 	List: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<ITaskList> => {
 		// body = { groupId, role, accessToken, page }
 		const { groupId, role, accessToken, page } = req.body
@@ -70,19 +70,20 @@ const TaskController = {
 
 		// TechLead gets all tasks, other roles get only their assigned tasks
 		if (role === Roles.techLead) {
-			tasks = await TaskModel.ListForTechLead({ groupId, skip, limit })
-			count = await TaskModel.CountForTechLead({ groupId })
+			// here i use a session because i do not want one if i do not get the other one
+			tasks = await TaskModel.ListForTechLead({ groupId, skip, limit }, session)
+			count = await TaskModel.CountForTechLead({ groupId }, session)
 		} else {
 			tasks = await TaskModel.ListForMember({
 				groupId,
 				account: accessToken.account,
 				skip,
 				limit,
-			})
+			}, session)
 			count = await TaskModel.CountForUser({
 				groupId,
 				account: accessToken.account,
-			})
+			}, session)
 		}
 
 		if (!tasks || !count)
@@ -154,7 +155,7 @@ const TaskController = {
 	Delete: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		// body = { _id => taskId, groupId }
 		const { _id, groupId } = req.body
@@ -163,12 +164,12 @@ const TaskController = {
 		if (!Types.ObjectId.isValid(_id))
 			throw new UserBadRequest('Invalid credentials', 'Invalid task id')
 
-		const taskBelongsToGroup = await TaskModel.Exists({ _id, groupId })
+		const taskBelongsToGroup = await TaskModel.Exists({ _id, groupId }, session)
 		if (!taskBelongsToGroup)
 			throw new Forbidden('Access denied', 'Task does not belong to the group')
 
-		const deleteSolution = await SolutionModel.Delete({ _id })
-		const result = await TaskModel.Delete({ _id })
+		const deleteSolution = await SolutionModel.Delete({ _id }, session)
+		const result = await TaskModel.Delete({ _id }, session)
 
 		if (!result || !deleteSolution)
 			throw new ServerError('Operation Failed', 'The task was not deleted')

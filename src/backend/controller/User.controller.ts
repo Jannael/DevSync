@@ -103,7 +103,7 @@ const UserController = {
 	Delete: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		const { account: verifiedAccount } = GetAuth({
 			req,
@@ -119,7 +119,7 @@ const UserController = {
 		// Check if the user is the last techLead in any group
 		const userMemberships = await MemberModel.GetForUser({
 			account: accessToken.account,
-		})
+		}, session)
 
 		if (!userMemberships) {
 			throw new ServerError(
@@ -132,7 +132,7 @@ const UserController = {
 			if (membership.role === Roles.techLead) {
 				const groupMembers = await MemberModel.GetForGroup({
 					groupId: membership.groupId,
-				})
+				}, session)
 
 				if (!groupMembers) {
 					throw new ServerError(
@@ -157,10 +157,10 @@ const UserController = {
 		// Cascading deletes
 		const deleteInvitations = await InvitationModel.DeleteByUser({
 			account: accessToken.account,
-		})
+		}, session)
 		const deleteMemberships = await MemberModel.DeleteByUser({
 			account: accessToken.account,
-		})
+		}, session)
 
 		if (!deleteInvitations || !deleteMemberships) {
 			throw new ServerError(
@@ -169,7 +169,7 @@ const UserController = {
 			)
 		}
 
-		const result = await UserModel.Delete({ _id: accessToken._id })
+		const result = await UserModel.Delete({ _id: accessToken._id }, session)
 
 		if (!result) {
 			throw new ServerError('Operation Failed', 'The user was not deleted')

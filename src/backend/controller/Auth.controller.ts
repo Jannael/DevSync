@@ -205,7 +205,7 @@ const AuthController = {
 		Change: async (
 			req: Request,
 			res: Response,
-			_session: ClientSession | undefined,
+			session: ClientSession | undefined,
 		): Promise<boolean> => {
 			// cookies = { codeCurrentAccount, codeNewAccount }
 			const accessToken = GetAccessToken({ req })
@@ -246,11 +246,11 @@ const AuthController = {
 			const updateGroupMembership = await MemberModel.UpdateAccount({
 				oldAccount: accessToken.account,
 				newAccount: cookieNewAccount.account,
-			})
+			}, session)
 			const updateInvitation = await InvitationModel.UpdateAccount({
 				oldAccount: accessToken.account,
 				newAccount: cookieNewAccount.account,
-			})
+			}, session)
 
 			if (!updateGroupMembership || !updateInvitation)
 				throw new ServerError(
@@ -261,7 +261,7 @@ const AuthController = {
 			const result = await UserModel.Update({
 				_id: user._id,
 				data: { account: cookieNewAccount.account },
-			})
+			}, session)
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 

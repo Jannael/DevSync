@@ -60,7 +60,7 @@ const SolutionController = {
 	Create: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<ISolution> => {
 		// body = { data, accessToken, role, groupId } (accessToken, groupId and role come from RoleMiddleware)
 		const { data, accessToken, role, groupId } = req.body
@@ -71,20 +71,20 @@ const SolutionController = {
 			user: accessToken.account,
 		})
 
-		const taskExists = await TaskModel.Exists({ _id: solution._id, groupId })
+		const taskExists = await TaskModel.Exists({ _id: solution._id, groupId }, session)
 		if (!taskExists)
 			throw new NotFound('Task not found', 'The task does not exist')
 		const solutionExists = await SolutionModel.Exists({
 			_id: solution._id,
 			groupId,
-		})
+		}, session)
 		if (solutionExists)
 			throw new Forbidden('Access denied', 'Solution already exists')
 
 		const task = await TaskModel.Get({
 			_id: solution._id,
 			projection: { user: 1 },
-		})
+		}, session)
 		if (!task) throw new NotFound('Task not found')
 		if (
 			!hasTaskAccess({
@@ -99,11 +99,11 @@ const SolutionController = {
 			)
 		}
 
-		const result = await SolutionModel.Create({ data: solution })
+		const result = await SolutionModel.Create({ data: solution }, session)
 		const updateTaskStatus = TaskModel.Update({
 			_id: solution._id,
 			data: { isComplete: true },
-		})
+		}, session)
 
 		if (!result || !updateTaskStatus)
 			throw new ServerError('Operation Failed', 'The solution was not created')
@@ -169,7 +169,7 @@ const SolutionController = {
 	Delete: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		// body = { _id, accessToken, role } => solutionId
 		const { _id, accessToken, role, groupId } = req.body
@@ -178,13 +178,13 @@ const SolutionController = {
 		if (!Types.ObjectId.isValid(_id))
 			throw new UserBadRequest('Invalid credentials', 'Invalid solution id')
 
-		const solution = await SolutionModel.Exists({ _id, groupId })
+		const solution = await SolutionModel.Exists({ _id, groupId }, session)
 		if (!solution) throw new NotFound('Solution not found')
 
 		const task = await TaskModel.Get({
 			_id,
 			projection: { user: 1 },
-		})
+		}, session)
 		if (!task) throw new NotFound('Task not found')
 		if (
 			!hasTaskAccess({
@@ -199,11 +199,11 @@ const SolutionController = {
 			)
 		}
 
-		const result = await SolutionModel.Delete({ _id })
+		const result = await SolutionModel.Delete({ _id }, session)
 		const updateTaskStatus = TaskModel.Update({
 			_id,
 			data: { isComplete: false },
-		})
+		}, session)
 
 		if (!result || !updateTaskStatus)
 			throw new ServerError('Operation Failed', 'The solution was not deleted')

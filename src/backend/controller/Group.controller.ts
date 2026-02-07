@@ -35,12 +35,12 @@ const GroupController = {
 	Create: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<IGroup> => {
 		// body = { data }
 		const group = GroupValidator(req.body.data)
 		const accessToken = GetAccessToken({ req })
-		const result = await Model.Create({ data: group })
+		const result = await Model.Create({ data: group }, session)
 		if (!result)
 			throw new ServerError('Operation Failed', 'The group was not created')
 
@@ -50,7 +50,7 @@ const GroupController = {
 				account: accessToken.account,
 				role: Roles.techLead,
 			},
-		})
+		}, session)
 		if (!addTechLead)
 			throw new ServerError('Operation Failed', 'The techLead was not added')
 
@@ -76,17 +76,17 @@ const GroupController = {
 	Delete: async (
 		req: Request,
 		_res: Response,
-		_session: ClientSession | undefined,
+		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		// body = { groupId }
 		const { groupId } = req.body
-		const resultDeleteMembers = await MemberModel.DeleteByGroup({ groupId })
+		const resultDeleteMembers = await MemberModel.DeleteByGroup({ groupId }, session)
 		const resultDeleteInvitations = await InvitationModel.DeleteByGroup({
 			groupId,
-		})
-		const resultDeleteSolutions = await SolutionModel.DeleteByGroup({ groupId })
-		const resultDeleteTasks = await TaskModel.DeleteByGroup({ groupId })
-		const result = await Model.Delete({ _id: groupId })
+		}, session)
+		const resultDeleteSolutions = await SolutionModel.DeleteByGroup({ groupId }, session)
+		const resultDeleteTasks = await TaskModel.DeleteByGroup({ groupId }, session)
+		const result = await Model.Delete({ _id: groupId }, session)
 
 		if (
 			!result ||

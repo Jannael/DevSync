@@ -1,6 +1,6 @@
-# Contribution Guide Index
+# Code Documentation
 
-Welcome to the DevSync Contribution Guide. This directory contains documentation about the core systems, coding standards, and utilities used in the project.
+This directory contains documentation about the core systems, coding standards, and utilities used in the project.
 
 ## General
 - [Code rules](Code.rules.md): Essential coding rules, including HTTP methods usage and token security.

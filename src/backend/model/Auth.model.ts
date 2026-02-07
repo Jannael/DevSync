@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import type { Types } from 'mongoose'
+import type { ClientSession, Types } from 'mongoose'
 import Config from '../config/Projection.config'
 import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/Error.instance'
@@ -8,9 +8,9 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 
 const AuthModel = {
 	Login: CreateModel<{ account: string; pwd: string }, IRefreshToken>({
-		Model: async ({ account, pwd }: { account: string; pwd: string }) => {
+		Model: async ({ account, pwd }, session) => {
 			const user = await dbModel
-				.findOne({ account }, { ...Config.IRefreshToken, pwd: 1 })
+				.findOne({ account }, { ...Config.IRefreshToken, pwd: 1 }, { session })
 				.lean<IRefreshToken & { pwd?: string }>()
 
 			const isMatch =
@@ -29,8 +29,8 @@ const AuthModel = {
 		),
 	}),
 	Exists: CreateModel<{ account: string }, boolean>({
-		Model: async ({ account }: { account: string }) => {
-			const exists = await dbModel.exists({ account })
+		Model: async ({ account }, session) => {
+			const exists = await dbModel.exists({ account }).session(session ?? null)
 			if (!exists) return false
 			return true
 		},
@@ -41,10 +41,11 @@ const AuthModel = {
 	}),
 	RefreshToken: {
 		Save: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
-			Model: async ({ token, userId }) => {
+			Model: async ({ token, userId }, session) => {
 				const result = await dbModel.updateOne(
 					{ _id: userId },
 					{ $push: { refreshToken: token } },
+					{ session },
 				)
 
 				return result.matchedCount === 1 && result.modifiedCount === 1
@@ -55,10 +56,11 @@ const AuthModel = {
 			),
 		}),
 		Remove: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
-			Model: async ({ token, userId }) => {
+			Model: async ({ token, userId }, session) => {
 				const result = await dbModel.updateOne(
 					{ _id: userId },
 					{ $pull: { refreshToken: token } },
+					{ session },
 				)
 
 				return result.matchedCount === 1 && result.modifiedCount === 1
@@ -69,9 +71,9 @@ const AuthModel = {
 			),
 		}),
 		Verify: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
-			Model: async ({ token, userId }) => {
+			Model: async ({ token, userId }, session) => {
 				const result = await dbModel
-					.findOne({ _id: userId }, { refreshToken: 1, _id: 0 })
+					.findOne({ _id: userId }, { refreshToken: 1, _id: 0 }, { session })
 					.lean()
 
 				const tokens = result?.refreshToken

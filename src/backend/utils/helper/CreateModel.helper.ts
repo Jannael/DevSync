@@ -6,10 +6,10 @@ function CreateModel<T, R>({
 	Model,
 	DefaultError,
 }: {
-	Model: (params: T, session: ClientSession) => Promise<R | undefined>
+	Model: (params: T, session?: ClientSession) => Promise<R | undefined>
 	DefaultError: CustomError
 }) {
-	return async (params: T, session: ClientSession): Promise<R | undefined> => {
+	return async (params: T, session?: ClientSession): Promise<R | undefined> => {
 		try {
 			return await Model(params, session)
 		} catch (e) {

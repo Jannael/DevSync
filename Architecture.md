@@ -1,6 +1,6 @@
 # Architecture Overview
 
->![NOTE]
+> [!NOTE]
 > if you want to know more about how the code works you can check the [Contribution guide](/doc/ContributionGuide/Index.md)
 
 The flow for each request is simple and structured:

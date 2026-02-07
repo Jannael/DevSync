@@ -20,6 +20,7 @@ interface Response {
       hasPrevPage: boolean;
     }
   } & any[];
+  link?: Array<{rel: string; href: string}>;
 } & {
   success: false;
   msg: string;

@@ -6,11 +6,13 @@ import ErrorHandler from '../../error/Error.handler'
 
 function CreateAdapter({
 	controller,
-	link,
+	ErrorLink,
+	SuccessLink,
 	options,
 }: {
 	controller: (req: Request, res: Response, session?: ClientSession) => unknown
-	link?: Array<{ rel: string; href: string }>
+	ErrorLink?: Array<{ rel: string; href: string }>
+	SuccessLink?: Array<{ rel: string; href: string }>
 	options?: { transaction?: boolean }
 }) {
 	return async (req: Request, res: Response) => {
@@ -23,13 +25,13 @@ function CreateAdapter({
 			const result = await controller(req, res, session)
 			transaction && session?.commitTransaction()
 			if (typeof result === 'boolean') {
-				res.json({ success: result })
+				res.json({ success: result, link: SuccessLink })
 			} else {
-				res.json({ success: true, data: result })
+				res.json({ success: true, data: result, link: SuccessLink })
 			}
 		} catch (e) {
 			transaction && session?.abortTransaction()
-			;(e as CustomError).link = link
+			;(e as CustomError).link = ErrorLink
 
 			ErrorHandler.Response({ res, error: e as CustomError })
 		} finally {

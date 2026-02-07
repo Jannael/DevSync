@@ -35,8 +35,8 @@ const UserModel = {
 			const hashedPwd = await bcrypt.hash(data.pwd, salt)
 			const payload = { ...data, pwd: hashedPwd }
 
-			const user = await dbModel.create(payload)
-			return user
+			const user = await dbModel.create([payload])
+			return user[0].toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

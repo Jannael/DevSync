@@ -38,8 +38,8 @@ const SolutionModel = {
 	}),
 	Create: CreateModel<{ data: ISolution }, ISolution>({
 		Model: async ({ data }) => {
-			const res = await dbModel.create(data)
-			return res.toObject()
+			const res = await dbModel.create([data])
+			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

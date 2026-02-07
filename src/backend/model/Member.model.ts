@@ -43,8 +43,8 @@ const MemberModel = {
 	}),
 	Create: CreateModel<{ data: IMember }, IMember>({
 		Model: async ({ data }) => {
-			const created = await dbModel.create({ ...data, isInvitation: false })
-			return created.toObject()
+			const created = await dbModel.create([{ ...data, isInvitation: false }])
+			return created[0].toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

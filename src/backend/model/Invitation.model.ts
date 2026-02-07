@@ -50,8 +50,8 @@ const InvitationModel = {
 	}),
 	Create: CreateModel<{ data: IInvitation }, IInvitation>({
 		Model: async ({ data }) => {
-			const res = await dbModel.create({ data, isInvitation: true })
-			return res.toObject()
+			const res = await dbModel.create([{ data, isInvitation: true }])
+			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

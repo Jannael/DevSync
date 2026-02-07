@@ -105,8 +105,8 @@ const TaskModel = {
 	}),
 	Create: CreateModel<{ task: Omit<ITask, '_id'> }, ITask>({
 		Model: async ({ task }) => {
-			const res = await dbModel.create(task)
-			return res
+			const res = await dbModel.create([task])
+			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
 			'Failed to save',

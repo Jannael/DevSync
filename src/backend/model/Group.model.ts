@@ -29,8 +29,8 @@ const GroupModel = {
 	}),
 	Create: CreateModel<{ data: Omit<IGroup, '_id'> }, IGroup>({
 		Model: async ({ data }) => {
-			const created = await dbModel.create(data)
-			const res = created.toObject()
+			const created = await dbModel.create([data])
+			const res = created[0].toObject()
 			return res
 		},
 		DefaultError: new DatabaseError(

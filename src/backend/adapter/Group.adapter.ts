@@ -2,18 +2,55 @@ import GroupController from '../controller/Group.controller'
 import CreateAdapter from '../utils/helper/CreateAdapter.helper'
 
 const GroupAdapter = {
-	Get: CreateAdapter({ controller: GroupController.Get }),
+	Get: CreateAdapter({
+		controller: GroupController.Get,
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/get/' },
+			{ rel: 'members', href: '/member/v1/get/' },
+			{ rel: 'invitations', href: '/invitation/v1/get/group/' },
+			{ rel: 'tasks', href: '/task/v1/list/' },
+		],
+	}),
 	Create: CreateAdapter({
 		controller: GroupController.Create,
 		options: { transaction: true },
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/create/' },
+			{ rel: 'get', href: '/group/v1/get/' },
+			{ rel: 'update', href: '/group/v1/update/' },
+			{ rel: 'delete', href: '/group/v1/delete/' },
+		],
 	}),
-	Update: CreateAdapter({ controller: GroupController.Update }),
+	Update: CreateAdapter({
+		controller: GroupController.Update,
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/update/' },
+			{ rel: 'get', href: '/group/v1/get/' },
+			{ rel: 'delete', href: '/group/v1/delete/' },
+		],
+	}),
 	Delete: CreateAdapter({
 		controller: GroupController.Delete,
 		options: { transaction: true },
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/delete/' },
+			{ rel: 'create', href: '/group/v1/create/' },
+		],
 	}),
-	Join: CreateAdapter({ controller: GroupController.Join }),
-	Quit: CreateAdapter({ controller: GroupController.Quit }),
+	Join: CreateAdapter({
+		controller: GroupController.Join,
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/join/' },
+			{ rel: 'get', href: '/group/v1/get/' },
+		],
+	}),
+	Quit: CreateAdapter({
+		controller: GroupController.Quit,
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/quit/' },
+			{ rel: 'join', href: '/group/v1/join/' },
+		],
+	}),
 }
 
 export default GroupAdapter

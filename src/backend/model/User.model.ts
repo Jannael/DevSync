@@ -16,9 +16,9 @@ const UserModel = {
 		},
 		IUser
 	>({
-		Model: async ({ account, projection }) => {
+		Model: async ({ account, projection }, session) => {
 			const user = await dbModel
-				.findOne({ account }, { ...projection })
+				.findOne({ account }, projection, { session })
 				.lean<IUser>()
 			if (!user) return
 
@@ -30,12 +30,12 @@ const UserModel = {
 		{ data: Omit<IUser, 'refreshToken' | '_id'> },
 		IRefreshToken
 	>({
-		Model: async ({ data }) => {
+		Model: async ({ data }, session) => {
 			const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
 			const hashedPwd = await bcrypt.hash(data.pwd, salt)
 			const payload = { ...data, pwd: hashedPwd }
 
-			const user = await dbModel.create([payload])
+			const user = await dbModel.create([payload], { session })
 			return user[0].toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -44,14 +44,14 @@ const UserModel = {
 		),
 	}),
 	Update: CreateModel<{ data: Partial<IUser>; _id: Types.ObjectId }, boolean>({
-		Model: async ({ data, _id }) => {
+		Model: async ({ data, _id }, session) => {
 			if (data.pwd) {
 				const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))
 				const pwd = await bcrypt.hash(data.pwd, salt)
 				data.pwd = pwd
 			}
 
-			const updated = await dbModel.updateOne({ _id }, { ...data })
+			const updated = await dbModel.updateOne({ _id }, data, { session })
 			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -60,8 +60,8 @@ const UserModel = {
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const result = await dbModel.deleteOne({ _id })
+		Model: async ({ _id }, session) => {
+			const result = await dbModel.deleteOne({ _id }, { session })
 			return result.acknowledged && result.deletedCount === 1
 		},
 		DefaultError: new DatabaseError(

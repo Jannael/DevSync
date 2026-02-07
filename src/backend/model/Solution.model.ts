@@ -12,8 +12,10 @@ const SolutionModel = {
 		},
 		ISolution
 	>({
-		Model: async ({ _id, projection = {} }) => {
-			const res = await dbModel.findOne({ _id }, projection).lean<ISolution>()
+		Model: async ({ _id, projection = {} }, session) => {
+			const res = await dbModel
+				.findOne({ _id }, projection, { session })
+				.lean<ISolution>()
 			if (!res) return
 			return res
 		},
@@ -26,8 +28,10 @@ const SolutionModel = {
 		{ _id: Types.ObjectId; groupId: Types.ObjectId },
 		boolean
 	>({
-		Model: async ({ _id, groupId }) => {
-			const res = await dbModel.exists({ _id, groupId })
+		Model: async ({ _id, groupId }, session) => {
+			const res = await dbModel
+				.exists({ _id, groupId })
+				.session(session ?? null)
 			if (!res) return false
 			return true
 		},
@@ -37,8 +41,8 @@ const SolutionModel = {
 		),
 	}),
 	Create: CreateModel<{ data: ISolution }, ISolution>({
-		Model: async ({ data }) => {
-			const res = await dbModel.create([data])
+		Model: async ({ data }, session) => {
+			const res = await dbModel.create([data], { session })
 			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -50,8 +54,8 @@ const SolutionModel = {
 		{ _id: Types.ObjectId; data: Partial<Omit<ISolution, '_id'>> },
 		boolean
 	>({
-		Model: async ({ _id, data }) => {
-			const res = await dbModel.updateOne({ _id }, data)
+		Model: async ({ _id, data }, session) => {
+			const res = await dbModel.updateOne({ _id }, data, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -60,8 +64,8 @@ const SolutionModel = {
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const res = await dbModel.deleteOne({ _id })
+		Model: async ({ _id }, session) => {
+			const res = await dbModel.deleteOne({ _id }, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -70,8 +74,8 @@ const SolutionModel = {
 		),
 	}),
 	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
-		Model: async ({ groupId }) => {
-			const res = await dbModel.deleteMany({ groupId })
+		Model: async ({ groupId }, session) => {
+			const res = await dbModel.deleteMany({ groupId }, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

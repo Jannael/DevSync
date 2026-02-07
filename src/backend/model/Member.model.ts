@@ -6,9 +6,9 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 
 const MemberModel = {
 	GetForUser: CreateModel<{ account: string }, IMember[]>({
-		Model: async ({ account }) => {
+		Model: async ({ account }, session) => {
 			const groups = await dbModel
-				.find({ account, isInvitation: false })
+				.find({ account, isInvitation: false }, { session })
 				.lean<IMember[]>()
 			return groups || []
 		},
@@ -18,9 +18,9 @@ const MemberModel = {
 		),
 	}),
 	GetForGroup: CreateModel<{ groupId: Types.ObjectId }, IMember[]>({
-		Model: async ({ groupId }) => {
+		Model: async ({ groupId }, session) => {
 			const users = await dbModel
-				.find({ groupId, isInvitation: false })
+				.find({ groupId, isInvitation: false }, { session })
 				.lean<IMember[]>()
 			return users || []
 		},
@@ -30,9 +30,13 @@ const MemberModel = {
 		),
 	}),
 	GetRole: CreateModel<{ groupId: Types.ObjectId; account: string }, string>({
-		Model: async ({ groupId, account }) => {
+		Model: async ({ groupId, account }, session) => {
 			const member = await dbModel
-				.findOne({ groupId, account, isInvitation: false }, { role: 1 })
+				.findOne(
+					{ groupId, account, isInvitation: false },
+					{ role: 1 },
+					{ session },
+				)
 				.lean()
 			return member ? member.role : undefined
 		},
@@ -42,8 +46,10 @@ const MemberModel = {
 		),
 	}),
 	Create: CreateModel<{ data: IMember }, IMember>({
-		Model: async ({ data }) => {
-			const created = await dbModel.create([{ ...data, isInvitation: false }])
+		Model: async ({ data }, session) => {
+			const created = await dbModel.create([{ ...data, isInvitation: false }], {
+				session,
+			})
 			return created[0].toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -55,12 +61,15 @@ const MemberModel = {
 		{ groupId: Types.ObjectId; account: string },
 		boolean
 	>({
-		Model: async ({ groupId, account }) => {
-			const deleted = await dbModel.deleteOne({
-				groupId,
-				account,
-				isInvitation: false,
-			})
+		Model: async ({ groupId, account }, session) => {
+			const deleted = await dbModel.deleteOne(
+				{
+					groupId,
+					account,
+					isInvitation: false,
+				},
+				{ session },
+			)
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -72,10 +81,11 @@ const MemberModel = {
 		{ groupId: Types.ObjectId; account: string; role: string },
 		boolean
 	>({
-		Model: async ({ groupId, account, role }) => {
+		Model: async ({ groupId, account, role }, session) => {
 			const updated = await dbModel.updateOne(
 				{ groupId, account, isInvitation: false },
 				{ role },
+				{ session },
 			)
 			return updated.acknowledged
 		},
@@ -88,10 +98,11 @@ const MemberModel = {
 		{ oldAccount: string; newAccount: string },
 		boolean
 	>({
-		Model: async ({ oldAccount, newAccount }) => {
+		Model: async ({ oldAccount, newAccount }, session) => {
 			const updated = await dbModel.updateMany(
 				{ account: oldAccount },
 				{ account: newAccount },
+				{ session },
 			)
 			return updated.acknowledged
 		},
@@ -102,8 +113,8 @@ const MemberModel = {
 	}),
 	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
 		// => if the group is deleted
-		Model: async ({ groupId }) => {
-			const deleted = await dbModel.deleteMany({ groupId })
+		Model: async ({ groupId }, session) => {
+			const deleted = await dbModel.deleteMany({ groupId }, { session })
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -113,8 +124,8 @@ const MemberModel = {
 	}),
 	DeleteByUser: CreateModel<{ account: string }, boolean>({
 		// => remove all member records for a user
-		Model: async ({ account }) => {
-			const deleted = await dbModel.deleteMany({ account })
+		Model: async ({ account }, session) => {
+			const deleted = await dbModel.deleteMany({ account }, { session })
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(

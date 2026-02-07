@@ -11,9 +11,9 @@ const TaskModel = {
 		{ groupId: Types.ObjectId; skip: number; limit: number },
 		ITaskListItem[]
 	>({
-		Model: async ({ groupId, skip, limit }) => {
+		Model: async ({ groupId, skip, limit }, session) => {
 			const response = await dbModel
-				.find({ groupId }, Config.ITaskListItem)
+				.find({ groupId }, Config.ITaskListItem, { session })
 				.skip(skip)
 				.limit(limit)
 				.lean<ITaskListItem[]>()
@@ -29,11 +29,12 @@ const TaskModel = {
 		{ groupId: Types.ObjectId; account: string; skip: number; limit: number },
 		ITaskListItem[]
 	>({
-		Model: async ({ groupId, account, skip, limit }) => {
+		Model: async ({ groupId, account, skip, limit }, session) => {
 			const response = await dbModel
 				.find(
 					{ groupId, user: account, isComplete: false },
 					Config.ITaskListItem,
+					{ session },
 				)
 				.skip(skip)
 				.limit(limit)
@@ -47,8 +48,8 @@ const TaskModel = {
 		),
 	}),
 	CountForTechLead: CreateModel<{ groupId: Types.ObjectId }, number>({
-		Model: async ({ groupId }) => {
-			const total = await dbModel.countDocuments({ groupId })
+		Model: async ({ groupId }, session) => {
+			const total = await dbModel.countDocuments({ groupId }, { session })
 			return total
 		},
 		DefaultError: new DatabaseError(
@@ -60,12 +61,15 @@ const TaskModel = {
 		{ groupId: Types.ObjectId; account: string },
 		number
 	>({
-		Model: async ({ groupId, account }) => {
-			const total = await dbModel.countDocuments({
-				groupId,
-				user: account,
-				isComplete: false,
-			})
+		Model: async ({ groupId, account }, session) => {
+			const total = await dbModel.countDocuments(
+				{
+					groupId,
+					user: account,
+					isComplete: false,
+				},
+				{ session },
+			)
 			return total
 		},
 		DefaultError: new DatabaseError(
@@ -80,8 +84,10 @@ const TaskModel = {
 		},
 		ITask
 	>({
-		Model: async ({ _id, projection = {} }) => {
-			const res = await dbModel.findOne({ _id }, projection).lean<ITask>()
+		Model: async ({ _id, projection = {} }, session) => {
+			const res = await dbModel
+				.findOne({ _id }, projection, { session })
+				.lean<ITask>()
 			return res || undefined
 		},
 		DefaultError: new DatabaseError(
@@ -93,8 +99,10 @@ const TaskModel = {
 		{ _id: Types.ObjectId; groupId: Types.ObjectId },
 		boolean
 	>({
-		Model: async ({ _id, groupId }) => {
-			const res = await dbModel.exists({ _id, groupId })
+		Model: async ({ _id, groupId }, session) => {
+			const res = await dbModel
+				.exists({ _id, groupId })
+				.session(session ?? null)
 			if (!res) return false
 			return true
 		},
@@ -104,8 +112,8 @@ const TaskModel = {
 		),
 	}),
 	Create: CreateModel<{ task: Omit<ITask, '_id'> }, ITask>({
-		Model: async ({ task }) => {
-			const res = await dbModel.create([task])
+		Model: async ({ task }, session) => {
+			const res = await dbModel.create([task], { session })
 			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -114,8 +122,8 @@ const TaskModel = {
 		),
 	}),
 	Update: CreateModel<{ _id: Types.ObjectId; data: Partial<ITask> }, boolean>({
-		Model: async ({ _id, data }) => {
-			const res = await dbModel.updateOne({ _id }, data)
+		Model: async ({ _id, data }, session) => {
+			const res = await dbModel.updateOne({ _id }, data, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -124,8 +132,8 @@ const TaskModel = {
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const res = await dbModel.deleteOne({ _id })
+		Model: async ({ _id }, session) => {
+			const res = await dbModel.deleteOne({ _id }, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -134,8 +142,8 @@ const TaskModel = {
 		),
 	}),
 	DeleteByGroup: CreateModel<{ groupId: Types.ObjectId }, boolean>({
-		Model: async ({ groupId }) => {
-			const res = await dbModel.deleteMany({ groupId })
+		Model: async ({ groupId }, session) => {
+			const res = await dbModel.deleteMany({ groupId }, { session })
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

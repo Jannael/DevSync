@@ -11,9 +11,9 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 
 const InvitationModel = {
 	GetByGroup: CreateModel<{ _id: Types.ObjectId }, IInvitation[]>({
-		Model: async ({ _id }) => {
+		Model: async ({ _id }, session) => {
 			const res = await dbModel
-				.find({ _id, isInvitation: true })
+				.find({ _id, isInvitation: true }, { session })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -24,9 +24,9 @@ const InvitationModel = {
 		),
 	}),
 	GetByUser: CreateModel<{ account: string }, IInvitation[]>({
-		Model: async ({ account }) => {
+		Model: async ({ account }, session) => {
 			const res = await dbModel
-				.find({ account, isInvitation: true })
+				.find({ account, isInvitation: true }, { session })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -37,9 +37,13 @@ const InvitationModel = {
 		),
 	}),
 	GetRole: CreateModel<{ groupId: Types.ObjectId; account: string }, string>({
-		Model: async ({ groupId, account }) => {
+		Model: async ({ groupId, account }, session) => {
 			const member = await dbModel
-				.findOne({ groupId, account, isInvitation: true }, { role: 1 })
+				.findOne(
+					{ groupId, account, isInvitation: true },
+					{ role: 1 },
+					{ session },
+				)
 				.lean()
 			return member ? member.role : undefined
 		},
@@ -49,8 +53,10 @@ const InvitationModel = {
 		),
 	}),
 	Create: CreateModel<{ data: IInvitation }, IInvitation>({
-		Model: async ({ data }) => {
-			const res = await dbModel.create([{ data, isInvitation: true }])
+		Model: async ({ data }, session) => {
+			const res = await dbModel.create([{ data, isInvitation: true }], {
+				session,
+			})
 			return res[0].toObject()
 		},
 		DefaultError: new DatabaseError(
@@ -59,10 +65,11 @@ const InvitationModel = {
 		),
 	}),
 	Accept: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
-		Model: async ({ groupId, account }) => {
+		Model: async ({ groupId, account }, session) => {
 			const updated = await dbModel.updateOne(
 				{ groupId, account },
 				{ isInvitation: false },
+				{ session },
 			)
 			return updated.acknowledged
 		},
@@ -75,10 +82,11 @@ const InvitationModel = {
 		{ groupId: Types.ObjectId; account: string; role: string },
 		boolean
 	>({
-		Model: async ({ groupId, account, role }) => {
+		Model: async ({ groupId, account, role }, session) => {
 			const updated = await dbModel.updateOne(
 				{ groupId, account, isInvitation: true },
 				{ role },
+				{ session },
 			)
 			return updated.acknowledged
 		},
@@ -104,12 +112,15 @@ const InvitationModel = {
 	}),
 	Delete: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
 		// => reject or cancel
-		Model: async ({ groupId, account }) => {
-			const res = await dbModel.deleteOne({
-				account,
-				groupId,
-				isInvitation: true,
-			})
+		Model: async ({ groupId, account }, session) => {
+			const res = await dbModel.deleteOne(
+				{
+					account,
+					groupId,
+					isInvitation: true,
+				},
+				{ session },
+			)
 			return res.acknowledged
 		},
 		DefaultError: new DatabaseError(

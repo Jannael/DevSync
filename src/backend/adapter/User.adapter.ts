@@ -6,7 +6,10 @@ const UserAdapter = {
 	GetGroup: CreateAdapter({ controller: UserController.GetGroup }),
 	Update: CreateAdapter({ controller: UserController.Update }),
 	Create: CreateAdapter({ controller: UserController.Create }),
-	Delete: CreateAdapter({ controller: UserController.Delete }),
+	Delete: CreateAdapter({
+		controller: UserController.Delete,
+		options: { transaction: true },
+	}),
 }
 
 export default UserAdapter

@@ -18,6 +18,7 @@ const AuthAdapter = {
 	}),
 	ChangeAccount: CreateAdapter({
 		controller: AuthController.Account.Change,
+		options: { transaction: true },
 	}),
 	PasswordRequestCode: CreateAdapter({
 		controller: AuthController.Pwd.RequestCode,

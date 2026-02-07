@@ -3,9 +3,15 @@ import CreateAdapter from '../utils/helper/CreateAdapter.helper'
 
 const GroupAdapter = {
 	Get: CreateAdapter({ controller: GroupController.Get }),
-	Create: CreateAdapter({ controller: GroupController.Create }),
+	Create: CreateAdapter({
+		controller: GroupController.Create,
+		options: { transaction: true },
+	}),
 	Update: CreateAdapter({ controller: GroupController.Update }),
-	Delete: CreateAdapter({ controller: GroupController.Delete }),
+	Delete: CreateAdapter({
+		controller: GroupController.Delete,
+		options: { transaction: true },
+	}),
 	Join: CreateAdapter({ controller: GroupController.Join }),
 	Quit: CreateAdapter({ controller: GroupController.Quit }),
 }

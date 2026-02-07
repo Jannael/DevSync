@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { Types } from 'mongoose'
+import { type ClientSession, Types } from 'mongoose'
 import PaginationConfig from '../config/Pagination.config'
 import Roles from '../constant/Role.constant'
 import {
@@ -29,7 +29,11 @@ import {
 // so keep this in mind, for this i have the Exists function in task model
 
 const TaskController = {
-	Get: async (req: Request, _res: Response): Promise<ITask> => {
+	Get: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<ITask> => {
 		// body = { _id => taskId, groupId }
 		const { _id, groupId } = req.body
 
@@ -46,7 +50,11 @@ const TaskController = {
 
 		return task
 	},
-	List: async (req: Request, _res: Response): Promise<ITaskList> => {
+	List: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<ITaskList> => {
 		// body = { groupId, role, accessToken, page }
 		const { groupId, role, accessToken, page } = req.body
 
@@ -98,7 +106,11 @@ const TaskController = {
 			metadata,
 		}
 	},
-	Create: async (req: Request, _res: Response): Promise<ITask> => {
+	Create: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<ITask> => {
 		// body = { data, groupId }
 		const { data, groupId } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing task data')
@@ -111,7 +123,11 @@ const TaskController = {
 
 		return result
 	},
-	Update: async (req: Request, _res: Response): Promise<boolean> => {
+	Update: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { _id => taskId, data, groupId }
 		const { _id, data, groupId } = req.body
 
@@ -135,7 +151,11 @@ const TaskController = {
 
 		return result
 	},
-	Delete: async (req: Request, _res: Response): Promise<boolean> => {
+	Delete: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { _id => taskId, groupId }
 		const { _id, groupId } = req.body
 

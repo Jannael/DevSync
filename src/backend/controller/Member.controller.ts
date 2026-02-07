@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import type { ClientSession } from 'mongoose'
 import Roles, { ValidRoles } from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IMember } from '../interface/Member'
@@ -6,7 +7,11 @@ import MemberModel from '../model/Member.model'
 import AccountValidator from '../validator/Account.validator'
 
 const MemberController = {
-	Get: async (req: Request, _res: Response): Promise<IMember[]> => {
+	Get: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IMember[]> => {
 		// body = { groupId }
 		// Get all members of a group
 		const { groupId } = req.body
@@ -20,7 +25,11 @@ const MemberController = {
 
 		return members
 	},
-	UpdateRole: async (req: Request, _res: Response): Promise<boolean> => {
+	UpdateRole: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, account, role }
 		const { groupId, account, newRole } = req.body
 
@@ -42,7 +51,11 @@ const MemberController = {
 
 		return result
 	},
-	Remove: async (req: Request, _res: Response): Promise<boolean> => {
+	Remove: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, account }
 		const { groupId, account } = req.body
 

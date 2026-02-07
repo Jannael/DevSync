@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { Types } from 'mongoose'
+import { type ClientSession, Types } from 'mongoose'
 import Roles, { DefaultRole } from '../constant/Role.constant'
 import {
 	Forbidden,
@@ -21,14 +21,22 @@ import {
 } from '../validator/schemas/Group.schema'
 
 const GroupController = {
-	Get: async (req: Request, _res: Response): Promise<IGroup> => {
+	Get: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IGroup> => {
 		// body = { groupId }
 		const group = await Model.Get({ _id: req.body.groupId })
 		if (!group) throw new NotFound('Group not found')
 
 		return group
 	},
-	Create: async (req: Request, _res: Response): Promise<IGroup> => {
+	Create: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IGroup> => {
 		// body = { data }
 		const group = GroupValidator(req.body.data)
 		const accessToken = GetAccessToken({ req })
@@ -48,7 +56,11 @@ const GroupController = {
 
 		return result
 	},
-	Update: async (req: Request, _res: Response): Promise<boolean> => {
+	Update: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, data }
 		const { groupId, data } = req.body
 		const group = GroupPartialValidator(data)
@@ -61,7 +73,11 @@ const GroupController = {
 
 		return result
 	},
-	Delete: async (req: Request, _res: Response): Promise<boolean> => {
+	Delete: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId }
 		const { groupId } = req.body
 		const resultDeleteMembers = await MemberModel.DeleteByGroup({ groupId })
@@ -83,7 +99,11 @@ const GroupController = {
 
 		return result && resultDeleteInvitations && resultDeleteMembers
 	},
-	Join: async (req: Request, _res: Response): Promise<IMember> => {
+	Join: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IMember> => {
 		// body = { groupId }
 		const { groupId } = req.body
 		if (!groupId) throw new UserBadRequest('Missing data', 'Missing groupId')
@@ -118,7 +138,11 @@ const GroupController = {
 
 		return result
 	},
-	Quit: async (req: Request, _res: Response): Promise<boolean> => {
+	Quit: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, accessToken, role } (accessToken and role come from RoleMiddleware)
 		const { groupId, accessToken, role: userRole } = req.body
 

@@ -28,7 +28,11 @@ const { JWT_REFRESH_TOKEN_ENV, CRYPTO_REFRESH_TOKEN_ENV } = env
 
 const AuthController = {
 	Request: {
-		Code: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Code: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// body = { account, TEST_PWD }
 			const { account, TEST_PWD } = req.body
 			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
@@ -42,7 +46,11 @@ const AuthController = {
 			res.cookie(CookiesKeys.code, jwtEncrypt, cookiesConfig['5m'])
 			return true
 		},
-		AccessToken: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		AccessToken: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// cookies = { refreshToken }
 			if (!req.cookies.refreshToken)
 				throw new UserBadRequest('Missing data', 'Missing refreshToken')
@@ -99,7 +107,11 @@ const AuthController = {
 
 			return true
 		},
-		Logout: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Logout: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// cookies = { refreshToken }
 			const refreshToken = GetRefreshToken({ req })
 
@@ -119,7 +131,11 @@ const AuthController = {
 			return true
 		},
 	},
-	VerifyCode: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+	VerifyCode: async (
+		req: Request,
+		res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { code }
 		if (!req.body.code) throw new UserBadRequest('Missing data', 'Missing code')
 
@@ -141,7 +157,11 @@ const AuthController = {
 		return true
 	},
 	Account: {
-		RequestCode: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		RequestCode: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// body = { newAccount, TEST_PWD }
 			const { newAccount, TEST_PWD } = req.body
 			if (newAccount === undefined)
@@ -182,7 +202,11 @@ const AuthController = {
 			)
 			return true
 		},
-		Change: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Change: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// cookies = { codeCurrentAccount, codeNewAccount }
 			const accessToken = GetAccessToken({ req })
 			const { codeCurrentAccount, codeNewAccount } = req.body
@@ -261,7 +285,11 @@ const AuthController = {
 		},
 	},
 	Pwd: {
-		RequestCode: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		RequestCode: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// body = { account, TEST_PWD }
 			const { account, TEST_PWD } = req.body
 			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
@@ -279,7 +307,11 @@ const AuthController = {
 			res.cookie(CookiesKeys.pwdChange, hashCode, cookiesConfig['5m'])
 			return true
 		},
-		Change: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Change: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// cookies = { pwdChange }
 			// body = { code, newPwd }
 			const { code, newPwd } = req.body
@@ -332,7 +364,11 @@ const AuthController = {
 		},
 	},
 	RefreshToken: {
-		Code: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Code: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// body = { account, pwd, TEST_PWD }
 			const { account, pwd, TEST_PWD } = req.body
 			if (!account || !pwd)
@@ -363,7 +399,11 @@ const AuthController = {
 
 			return true
 		},
-		Confirm: async (req: Request, res: Response, _session: ClientSession | undefined): Promise<boolean> => {
+		Confirm: async (
+			req: Request,
+			res: Response,
+			_session: ClientSession | undefined,
+		): Promise<boolean> => {
 			// cookies = { genericToken, refreshTokenRequestCode }
 			// body = { code }
 			const { code } = req.body

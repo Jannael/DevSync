@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import type { ClientSession } from 'mongoose'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
@@ -15,11 +16,19 @@ import {
 } from '../validator/schemas/User.schema'
 
 const UserController = {
-	Get: async (req: Request, _res: Response): Promise<IRefreshToken> => {
+	Get: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IRefreshToken> => {
 		const accessToken = GetAccessToken({ req })
 		return accessToken
 	},
-	GetGroup: async (req: Request, _res: Response): Promise<IMember[]> => {
+	GetGroup: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IMember[]> => {
 		const accessToken = GetAccessToken({ req })
 		const groups = await MemberModel.GetForUser({
 			account: accessToken.account,
@@ -34,7 +43,11 @@ const UserController = {
 
 		return groups
 	},
-	Update: async (req: Request, _res: Response): Promise<boolean> => {
+	Update: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		const { account: verifiedAccount } = GetAuth({
 			req,
 			tokenName: CookiesKeys.account,
@@ -68,7 +81,11 @@ const UserController = {
 
 		return result
 	},
-	Create: async (req: Request, _res: Response): Promise<IRefreshToken> => {
+	Create: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IRefreshToken> => {
 		const { account } = GetAuth({ req, tokenName: CookiesKeys.account })
 
 		const { data } = req.body
@@ -83,7 +100,11 @@ const UserController = {
 
 		return result
 	},
-	Delete: async (req: Request, _res: Response): Promise<boolean> => {
+	Delete: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		const { account: verifiedAccount } = GetAuth({
 			req,
 			tokenName: CookiesKeys.account,

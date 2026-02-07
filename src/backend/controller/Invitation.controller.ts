@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { Types } from 'mongoose'
+import { type ClientSession, Types } from 'mongoose'
 import { ValidRoles } from '../constant/Role.constant'
 import { ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
@@ -9,7 +9,11 @@ import AccountValidator from '../validator/Account.validator'
 import { InvitationValidator } from '../validator/schemas/Invitation.schema'
 
 const InvitationController = {
-	GetForUser: async (req: Request, _res: Response): Promise<IInvitation[]> => {
+	GetForUser: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IInvitation[]> => {
 		const accessToken = GetAccessToken({ req })
 		const invitations = await InvitationModel.GetByUser({
 			account: accessToken.account,
@@ -22,7 +26,11 @@ const InvitationController = {
 
 		return invitations
 	},
-	GetForGroup: async (req: Request, _res: Response): Promise<IInvitation[]> => {
+	GetForGroup: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IInvitation[]> => {
 		// body = { groupId }
 		// Get all invitations emitted by a group
 		const invitations = await InvitationModel.GetByGroup({
@@ -36,7 +44,11 @@ const InvitationController = {
 
 		return invitations
 	},
-	Create: async (req: Request, _res: Response): Promise<IInvitation> => {
+	Create: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IInvitation> => {
 		// body = { account, role }
 		const invitation = InvitationValidator({
 			...req.body.data,
@@ -51,7 +63,11 @@ const InvitationController = {
 
 		return result
 	},
-	UpdateRole: async (req: Request, _res: Response): Promise<boolean> => {
+	UpdateRole: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, account, role }
 		const { groupId, account, newRole } = req.body
 
@@ -74,7 +90,11 @@ const InvitationController = {
 
 		return result
 	},
-	Accept: async (req: Request, _res: Response): Promise<boolean> => {
+	Accept: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId }
 		const accessToken = GetAccessToken({ req })
 
@@ -96,7 +116,11 @@ const InvitationController = {
 
 		return result
 	},
-	Reject: async (req: Request, _res: Response): Promise<boolean> => {
+	Reject: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId } => invitationId
 		const accessToken = GetAccessToken({ req })
 		const { groupId } = req.body
@@ -118,7 +142,11 @@ const InvitationController = {
 
 		return result
 	},
-	Cancel: async (req: Request, _res: Response): Promise<boolean> => {
+	Cancel: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { groupId, account }
 		const { groupId, account } = req.body
 

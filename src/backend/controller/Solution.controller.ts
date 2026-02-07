@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { Types } from 'mongoose'
+import { type ClientSession, Types } from 'mongoose'
 import {
 	Forbidden,
 	NotFound,
@@ -29,6 +29,7 @@ const SolutionController = {
 	Get: async (
 		req: Request,
 		_res: Response,
+		_session: ClientSession | undefined,
 	): Promise<Omit<ISolution, 'groupId' | '_id'>> => {
 		// body = { _id  => solutionId }
 		const { _id, groupId } = req.body
@@ -56,7 +57,11 @@ const SolutionController = {
 
 		return solution
 	},
-	Create: async (req: Request, _res: Response): Promise<ISolution> => {
+	Create: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<ISolution> => {
 		// body = { data, accessToken, role, groupId } (accessToken, groupId and role come from RoleMiddleware)
 		const { data, accessToken, role, groupId } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing solution data')
@@ -105,7 +110,11 @@ const SolutionController = {
 
 		return result
 	},
-	Update: async (req: Request, _res: Response): Promise<boolean> => {
+	Update: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { _id, data, accessToken, role, groupId } => solutionId
 		const { _id, data, accessToken, role, groupId } = req.body
 
@@ -157,7 +166,11 @@ const SolutionController = {
 
 		return result
 	},
-	Delete: async (req: Request, _res: Response): Promise<boolean> => {
+	Delete: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<boolean> => {
 		// body = { _id, accessToken, role } => solutionId
 		const { _id, accessToken, role, groupId } = req.body
 

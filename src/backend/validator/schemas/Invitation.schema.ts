@@ -6,9 +6,10 @@ export const InvitationSchemaPartial = InvitationSchema.partial()
 
 export type InvitationType = z.infer<typeof InvitationSchema>
 
-export const InvitationValidator = CreateValidator<typeof InvitationSchema, InvitationType>(
-	InvitationSchema,
-)
+export const InvitationValidator = CreateValidator<
+	typeof InvitationSchema,
+	InvitationType
+>(InvitationSchema)
 
 export const InvitationPartialValidator = CreateValidator<
 	typeof InvitationSchemaPartial,

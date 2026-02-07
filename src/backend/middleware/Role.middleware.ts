@@ -45,7 +45,7 @@ const RoleMiddleware = (roles: Array<IRole>) => {
 			req.body.role = memberRole
 			next()
 		} catch (e) {
-			ErrorHandler.Response(res, e as CustomError)
+			ErrorHandler.Response({ res, error: e as CustomError })
 		}
 	}
 }

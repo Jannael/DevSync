@@ -2,7 +2,7 @@
 	"editor.defaultFormatter": "biomejs.biome",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "explicit",
-    "source.fixAll.markdownlint": "always"
+		"source.fixAll.markdownlint": "always"
 	},
 	"[markdown]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",

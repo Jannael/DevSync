@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import type { ClientSession, Types } from 'mongoose'
+import type { Types } from 'mongoose'
 import Config from '../config/Projection.config'
 import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/Error.instance'

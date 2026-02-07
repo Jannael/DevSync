@@ -6,8 +6,8 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 
 const GroupModel = {
 	Get: CreateModel<{ _id: Types.ObjectId }, IGroup>({
-		Model: async ({ _id }) => {
-			const res = await dbModel.findOne({ _id }).lean<IGroup>()
+		Model: async ({ _id }, session) => {
+			const res = await dbModel.findOne({ _id }, { session }).lean<IGroup>()
 			if (!res) return
 			return res
 		},
@@ -17,8 +17,8 @@ const GroupModel = {
 		),
 	}),
 	Exists: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const res = await dbModel.exists({ _id })
+		Model: async ({ _id }, session) => {
+			const res = await dbModel.exists({ _id }).session(session ?? null)
 			if (!res) return false
 			return true
 		},
@@ -28,8 +28,8 @@ const GroupModel = {
 		),
 	}),
 	Create: CreateModel<{ data: Omit<IGroup, '_id'> }, IGroup>({
-		Model: async ({ data }) => {
-			const created = await dbModel.create([data])
+		Model: async ({ data }, session) => {
+			const created = await dbModel.create([data], { session })
 			const res = created[0].toObject()
 			return res
 		},
@@ -39,8 +39,8 @@ const GroupModel = {
 		),
 	}),
 	Update: CreateModel<{ _id: Types.ObjectId; data: Partial<IGroup> }, boolean>({
-		Model: async ({ _id, data }) => {
-			const updated = await dbModel.updateOne({ _id }, data)
+		Model: async ({ _id, data }, session) => {
+			const updated = await dbModel.updateOne({ _id }, data, { session })
 			return updated.acknowledged
 		},
 		DefaultError: new DatabaseError(
@@ -49,8 +49,8 @@ const GroupModel = {
 		),
 	}),
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
-		Model: async ({ _id }) => {
-			const deleted = await dbModel.deleteOne({ _id })
+		Model: async ({ _id }, session) => {
+			const deleted = await dbModel.deleteOne({ _id }, { session })
 			return deleted.acknowledged
 		},
 		DefaultError: new DatabaseError(

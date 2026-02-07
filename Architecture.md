@@ -83,6 +83,7 @@ I use the following naming convention for variables:
 ### Adapter
 
 - Handles request format and HATEOS for error handling.
+- Decides whether or not to use transactions.
 
 ### Controller
 
@@ -90,10 +91,12 @@ I use the following naming convention for variables:
 - Manages token operations: encryption, decryption, and JWT handling.
 - Configures options related to authentication and security.
 - Delegates data operations to the model layer.
+- Passes the session to the model layer only if the adapter decides to use transactions.
 
 ### Model
 
 - Interfaces directly with the database.
+- Passes the session to the database
 - Executes queries.
 - Handles data encryption and related errors the encryption to save in the
   database ONLY (like passwords, because it's something only the db needs it has

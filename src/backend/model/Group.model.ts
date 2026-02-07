@@ -7,7 +7,9 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 const GroupModel = {
 	Get: CreateModel<{ _id: Types.ObjectId }, IGroup>({
 		Model: async ({ _id }, session) => {
-			const res = await dbModel.findOne({ _id }, { session }).lean<IGroup>()
+			const res = await dbModel
+				.findOne({ _id }, null, { session })
+				.lean<IGroup>()
 			if (!res) return
 			return res
 		},

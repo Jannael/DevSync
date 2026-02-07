@@ -13,4 +13,4 @@ this is not something about the project but i've seen that even AI does not unde
 - When the operation involves more than one collection
 - When the operations are write operations
 
-this are the only two rules you need to decide wether or not to use a transaction, an operation can read multiple collections but if it only write to one collection it is not a transaction, only if its writes into multiple collections it is a transaction
+this are the only two rules you need to decide wether or not to use a transaction, an operation can read multiple collections but if it only write to one collection it is not a transaction unless it read.. after the write operation, only if its writes into multiple collections it is a transaction

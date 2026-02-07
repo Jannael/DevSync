@@ -11,6 +11,14 @@ const UserAdapter = {
 			{ rel: 'update', href: '/user/v1/update/' },
 			{ rel: 'delete', href: '/user/v1/delete/' },
 		],
+		ErrorLink: [
+			{ rel: 'self', href: '/user/v1/get/' },
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{
+				rel: 'login',
+				href: '/auth/v1/request/refreshToken/code/',
+			},
+		],
 	}),
 	GetGroup: CreateAdapter({
 		controller: UserController.GetGroup,
@@ -20,6 +28,14 @@ const UserAdapter = {
 			{ rel: 'update', href: '/user/v1/update/' },
 			{ rel: 'delete', href: '/user/v1/delete/' },
 		],
+		ErrorLink: [
+			{ rel: 'self', href: '/user/v1/get/group/' },
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{
+				rel: 'login',
+				href: '/auth/v1/request/refreshToken/code/',
+			},
+		],
 	}),
 	Update: CreateAdapter({
 		controller: UserController.Update,
@@ -28,12 +44,22 @@ const UserAdapter = {
 			{ rel: 'details', href: '/user/v1/get/' },
 			{ rel: 'delete', href: '/user/v1/delete/' },
 		],
+		ErrorLink: [
+			{ rel: 'self', href: '/user/v1/update/' },
+			{ rel: 'verify', href: '/auth/v1/verify/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/request/code/' },
+		],
 	}),
 	Create: CreateAdapter({
 		controller: UserController.Create,
 		SuccessLink: [
 			{ rel: 'self', href: '/user/v1/create/' },
 			{ rel: 'details', href: '/user/v1/get/' },
+		],
+		ErrorLink: [
+			{ rel: 'self', href: '/user/v1/create/' },
+			{ rel: 'verify', href: '/auth/v1/verify/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/request/code/' },
 		],
 	}),
 	Delete: CreateAdapter({
@@ -42,6 +68,11 @@ const UserAdapter = {
 		SuccessLink: [
 			{ rel: 'self', href: '/user/v1/delete/' },
 			{ rel: 'create', href: '/user/v1/create/' },
+		],
+		ErrorLink: [
+			{ rel: 'self', href: '/user/v1/delete/' },
+			{ rel: 'verify', href: '/auth/v1/verify/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/request/code/' },
 		],
 	}),
 }

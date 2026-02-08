@@ -14,10 +14,7 @@ const UserAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/user/v1/get/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	GetGroup: CreateAdapter({
@@ -31,10 +28,7 @@ const UserAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/user/v1/get/group/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	Update: CreateAdapter({

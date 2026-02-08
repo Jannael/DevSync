@@ -9,11 +9,9 @@ const MemberAdapter = {
 			{ rel: 'group', href: '/group/v1/get/' },
 		],
 		ErrorLink: [
+			{ rel: 'self', href: '/member/v1/get/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	UpdateRole: CreateAdapter({
@@ -23,11 +21,9 @@ const MemberAdapter = {
 			{ rel: 'get', href: '/member/v1/get/' },
 		],
 		ErrorLink: [
+			{ rel: 'self', href: '/member/v1/update/role/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	Remove: CreateAdapter({
@@ -37,11 +33,9 @@ const MemberAdapter = {
 			{ rel: 'group', href: '/group/v1/get/' },
 		],
 		ErrorLink: [
+			{ rel: 'self', href: '/member/v1/remove/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 }

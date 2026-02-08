@@ -13,10 +13,7 @@ const SolutionAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/solution/v1/get/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	Create: CreateAdapter({
@@ -30,10 +27,7 @@ const SolutionAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/solution/v1/create/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	Update: CreateAdapter({
@@ -46,10 +40,7 @@ const SolutionAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/solution/v1/update/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 	Delete: CreateAdapter({
@@ -62,10 +53,7 @@ const SolutionAdapter = {
 		ErrorLink: [
 			{ rel: 'self', href: '/solution/v1/delete/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{
-				rel: 'login',
-				href: '/auth/v1/request/refreshToken/code/',
-			},
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],
 	}),
 }

@@ -221,11 +221,6 @@ describe('/auth/v1/', () => {
 	describe('/request/refreshToken/', () => {
 		const endpoint = `${api}/request/refreshToken/`
 		test('good request', async () => {
-			// Initial setup: get the codes
-			await agent
-				.post(`${api}/request/refreshToken/code/`)
-				.send({ account: testAccount, pwd: 'Password123!' })
-
 			const res = await agent.post(endpoint).send({ code: '1234' })
 
 			ValidateCookie({
@@ -313,7 +308,6 @@ describe('/auth/v1/', () => {
 	describe('/account/request/code/', () => {
 		const endpoint = `${api}/account/request/code/`
 		test('good request', async () => {
-			// Need accessToken
 			testAccount = 'newTest@gmail.com'
 			const res = await agent.patch(endpoint).send({ newAccount: testAccount })
 

@@ -41,6 +41,8 @@ function GetToken({
 			'Invalid credentials',
 			`Invalid token = ${tokenName}`,
 		)
+	delete token.iat
+	delete token.exp
 	return token
 }
 

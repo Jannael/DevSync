@@ -104,7 +104,6 @@ const AuthController = {
 				accessToken,
 				cookiesConfig.accessToken,
 			)
-
 			return true
 		},
 		Logout: async (
@@ -454,9 +453,6 @@ const AuthController = {
 			if (cookieCode.code !== code)
 				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
-			delete (user as JwtPayload).iat
-			delete (user as JwtPayload).exp
-
 			const refreshToken = GenerateRefreshToken({ content: user })
 			const accessToken = GenerateAccessToken({ content: user })
 
@@ -464,7 +460,6 @@ const AuthController = {
 				token: refreshToken,
 				userId: user._id,
 			})
-
 			if (!savedInDB)
 				throw new ServerError(
 					'Operation Failed',

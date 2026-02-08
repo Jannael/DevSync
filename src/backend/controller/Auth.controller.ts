@@ -208,7 +208,6 @@ const AuthController = {
 			// cookies = { codeCurrentAccount, codeNewAccount }
 			const accessToken = GetAccessToken({ req })
 			const { codeCurrentAccount, codeNewAccount } = req.body
-
 			if (!codeCurrentAccount || !codeNewAccount)
 				throw new UserBadRequest(
 					'Missing data',
@@ -223,7 +222,6 @@ const AuthController = {
 				req,
 				tokenName: CookiesKeys.codeNewAccount,
 			})
-
 			if (code.code !== codeCurrentAccount)
 				throw new UserBadRequest(
 					'Invalid credentials',
@@ -255,7 +253,6 @@ const AuthController = {
 				},
 				session,
 			)
-
 			if (!updateGroupMembership || !updateInvitation)
 				throw new ServerError(
 					'Operation Failed',
@@ -275,6 +272,9 @@ const AuthController = {
 			const newAccessToken = GenerateAccessToken({ content: user })
 			const refreshToken = GenerateRefreshToken({ content: user })
 
+			const deleteSessions = await AuthModel.RefreshToken.RemoveAll({
+				userId: user._id,
+			}, session)
 			const savedInDB = await AuthModel.RefreshToken.Save(
 				{
 					token: refreshToken,
@@ -282,8 +282,7 @@ const AuthController = {
 				},
 				session,
 			)
-
-			if (!savedInDB)
+			if (!savedInDB || !deleteSessions)
 				throw new ServerError(
 					'Operation Failed',
 					'The session was not saved please try again',
@@ -331,7 +330,7 @@ const AuthController = {
 		Change: async (
 			req: Request,
 			res: Response,
-			_session: ClientSession | undefined,
+			session: ClientSession | undefined,
 		): Promise<boolean> => {
 			// cookies = { pwdChange }
 			// body = { code, newPwd }
@@ -350,14 +349,17 @@ const AuthController = {
 			const user = await UserModel.Get({
 				account: cookieCode.account,
 				projection: ProjectionConfig.IRefreshToken,
-			})
+			}, session)
 			if (!user || !user._id) throw new NotFound('User not found')
 
 			const savedInDB = await UserModel.Update({
 				data: { pwd: validPwd.password },
 				_id: user._id,
-			})
-			if (!savedInDB)
+			}, session)
+			const deleteSessions = await AuthModel.RefreshToken.RemoveAll({
+				userId: user._id,
+			}, session)
+			if (!savedInDB || !deleteSessions)
 				throw new ServerError(
 					'Operation Failed',
 					'The password was not updated',
@@ -369,6 +371,16 @@ const AuthController = {
 			const accessToken = GenerateAccessToken({
 				content: user,
 			})
+
+			const savedSession = await AuthModel.RefreshToken.Save({
+				token: refreshToken,
+				userId: user._id,
+			}, session)
+			if (!savedSession)
+				throw new ServerError(
+					'Operation Failed',
+					'The session was not saved please try again',
+				)
 
 			res.cookie(
 				CookiesKeys.refreshToken,

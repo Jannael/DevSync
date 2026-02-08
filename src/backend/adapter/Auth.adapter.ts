@@ -80,6 +80,7 @@ const AuthAdapter = {
 	}),
 	ChangePassword: CreateAdapter({
 		controller: AuthController.Pwd.Change,
+		options: { transaction: true },
 		SuccessLink: [
 			{ rel: 'self', href: '/auth/v1/change/password/' },
 			{ rel: 'logout', href: '/auth/v1/request/logout/' },

@@ -357,7 +357,6 @@ describe('/auth/v1/', () => {
 	describe('/change/account/', () => {
 		const endpoint = `${api}/change/account/`
 		test('good request', async () => {
-			// Setup
 			const res = await agent.patch(endpoint).send({
 				codeCurrentAccount: '1234',
 				codeNewAccount: '1234',

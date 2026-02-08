@@ -19,23 +19,24 @@ function CreateAdapter({
 		const { transaction } = options || {}
 
 		const session = transaction ? await mongoose.startSession() : undefined
-		transaction && session?.startTransaction()
+		transaction && await session?.startTransaction()
 
 		try {
 			const result = await controller(req, res, session)
-			transaction && session?.commitTransaction()
+			if (transaction && session) await session.commitTransaction()
+
 			if (typeof result === 'boolean') {
 				res.json({ success: result, link: SuccessLink })
 			} else {
 				res.json({ success: true, data: result, link: SuccessLink })
 			}
 		} catch (e) {
-			transaction && session?.abortTransaction()
-			;(e as CustomError).link = ErrorLink
+			if (transaction && session) await session.abortTransaction()
 
+			;(e as CustomError).link = ErrorLink
 			ErrorHandler.Response({ res, error: e as CustomError })
 		} finally {
-			transaction && session?.endSession()
+			if (transaction && session) await session.endSession()
 		}
 	}
 }

@@ -83,10 +83,10 @@ describe('/user/v1/', () => {
 			const cases: ISuitErrorCasesResponse = [
 				{
 					name: 'Missing user data',
-          fn: async () => {
-            await Auth()
-            return await agent.post(endpoint)
-          },
+					fn: async () => {
+						await Auth()
+						return await agent.post(endpoint)
+					},
 					error: {
 						success: false,
 						code: 400,
@@ -112,6 +112,54 @@ describe('/user/v1/', () => {
 					{ rel: 'self', href: '/user/v1/create/' },
 					{ rel: 'verify', href: '/auth/v1/verify/code/' },
 					{ rel: 'requestCode', href: '/auth/v1/request/code/' },
+				],
+			})
+		})
+	})
+
+	describe('/get/', () => {
+		const endpoint = `${api}/get/`
+
+		test('good request', async () => {
+			const res = await agent.get(endpoint)
+
+			expect(res.body).toStrictEqual({
+				success: true,
+				data: {
+					fullName: user.fullName,
+					account: user.account,
+					nickName: user.nickName,
+				},
+				link: [
+					{ rel: 'self', href: '/user/v1/get/' },
+					{ rel: 'groups', href: '/user/v1/get/group/' },
+					{ rel: 'invitations', href: '/user/v1/get/invitation/' },
+					{ rel: 'update', href: '/user/v1/update/' },
+					{ rel: 'delete', href: '/user/v1/delete/' },
+				],
+			})
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Auth token is missing',
+					fn: () => request(app).get(endpoint),
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing token = accessToken',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/user/v1/get/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 				],
 			})
 		})

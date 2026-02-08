@@ -21,9 +21,7 @@ const UserAdapter = {
 		controller: UserController.GetGroup,
 		SuccessLink: [
 			{ rel: 'self', href: '/user/v1/get/group/' },
-			{ rel: 'details', href: '/user/v1/get/' },
-			{ rel: 'update', href: '/user/v1/update/' },
-			{ rel: 'delete', href: '/user/v1/delete/' },
+			{ rel: 'details', href: '/group/v1/get/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/user/v1/get/group/' },

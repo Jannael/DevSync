@@ -164,4 +164,45 @@ describe('/user/v1/', () => {
 			})
 		})
 	})
+
+	describe('/get/group/', () => {
+		const endpoint = `${api}/get/group/`
+
+		test('good request', async () => {
+			const res = await agent.get(endpoint)
+
+			expect(res.body).toStrictEqual({
+				success: true,
+				data: [],
+				link: [
+					{ rel: 'self', href: '/user/v1/get/group/' },
+					{ rel: 'details', href: '/group/v1/get/' },
+				],
+			})
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Auth token is missing',
+					fn: () => request(app).get(endpoint),
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing token = accessToken',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/user/v1/get/group/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
+		})
+	})
 })

@@ -74,16 +74,22 @@ const TaskController = {
 			tasks = await TaskModel.ListForTechLead({ groupId, skip, limit }, session)
 			count = await TaskModel.CountForTechLead({ groupId }, session)
 		} else {
-			tasks = await TaskModel.ListForMember({
-				groupId,
-				account: accessToken.account,
-				skip,
-				limit,
-			}, session)
-			count = await TaskModel.CountForUser({
-				groupId,
-				account: accessToken.account,
-			}, session)
+			tasks = await TaskModel.ListForMember(
+				{
+					groupId,
+					account: accessToken.account,
+					skip,
+					limit,
+				},
+				session,
+			)
+			count = await TaskModel.CountForUser(
+				{
+					groupId,
+					account: accessToken.account,
+				},
+				session,
+			)
 		}
 
 		if (!tasks || !count)

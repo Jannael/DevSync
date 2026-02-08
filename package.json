@@ -6,10 +6,14 @@
 	"scripts": {
 		"test": "pnpm jest --verbose --detectOpenHandles",
 		"test:w": "pnpm jest --verbose --detectOpenHandles src/test/backend/routes/auth/test.test.ts",
+
 		"build": "pnpm tsc",
-		"start": "node ./dist/backend/server.js",
-		"lint": "pnpm biome check",
 		"type-check": "pnpm tsc -noEmit",
+		"start": "node ./dist/backend/server.js",
+
+		"format": "pnpm biome check --write",
+		"lint": "pnpm biome check",
+
 		"lint:md": "markdownlint \"**/*.md\"",
 		"format:md": "prettier --write \"**/*.md\"",
 		"check:md": "prettier --check \"**/*.md\""

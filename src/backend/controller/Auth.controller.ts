@@ -243,14 +243,20 @@ const AuthController = {
 			})
 			if (!user) throw new NotFound('User not found')
 
-			const updateGroupMembership = await MemberModel.UpdateAccount({
-				oldAccount: accessToken.account,
-				newAccount: cookieNewAccount.account,
-			}, session)
-			const updateInvitation = await InvitationModel.UpdateAccount({
-				oldAccount: accessToken.account,
-				newAccount: cookieNewAccount.account,
-			}, session)
+			const updateGroupMembership = await MemberModel.UpdateAccount(
+				{
+					oldAccount: accessToken.account,
+					newAccount: cookieNewAccount.account,
+				},
+				session,
+			)
+			const updateInvitation = await InvitationModel.UpdateAccount(
+				{
+					oldAccount: accessToken.account,
+					newAccount: cookieNewAccount.account,
+				},
+				session,
+			)
 
 			if (!updateGroupMembership || !updateInvitation)
 				throw new ServerError(
@@ -258,10 +264,13 @@ const AuthController = {
 					'The group membership or invitation was not updated',
 				)
 
-			const result = await UserModel.Update({
-				_id: user._id,
-				data: { account: cookieNewAccount.account },
-			}, session)
+			const result = await UserModel.Update(
+				{
+					_id: user._id,
+					data: { account: cookieNewAccount.account },
+				},
+				session,
+			)
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 

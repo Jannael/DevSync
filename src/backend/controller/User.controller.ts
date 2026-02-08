@@ -117,9 +117,12 @@ const UserController = {
 			)
 
 		// Check if the user is the last techLead in any group
-		const userMemberships = await MemberModel.GetForUser({
-			account: accessToken.account,
-		}, session)
+		const userMemberships = await MemberModel.GetForUser(
+			{
+				account: accessToken.account,
+			},
+			session,
+		)
 
 		if (!userMemberships) {
 			throw new ServerError(
@@ -130,9 +133,12 @@ const UserController = {
 
 		for (const membership of userMemberships) {
 			if (membership.role === Roles.techLead) {
-				const groupMembers = await MemberModel.GetForGroup({
-					groupId: membership.groupId,
-				}, session)
+				const groupMembers = await MemberModel.GetForGroup(
+					{
+						groupId: membership.groupId,
+					},
+					session,
+				)
 
 				if (!groupMembers) {
 					throw new ServerError(
@@ -155,12 +161,18 @@ const UserController = {
 		}
 
 		// Cascading deletes
-		const deleteInvitations = await InvitationModel.DeleteByUser({
-			account: accessToken.account,
-		}, session)
-		const deleteMemberships = await MemberModel.DeleteByUser({
-			account: accessToken.account,
-		}, session)
+		const deleteInvitations = await InvitationModel.DeleteByUser(
+			{
+				account: accessToken.account,
+			},
+			session,
+		)
+		const deleteMemberships = await MemberModel.DeleteByUser(
+			{
+				account: accessToken.account,
+			},
+			session,
+		)
 
 		if (!deleteInvitations || !deleteMemberships) {
 			throw new ServerError(

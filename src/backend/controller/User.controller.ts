@@ -116,15 +116,12 @@ const UserController = {
 		const user = await UserModel.Get({
 			account: accessToken.account,
 			projection: ProjectionConfig.IRefreshToken,
-		})
+		}, session)
 		if (!user) throw new ServerError('Operation Failed', 'User not found')
 
-		const refreshToken = GenerateRefreshToken({
-			content: user,
-		})
-		const newAccessToken = GenerateAccessToken({
-			content: user,
-		})
+		const refreshToken = GenerateRefreshToken({ content: user })
+		const newAccessToken = GenerateAccessToken({ content: user })
+
 		const savedNewSession = await AuthModel.RefreshToken.Save(
 			{
 				userId: accessToken._id,

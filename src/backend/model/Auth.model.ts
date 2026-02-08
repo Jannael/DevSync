@@ -70,6 +70,21 @@ const AuthModel = {
 				'The session was not removed, something went wrong please try again',
 			),
 		}),
+		RemoveAll: CreateModel<{ userId: Types.ObjectId }, boolean>({
+			Model: async ({ userId }, session) => {
+				const result = await dbModel.updateOne(
+					{ _id: userId },
+					{ $set: { refreshToken: [] } },
+					{ session },
+				)
+
+				return result.matchedCount === 1 && result.modifiedCount === 1
+			},
+			DefaultError: new DatabaseError(
+				'Failed to remove',
+				'The sessions were not removed, something went wrong please try again',
+			),
+		}),
 		Verify: CreateModel<{ token: string; userId: Types.ObjectId }, boolean>({
 			Model: async ({ token, userId }, session) => {
 				const result = await dbModel

@@ -12,7 +12,7 @@ const UserModel = {
 	Get: CreateModel<
 		{
 			account: string
-			projection: Record<keyof IUser, 0 | 1>
+			projection: Partial<Record<keyof IUser, 0 | 1>>
 		},
 		IUser
 	>({

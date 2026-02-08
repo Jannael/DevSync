@@ -4,9 +4,6 @@ export default {
 		fullName: 1,
 		account: 1,
 		nickName: 1,
-		// exclude
-		refreshToken: 0,
-		pwd: 0,
 	},
 	ITaskListItem: {
 		_id: 1,

@@ -275,6 +275,20 @@ const AuthController = {
 			const newAccessToken = GenerateAccessToken({ content: user })
 			const refreshToken = GenerateRefreshToken({ content: user })
 
+			const savedInDB = await AuthModel.RefreshToken.Save(
+				{
+					token: refreshToken,
+					userId: user._id,
+				},
+				session,
+			)
+
+			if (!savedInDB)
+				throw new ServerError(
+					'Operation Failed',
+					'The session was not saved please try again',
+				)
+
 			res.cookie(
 				CookiesKeys.refreshToken,
 				refreshToken,

@@ -9,6 +9,7 @@ const GroupAdapter = {
 			{ rel: 'members', href: '/member/v1/get/' },
 			{ rel: 'invitations', href: '/invitation/v1/get/group/' },
 			{ rel: 'tasks', href: '/task/v1/list/' },
+			{ rel: 'createTask', href: '/task/v1/create/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/group/v1/get/' },

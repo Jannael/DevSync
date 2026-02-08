@@ -7,6 +7,8 @@ const InvitationAdapter = {
 		SuccessLink: [
 			{ rel: 'self', href: '/invitation/v1/get/user/' },
 			{ rel: 'details', href: '/user/v1/get/' },
+			{ rel: 'accept', href: '/invitation/v1/accept/' },
+			{ rel: 'reject', href: '/invitation/v1/reject/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/invitation/v1/get/user/' },
@@ -19,6 +21,7 @@ const InvitationAdapter = {
 		SuccessLink: [
 			{ rel: 'self', href: '/invitation/v1/get/group/' },
 			{ rel: 'details', href: '/group/v1/get/' },
+			{ rel: 'cancel', href: '/invitation/v1/cancel/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/invitation/v1/get/group/' },

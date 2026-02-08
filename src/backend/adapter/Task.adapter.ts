@@ -10,6 +10,7 @@ const TaskAdapter = {
 			{ rel: 'update', href: '/task/v1/update/' },
 			{ rel: 'delete', href: '/task/v1/delete/' },
 			{ rel: 'solution', href: '/solution/v1/get/' },
+			{ rel: 'createSolution', href: '/solution/v1/create/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/task/v1/get/' },

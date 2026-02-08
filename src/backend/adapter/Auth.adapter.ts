@@ -20,7 +20,7 @@ const AuthAdapter = {
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/auth/v1/verify/code/' },
-			{ rel: 'code', href: '/auth/v1/request/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/request/code/' },
 		],
 	}),
 	RequestAccessToken: CreateAdapter({
@@ -67,7 +67,7 @@ const AuthAdapter = {
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/auth/v1/change/account/' },
-			{ rel: 'code', href: '/auth/v1/account/request/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/account/request/code/' },
 		],
 	}),
 	PasswordRequestCode: CreateAdapter({
@@ -86,7 +86,7 @@ const AuthAdapter = {
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/auth/v1/change/password/' },
-			{ rel: 'code', href: '/auth/v1/password/request/code/' },
+			{ rel: 'requestCode', href: '/auth/v1/password/request/code/' },
 		],
 	}),
 	Logout: CreateAdapter({

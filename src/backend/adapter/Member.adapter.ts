@@ -7,6 +7,8 @@ const MemberAdapter = {
 		SuccessLink: [
 			{ rel: 'self', href: '/member/v1/get/' },
 			{ rel: 'group', href: '/group/v1/get/' },
+			{ rel: 'updateRole', href: '/member/v1/update/role/' },
+			{ rel: 'remove', href: '/member/v1/remove/' },
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/member/v1/get/' },

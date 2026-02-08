@@ -46,6 +46,7 @@ const UserAdapter = {
 	}),
 	Create: CreateAdapter({
 		controller: UserController.Create,
+		options: { transaction: true },
 		SuccessLink: [
 			{ rel: 'self', href: '/user/v1/create/' },
 			{ rel: 'details', href: '/user/v1/get/' },

@@ -11,6 +11,7 @@ router.post(
 	RoleMiddleware([Roles.techLead]),
 	GroupAdapter.GetInvitation,
 )
+
 router.post('/create/', GroupAdapter.Create)
 router.put('/update/', RoleMiddleware([Roles.techLead]), GroupAdapter.Update)
 router.delete('/delete/', RoleMiddleware([Roles.techLead]), GroupAdapter.Delete)

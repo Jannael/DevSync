@@ -3,7 +3,7 @@ import type { Types } from 'mongoose'
 import dbModel from '../database/node/User'
 import { env } from '../Env.validator'
 import { DatabaseError } from '../error/Error.instance'
-import type { IRefreshToken, IUser } from '../interface/User'
+import type { IUser } from '../interface/User'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const { BCRYPT_SALT_HASH } = env
@@ -28,7 +28,7 @@ const UserModel = {
 	}),
 	Create: CreateModel<
 		{ data: Omit<IUser, 'refreshToken' | '_id'> },
-		IRefreshToken
+		IUser
 	>({
 		Model: async ({ data }, session) => {
 			const salt = await bcrypt.genSalt(Number(BCRYPT_SALT_HASH))

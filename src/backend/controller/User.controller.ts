@@ -1,14 +1,20 @@
 import type { Request, Response } from 'express'
 import type { ClientSession } from 'mongoose'
+import cookieConfig from '../config/Cookie.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
 import type { IMember } from '../interface/Member'
 import type { IRefreshToken } from '../interface/User'
+import AuthModel from '../model/Auth.model'
 import InvitationModel from '../model/Invitation.model'
 import MemberModel from '../model/Member.model'
 import UserModel from '../model/User.model'
+import {
+	GenerateAccessToken,
+	GenerateRefreshToken,
+} from '../secret/GenerateToken'
 import { GetAccessToken, GetAuth } from '../secret/GetToken'
 import { PasswordValidator } from '../validator/schemas/Password.schema'
 import {
@@ -21,9 +27,13 @@ const UserController = {
 		req: Request,
 		_res: Response,
 		_session: ClientSession | undefined,
-	): Promise<IRefreshToken> => {
+	): Promise<Omit<IRefreshToken, '_id'>> => {
 		const accessToken = GetAccessToken({ req })
-		return accessToken
+		return {
+			fullName: accessToken.fullName,
+			account: accessToken.account,
+			nickName: accessToken.nickName,
+		}
 	},
 	GetGroup: async (
 		req: Request,
@@ -101,22 +111,59 @@ const UserController = {
 	},
 	Create: async (
 		req: Request,
-		_res: Response,
-		_session: ClientSession | undefined,
-	): Promise<IRefreshToken> => {
+		res: Response,
+		session: ClientSession | undefined,
+	): Promise<Omit<IRefreshToken, '_id'>> => {
 		const { account } = GetAuth({ req, tokenName: CookiesKeys.account })
 
 		const { data } = req.body
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
 
 		const validatedData = UserValidator({ ...data, account })
-		const result = await UserModel.Create({ data: validatedData })
+		const result = await UserModel.Create({ data: validatedData }, session)
 
 		if (!result) {
 			throw new ServerError('Operation Failed', 'The user was not created')
 		}
 
-		return result
+		const tokenContent: IRefreshToken = {
+			_id: result._id,
+			account: result.account,
+			nickName: result.nickName,
+			fullName: result.fullName,
+		}
+
+		const refreshToken = GenerateRefreshToken({
+			content: tokenContent,
+		})
+		const accessToken = GenerateAccessToken({
+			content: tokenContent,
+		})
+
+		const savedSession = await AuthModel.RefreshToken.Save(
+			{
+				userId: result._id,
+				token: refreshToken,
+			},
+			session,
+		)
+		if (!savedSession) {
+			throw new ServerError('Operation Failed', 'User was not created')
+		}
+
+		res.cookie(
+			CookiesKeys.refreshToken,
+			refreshToken,
+			cookieConfig.refreshToken,
+		)
+		res.cookie(CookiesKeys.accessToken, accessToken, cookieConfig.accessToken)
+		res.clearCookie(CookiesKeys.account)
+
+		return {
+			fullName: result.fullName,
+			account: result.account,
+			nickName: result.nickName,
+		}
 	},
 	Delete: async (
 		req: Request,

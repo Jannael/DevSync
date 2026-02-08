@@ -1,43 +1,119 @@
+import dotenv from 'dotenv'
+import type { Express } from 'express'
+import mongoose from 'mongoose'
+import request from 'supertest'
+import { CreateApp } from '../../backend/CreateApp'
+import CookiesKeys from '../../backend/constant/Cookie.constant'
+import type { IEnv } from '../../backend/interface/Env'
+import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesResponse'
+import CleanDatabase from '../utils/CleanDatabase'
+import ValidateCookie from '../utils/ValidateCookie'
+import ValidateResponseError from '../utils/ValidateResponseError'
+
+dotenv.config({ quiet: true })
+jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({
+	__esModule: true,
+	default: jest.fn().mockReturnValue('1234'),
+}))
+jest.mock('../../backend/service/SendEmail.service', () => ({
+	__esModule: true,
+	default: jest.fn().mockResolvedValue(true),
+}))
+
+const env = process.env as unknown as IEnv
+
+let app: Express
+let agent: ReturnType<typeof request.agent>
+
+const user = {
+	account: 'test@gmail.com',
+	pwd: 'Password123!',
+	nickName: 'Test User',
+	fullName: 'Test User',
+}
+
+async function Auth() {
+	await agent.post('/auth/v1/request/code').send({ account: user.account })
+	await agent
+		.post('/auth/v1/verify/code')
+		.send({ account: user.account, code: '1234' })
+}
+
+beforeAll(async () => {
+	app = await CreateApp({ DbUrl: env.DB_URL_ENV_TEST, environment: 'test' })
+	agent = request.agent(app)
+})
+afterAll(async () => {
+	await CleanDatabase()
+	await mongoose.connection.close()
+})
+
 describe('/user/v1/', () => {
-	// const api = '/user/v1/'
-	describe('/get/', () => {
-		test('good request')
-		describe('error request', () => {
-			for (let i = 0; i < 10; i++) {
-				test('Forbidden: Missing required header')
-			}
-		})
-	})
-	describe('/get/group/', () => {
-		test('good request')
-		describe('error request', () => {
-			for (let i = 0; i < 10; i++) {
-				test('Forbidden: Missing required header')
-			}
-		})
-	})
-	describe('/update/', () => {
-		test('good request')
-		describe('error request', () => {
-			for (let i = 0; i < 10; i++) {
-				test('Forbidden: Missing required header')
-			}
-		})
-	})
+	const api = '/user/v1'
+
 	describe('/create/', () => {
-		test('good request')
-		describe('error request', () => {
-			for (let i = 0; i < 10; i++) {
-				test('Forbidden: Missing required header')
-			}
+		const endpoint = `${api}/create/`
+
+		test('good request', async () => {
+			await Auth()
+			const res = await agent.post(endpoint).send({
+				data: user,
+			})
+
+			ValidateCookie({
+				cookieObj: res.headers,
+				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
+			})
+
+			expect(res.body).toStrictEqual({
+				success: true,
+				data: {
+					fullName: 'Test User',
+					account: 'test@gmail.com',
+					nickName: 'Test User',
+				},
+				link: [
+					{ rel: 'self', href: '/user/v1/create/' },
+					{ rel: 'details', href: '/user/v1/get/' },
+				],
+			})
 		})
-	})
-	describe('/delete/', () => {
-		test('good request')
+
 		describe('error request', () => {
-			for (let i = 0; i < 10; i++) {
-				test('Forbidden: Missing required header')
-			}
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing user data',
+          fn: async () => {
+            await Auth()
+            return await agent.post(endpoint)
+          },
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing user data',
+					},
+				},
+				{
+					name: 'Auth token is missing',
+					fn: () => request(app).post(endpoint),
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing token = account',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/user/v1/create/' },
+					{ rel: 'verify', href: '/auth/v1/verify/code/' },
+					{ rel: 'requestCode', href: '/auth/v1/request/code/' },
+				],
+			})
 		})
 	})
 })

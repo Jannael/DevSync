@@ -33,14 +33,14 @@ const AuthController = {
 			res: Response,
 			_session: ClientSession | undefined,
 		): Promise<boolean> => {
-			// body = { account, TEST_PWD }
-			const { account, TEST_PWD } = req.body
+			// body = { account }
+			const { account } = req.body
 			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
-			if (!AccountValidator(account))
+			if (!AccountValidator({ account }))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
-			const code = GenerateCode(TEST_PWD)
+			const code = GenerateCode()
 
-			if (!TEST_PWD) await SendEmail({ account, code })
+			await SendEmail({ account, code })
 			const jwtEncrypt = GenerateAuth({ content: { code, account } })
 
 			res.cookie(CookiesKeys.code, jwtEncrypt, cookiesConfig['5m'])
@@ -162,21 +162,19 @@ const AuthController = {
 			res: Response,
 			_session: ClientSession | undefined,
 		): Promise<boolean> => {
-			// body = { newAccount, TEST_PWD }
-			const { newAccount, TEST_PWD } = req.body
+			// body = { newAccount }
+			const { newAccount } = req.body
 			if (newAccount === undefined)
 				throw new UserBadRequest('Missing data', 'Missing new account')
-			if (!AccountValidator(newAccount))
+			if (!AccountValidator({ account: newAccount }))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 			const accessToken = GetAccessToken({ req })
-			const code = GenerateCode(TEST_PWD)
-			const codeNewAccount = GenerateCode(TEST_PWD)
+			const code = GenerateCode()
+			const codeNewAccount = GenerateCode()
 
-			if (!TEST_PWD) {
-				await SendEmail({ account: accessToken.account, code })
-				await SendEmail({ account: newAccount, code: codeNewAccount })
-			}
+			await SendEmail({ account: accessToken.account, code })
+			await SendEmail({ account: newAccount, code: codeNewAccount })
 
 			if (accessToken.account === newAccount)
 				throw new UserBadRequest(
@@ -299,17 +297,17 @@ const AuthController = {
 			res: Response,
 			_session: ClientSession | undefined,
 		): Promise<boolean> => {
-			// body = { account, TEST_PWD }
-			const { account, TEST_PWD } = req.body
+			// body = { account }
+			const { account } = req.body
 			if (!account) throw new UserBadRequest('Missing data', 'Missing account')
-			if (!AccountValidator(account))
+			if (!AccountValidator({ account }))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 			const dbValidation = await AuthModel.Exists({ account })
 			if (!dbValidation) throw new NotFound('User not found')
 
-			const code = GenerateCode(TEST_PWD)
-			if (!TEST_PWD) await SendEmail({ account, code })
+			const code = GenerateCode()
+			await SendEmail({ account, code })
 
 			const hashCode = GenerateAuth({ content: { code, account } })
 
@@ -378,14 +376,14 @@ const AuthController = {
 			res: Response,
 			_session: ClientSession | undefined,
 		): Promise<boolean> => {
-			// body = { account, pwd, TEST_PWD }
-			const { account, pwd, TEST_PWD } = req.body
+			// body = { account, pwd }
+			const { account, pwd } = req.body
 			if (!account || !pwd)
 				throw new UserBadRequest('Missing data', 'Missing account or password')
-			if (!AccountValidator(account))
+			if (!AccountValidator({ account }))
 				throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
-			const code = GenerateCode(TEST_PWD)
+			const code = GenerateCode()
 			const user = await AuthModel.Login({ account, pwd })
 
 			if (!user)
@@ -394,7 +392,7 @@ const AuthController = {
 					'Invalid account or password',
 				)
 
-			if (!TEST_PWD) await SendEmail({ account, code })
+			await SendEmail({ account, code })
 
 			const token = GenerateAuth({ content: user })
 			const hashCode = GenerateAuth({ content: { code } })

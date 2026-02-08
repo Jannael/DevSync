@@ -74,7 +74,7 @@ const InvitationController = {
 		if (!newRole || !account) {
 			throw new UserBadRequest('Missing data', 'Missing account or role')
 		}
-		if (!AccountValidator(account))
+		if (!AccountValidator({ account }))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 		if (!ValidRoles.includes(newRole))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
@@ -151,7 +151,7 @@ const InvitationController = {
 		const { groupId, account } = req.body
 
 		if (!account) throw new UserBadRequest('Missing data', 'Missing account')
-		if (!AccountValidator(account))
+		if (!AccountValidator({ account }))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 		const result = await InvitationModel.Delete({

@@ -28,7 +28,6 @@ BCRYPT_SALT_HASH='number'
 
 # test
 DB_URL_ENV_TEST=''
-TEST_PWD_ENV=''
 
 # Sever
 PORT=''

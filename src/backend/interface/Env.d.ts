@@ -13,5 +13,4 @@ export interface IEnv {
 	BCRYPT_SALT_HASH: string
 
 	DB_URL_ENV_TEST: string
-	TEST_PWD_ENV: string
 }

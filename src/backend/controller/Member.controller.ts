@@ -35,7 +35,7 @@ const MemberController = {
 
 		if (!account || !newRole)
 			throw new UserBadRequest('Missing data', 'Missing account or role')
-		if (!AccountValidator(account))
+		if (!AccountValidator({ account }))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 		if (!ValidRoles.includes(newRole))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
@@ -62,7 +62,7 @@ const MemberController = {
 		if (!account) {
 			throw new UserBadRequest('Missing data', 'Missing group id or account')
 		}
-		if (!AccountValidator(account))
+		if (!AccountValidator({ account }))
 			throw new UserBadRequest('Invalid credentials', 'Invalid account')
 
 		// Check if the user to be removed is a techLead

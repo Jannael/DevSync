@@ -32,7 +32,6 @@ const envSchema = z.object({
 
 	// Test (optional for production, but good to have in schema if used)
 	DB_URL_ENV_TEST: z.string().optional(),
-	TEST_PWD_ENV: z.string().optional(),
 })
 
 export const env = envSchema.parse(process.env)

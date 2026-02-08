@@ -19,7 +19,6 @@
 | Parameter  | Type     | Required | Description     |
 | :--------- | :------- | :------- | :-------------- |
 | `account`  | `String` | Yes      | User's account. |
-| `TEST_PWD` | `String` | No       | Test password.  |
 
 #### Request Body
 
@@ -109,7 +108,6 @@
 | :--------- | :------- | :------- | :--------------- |
 | `account`  | `String` | Yes      | Users's account. |
 | `pwd`      | `String` | Yes      | User's password. |
-| `TEST_PWD` | `String` | No       | Test password.   |
 
 #### Request Body
 
@@ -173,7 +171,6 @@
 | Parameter    | Type     | Required | Description         |
 | :----------- | :------- | :------- | :------------------ |
 | `newAccount` | `String` | Yes      | User's new account. |
-| `TEST_PWD`   | `String` | No       | Test password.      |
 
 #### Request Body
 
@@ -238,7 +235,6 @@
 | Parameter  | Type     | Required | Description     |
 | :--------- | :------- | :------- | :-------------- |
 | `account`  | `String` | Yes      | User's account. |
-| `TEST_PWD` | `String` | No       | Test password.  |
 
 #### Request Body
 

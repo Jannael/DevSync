@@ -8,6 +8,13 @@ const MemberAdapter = {
 			{ rel: 'self', href: '/member/v1/get/' },
 			{ rel: 'group', href: '/group/v1/get/' },
 		],
+		ErrorLink: [
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{
+				rel: 'login',
+				href: '/auth/v1/request/refreshToken/code/',
+			},
+		],
 	}),
 	UpdateRole: CreateAdapter({
 		controller: MemberController.UpdateRole,
@@ -15,12 +22,26 @@ const MemberAdapter = {
 			{ rel: 'self', href: '/member/v1/update/role/' },
 			{ rel: 'get', href: '/member/v1/get/' },
 		],
+		ErrorLink: [
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{
+				rel: 'login',
+				href: '/auth/v1/request/refreshToken/code/',
+			},
+		],
 	}),
 	Remove: CreateAdapter({
 		controller: MemberController.Remove,
 		SuccessLink: [
 			{ rel: 'self', href: '/member/v1/remove/' },
 			{ rel: 'group', href: '/group/v1/get/' },
+		],
+		ErrorLink: [
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{
+				rel: 'login',
+				href: '/auth/v1/request/refreshToken/code/',
+			},
 		],
 	}),
 }

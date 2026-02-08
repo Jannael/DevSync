@@ -16,9 +16,9 @@
 
 #### Body fields
 
-| Parameter  | Type     | Required | Description     |
-| :--------- | :------- | :------- | :-------------- |
-| `account`  | `String` | Yes      | User's account. |
+| Parameter | Type     | Required | Description     |
+| :-------- | :------- | :------- | :-------------- |
+| `account` | `String` | Yes      | User's account. |
 
 #### Request Body
 
@@ -104,10 +104,10 @@
 
 #### Body fields
 
-| Parameter  | Type     | Required | Description      |
-| :--------- | :------- | :------- | :--------------- |
-| `account`  | `String` | Yes      | Users's account. |
-| `pwd`      | `String` | Yes      | User's password. |
+| Parameter | Type     | Required | Description      |
+| :-------- | :------- | :------- | :--------------- |
+| `account` | `String` | Yes      | Users's account. |
+| `pwd`     | `String` | Yes      | User's password. |
 
 #### Request Body
 
@@ -232,9 +232,9 @@
 
 #### Body fields
 
-| Parameter  | Type     | Required | Description     |
-| :--------- | :------- | :------- | :-------------- |
-| `account`  | `String` | Yes      | User's account. |
+| Parameter | Type     | Required | Description     |
+| :-------- | :------- | :------- | :-------------- |
+| `account` | `String` | Yes      | User's account. |
 
 #### Request Body
 

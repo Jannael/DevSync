@@ -1,31 +1,5 @@
 # /invitation/v1/
 
-## [/get/user/]
-
-`[POST]`
-
-### Action
-
-[Retrieves all invitations received by the current user.]
-
-### Credentials & Security
-
-- **Endpoints required to be called first:** `[NONE]`
-- **Required Permissions:** `[NONE]`
-- **Required Header:** `application/json`
-
-### Input (Request)
-
-#### Body fields
-
-`[NONE]`
-
-#### Request Body
-
-`[NONE]`
-
----
-
 ## [/get/group/]
 
 `[POST]`

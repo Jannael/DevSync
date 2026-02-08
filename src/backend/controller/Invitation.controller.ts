@@ -9,23 +9,6 @@ import AccountValidator from '../validator/Account.validator'
 import { InvitationValidator } from '../validator/schemas/Invitation.schema'
 
 const InvitationController = {
-	GetForUser: async (
-		req: Request,
-		_res: Response,
-		_session: ClientSession | undefined,
-	): Promise<IInvitation[]> => {
-		const accessToken = GetAccessToken({ req })
-		const invitations = await InvitationModel.GetByUser({
-			account: accessToken.account,
-		})
-		if (!invitations)
-			throw new ServerError(
-				'Operation Failed',
-				'The invitations were not retrieved',
-			)
-
-		return invitations
-	},
 	GetForGroup: async (
 		req: Request,
 		_res: Response,

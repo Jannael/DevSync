@@ -3,6 +3,7 @@ import type { ClientSession } from 'mongoose'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
+import type { IInvitation } from '../interface/Invitation'
 import type { IMember } from '../interface/Member'
 import type { IRefreshToken } from '../interface/User'
 import InvitationModel from '../model/Invitation.model'
@@ -42,6 +43,23 @@ const UserController = {
 		}
 
 		return groups
+	},
+	GetInvitation: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IInvitation[]> => {
+		const accessToken = GetAccessToken({ req })
+		const invitations = await InvitationModel.GetByUser({
+			account: accessToken.account,
+		})
+		if (!invitations)
+			throw new ServerError(
+				'Operation Failed',
+				'The invitations were not retrieved',
+			)
+
+		return invitations
 	},
 	Update: async (
 		req: Request,

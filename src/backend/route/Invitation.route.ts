@@ -5,7 +5,6 @@ import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post('/get/user/', InvitationAdapter.GetForUser)
 router.post(
 	'/get/group/',
 	RoleMiddleware([Roles.techLead]),

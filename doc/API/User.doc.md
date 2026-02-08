@@ -52,6 +52,32 @@
 
 ---
 
+## [/get/invitation/]
+
+`[POST]`
+
+### Action
+
+[Retrieves all invitations received by the current user.]
+
+### Credentials & Security
+
+- **Endpoints required to be called first:** `[Authenticated]`
+- **Required Permissions:** `[Authenticated]`
+- **Required Header:** `application/json`
+
+### Input (Request)
+
+#### Body fields
+
+`[NONE]`
+
+#### Request Body
+
+`[NONE]`
+
+---
+
 ## [/create/]
 
 `[POST]`

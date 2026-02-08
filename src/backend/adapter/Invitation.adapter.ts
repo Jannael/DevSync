@@ -2,24 +2,11 @@ import InvitationController from '../controller/Invitation.controller'
 import CreateAdapter from '../utils/helper/CreateAdapter.helper'
 
 const InvitationAdapter = {
-	GetForGroup: CreateAdapter({
-		controller: InvitationController.GetForGroup,
-		SuccessLink: [
-			{ rel: 'self', href: '/invitation/v1/get/group/' },
-			{ rel: 'details', href: '/group/v1/get/' },
-			{ rel: 'cancel', href: '/invitation/v1/cancel/' },
-		],
-		ErrorLink: [
-			{ rel: 'self', href: '/invitation/v1/get/group/' },
-			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
-			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
-		],
-	}),
 	Create: CreateAdapter({
 		controller: InvitationController.Create,
 		SuccessLink: [
 			{ rel: 'self', href: '/invitation/v1/create/' },
-			{ rel: 'invitations', href: '/invitation/v1/get/group/' },
+			{ rel: 'invitations', href: '/group/v1/get/invitation/' },
 			{ rel: 'group', href: '/group/v1/get/' },
 		],
 		ErrorLink: [

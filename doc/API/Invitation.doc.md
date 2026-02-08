@@ -1,37 +1,5 @@
 # /invitation/v1/
 
-## [/get/group/]
-
-`[POST]`
-
-### Action
-
-[Retrieves all invitations emitted by a specific group.]
-
-### Credentials & Security
-
-- **Endpoints required to be called first:** `[NONE]`
-- **Required Permissions:** `[techLead]`
-- **Required Header:** `application/json`
-
-### Input (Request)
-
-#### Body fields
-
-| Parameter | Type     | Required | Description                 |
-| :-------- | :------- | :------- | :-------------------------- |
-| `groupId` | `String` | Yes      | The unique ID of the group. |
-
-#### Request Body
-
-```json
-{
-  "groupId": "65b2f1..."
-}
-```
-
----
-
 ## [/create/]
 
 `[POST]`

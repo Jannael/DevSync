@@ -8,6 +8,7 @@ import {
 	UserBadRequest,
 } from '../error/Error.instance'
 import type { IGroup } from '../interface/Group'
+import type { IInvitation } from '../interface/Invitation'
 import type { IMember } from '../interface/Member'
 import Model from './../model/Group.model'
 import InvitationModel from '../model/Invitation.model'
@@ -31,6 +32,24 @@ const GroupController = {
 		if (!group) throw new NotFound('Group not found')
 
 		return group
+	},
+	GetInvitation: async (
+		req: Request,
+		_res: Response,
+		_session: ClientSession | undefined,
+	): Promise<IInvitation[]> => {
+		// body = { groupId }
+		// Get all invitations emitted by a group
+		const invitations = await InvitationModel.GetByGroup({
+			_id: req.body.groupId,
+		})
+		if (!invitations)
+			throw new ServerError(
+				'Operation Failed',
+				'The invitations were not retrieved',
+			)
+
+		return invitations
 	},
 	Create: async (
 		req: Request,

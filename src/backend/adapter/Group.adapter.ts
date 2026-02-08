@@ -7,7 +7,7 @@ const GroupAdapter = {
 		SuccessLink: [
 			{ rel: 'self', href: '/group/v1/get/' },
 			{ rel: 'members', href: '/member/v1/get/' },
-			{ rel: 'invitations', href: '/invitation/v1/get/group/' },
+			{ rel: 'invitations', href: '/group/v1/get/invitation/' },
 			{ rel: 'tasks', href: '/task/v1/list/' },
 			{ rel: 'createTask', href: '/task/v1/create/' },
 		],
@@ -78,6 +78,19 @@ const GroupAdapter = {
 		],
 		ErrorLink: [
 			{ rel: 'self', href: '/group/v1/quit/' },
+			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+		],
+	}),
+	GetInvitation: CreateAdapter({
+		controller: GroupController.GetInvitation,
+		SuccessLink: [
+			{ rel: 'self', href: '/group/v1/get/invitation/' },
+			{ rel: 'details', href: '/group/v1/get/' },
+			{ rel: 'cancel', href: '/invitation/v1/cancel/' },
+		],
+		ErrorLink: [
+			{ rel: 'self', href: '/group/v1/get/invitation/' },
 			{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
 			{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
 		],

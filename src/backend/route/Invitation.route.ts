@@ -5,12 +5,6 @@ import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post(
-	'/get/group/',
-	RoleMiddleware([Roles.techLead]),
-	InvitationAdapter.GetForGroup,
-)
-
 router.patch(
 	'/update/role/',
 	RoleMiddleware([Roles.techLead]),

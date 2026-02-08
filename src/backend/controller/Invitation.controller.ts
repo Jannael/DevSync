@@ -9,24 +9,6 @@ import AccountValidator from '../validator/Account.validator'
 import { InvitationValidator } from '../validator/schemas/Invitation.schema'
 
 const InvitationController = {
-	GetForGroup: async (
-		req: Request,
-		_res: Response,
-		_session: ClientSession | undefined,
-	): Promise<IInvitation[]> => {
-		// body = { groupId }
-		// Get all invitations emitted by a group
-		const invitations = await InvitationModel.GetByGroup({
-			_id: req.body.groupId,
-		})
-		if (!invitations)
-			throw new ServerError(
-				'Operation Failed',
-				'The invitations were not retrieved',
-			)
-
-		return invitations
-	},
 	Create: async (
 		req: Request,
 		_res: Response,

@@ -12,7 +12,7 @@ export function EncryptToken({
 	jwtPwd: string
 	options: SignOptions
 }): string {
-	const payload = jwt.sign(text as Record<string, unknown>, jwtPwd, options)
+	const payload = jwt.sign(text, jwtPwd, options)
 
 	const iv = crypto.randomBytes(16)
 	const cipher = crypto.createCipheriv(

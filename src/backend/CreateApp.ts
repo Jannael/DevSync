@@ -31,6 +31,7 @@ export async function CreateApp({
 	}
 
 	app.use(express.json())
+	app.use(cookieParser())
 	app.use((req, _res, next) => {
 		if (!req.body) {
 			req.body = {}
@@ -40,7 +41,6 @@ export async function CreateApp({
 		}
 		next()
 	})
-	app.use(cookieParser())
 	app.use(HeaderMiddleware)
 
 	app.use('/auth/v1/', RouterMerge.Auth)

@@ -1,4 +1,5 @@
 # /api/v1/
+
 ## [ENDPOINT_NAME]
 
 `[HTTP_METHOD]`
@@ -17,9 +18,9 @@
 
 #### Body fields
 
-| Parameter  | Type     | Required | Description     |
-| :--------- | :------- | :------- | :-------------- |
-| `parameter`  | `String` | Yes      | Description. |
+| Parameter   | Type     | Required | Description  |
+| :---------- | :------- | :------- | :----------- |
+| `parameter` | `String` | Yes      | Description. |
 
 #### Request Body
 

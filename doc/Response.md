@@ -34,4 +34,3 @@ interface Response {
 - those endpoint with pagination return a metadata objet inside the data object
 - for those that does not need pagination you will get all the data in data object
 - response that returns an array(like get group, which is an array with all the users groups), data will be an array thats why the data type is any[]
-

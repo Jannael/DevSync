@@ -52,13 +52,13 @@
 
 #### Body fields
 
-| Parameter          | Type     | Required | Description                             |
-| :----------------- | :------- | :------- | :-------------------------------------- |
-| `groupId`          | `String` | Yes      | The unique ID of the group.             |
-| `data._id`         | `String` | Yes      | The ID of the task this solution belongs to. |
+| Parameter          | Type     | Required | Description                                   |
+| :----------------- | :------- | :------- | :-------------------------------------------- |
+| `groupId`          | `String` | Yes      | The unique ID of the group.                   |
+| `data._id`         | `String` | Yes      | The ID of the task this solution belongs to.  |
 | `data.feature`     | `String` | Yes      | Short description of the feature implemented. |
-| `data.description` | `String` | Yes      | Detailed description of the solution.   |
-| `data.code`        | `String` | Yes      | The code implementation.                |
+| `data.description` | `String` | Yes      | Detailed description of the solution.         |
+| `data.code`        | `String` | Yes      | The code implementation.                      |
 
 #### Request Body
 
@@ -94,13 +94,13 @@
 
 #### Body fields
 
-| Parameter          | Type     | Required | Description                             |
-| :----------------- | :------- | :------- | :-------------------------------------- |
+| Parameter          | Type     | Required | Description                               |
+| :----------------- | :------- | :------- | :---------------------------------------- |
 | `_id`              | `String` | Yes      | The ID of the solution (same as Task ID). |
-| `groupId`          | `String` | Yes      | The unique ID of the group.             |
-| `data.feature`     | `String` | No       | Updated feature description.            |
-| `data.description` | `String` | No       | Updated solution description.           |
-| `data.code`        | `String` | No       | Updated code.                           |
+| `groupId`          | `String` | Yes      | The unique ID of the group.               |
+| `data.feature`     | `String` | No       | Updated feature description.              |
+| `data.description` | `String` | No       | Updated solution description.             |
+| `data.code`        | `String` | No       | Updated code.                             |
 
 #### Request Body
 
@@ -134,10 +134,10 @@
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                    |
-| :-------- | :------- | :------- | :----------------------------- |
+| Parameter | Type     | Required | Description                       |
+| :-------- | :------- | :------- | :-------------------------------- |
 | `_id`     | `String` | Yes      | The ID of the solution to delete. |
-| `groupId` | `String` | Yes      | The unique ID of the group.    |
+| `groupId` | `String` | Yes      | The unique ID of the group.       |
 
 #### Request Body
 

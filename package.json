@@ -14,7 +14,6 @@
 		"format": "pnpm biome check --write",
 		"lint": "pnpm biome check",
 
-		"lint:md": "markdownlint \"**/*.md\"",
 		"format:md": "prettier --write \"**/*.md\"",
 		"check:md": "prettier --check \"**/*.md\""
 	},

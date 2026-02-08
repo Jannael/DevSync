@@ -6,8 +6,8 @@
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :--- | :--- | :--- |
+| Parameter   | Type   | Description  |
+| :---------- | :----- | :----------- |
 | `parameter` | `Type` | Description. |
 
 ## Returns

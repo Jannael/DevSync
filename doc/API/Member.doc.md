@@ -50,10 +50,10 @@
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                          |
-| :-------- | :------- | :------- | :----------------------------------- |
-| `groupId` | `String` | Yes      | The unique ID of the group.          |
-| `account` | `String` | Yes      | The account (email) of the member.   |
+| Parameter | Type     | Required | Description                                           |
+| :-------- | :------- | :------- | :---------------------------------------------------- |
+| `groupId` | `String` | Yes      | The unique ID of the group.                           |
+| `account` | `String` | Yes      | The account (email) of the member.                    |
 | `newRole` | `String` | Yes      | The new role (`developer`, `documenter`, `techLead`). |
 
 #### Request Body
@@ -86,9 +86,9 @@
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                          |
-| :-------- | :------- | :------- | :----------------------------------- |
-| `groupId` | `String` | Yes      | The unique ID of the group.          |
+| Parameter | Type     | Required | Description                                  |
+| :-------- | :------- | :------- | :------------------------------------------- |
+| `groupId` | `String` | Yes      | The unique ID of the group.                  |
 | `account` | `String` | Yes      | The account (email) of the member to remove. |
 
 #### Request Body

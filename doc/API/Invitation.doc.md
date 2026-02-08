@@ -76,11 +76,11 @@
 
 #### Body fields
 
-| Parameter     | Type     | Required | Description                        |
-| :------------ | :------- | :------- | :--------------------------------- |
-| `groupId`     | `String` | Yes      | The unique ID of the group.        |
-| `data.account`| `String` | Yes      | The account (email) of the user to invite. |
-| `data.role`   | `String` | Yes      | The role to assign (`developer`, `documenter`, `techLead`). |
+| Parameter      | Type     | Required | Description                                                 |
+| :------------- | :------- | :------- | :---------------------------------------------------------- |
+| `groupId`      | `String` | Yes      | The unique ID of the group.                                 |
+| `data.account` | `String` | Yes      | The account (email) of the user to invite.                  |
+| `data.role`    | `String` | Yes      | The role to assign (`developer`, `documenter`, `techLead`). |
 
 #### Request Body
 
@@ -114,11 +114,11 @@
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                          |
-| :-------- | :------- | :------- | :----------------------------------- |
-| `groupId` | `String` | Yes      | The unique ID of the group.          |
+| Parameter | Type     | Required | Description                              |
+| :-------- | :------- | :------- | :--------------------------------------- |
+| `groupId` | `String` | Yes      | The unique ID of the group.              |
 | `account` | `String` | Yes      | The account (email) of the invited user. |
-| `newRole` | `String` | Yes      | The new role to assign.              |
+| `newRole` | `String` | Yes      | The new role to assign.                  |
 
 #### Request Body
 
@@ -150,9 +150,9 @@
 
 #### Body fields
 
-| Parameter | Type     | Required | Description                          |
-| :-------- | :------- | :------- | :----------------------------------- |
-| `groupId` | `String` | Yes      | The unique ID of the group.          |
+| Parameter | Type     | Required | Description                              |
+| :-------- | :------- | :------- | :--------------------------------------- |
+| `groupId` | `String` | Yes      | The unique ID of the group.              |
 | `account` | `String` | Yes      | The account (email) of the invited user. |
 
 #### Request Body

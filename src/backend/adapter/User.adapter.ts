@@ -72,7 +72,7 @@ const UserAdapter = {
 		controller: UserController.GetInvitation,
 		SuccessLink: [
 			{ rel: 'self', href: '/user/v1/get/invitation/' },
-			{ rel: 'details', href: '/user/v1/get/' },
+			{ rel: 'details', href: '/invitation/v1/get/' },
 			{ rel: 'accept', href: '/invitation/v1/accept/' },
 			{ rel: 'reject', href: '/invitation/v1/reject/' },
 		],

@@ -248,4 +248,86 @@ describe('/user/v1/', () => {
 			})
 		})
 	})
+
+	describe('/update/', () => {
+		const endpoint = `${api}/update/`
+
+		test('good request', async () => {
+			user.nickName = 'new nickName User'
+			user.fullName = 'new fullName User'
+
+			await Auth()
+			const res = await agent.put(endpoint).send({
+				data: {
+					nickName: user.nickName,
+					fullName: user.fullName,
+					account: 'newaccount@gmail.com', // i leave this here because account should not be possible to update here, so if it changes i want to know
+				},
+			})
+
+			expect(res.body).toStrictEqual({
+				success: true,
+				link: [
+					{ rel: 'self', href: '/user/v1/update/' },
+					{ rel: 'details', href: '/user/v1/get/' },
+					{ rel: 'delete', href: '/user/v1/delete/' },
+				],
+			})
+
+			const guard = await agent.get(`${api}/get/`)
+
+			expect(guard.body).toStrictEqual({
+				success: true,
+				data: {
+					nickName: user.nickName,
+					fullName: user.fullName,
+					account: user.account,
+				},
+				link: [
+					{ rel: 'self', href: '/user/v1/get/' },
+					{ rel: 'groups', href: '/user/v1/get/group/' },
+					{ rel: 'invitations', href: '/user/v1/get/invitation/' },
+					{ rel: 'update', href: '/user/v1/update/' },
+					{ rel: 'delete', href: '/user/v1/delete/' },
+				],
+			})
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing user data',
+					fn: async () => {
+						await Auth()
+						return await agent.put(endpoint)
+					},
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing user data',
+					},
+				},
+				{
+					name: 'Auth token is missing',
+					fn: () => request(app).put(endpoint),
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing token = account',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/user/v1/update/' },
+					{ rel: 'verify', href: '/auth/v1/verify/code/' },
+					{ rel: 'requestCode', href: '/auth/v1/request/code/' },
+				],
+			})
+		})
+	})
 })

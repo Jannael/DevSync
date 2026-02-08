@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import type { ClientSession } from 'mongoose'
 import cookieConfig from '../config/Cookie.config'
+import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
@@ -73,8 +74,8 @@ const UserController = {
 	},
 	Update: async (
 		req: Request,
-		_res: Response,
-		_session: ClientSession | undefined,
+		res: Response,
+		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		const { account: verifiedAccount } = GetAuth({
 			req,
@@ -98,15 +99,55 @@ const UserController = {
 			throw new UserBadRequest('Missing data', 'Missing data to update')
 		}
 
-		const result = await UserModel.Update({
-			_id: accessToken._id,
-			data: validatedData,
-		})
+		const result = await UserModel.Update(
+			{
+				_id: accessToken._id,
+				data: validatedData,
+			},
+			session,
+		)
 
-		if (!result) {
+		const deleteSession = await AuthModel.RefreshToken.RemoveAll(
+			{
+				userId: accessToken._id,
+			},
+			session,
+		)
+		const user = await UserModel.Get({
+			account: accessToken.account,
+			projection: ProjectionConfig.IRefreshToken,
+		})
+		if (!user) throw new ServerError('Operation Failed', 'User not found')
+
+		const refreshToken = GenerateRefreshToken({
+			content: user,
+		})
+		const newAccessToken = GenerateAccessToken({
+			content: user,
+		})
+		const savedNewSession = await AuthModel.RefreshToken.Save(
+			{
+				userId: accessToken._id,
+				token: refreshToken,
+			},
+			session,
+		)
+
+		if (!result || !deleteSession || !savedNewSession) {
 			throw new ServerError('Operation Failed', 'The user was not updated')
 		}
 
+		res.cookie(
+			CookiesKeys.refreshToken,
+			refreshToken,
+			cookieConfig.refreshToken,
+		)
+		res.cookie(
+			CookiesKeys.accessToken,
+			newAccessToken,
+			cookieConfig.accessToken,
+		)
+		res.clearCookie(CookiesKeys.account)
 		return result
 	},
 	Create: async (

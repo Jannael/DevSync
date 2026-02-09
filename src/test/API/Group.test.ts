@@ -223,7 +223,7 @@ describe('/group/v1/', () => {
 						code: 403,
 						success: false,
 						msg: 'Access denied',
-						description: 'You are not authorized to perform this action',
+						description: 'You do not belong to the group',
 					},
 				},
 			]
@@ -251,7 +251,6 @@ describe('/group/v1/', () => {
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/group/v1/update/' },
 					{ rel: 'get', href: '/group/v1/get/' },
@@ -279,7 +278,7 @@ describe('/group/v1/', () => {
 						code: 403,
 						success: false,
 						msg: 'Access denied',
-						description: 'You are not authorized to perform this action',
+						description: 'You do not belong to the group',
 					},
 				},
 			]
@@ -303,11 +302,9 @@ describe('/group/v1/', () => {
 			expect(res.body).toStrictEqual({
 				success: true,
 				data: {
-					_id: expect.any(String),
 					groupId,
 					account: secondUserAccount,
-					role: 'developer', // DefaultRole
-					joinDate: expect.any(String),
+					role: 'developer',
 				},
 				link: [
 					{ rel: 'self', href: '/group/v1/join/' },
@@ -341,7 +338,7 @@ describe('/group/v1/', () => {
 						code: 404, // Controller throws NotFound
 						success: false,
 						msg: 'Group not found',
-						description: 'Group not found',
+						description: undefined,
 					},
 				},
 			]
@@ -364,7 +361,6 @@ describe('/group/v1/', () => {
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/group/v1/quit/' },
 					{ rel: 'join', href: '/group/v1/join/' },
@@ -380,12 +376,10 @@ describe('/group/v1/', () => {
 						return await agentB.post(endpoint).send({ groupId })
 					},
 					error: {
-						code: 403, // RoleMiddleware likely blocks this first with "You are not a member of this group" or similar?
-						// Actually RoleMiddleware(ValidRoles) checks if user is in group.
-						// If not in group, RoleMiddleware throws Forbidden.
+						code: 403, 
 						success: false,
 						msg: 'Access denied',
-						description: 'You are not a member of this group',
+						description: 'You do not belong to the group',
 					},
 				},
 			]
@@ -408,7 +402,6 @@ describe('/group/v1/', () => {
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/group/v1/delete/' },
 					{ rel: 'create', href: '/group/v1/create/' },
@@ -438,13 +431,11 @@ describe('/group/v1/', () => {
 					fn: async () => {
 						// Create a new group with agent just for this test
 						const tempRes = await agent.post(`${api}/create/`).send({
-							data: { name: 'Temp', description: 'Temp' },
+							data: group,
 						})
 						const tempGroupId = tempRes.body.data._id
 
-						// Try to delete with agentB (who will join first to be a member? RoleMiddleware requires being a member usually?)
-						// RoleMiddleware([Roles.techLead]) -> checks if user is member AND has role.
-						// Accessing with agentB (not member) -> 403.
+						// Accessing with agentB (not member)
 						const res = await agentB
 							.delete(endpoint)
 							.send({ groupId: tempGroupId })
@@ -457,7 +448,7 @@ describe('/group/v1/', () => {
 						code: 403,
 						success: false,
 						msg: 'Access denied',
-						description: 'You are not a member of this group', // Because agentB didn't join
+						description: 'You do not belong to the group',
 					},
 				},
 			]

@@ -172,7 +172,7 @@ const GroupController = {
 		if (!result)
 			throw new ServerError('Operation Failed', 'Could not join the group')
 
-		return result
+		return { groupId: result.groupId, role: result.role, account: result.account }
 	},
 	Quit: async (
 		req: Request,

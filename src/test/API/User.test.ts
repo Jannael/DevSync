@@ -265,6 +265,11 @@ describe('/user/v1/', () => {
 				},
 			})
 
+			ValidateCookie({
+				cookieObj: res.headers,
+				cookies: [CookiesKeys.accessToken, CookiesKeys.refreshToken],
+			})
+
 			expect(res.body).toStrictEqual({
 				success: true,
 				link: [
@@ -324,6 +329,47 @@ describe('/user/v1/', () => {
 				cases,
 				link: [
 					{ rel: 'self', href: '/user/v1/update/' },
+					{ rel: 'verify', href: '/auth/v1/verify/code/' },
+					{ rel: 'requestCode', href: '/auth/v1/request/code/' },
+				],
+			})
+		})
+	})
+
+	describe('/delete/', () => {
+		const endpoint = `${api}/delete/`
+
+		test('good request', async () => {
+			await Auth()
+			const res = await agent.delete(endpoint)
+
+			expect(res.body).toStrictEqual({
+				success: true,
+				link: [
+					{ rel: 'self', href: '/user/v1/delete/' },
+					{ rel: 'create', href: '/user/v1/create/' },
+				],
+			})
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Auth token is missing',
+					fn: () => request(app).delete(endpoint),
+					error: {
+						success: false,
+						code: 400,
+						msg: 'Missing data',
+						description: 'Missing token = account',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/user/v1/delete/' },
 					{ rel: 'verify', href: '/auth/v1/verify/code/' },
 					{ rel: 'requestCode', href: '/auth/v1/request/code/' },
 				],

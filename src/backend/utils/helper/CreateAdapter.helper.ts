@@ -4,6 +4,14 @@ import mongoose from 'mongoose'
 import type { CustomError } from '../../error/Error.constructor'
 import ErrorHandler from '../../error/Error.handler'
 
+export type IAdapterHandler = ((
+	req: Request,
+	res: Response,
+) => Promise<void>) & {
+	ErrorLink?: Array<{ rel: string; href: string }>
+	SuccessLink?: Array<{ rel: string; href: string }>
+}
+
 function CreateAdapter({
 	controller,
 	ErrorLink,
@@ -14,12 +22,12 @@ function CreateAdapter({
 	ErrorLink?: Array<{ rel: string; href: string }>
 	SuccessLink?: Array<{ rel: string; href: string }>
 	options?: { transaction?: boolean }
-}) {
-	return async (req: Request, res: Response) => {
+}): IAdapterHandler {
+	const handler = async (req: Request, res: Response) => {
 		const { transaction } = options || {}
 
 		const session = transaction ? await mongoose.startSession() : undefined
-		transaction && await session?.startTransaction()
+		transaction && (await session?.startTransaction())
 
 		try {
 			const result = await controller(req, res, session)
@@ -38,7 +46,10 @@ function CreateAdapter({
 		} finally {
 			if (transaction && session) await session.endSession()
 		}
+		Object.assign(handler, { ErrorLink, SuccessLink })
 	}
+
+	return handler as IAdapterHandler
 }
 
 export default CreateAdapter

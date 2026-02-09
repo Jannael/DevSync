@@ -15,7 +15,10 @@ import { GetAccessToken } from '../secret/GetToken'
 // !IMPORTANT:
 // do not use the field 'role': use 'newRole' or 'memberRole' instead
 
-const RoleMiddleware = (roles: Array<IRole>) => {
+const RoleMiddleware = (
+	roles: Array<IRole>,
+	errorLink?: Array<{ rel: string; href: string }>,
+) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const accessToken = GetAccessToken({ req })
@@ -45,6 +48,7 @@ const RoleMiddleware = (roles: Array<IRole>) => {
 			req.body.role = memberRole
 			next()
 		} catch (e) {
+			;(e as CustomError).link = errorLink
 			ErrorHandler.Response({ res, error: e as CustomError })
 		}
 	}

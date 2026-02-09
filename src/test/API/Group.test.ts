@@ -156,7 +156,6 @@ describe('/group/v1/', () => {
 					name: 'Missing group id',
 					fn: async () => {
 						const res = await agent.post(endpoint).send({})
-						console.log(res.body)
 						return res
 					},
 					error: {

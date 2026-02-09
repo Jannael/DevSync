@@ -359,18 +359,21 @@ describe('/invitation/v1/', () => {
 	})
 
 	describe('/reject/', () => {
-		const endpoint = `${api}reject/`
+		const endpoint = `${api}/reject/`
 		test('good request', async () => {
 			// Re-invite first
-			await agent.post(`${api}create/`).send({
+			await agent.post(`${api}/create/`).send({
 				groupId,
+				data: {
+					account: userB.account,
+					role: Roles.developer,
+				},
 			})
 
 			const res = await agentB.post(endpoint).send({ groupId })
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/invitation/v1/reject/' },
 					{ rel: 'details', href: '/user/v1/get/' },
@@ -382,9 +385,9 @@ describe('/invitation/v1/', () => {
 			const groupInvRes = await agent
 				.post('/group/v1/get/invitation/')
 				.send({ groupId })
-			expect(groupInvRes.body.data).not.toContainEqual([])
+			expect(groupInvRes.body.data).toStrictEqual([])
 
-			const userInvRes = await agentB.post('/user/v1/get/invitation/')
+			const userInvRes = await agentB.get('/user/v1/get/invitation/')
 			expect(userInvRes.body.data).not.toContainEqual(
 				expect.objectContaining({ groupId }),
 			)

@@ -150,6 +150,23 @@ const InvitationModel = {
 			'The user invitations were not deleted, something went wrong please try again',
 		),
 	}),
+	Exists: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
+		Model: async ({ groupId, account }, session) => {
+			const res = await dbModel.exists(
+				{
+					groupId,
+					account,
+					isInvitation: true,
+				}
+			).session(session ?? null)
+
+			return !!res
+		},
+		DefaultError: new DatabaseError(
+			'Failed to access data',
+			'Could not check if invitation exists, something went wrong please try again',
+		),
+	}),
 }
 
 export default InvitationModel

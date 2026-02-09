@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { type ClientSession, Types } from 'mongoose'
 import { ValidRoles } from '../constant/Role.constant'
-import { ServerError, UserBadRequest } from '../error/Error.instance'
+import { NotFound, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
 import InvitationModel from '../model/Invitation.model'
 import { GetAccessToken } from '../secret/GetToken'
@@ -15,6 +15,13 @@ const InvitationController = {
 		_session: ClientSession | undefined,
 	): Promise<IInvitation> => {
 		// body = { account, role }
+		const exists = await InvitationModel.Exists({
+			groupId: req.body.groupId,
+			account: req.body.data.account,
+		})
+		if (exists)
+			throw new NotFound('Invitation not found', 'Invitation not found')
+
 		const invitation = InvitationValidator({
 			...req.body.data,
 			groupId: req.body.groupId,

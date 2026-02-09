@@ -3,11 +3,10 @@ import type { Express } from 'express'
 import mongoose from 'mongoose'
 import request from 'supertest'
 import { CreateApp } from '../../backend/CreateApp'
-import CookiesKeys from '../../backend/constant/Cookie.constant'
+import { DefaultRole } from '../../backend/constant/Role.constant'
 import type { IEnv } from '../../backend/interface/Env'
 import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesResponse'
 import CleanDatabase from '../utils/CleanDatabase'
-import ValidateCookie from '../utils/ValidateCookie'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
@@ -259,9 +258,9 @@ describe('/group/v1/', () => {
 			})
 
 			// Verify update
-			const getRes = await agent.post(`${api}/get/`).send({ groupId })
-			expect(getRes.body.data.name).toBe(group.name)
-			expect(getRes.body.data.color).toBe(group.color)
+			const guard = await agent.post(`${api}/get/`).send({ groupId })
+			expect(guard.body.data.name).toBe(group.name)
+			expect(guard.body.data.color).toBe(group.color)
 		})
 
 		describe('error request', () => {
@@ -304,7 +303,7 @@ describe('/group/v1/', () => {
 				data: {
 					groupId,
 					account: secondUserAccount,
-					role: 'developer',
+					role: DefaultRole,
 				},
 				link: [
 					{ rel: 'self', href: '/group/v1/join/' },
@@ -376,7 +375,7 @@ describe('/group/v1/', () => {
 						return await agentB.post(endpoint).send({ groupId })
 					},
 					error: {
-						code: 403, 
+						code: 403,
 						success: false,
 						msg: 'Access denied',
 						description: 'You do not belong to the group',
@@ -443,6 +442,18 @@ describe('/group/v1/', () => {
 						// Cleanup
 						await agent.delete(endpoint).send({ groupId: tempGroupId })
 						return res
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not belong to the group',
+					},
+				},
+				{
+					name: 'Group not found (already deleted)',
+					fn: async () => {
+						return await agent.delete(endpoint).send({ groupId })
 					},
 					error: {
 						code: 403,

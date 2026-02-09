@@ -41,15 +41,22 @@ const GroupController = {
 		// body = { groupId }
 		// Get all invitations emitted by a group
 		const invitations = await InvitationModel.GetByGroup({
-			_id: req.body.groupId,
+			groupId: req.body.groupId,
 		})
 		if (!invitations)
 			throw new ServerError(
 				'Operation Failed',
 				'The invitations were not retrieved',
 			)
+		const returnObj = invitations.map((invitation) => {
+			return {
+				groupId: invitation.groupId,
+				account: invitation.account,
+				role: invitation.role,
+			}
+		})
 
-		return invitations
+		return returnObj
 	},
 	Create: async (
 		req: Request,
@@ -172,7 +179,11 @@ const GroupController = {
 		if (!result)
 			throw new ServerError('Operation Failed', 'Could not join the group')
 
-		return { groupId: result.groupId, role: result.role, account: result.account }
+		return {
+			groupId: result.groupId,
+			role: result.role,
+			account: result.account,
+		}
 	},
 	Quit: async (
 		req: Request,

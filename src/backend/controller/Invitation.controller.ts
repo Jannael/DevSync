@@ -36,7 +36,11 @@ const InvitationController = {
 				'The invitation was not created',
 			)
 
-		return result
+		return {
+			groupId: invitation.groupId,
+			account: invitation.account,
+			role: invitation.role,
+		}
 	},
 	UpdateRole: async (
 		req: Request,

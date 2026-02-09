@@ -10,10 +10,10 @@ import CreateModel from '../utils/helper/CreateModel.helper'
 // because of this update functions and getRole function are in the Member model
 
 const InvitationModel = {
-	GetByGroup: CreateModel<{ _id: Types.ObjectId }, IInvitation[]>({
-		Model: async ({ _id }, session) => {
+	GetByGroup: CreateModel<{ groupId: Types.ObjectId }, IInvitation[]>({
+		Model: async ({ groupId }, session) => {
 			const res = await dbModel
-				.find({ _id, isInvitation: true }, null, { session })
+				.find({ groupId, isInvitation: true }, null, { session })
 				.limit(GroupLimits.maxInvitation)
 				.lean<IInvitation[]>()
 			return res
@@ -28,7 +28,7 @@ const InvitationModel = {
 			const res = await dbModel
 				.find({ account, isInvitation: true }, null, { session })
 				.limit(GroupLimits.maxInvitation)
-				.lean<IInvitation[]>()
+				.lean()
 			return res
 		},
 		DefaultError: new DatabaseError(
@@ -54,7 +54,7 @@ const InvitationModel = {
 	}),
 	Create: CreateModel<{ data: IInvitation }, IInvitation>({
 		Model: async ({ data }, session) => {
-			const res = await dbModel.create([{ data, isInvitation: true }], {
+			const res = await dbModel.create([{ ...data, isInvitation: true }], {
 				session,
 			})
 			return res[0].toObject()

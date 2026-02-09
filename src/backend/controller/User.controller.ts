@@ -69,8 +69,15 @@ const UserController = {
 				'Operation Failed',
 				'The invitations were not retrieved',
 			)
+		const returnObj = invitations.map((invitation) => {
+			return {
+				groupId: invitation.groupId,
+				account: invitation.account,
+				role: invitation.role,
+			}
+		})
 
-		return invitations
+		return returnObj
 	},
 	Update: async (
 		req: Request,
@@ -113,10 +120,13 @@ const UserController = {
 			},
 			session,
 		)
-		const user = await UserModel.Get({
-			account: accessToken.account,
-			projection: ProjectionConfig.IRefreshToken,
-		}, session)
+		const user = await UserModel.Get(
+			{
+				account: accessToken.account,
+				projection: ProjectionConfig.IRefreshToken,
+			},
+			session,
+		)
 		if (!user) throw new ServerError('Operation Failed', 'User not found')
 
 		const refreshToken = GenerateRefreshToken({ content: user })

@@ -8,6 +8,7 @@ import type { IEnv } from '../../backend/interface/Env'
 import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesResponse'
 import CleanDatabase from '../utils/CleanDatabase'
 import ValidateCookie from '../utils/ValidateCookie'
+import ValidateCookieRemove from '../utils/ValidateCookieRemove'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
@@ -63,6 +64,11 @@ describe('/user/v1/', () => {
 			ValidateCookie({
 				cookieObj: res.headers,
 				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
+			})
+
+			ValidateCookieRemove({
+				cookieObj: res.headers,
+				cookies: [CookiesKeys.account],
 			})
 
 			expect(res.body).toStrictEqual({
@@ -277,6 +283,11 @@ describe('/user/v1/', () => {
 					{ rel: 'details', href: '/user/v1/get/' },
 					{ rel: 'delete', href: '/user/v1/delete/' },
 				],
+			})
+
+			ValidateCookieRemove({
+				cookieObj: res.headers,
+				cookies: [CookiesKeys.account],
 			})
 
 			const guard = await agent.get(`${api}/get/`)

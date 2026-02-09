@@ -9,6 +9,7 @@ import UserModel from '../../backend/model/User.model'
 import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesResponse'
 import CleanDatabase from '../utils/CleanDatabase'
 import ValidateCookie from '../utils/ValidateCookie'
+import ValidateCookieRemove from '../utils/ValidateCookieRemove'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
@@ -105,6 +106,11 @@ describe('/auth/v1/', () => {
 			ValidateCookie({
 				cookieObj: res.header,
 				cookies: [CookiesKeys.account],
+			})
+
+			ValidateCookieRemove({
+				cookieObj: res.header,
+				cookies: [CookiesKeys.code],
 			})
 
 			expect(res.body).toStrictEqual({
@@ -226,6 +232,14 @@ describe('/auth/v1/', () => {
 			ValidateCookie({
 				cookieObj: res.header,
 				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
+			})
+
+			ValidateCookieRemove({
+				cookieObj: res.header,
+				cookies: [
+					CookiesKeys.genericToken,
+					CookiesKeys.refreshTokenRequestCode,
+				],
 			})
 
 			expect(res.body).toStrictEqual({
@@ -361,6 +375,11 @@ describe('/auth/v1/', () => {
 				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
 			})
 
+			ValidateCookieRemove({
+				cookieObj: res.header,
+				cookies: [CookiesKeys.codeCurrentAccount, CookiesKeys.codeNewAccount],
+			})
+
 			expect(res.body).toStrictEqual({
 				success: true,
 				link: [
@@ -455,6 +474,11 @@ describe('/auth/v1/', () => {
 				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
 			})
 
+			ValidateCookieRemove({
+				cookieObj: res.header,
+				cookies: [CookiesKeys.confirmPwdChange],
+			})
+
 			expect(res.body).toStrictEqual({
 				success: true,
 				link: [
@@ -494,6 +518,11 @@ describe('/auth/v1/', () => {
 		const endpoint = `${api}/request/logout/`
 		test('good request', async () => {
 			const res = await agent.post(endpoint)
+
+			ValidateCookieRemove({
+				cookieObj: res.header,
+				cookies: [CookiesKeys.refreshToken, CookiesKeys.accessToken],
+			})
 
 			expect(res.body).toStrictEqual({
 				success: true,

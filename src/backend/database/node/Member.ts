@@ -13,7 +13,7 @@ const schema = new Schema<IMemberCollection>(
 	},
 	{
 		...config.schemaOptions,
-		_id: false,
+		collection: 'member',
 	},
 )
 

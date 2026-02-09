@@ -57,6 +57,8 @@ const GroupController = {
 		session: ClientSession | undefined,
 	): Promise<IGroup> => {
 		// body = { data }
+		if (!req.body.data)
+			throw new UserBadRequest('Missing data', 'Missing group data')
 		const group = GroupValidator(req.body.data)
 		const accessToken = GetAccessToken({ req })
 		const result = await Model.Create({ data: group }, session)

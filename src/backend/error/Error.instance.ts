@@ -13,7 +13,7 @@ export const UserBadRequest = CreateError<IUserBadRequest>(
 	'userBadRequest',
 )
 
-type IDuplicateData = 'User already exists'
+type IDuplicateData = 'User already exists' | 'Invitation already exists'
 export const DuplicateData = CreateError<IDuplicateData>(409, 'duplicateData')
 
 type INotFound =

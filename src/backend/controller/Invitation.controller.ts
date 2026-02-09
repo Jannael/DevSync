@@ -1,7 +1,11 @@
 import type { Request, Response } from 'express'
 import { type ClientSession, Types } from 'mongoose'
 import { ValidRoles } from '../constant/Role.constant'
-import { NotFound, ServerError, UserBadRequest } from '../error/Error.instance'
+import {
+	DuplicateData,
+	ServerError,
+	UserBadRequest,
+} from '../error/Error.instance'
 import type { IInvitation } from '../interface/Invitation'
 import InvitationModel from '../model/Invitation.model'
 import { GetAccessToken } from '../secret/GetToken'
@@ -19,8 +23,7 @@ const InvitationController = {
 			groupId: req.body.groupId,
 			account: req.body.data.account,
 		})
-		if (exists)
-			throw new NotFound('Invitation not found', 'Invitation not found')
+		if (exists) throw new DuplicateData('Invitation already exists')
 
 		const invitation = InvitationValidator({
 			...req.body.data,

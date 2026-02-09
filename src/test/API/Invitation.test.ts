@@ -158,14 +158,15 @@ describe('/invitation/v1/', () => {
 							groupId,
 							data: {
 								role: Roles.developer,
+								account: userB.account,
 							},
 						})
 					},
 					error: {
 						code: 409,
 						success: false,
-						msg: 'Duplicate data',
-						description: 'Invitation already exists',
+						msg: 'Invitation already exists',
+						description: undefined,
 					},
 				},
 				{

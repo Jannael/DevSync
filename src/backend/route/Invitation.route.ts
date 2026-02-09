@@ -7,17 +7,17 @@ const router = Router()
 
 router.patch(
 	'/update/role/',
-	RoleMiddleware([Roles.techLead]),
+	RoleMiddleware([Roles.techLead], InvitationAdapter.UpdateRole.ErrorLink),
 	InvitationAdapter.UpdateRole,
 )
 router.post(
 	'/create/',
-	RoleMiddleware([Roles.techLead]),
+	RoleMiddleware([Roles.techLead], InvitationAdapter.Create.ErrorLink),
 	InvitationAdapter.Create,
 )
 router.post(
 	'/cancel/',
-	RoleMiddleware([Roles.techLead]),
+	RoleMiddleware([Roles.techLead], InvitationAdapter.Cancel.ErrorLink),
 	InvitationAdapter.Cancel,
 )
 

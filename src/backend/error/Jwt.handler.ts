@@ -9,7 +9,12 @@ function JwtErrorHandler(e: CustomError):
 	  }
 	| undefined {
 	let isNull = true
-	const status = { code: 500, msg: '', description: '', link: e.link }
+	const status = {
+		code: 500,
+		msg: 'Server error',
+		description: '',
+		link: e.link,
+	}
 
 	if (e.name === 'TokenExpiredError') {
 		isNull = false

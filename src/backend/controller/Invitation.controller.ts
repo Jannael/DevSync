@@ -18,7 +18,10 @@ const InvitationController = {
 		_res: Response,
 		_session: ClientSession | undefined,
 	): Promise<IInvitation> => {
-		// body = { account, role }
+		// body = { groupId, data: { account, role } }
+		if (!req.body.data)
+			throw new UserBadRequest('Missing data', 'Missing invitation details')
+
 		const exists = await InvitationModel.Exists({
 			groupId: req.body.groupId,
 			account: req.body.data.account,

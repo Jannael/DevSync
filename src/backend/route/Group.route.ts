@@ -5,14 +5,19 @@ import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post('/get/', RoleMiddleware(ValidRoles), GroupAdapter.Get)
+router.post('/create/', GroupAdapter.Create)
+
+router.post(
+	'/get/',
+	RoleMiddleware(ValidRoles, GroupAdapter.Get.ErrorLink),
+	GroupAdapter.Get,
+)
 router.post(
 	'/get/invitation/',
 	RoleMiddleware([Roles.techLead], GroupAdapter.GetInvitation.ErrorLink),
 	GroupAdapter.GetInvitation,
 )
 
-router.post('/create/', GroupAdapter.Create)
 router.put(
 	'/update/',
 	RoleMiddleware([Roles.techLead], GroupAdapter.Update.ErrorLink),

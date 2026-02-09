@@ -46,8 +46,8 @@ function CreateAdapter({
 		} finally {
 			if (transaction && session) await session.endSession()
 		}
-		Object.assign(handler, { ErrorLink, SuccessLink })
 	}
+	Object.assign(handler, { ErrorLink, SuccessLink })
 
 	return handler as IAdapterHandler
 }

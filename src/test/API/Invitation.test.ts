@@ -201,31 +201,40 @@ describe('/invitation/v1/', () => {
 	})
 
 	describe('/update/role/', () => {
-		const endpoint = `${api}update/role/`
+		const endpoint = `${api}/update/role/`
 		test('good request', async () => {
 			const res = await agent.patch(endpoint).send({
 				groupId,
 				newRole: Roles.techLead,
+				account: userB.account,
 			})
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/invitation/v1/update/role/' },
 					{ rel: 'group', href: '/group/v1/get/' },
 				],
 			})
 
-			// Verify update
-			const groupInvRes = await agent
-				.post('/group/v1/get/invitation/')
-				.send({ groupId })
-			expect(groupInvRes.body.data).toContainEqual(
-				expect.objectContaining({
-					role: Roles.techLead,
-				}),
-			)
+			const guard = await agent.post('/group/v1/get/invitation/').send({
+				groupId,
+			})
+			expect(guard.body).toStrictEqual({
+				success: true,
+				data: [
+					{
+						groupId,
+						account: userB.account,
+						role: Roles.techLead,
+					},
+				],
+				link: [
+					{ rel: 'self', href: '/group/v1/get/invitation/' },
+					{ rel: 'details', href: '/group/v1/get/' },
+					{ rel: 'cancel', href: '/invitation/v1/cancel/' },
+				],
+			})
 		})
 
 		describe('error request', () => {
@@ -236,6 +245,7 @@ describe('/invitation/v1/', () => {
 						return await agentB.patch(endpoint).send({
 							groupId,
 							newRole: Roles.techLead,
+							account: user.account,
 						})
 					},
 					error: {

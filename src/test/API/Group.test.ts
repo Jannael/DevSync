@@ -171,10 +171,10 @@ describe('/group/v1/', () => {
 						return await agent.post(endpoint).send({ groupId: 'invalid' })
 					},
 					error: {
-						code: 404,
+						code: 400,
 						success: false,
-						msg: 'Group not found',
-						description: 'Group not found',
+						msg: 'Invalid credentials',
+						description: 'Invalid group id',
 					},
 				},
 			]

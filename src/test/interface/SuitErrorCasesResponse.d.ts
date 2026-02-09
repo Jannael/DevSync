@@ -7,6 +7,6 @@ export type ISuitErrorCasesResponse = {
 		code: number
 		success: boolean
 		msg: string
-		description: string
+		description: string | undefined
 	}
 }[]

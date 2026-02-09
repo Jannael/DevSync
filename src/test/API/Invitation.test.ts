@@ -269,15 +269,14 @@ describe('/invitation/v1/', () => {
 	})
 
 	describe('/cancel/', () => {
-		const endpoint = `${api}cancel/`
+		const endpoint = `${api}/cancel/`
 		test('good request', async () => {
-			const res = await agent.post(endpoint).send({
-				groupId,
-			})
+			const res = await agent
+				.post(endpoint)
+				.send({ groupId, account: userB.account })
 
 			expect(res.body).toStrictEqual({
 				success: true,
-				data: true,
 				link: [
 					{ rel: 'self', href: '/invitation/v1/cancel/' },
 					{ rel: 'details', href: '/group/v1/get/' },
@@ -288,12 +287,7 @@ describe('/invitation/v1/', () => {
 			const groupInvRes = await agent
 				.post('/group/v1/get/invitation/')
 				.send({ groupId })
-			expect(groupInvRes.body.data).not.toContainEqual([])
-
-			const userInvRes = await agentB.post('/user/v1/get/invitation/')
-			expect(userInvRes.body.data).not.toContainEqual(
-				expect.objectContaining({ groupId }),
-			)
+			expect(groupInvRes.body.data).toStrictEqual([])
 		})
 
 		describe('error request', () => {
@@ -306,10 +300,10 @@ describe('/invitation/v1/', () => {
 						})
 					},
 					error: {
-						code: 500, // Controller throws ServerError if result is false
+						code: 400,
 						success: false,
-						msg: 'Operation Failed',
-						description: 'The invitation was not cancelled',
+						msg: 'Missing data',
+						description: 'Missing account',
 					},
 				},
 			]

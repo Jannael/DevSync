@@ -125,6 +125,7 @@ UPDATE: i've work in refactoring the entire project, and i fixed all the issues 
 - indexes for db
 
 (low priority)
+
 - unit tests for utils (mostly)
 - middleware to validate missing fields, avoid things like this in controllers:
 

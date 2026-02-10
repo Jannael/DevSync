@@ -5,15 +5,19 @@ import RoleMiddleware from '../middleware/Role.middleware'
 
 const router = Router()
 
-router.post('/get/', RoleMiddleware(ValidRoles), MemberAdapter.Get) // members of a group
+router.post(
+	'/get/',
+	RoleMiddleware(ValidRoles, MemberAdapter.Get.ErrorLink),
+	MemberAdapter.Get,
+) // members of a group
 router.delete(
 	'/remove/',
-	RoleMiddleware([Roles.techLead]),
+	RoleMiddleware([Roles.techLead], MemberAdapter.Remove.ErrorLink),
 	MemberAdapter.Remove,
 ) // remove a member from a group
 router.patch(
 	'/update/role/',
-	RoleMiddleware([Roles.techLead]),
+	RoleMiddleware([Roles.techLead], MemberAdapter.UpdateRole.ErrorLink),
 	MemberAdapter.UpdateRole,
 ) // update the role of a member
 

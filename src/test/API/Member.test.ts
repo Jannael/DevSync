@@ -112,6 +112,59 @@ describe('/member/v1/', () => {
 				],
 			})
 		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing group id',
+					fn: () => agent.post(endpoint).send({}),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing group id',
+					},
+				},
+				{
+					name: 'Invalid group id',
+					fn: () => agent.post(endpoint).send({ groupId: 'invalid' }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid group id',
+					},
+				},
+				{
+					name: 'Unauthorized (not a member)',
+					fn: async () => {
+						const agentC = request.agent(app)
+						await registerUser(
+							agentC,
+							'unprivileged@gmail.com',
+							'Unprivileged',
+							'Unprivileged User',
+						)
+						return await agentC.post(endpoint).send({ groupId })
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/member/v1/get/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
+		})
 	})
 
 	describe('/update/role/', () => {
@@ -119,7 +172,11 @@ describe('/member/v1/', () => {
 		test('good request', async () => {
 			const res = await agent
 				.patch(endpoint)
-				.send({ groupId, account: secondUserAccount, newRole: Roles.techLead })
+				.send({
+					groupId,
+					account: secondUserAccount,
+					newRole: Roles.documenter,
+				})
 
 			expect(res.body).toEqual({
 				success: true,
@@ -139,9 +196,91 @@ describe('/member/v1/', () => {
 				{
 					groupId,
 					account: secondUserAccount,
-					role: Roles.techLead,
+					role: Roles.documenter,
 				},
 			])
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing account or role',
+					fn: () => agent.patch(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing account or role',
+					},
+				},
+				{
+					name: 'Invalid account',
+					fn: () =>
+						agent
+							.patch(endpoint)
+							.send({ groupId, account: 'invalid', newRole: Roles.developer }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid account',
+					},
+				},
+				{
+					name: 'Invalid role',
+					fn: () =>
+						agent.patch(endpoint).send({
+							groupId,
+							account: secondUserAccount,
+							newRole: 'invalid',
+						}),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid role',
+					},
+				},
+				{
+					name: 'Unauthorized (not TechLead)',
+					fn: () =>
+						agentB.patch(endpoint).send({
+							groupId,
+							account: userAccount,
+							newRole: Roles.techLead,
+						}),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not have the required role',
+					},
+				},
+				{
+					name: 'Group not found',
+					fn: () =>
+						agent.patch(endpoint).send({
+							groupId: new mongoose.Types.ObjectId().toString(),
+							account: secondUserAccount,
+							newRole: Roles.developer,
+						}),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/member/v1/update/role/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
 		})
 	})
 
@@ -167,6 +306,65 @@ describe('/member/v1/', () => {
 					role: Roles.techLead,
 				},
 			])
+
+			await agentB.post('/group/v1/join/').send({ groupId })
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing account',
+					fn: () => agent.delete(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing group id or account',
+					},
+				},
+				{
+					name: 'Invalid account',
+					fn: () =>
+						agent.delete(endpoint).send({ groupId, account: 'invalid' }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid account',
+					},
+				},
+				{
+					name: 'Unauthorized (not TechLead)',
+					fn: () =>
+						agentB.delete(endpoint).send({ groupId, account: userAccount }),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not have the required role',
+					},
+				},
+				{
+					name: 'Cannot remove the last techLead',
+					fn: () =>
+						agent.delete(endpoint).send({ groupId, account: userAccount }),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'Cannot remove the last techLead from the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/member/v1/remove/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
 		})
 	})
 })

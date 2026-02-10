@@ -3,13 +3,16 @@ import CreateValidator from '../../utils/helper/CreateValidator.helper'
 
 export const GroupSchema = z.object({
 	name: z
-		.string()
-		.min(1, 'name is required')
-		.max(100, 'name must be 100 characters long'),
+		.string('Name is required')
+		.min(1, 'Name is required')
+		.max(100, 'Name must be 100 characters long'),
 	color: z
-		.string()
+		.string('Color is required')
 		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex code'),
-	repository: z.string().url('Must be a valid url').nullable(),
+	repository: z
+		.string('Repository is required')
+		.url('Must be a valid url')
+		.nullable(),
 })
 
 export const GroupSchemaPartial = GroupSchema.partial()

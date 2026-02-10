@@ -10,7 +10,7 @@ export const TaskBaseSchema = z.object({
 		},
 		{ message: 'Invalid group id' },
 	),
-	user: z.array(z.string().email('user item is invalid')).nullable(),
+	user: z.array(z.string('User is required').email('User is invalid')).nullable(),
 	name: z
 		.string('Name is required')
 		.min(1, 'Name is required')
@@ -19,17 +19,17 @@ export const TaskBaseSchema = z.object({
 	feature: z
 		.array(
 			z
-				.string()
-				.min(1, 'feature item is required')
-				.max(100, 'feature item must be at most 100 characters'),
+				.string('Feature item is required')
+				.min(1, 'Feature item is required')
+				.max(100, 'Feature item must be at most 100 characters'),
 		)
 		.nullable(),
 	description: z
-		.string()
-		.min(1, 'description is required')
-		.max(1000, 'description must be at most 1000 characters'),
-	isComplete: z.boolean('isComplete is invalid'),
-	priority: z.number('priority is invalid'),
+		.string('Description is required')
+		.min(1, 'Description is required')
+		.max(1000, 'Description must be at most 1000 characters'),
+	isComplete: z.boolean('IsComplete is invalid'),
+	priority: z.number('Priority is invalid'),
 })
 
 export const TaskSchema = TaskBaseSchema.extend({

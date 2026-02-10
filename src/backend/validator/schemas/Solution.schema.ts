@@ -10,7 +10,7 @@ export const SolutionSchema = z.object({
 		},
 		{ message: 'Invalid solution id' },
 	),
-	user: z.string().email('Invalid user'),
+	user: z.string('User is required').email('Invalid user'),
 	groupId: z.custom<Types.ObjectId>(
 		(val) => {
 			return Types.ObjectId.isValid(val as string | number)
@@ -20,9 +20,9 @@ export const SolutionSchema = z.object({
 	feature: z
 		.array(
 			z
-				.string()
-				.min(1, 'feature item is required')
-				.max(100, 'feature item must be at most 100 characters'),
+				.string('Feature item is required')
+				.min(1, 'Feature item is required')
+				.max(100, 'Feature item must be at most 100 characters'),
 		)
 		.nullable(),
 	code: CodeFieldSchema,

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import CreateValidator from '../../utils/helper/CreateValidator.helper'
 
 const PasswordSchema = z
-	.string()
+	.string('Password is required')
 	.min(8, 'Password must be at least 8 characters long')
 	.max(20, 'Password cannot exceed 20 characters')
 	.refine((value) => /[A-Z]/.test(value), {

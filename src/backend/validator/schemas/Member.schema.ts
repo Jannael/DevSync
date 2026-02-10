@@ -10,7 +10,7 @@ export const MemberSchema = z.object({
 		},
 		{ message: 'Invalid group id' },
 	),
-	account: z.string().email('Invalid account'),
+	account: z.string('Account is required').email('Invalid account'),
 	role: z.enum([Roles.developer, Roles.documenter, Roles.techLead], {
 		message: 'Invalid role',
 	}),

@@ -4,19 +4,18 @@ import PasswordSchema from './Password.schema'
 
 export const UserSchema = z.object({
 	fullName: z
-		.string()
-		.min(1, 'fullName is required')
-		.max(100, 'fullName must be at most 100 characters'),
+		.string('FullName is required')
+		.min(1, 'FullName is required')
+		.max(100, 'FullName must be at most 100 characters'),
 	account: z
-		.string()
-		.min(1, 'account is required')
+		.string('Account is required')
 		.max(100, 'account must be at most 100 characters')
 		.email('Invalid account'),
 	pwd: PasswordSchema,
 	nickName: z
-		.string()
-		.min(1, 'nickName is required')
-		.max(100, 'nickName must be at most 100 characters')
+		.string('NickName is required')
+		.min(1, 'NickName is required')
+		.max(100, 'NickName must be at most 100 characters')
 		.nullable(),
 })
 

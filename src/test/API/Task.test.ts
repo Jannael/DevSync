@@ -198,6 +198,7 @@ describe('/task/v1/', () => {
 				link: [
 					{ rel: 'self', href: '/task/v1/update/' },
 					{ rel: 'get', href: '/task/v1/get/' },
+					{ rel: 'list', href: '/task/v1/list/' },
 					{ rel: 'delete', href: '/task/v1/delete/' },
 				],
 			})

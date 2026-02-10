@@ -8,10 +8,13 @@ This project uses **Jest** and **Supertest** for endpoint testing. The goal is t
 ## Getting Started
 
 To run the entire test suite:
+
 ```bash
 pnpm test
 ```
+
 To run a specific test file (working test):
+
 ```bash
 pnpm test:w
 ```
@@ -19,6 +22,7 @@ pnpm test:w
 ## Test Structure
 
 Each test file follows a hierarchical structure using `describe` blocks:
+
 1.  **Version/Module**: e.g., `describe('/auth/v1/', () => { ... })`
 2.  **Endpoint**: e.g., `describe('/request/code/', () => { ... })`
 3.  **Scenario Group**: `good request` vs `error request`.
@@ -34,7 +38,7 @@ describe("/api/v1/", () => {
 
     test("good request", async () => {
       // Use 'agent' if cookies/session are required
-      const res = await agent.delete(endpoint).send({ id: '123' });
+      const res = await agent.delete(endpoint).send({ id: "123" });
 
       ValidateCookie({
         cookieObj: res.header,
@@ -43,24 +47,27 @@ describe("/api/v1/", () => {
 
       expect(res.body).toEqual({
         success: true,
-        link: [
-          { rel: 'self', href: '/api/v1/delete/' },
-        ],
+        link: [{ rel: "self", href: "/api/v1/delete/" }],
       });
     });
 
     describe("error request", () => {
       const cases: ISuitErrorCasesResponse = [
         {
-          name: 'Missing ID',
+          name: "Missing ID",
           fn: () => agent.delete(endpoint).send({}),
-          error: { code: 400, success: false, msg: 'Missing data', description: 'Missing id' }
-        }
+          error: {
+            code: 400,
+            success: false,
+            msg: "Missing data",
+            description: "Missing id",
+          },
+        },
       ];
 
       ValidateResponseError({
         cases,
-        link: [{ rel: 'self', href: '/api/v1/delete/' }],
+        link: [{ rel: "self", href: "/api/v1/delete/" }],
       });
     });
   });
@@ -70,31 +77,36 @@ describe("/api/v1/", () => {
 ## Key Utilities
 
 ### 1. `ValidateCookie`
+
 Ensures that the response contains specific cookies and that they are configured with `HttpOnly`, because all the cookies in the project are HttpOnly.
 
 ### 2. `ValidateResponseError`
+
 Automates error scenario testing. It iterates through an array of `cases` and verifies:
--   Status Code
--   Success flag
--   Message (`msg`) and `description`
--   The consistency of HATEOAS `link`s across all error cases for that endpoint.
+
+- Status Code
+- Success flag
+- Message (`msg`) and `description`
+- The consistency of HATEOAS `link`s across all error cases for that endpoint.
 
 ### 3. `CleanDatabase`
+
 Used in `afterAll` or `beforeAll` to ensure the database is empty before running tests. It ignores system collections.
 
 ## Mocking
 
 External services (Email, SMS, External APIs) should be mocked to avoid side effects and speed up tests.
 Example of mocking the Email service:
+
 ```typescript
-jest.mock('../../backend/service/SendEmail.service', () => ({
+jest.mock("../../backend/service/SendEmail.service", () => ({
   __esModule: true,
   default: jest.fn().mockResolvedValue(true),
-}))
+}));
 ```
 
 ## Best Practices
 
--   **Persistent Sessions**: Use `agent = request.agent(app)` when your test flow depends on cookies set in previous requests (e.g., Login -> Get User).
--   **Link Validation**: Always verify the `link` property. It's a key part of our API architecture.
--   **Reference**: See `src/test/API/Auth.test.ts` for a comprehensive example of complex flows.
+- **Persistent Sessions**: Use `agent = request.agent(app)` when your test flow depends on cookies set in previous requests (e.g., Login -> Get User).
+- **Link Validation**: Always verify the `link` property. It's a key part of our API architecture.
+- **Reference**: See `src/test/API/Auth.test.ts` for a comprehensive example of complex flows.

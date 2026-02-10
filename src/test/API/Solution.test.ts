@@ -6,7 +6,6 @@ import { CreateApp } from '../../backend/CreateApp'
 import type { IEnv } from '../../backend/interface/Env'
 import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesResponse'
 import CleanDatabase from '../utils/CleanDatabase'
-import ValidatePagination from '../utils/ValidatePagination'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })

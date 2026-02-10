@@ -120,10 +120,12 @@ UPDATE: i've work in refactoring the entire project, and i fixed all the issues 
 
 ## Future work
 
+- Logger running in the background
 - limitations for group and pretty much everything (limited resources)
 - indexes for db
+
+(low priority)
 - unit tests for utils (mostly)
-- Logger running in the background
 - middleware to validate missing fields, avoid things like this in controllers:
 
   ```typescript

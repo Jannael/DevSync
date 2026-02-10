@@ -1,8 +1,13 @@
+import z from 'zod'
+
+const AccountSchema = z.string('Invalid email').email('Invalid email')
+
 export function AccountValidator({ account }: { account: string }): boolean {
-	const rgx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-	if (!rgx.test(account)) {
+	try {
+		AccountSchema.parse(account)
+		return true
+	} catch {
 		return false
 	}
-	return true
 }
 export default AccountValidator

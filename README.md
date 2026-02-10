@@ -8,19 +8,19 @@ managing the creation and tracking of **coding solutions**.
 
 ## Stack
 
-| Category            | Technology                                                                                                       |
-| :------------------ | :--------------------------------------------------------------------------------------------------------------- |
-| Language        | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](Typescript)        |
-| Framework       | [![Express.js](https://img_shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](Express) |
-| Database        | [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](MongoDB)           |
-| Package Manager | [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](pnpm)                                |
-|**LINTER/FORMATTER**||
-| Linter/formatter | [![Biome](https://img.shields.io/badge/Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev)                                |
-| Markdown Formatter | [![prettier](https://img.shields.io/badge/prettier-FF69B4?logo=prettier&logoColor=fff)](prettier)                                |
-|**TESTING**||
-|Jest| [![Jest](https://img.shields.io/badge/Jest-99424F?logo=jest&logoColor=fff)](Jest)                                |
-|ts-jest| [![ts-jest](https://img.shields.io/badge/ts-jest-99424F?logo=jest&logoColor=fff)](ts-jest)                                |
-|supertest| [![supertest](https://img.shields.io/badge/supertest-99424F?logo=jest&logoColor=fff)](supertest)                                |
+| Category             | Technology                                                                                                       |
+| :------------------- | :--------------------------------------------------------------------------------------------------------------- |
+| Language             | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](Typescript)        |
+| Framework            | [![Express.js](https://img_shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](Express) |
+| Database             | [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](MongoDB)           |
+| Package Manager      | [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](pnpm)                                |
+| **LINTER/FORMATTER** |                                                                                                                  |
+| Linter/formatter     | [![Biome](https://img.shields.io/badge/Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev)            |
+| Markdown Formatter   | [![prettier](https://img.shields.io/badge/prettier-FF69B4?logo=prettier&logoColor=fff)](prettier)                |
+| **TESTING**          |                                                                                                                  |
+| Jest                 | [![Jest](https://img.shields.io/badge/Jest-99424F?logo=jest&logoColor=fff)](Jest)                                |
+| ts-jest              | [![ts-jest](https://img.shields.io/badge/ts-jest-99424F?logo=jest&logoColor=fff)](ts-jest)                       |
+| supertest            | [![supertest](https://img.shields.io/badge/supertest-99424F?logo=jest&logoColor=fff)](supertest)                 |
 
 ## Install
 
@@ -66,7 +66,7 @@ Check the [Database doc](doc/Database.md).
   "build": "pnpm tsc",
   "type-check": "pnpm tsc -noEmit",
   "start": "node ./dist/backend/server.js",
-    
+
 
   // linters and formatters
   "format": "pnpm biome check --write",
@@ -119,3 +119,17 @@ UPDATE: i've work in refactoring the entire project, and i fixed all the issues 
 
 - limitations for group and pretty much everything (limited resources)
 - indexes for db
+- unit tests for utils (mostly)
+- Logger running in the background
+- middleware to validate missing fields, avoid things like this in controllers:
+
+  ```typescript
+  if (!_id) throw new UserBadRequest("Missing data", "Missing task id");
+  if (!Types.ObjectId.isValid(_id))
+    throw new UserBadRequest("Invalid credentials", "Invalid task id");
+
+  if (page === undefined)
+    throw new UserBadRequest("Missing data", "Missing page number");
+  if (typeof page !== "number")
+    throw new UserBadRequest("Invalid credentials", "Invalid page");
+  ```

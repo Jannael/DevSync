@@ -6,11 +6,13 @@ import CodeFieldSchema from './CodeField.schema'
 export const TaskBaseSchema = z.object({
 	groupId: z.custom<Types.ObjectId>(
 		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
+			return Types.ObjectId.isValid(val as string)
 		},
 		{ message: 'Invalid group id' },
 	),
-	user: z.array(z.string('User is required').email('User is invalid')).nullable(),
+	user: z
+		.array(z.string('User is required').email('User is invalid'))
+		.nullable(),
 	name: z
 		.string('Name is required')
 		.min(1, 'Name is required')

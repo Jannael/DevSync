@@ -6,14 +6,14 @@ import CodeFieldSchema from './CodeField.schema'
 export const SolutionSchema = z.object({
 	_id: z.custom<Types.ObjectId>(
 		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
+			return Types.ObjectId.isValid(val as string)
 		},
 		{ message: 'Invalid solution id' },
 	),
 	user: z.string('User is required').email('Invalid user'),
 	groupId: z.custom<Types.ObjectId>(
 		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
+			return Types.ObjectId.isValid(val as string)
 		},
 		{ message: 'Invalid group id' },
 	),

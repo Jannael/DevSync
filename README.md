@@ -73,7 +73,10 @@ Check the [Database doc](doc/Database.md).
   "lint": "pnpm biome check",
 
   "format:md": "prettier --write \"**/*.md\"",
-  "check:md": "prettier --check \"**/*.md\""
+  "check:md": "prettier --check \"**/*.md\"",
+
+  // runs all linters, formatters and checks
+  "fix:all": "pnpm type-check && pnpm lint && pnpm format && pnpm check:md  && pnpm format:md"
 ```
 
 ## Doc

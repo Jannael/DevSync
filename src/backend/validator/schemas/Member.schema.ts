@@ -6,7 +6,7 @@ import CreateValidator from '../../utils/helper/CreateValidator.helper'
 export const MemberSchema = z.object({
 	groupId: z.custom<Types.ObjectId>(
 		(val) => {
-			return Types.ObjectId.isValid(val as string | number)
+			return Types.ObjectId.isValid(val as string)
 		},
 		{ message: 'Invalid group id' },
 	),

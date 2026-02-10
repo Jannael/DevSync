@@ -23,7 +23,15 @@ const MemberController = {
 				'The members were not retrieved',
 			)
 
-		return members
+		const returnObj = members.map((member) => {
+			return {
+				groupId: member.groupId,
+				account: member.account,
+				role: member.role,
+			}
+		})
+
+		return returnObj
 	},
 	UpdateRole: async (
 		req: Request,

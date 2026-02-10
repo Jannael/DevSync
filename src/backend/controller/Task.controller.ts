@@ -58,7 +58,8 @@ const TaskController = {
 		// body = { groupId, role, accessToken, page }
 		const { groupId, role, accessToken, page } = req.body
 
-		if (!page) throw new UserBadRequest('Missing data', 'Missing page number')
+		if (page === undefined)
+			throw new UserBadRequest('Missing data', 'Missing page number')
 		if (typeof page !== 'number')
 			throw new UserBadRequest('Invalid credentials', 'Invalid page')
 
@@ -107,7 +108,15 @@ const TaskController = {
 		})
 
 		return {
-			task: tasks,
+			task: tasks.map((t) => {
+				return {
+					_id: t._id,
+					name: t.name,
+					priority: t.priority,
+					isComplete: t.isComplete,
+					user: t.user,
+				}
+			}),
 			// if the role is not techLead assign empty because all the task are assigned to the user
 			assign: role === Roles.techLead ? assign : [],
 			metadata,

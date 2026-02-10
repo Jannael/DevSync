@@ -222,6 +222,7 @@ describe('/task/v1/', () => {
 				success: true,
 				link: [
 					{ rel: 'self', href: '/task/v1/delete/' },
+					{ rel: 'list', href: '/task/v1/list/' },
 					{ rel: 'create', href: '/task/v1/create/' },
 				],
 			})
@@ -231,7 +232,7 @@ describe('/task/v1/', () => {
 				.post(`${api}/get/`)
 				.send({ _id: taskId, groupId })
 			expect(guard.body.success).toBe(false)
-			expect(guard.body.code).toBe(404)
+			expect(guard.statusCode).toBe(403)
 		})
 	})
 })

@@ -1,13 +1,8 @@
-import z from 'zod'
-
-const AccountSchema = z.string('Invalid email').email('Invalid email')
+import { z } from 'zod'
 
 export function AccountValidator({ account }: { account: string }): boolean {
-	try {
-		AccountSchema.parse(account)
-		return true
-	} catch {
-		return false
-	}
+	return z.string('Invalid email').email('Invalid email').safeParse(account)
+		.success
 }
+
 export default AccountValidator

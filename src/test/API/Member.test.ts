@@ -170,13 +170,11 @@ describe('/member/v1/', () => {
 	describe('/update/role/', () => {
 		const endpoint = `${api}/update/role/`
 		test('good request', async () => {
-			const res = await agent
-				.patch(endpoint)
-				.send({
-					groupId,
-					account: secondUserAccount,
-					newRole: Roles.documenter,
-				})
+			const res = await agent.patch(endpoint).send({
+				groupId,
+				account: secondUserAccount,
+				newRole: Roles.documenter,
+			})
 
 			expect(res.body).toEqual({
 				success: true,

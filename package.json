@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "pnpm jest --verbose --detectOpenHandles",
-		"test:w": "pnpm jest --verbose --detectOpenHandles src/test/API/Task.test.ts",
+		"test:w": "pnpm jest --verbose --detectOpenHandles src/test/API/Solution.test.ts",
 		"test:auth": "pnpm jest --verbose --detectOpenHandles src/test/API/Auth.test.ts",
 		"test:group": "pnpm jest --verbose --detectOpenHandles src/test/API/Group.test.ts",
 		"test:invitation": "pnpm jest --verbose --detectOpenHandles src/test/API/Invitation.test.ts",
@@ -13,9 +13,6 @@
 		"test:solution": "pnpm jest --verbose --detectOpenHandles src/test/API/Solution.test.ts",
 		"test:task": "pnpm jest --verbose --detectOpenHandles src/test/API/Task.test.ts",
 		"test:user": "pnpm jest --verbose --detectOpenHandles src/test/API/User.test.ts",
-
-
-
 
 		"build": "pnpm tsc",
 		"type-check": "pnpm tsc -noEmit",

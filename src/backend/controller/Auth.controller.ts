@@ -271,9 +271,12 @@ const AuthController = {
 			const newAccessToken = GenerateAccessToken({ content: user })
 			const refreshToken = GenerateRefreshToken({ content: user })
 
-			const deleteSessions = await AuthModel.RefreshToken.RemoveAll({
-				userId: user._id,
-			}, session)
+			const deleteSessions = await AuthModel.RefreshToken.RemoveAll(
+				{
+					userId: user._id,
+				},
+				session,
+			)
 			const savedInDB = await AuthModel.RefreshToken.Save(
 				{
 					token: refreshToken,
@@ -345,19 +348,28 @@ const AuthController = {
 			if (cookieCode.code !== code)
 				throw new UserBadRequest('Invalid credentials', 'Invalid code')
 
-			const user = await UserModel.Get({
-				account: cookieCode.account,
-				projection: ProjectionConfig.IRefreshToken,
-			}, session)
+			const user = await UserModel.Get(
+				{
+					account: cookieCode.account,
+					projection: ProjectionConfig.IRefreshToken,
+				},
+				session,
+			)
 			if (!user || !user._id) throw new NotFound('User not found')
 
-			const savedInDB = await UserModel.Update({
-				data: { pwd: validPwd.password },
-				_id: user._id,
-			}, session)
-			const deleteSessions = await AuthModel.RefreshToken.RemoveAll({
-				userId: user._id,
-			}, session)
+			const savedInDB = await UserModel.Update(
+				{
+					data: { pwd: validPwd.password },
+					_id: user._id,
+				},
+				session,
+			)
+			const deleteSessions = await AuthModel.RefreshToken.RemoveAll(
+				{
+					userId: user._id,
+				},
+				session,
+			)
 			if (!savedInDB || !deleteSessions)
 				throw new ServerError(
 					'Operation Failed',
@@ -371,10 +383,13 @@ const AuthController = {
 				content: user,
 			})
 
-			const savedSession = await AuthModel.RefreshToken.Save({
-				token: refreshToken,
-				userId: user._id,
-			}, session)
+			const savedSession = await AuthModel.RefreshToken.Save(
+				{
+					token: refreshToken,
+					userId: user._id,
+				},
+				session,
+			)
 			if (!savedSession)
 				throw new ServerError(
 					'Operation Failed',

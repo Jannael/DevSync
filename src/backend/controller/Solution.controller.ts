@@ -109,7 +109,7 @@ const SolutionController = {
 		}
 
 		const result = await SolutionModel.Create({ data: solution }, session)
-		const updateTaskStatus = TaskModel.Update(
+		const updateTaskStatus = await TaskModel.Update(
 			{
 				_id: solution._id,
 				data: { isComplete: true },
@@ -215,7 +215,7 @@ const SolutionController = {
 		}
 
 		const result = await SolutionModel.Delete({ _id }, session)
-		const updateTaskStatus = TaskModel.Update(
+		const updateTaskStatus = await TaskModel.Update(
 			{
 				_id,
 				data: { isComplete: false },

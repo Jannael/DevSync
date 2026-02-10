@@ -152,13 +152,13 @@ const InvitationModel = {
 	}),
 	Exists: CreateModel<{ groupId: Types.ObjectId; account: string }, boolean>({
 		Model: async ({ groupId, account }, session) => {
-			const res = await dbModel.exists(
-				{
+			const res = await dbModel
+				.exists({
 					groupId,
 					account,
 					isInvitation: true,
-				}
-			).session(session ?? null)
+				})
+				.session(session ?? null)
 
 			return !!res
 		},

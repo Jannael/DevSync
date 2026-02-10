@@ -26,6 +26,10 @@ managing the creation and tracking of **coding solutions**.
 
 Developed using Node.js 24.11.0.
 
+Check the [Env doc](doc/Env.md).
+
+Check the [Database doc](doc/Database.md).
+
 1. **Install dependencies:**
 
    ```bash
@@ -114,3 +118,4 @@ UPDATE: i've work in refactoring the entire project, and i fixed all the issues 
 ## Future work
 
 - limitations for group and pretty much everything (limited resources)
+- indexes for db

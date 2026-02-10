@@ -8,21 +8,23 @@ managing the creation and tracking of **coding solutions**.
 
 ## Stack
 
-This project is built using a modern, scalable backend stack:
-
-| Category            | Technology                                                                                                       | Purpose                                                                      |
-| :------------------ | :--------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------- |
-| **Language**        | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](Typescript)        | Provides static typing for highly maintainable and less error-prone code.    |
-| **Framework**       | [![Express.js](https://img_shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](Express) | Minimalist web server framework used for route management and API endpoints. |
-| **Database**        | [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](MongoDB)           | Used for flexible and scalable data storage.                                 |
-| **Package Manager** | [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](pnpm)                                | Ensures fast, efficient, and space-saving dependency management.             |
+| Category            | Technology                                                                                                       |
+| :------------------ | :--------------------------------------------------------------------------------------------------------------- |
+| Language        | [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](Typescript)        |
+| Framework       | [![Express.js](https://img_shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](Express) |
+| Database        | [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](MongoDB)           |
+| Package Manager | [![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](pnpm)                                |
+|**LINTER/FORMATTER**||
+| Linter/formatter | [![Biome](https://img.shields.io/badge/Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev)                                |
+| Markdown Formatter | [![prettier](https://img.shields.io/badge/prettier-FF69B4?logo=prettier&logoColor=fff)](prettier)                                |
+|**TESTING**||
+|Jest| [![Jest](https://img.shields.io/badge/Jest-99424F?logo=jest&logoColor=fff)](Jest)                                |
+|ts-jest| [![ts-jest](https://img.shields.io/badge/ts-jest-99424F?logo=jest&logoColor=fff)](ts-jest)                                |
+|supertest| [![supertest](https://img.shields.io/badge/supertest-99424F?logo=jest&logoColor=fff)](supertest)                                |
 
 ## Install
 
-The project requires **Node.js version 24.x** (developed using 24.11.0).
-
-[![Node.js](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](Node
-js) 24.x
+Developed using Node.js 24.11.0.
 
 1. **Install dependencies:**
 
@@ -33,7 +35,7 @@ js) 24.x
 2. **Start your MongoDB service:**
 
    ```bash
-   mongod
+   mongod --replSet "rs0"
    ```
 
 3. **Run tests (optional):**
@@ -44,19 +46,38 @@ js) 24.x
 
 ## Scripts
 
-```bash
-  pnpm test
-  pnpm test:w # i created this one to run a single test test:working
-  pnpm build
-  pnpm start
-  pnpm lint
-  pnpm type-check
+```json
+  "test": "pnpm jest --verbose --detectOpenHandles",
+  "test:w": "pnpm jest --verbose --detectOpenHandles src/test/API/Solution.test.ts", // it means test:working
+
+  // test a specific API
+  "test:auth": "pnpm jest --verbose --detectOpenHandles src/test/API/Auth.test.ts",
+  "test:group": "pnpm jest --verbose --detectOpenHandles src/test/API/Group.test.ts",
+  "test:invitation": "pnpm jest --verbose --detectOpenHandles src/test/API/Invitation.test.ts",
+  "test:member": "pnpm jest --verbose --detectOpenHandles src/test/API/Member.test.ts",
+  "test:solution": "pnpm jest --verbose --detectOpenHandles src/test/API/Solution.test.ts",
+  "test:task": "pnpm jest --verbose --detectOpenHandles src/test/API/Task.test.ts",
+  "test:user": "pnpm jest --verbose --detectOpenHandles src/test/API/User.test.ts",
+
+  "build": "pnpm tsc",
+  "type-check": "pnpm tsc -noEmit",
+  "start": "node ./dist/backend/server.js",
+    
+
+  // linters and formatters
+  "format": "pnpm biome check --write",
+  "lint": "pnpm biome check",
+
+  "format:md": "prettier --write \"**/*.md\"",
+  "check:md": "prettier --check \"**/*.md\""
 ```
 
 ## Doc
 
 The full API documentation, including route definitions and required parameters,
-is located in the **`/docs/routes/`** folder.
+is located in the [API](doc/API) folder.
+
+If you want to know how the code works check the [architecture](Architecture.md)
 
 ## Features
 
@@ -86,16 +107,10 @@ boundaries.
 Additionally, I introduced an architectural enhancement: the Service Layer
 (/src/backend/service/). This layer abstracts all complex business logic, state
 management (such as cookie handling and token refreshing), and data interactions
-away from the controllers. A key design decision was making the service
-functions directly receive the req and res objects. This choice was deliberate,
-as it allows for a much smoother future integration with GraphQL (specifically
-using Apollo Server), where the Service Layer can be easily reused and adapted
-by the GraphQL resolvers without significant refactoring. This approach
-significantly improved the overall modularity and separation of concerns.
+away from the controllers.
+
+UPDATE: i've work in refactoring the entire project, and i fixed all the issues i found when i created the first version of the frontend, but also all the problems i created in the backend with the first version of the backend (architecture, code quality, etc)
 
 ## Future work
 
-- invitations abort rework in invitations logic, instead of a member been part
-  of the group until it reject the invitation, this will be removed, its going
-  to be added as an invitation status
-- limitations for group and pretty much everything
+- limitations for group and pretty much everything (limited resources)

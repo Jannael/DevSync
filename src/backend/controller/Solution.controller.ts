@@ -77,15 +77,6 @@ const SolutionController = {
 		)
 		if (!taskExists)
 			throw new NotFound('Task not found', 'The task does not exist')
-		const solutionExists = await SolutionModel.Exists(
-			{
-				_id: solution._id,
-				groupId,
-			},
-			session,
-		)
-		if (solutionExists)
-			throw new Forbidden('Access denied', 'Solution already exists')
 
 		const task = await TaskModel.Get(
 			{
@@ -107,6 +98,16 @@ const SolutionController = {
 				'You must be assigned to this task or be a techLead to create a solution',
 			)
 		}
+
+		const solutionExists = await SolutionModel.Exists(
+			{
+				_id: solution._id,
+				groupId,
+			},
+			session,
+		)
+		if (solutionExists)
+			throw new Forbidden('Access denied', 'Solution already exists')
 
 		const result = await SolutionModel.Create({ data: solution }, session)
 		const updateTaskStatus = await TaskModel.Update(

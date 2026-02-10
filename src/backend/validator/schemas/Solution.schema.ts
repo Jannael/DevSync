@@ -27,9 +27,9 @@ export const SolutionSchema = z.object({
 		.nullable(),
 	code: CodeFieldSchema,
 	description: z
-		.string()
-		.min(1, 'description is required')
-		.max(1000, 'description must be at most 1000 characters'),
+		.string('Description is required')
+		.min(1, 'Description is required')
+		.max(1000, 'Description must be at most 1000 characters'),
 })
 
 export const SolutionSchemaPartial = SolutionSchema.pick({

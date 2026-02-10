@@ -11,6 +11,18 @@ import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
 
+/*
+FLOW:
+	1. Setup: Registers a User (Owner).
+	2. Create: Owner creates a new group.
+	3. Get: Retrieves group details to verify persistence.
+	4. Get Invitation: Lists invitations (initially empty).
+	5. Update: Owner modifies group details (Name, Color).
+	6. Join: A second user joins the group via code/link (simulated).
+	7. Quit: The second user leaves the group.
+	8. Delete: Owner deletes the group.
+*/
+
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({
 	__esModule: true,
 	default: jest.fn().mockReturnValue('1234'),

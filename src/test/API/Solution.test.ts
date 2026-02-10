@@ -8,6 +8,26 @@ import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesRespons
 import CleanDatabase from '../utils/CleanDatabase'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
+/*
+FLOW:
+	1. Setup: 
+		- Registers Agent A (TechLead), Agent B (Member assigned), and Agent C (Unprivileged).
+		- Agent A creates a group and Agent B joins it.
+		- Agent A creates a task assigned to Agent B.
+		- Captures 'groupId' and 'taskId' in the global scope.
+	2. Create: 
+		- Agent B creates a solution for 'taskId' using global 'solutionData'.
+		- Verifies 'isComplete: true' in the task via /task/v1/get/.
+	3. Get: Agent B verifies they can retrieve the created solution.
+	4. Update:
+		- Modifies global 'solutionData.description' locally.
+		- Agent B updates the solution on the server.
+		- Uses a guard (/get/) to verify the change was saved correctly.
+	5. Delete:
+		- Agent B deletes their solution.
+		- Verifies 'isComplete: false' in the task via /task/v1/get/.
+*/
+
 dotenv.config({ quiet: true })
 
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({

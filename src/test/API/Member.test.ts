@@ -9,6 +9,18 @@ import type { ISuitErrorCasesResponse } from '../interface/SuitErrorCasesRespons
 import CleanDatabase from '../utils/CleanDatabase'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
+/*
+FLOW:
+	1. Setup: Registers TechLead (Agent A) and Member (Agent B). Agent A creates a group and Agent B joins.
+	2. Get: Lists members to verify both users are correctly associated with the group and roles.
+	3. Update Role: 
+		- TechLead updates Agent B's role.
+		- Uses a guard (/get/) to verify the role change was persisted.
+	4. Remove: 
+		- TechLead removes Agent B from the group.
+		- Uses a guard (/get/) to verify the member count decreased.
+*/
+
 dotenv.config({ quiet: true })
 
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({

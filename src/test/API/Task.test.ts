@@ -9,6 +9,26 @@ import CleanDatabase from '../utils/CleanDatabase'
 import ValidatePagination from '../utils/ValidatePagination'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
+/*
+FLOW:
+	1. Setup: 
+		- Registers Agent A (TechLead) and Agent B (Member).
+		- Agent A creates a group and Agent B joins it.
+		- Captures 'groupId' in the global scope.
+	2. Create: 
+		- Agent A creates a task assigned to Agent B using the global 'task' object.
+		- Captures 'taskId' for subsequent tests.
+	3. Get: Agent B verifies they can retrieve information about their assigned task.
+	4. List: Agent B verifies the task appears in their task list.
+	5. Update:
+		- Agent A modifies global 'task' properties ('name', 'description', 'priority') locally.
+		- Sends update request to the server.
+		- Uses a guard (Agent B /get/) to verify that changes are reflected for assigned users.
+	6. Delete:
+		- Agent A deletes the task.
+		- Agent B verifies the task is no longer accessible.
+*/
+
 dotenv.config({ quiet: true })
 
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({

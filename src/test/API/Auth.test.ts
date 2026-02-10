@@ -13,6 +13,24 @@ import ValidateCookieRemove from '../utils/ValidateCookieRemove'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
+
+/*
+FLOW:
+	1. Setup: Pre-creates a User in the DB.
+	2. Request Code: Requests a login code for the account.
+	3. Verify Code: Verifies the code to obtain the 'account' token (creating a temporary session).
+	4. Login (Request Refresh Token):
+		- Requests a code specifically for login (refreshToken flow).
+		- Exchanges that code for Refresh and Access tokens.
+	5. Get Access Token: Uses the Refresh Token to obtain a new Access Token.
+	6. Change Account:
+		- Requests a code to change the email.
+		- Verifies the code and updates the account email.
+	7. Change Password:
+		- Requests a code to change the password.
+		- Verifies the code and updates the password.
+	8. Logout: Invalidates tokens and clears cookies.
+*/
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({
 	__esModule: true,
 	default: jest.fn().mockReturnValue('1234'),

@@ -11,6 +11,16 @@ import ValidateResponseError from '../utils/ValidateResponseError'
 
 dotenv.config({ quiet: true })
 
+/*
+FLOW:
+	1. Setup: Registers Owner and Invitee. Owner creates a group.
+	2. Create: Owner invites Invitee as 'developer'. Verifies invitation availability for both User and Group.
+	3. Update Role: Owner updates the Invitee's role in the invitation to 'techLead'.
+	4. Cancel: Owner cancels the invitation. Verifies it's removed.
+	5. Accept: Invitee accepts a new invitation. Verifies they become a group member.
+	6. Reject: Invitee rejects a new invitation. Verifies the invitation is removed.
+*/
+
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({
 	__esModule: true,
 	default: jest.fn().mockReturnValue('1234'),

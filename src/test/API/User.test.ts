@@ -11,6 +11,20 @@ import ValidateCookie from '../utils/ValidateCookie'
 import ValidateCookieRemove from '../utils/ValidateCookieRemove'
 import ValidateResponseError from '../utils/ValidateResponseError'
 
+/*
+FLOW:
+	1. Auth: Initial authentication using 'user.account' to prepare for registration.
+	2. Create: Registers the user in the system using the initial 'user' global object.
+	3. Get: Verifies that the registered data matches 'user' properties.
+	4. Update: 
+		- Modifies the 'user' object properties ('nickName', 'fullName') locally.
+		- Re-authenticates to perform the update.
+		- Sends update request and verifies server response.
+		- Uses a guard (/get/) to ensure the server state matches the modified 'user' object 
+		  and that restricted fields (like 'account') were not changed.
+	5. Delete: Final cleanup by removing the created user.
+*/
+
 dotenv.config({ quiet: true })
 jest.mock('../../backend/utils/auth/GenerateCode.utils', () => ({
 	__esModule: true,

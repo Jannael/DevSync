@@ -19,6 +19,7 @@ const InvitationController = {
 		_session: ClientSession | undefined,
 	): Promise<IInvitation> => {
 		// body = { groupId, data: { account, role } }
+		const { accessToken } = req.body
 		if (!req.body.data)
 			throw new UserBadRequest('Missing data', 'Missing invitation details')
 
@@ -32,6 +33,12 @@ const InvitationController = {
 			...req.body.data,
 			groupId: req.body.groupId,
 		})
+		if (invitation.account === accessToken.account)
+			throw new UserBadRequest(
+				'Invalid credentials',
+				'You cannot invite yourself',
+			)
+
 		const result = await InvitationModel.Create({ data: invitation })
 		if (!result)
 			throw new ServerError(

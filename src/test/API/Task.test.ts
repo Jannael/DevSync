@@ -118,6 +118,58 @@ describe('/task/v1/', () => {
 
 			taskId = res.body.data._id
 		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing task data',
+					fn: () => agent.post(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing task data',
+					},
+				},
+				{
+					name: 'Zod Validation Error (missing name)',
+					fn: () =>
+						agent.post(endpoint).send({
+							groupId,
+							data: { ...task, name: undefined },
+						}),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Name is required',
+					},
+				},
+				{
+					name: 'Unauthorized (not TechLead)',
+					fn: () =>
+						agentB.post(endpoint).send({
+							groupId,
+							data: task,
+						}),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not have the required role',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/task/v1/create/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
+		})
 	})
 
 	describe('/get/', () => {
@@ -148,6 +200,72 @@ describe('/task/v1/', () => {
 				],
 			})
 		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing task id',
+					fn: () => agentB.post(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing task id',
+					},
+				},
+				{
+					name: 'Invalid task id',
+					fn: () => agentB.post(endpoint).send({ groupId, _id: 'invalid' }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid task id',
+					},
+				},
+				{
+					name: 'Task does not belong to the group',
+					fn: async () => {
+						const res = await agent.post('/group/v1/create').send({
+							data: { ...group, name: 'Other Group' },
+						})
+						const otherGroupId = res.body.data._id
+						return await agent
+							.post(endpoint)
+							.send({ _id: taskId, groupId: otherGroupId })
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'Task does not belong to the group',
+					},
+				},
+				{
+					name: 'Unauthorized (not a member)',
+					fn: async () => {
+						const agentC = request.agent(app)
+						await registerUser(agentC, 'unprivileged@gmail.com', 'Un', 'User')
+						return await agentC.post(endpoint).send({ _id: taskId, groupId })
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/task/v1/get/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
+		})
 	})
 
 	describe('/list/', () => {
@@ -172,6 +290,54 @@ describe('/task/v1/', () => {
 				{ rel: 'get', href: '/task/v1/get/' },
 				{ rel: 'create', href: '/task/v1/create/' },
 			])
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing page number',
+					fn: () => agentB.post(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing page number',
+					},
+				},
+				{
+					name: 'Invalid page',
+					fn: () => agentB.post(endpoint).send({ groupId, page: 'invalid' }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Invalid credentials',
+						description: 'Invalid page',
+					},
+				},
+				{
+					name: 'Unauthorized (not a member)',
+					fn: async () => {
+						const agentC = request.agent(app)
+						await registerUser(agentC, 'other2@gmail.com', 'Other', 'Other')
+						return await agentC.post(endpoint).send({ groupId, page: 0 })
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/task/v1/list/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
 		})
 	})
 
@@ -211,6 +377,87 @@ describe('/task/v1/', () => {
 			expect(guard.body.data.description).toBe(task.description)
 			expect(guard.body.data.priority).toBe(task.priority)
 		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing task id',
+					fn: () =>
+						agent.put(endpoint).send({ groupId, data: { name: 'New' } }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing task id',
+					},
+				},
+				{
+					name: 'Missing task data',
+					fn: () => agent.put(endpoint).send({ groupId, _id: taskId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing task data',
+					},
+				},
+				{
+					name: 'No data to update',
+					fn: () =>
+						agent.put(endpoint).send({ groupId, _id: taskId, data: {} }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'No data to update',
+					},
+				},
+				{
+					name: 'Unauthorized (not TechLead)',
+					fn: () =>
+						agentB.put(endpoint).send({
+							_id: taskId,
+							groupId,
+							data: { name: 'Attempt' },
+						}),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not have the required role',
+					},
+				},
+				{
+					name: 'Task does not belong to the group',
+					fn: async () => {
+						const res = await agent.post('/group/v1/create').send({
+							data: { ...group, name: 'Other Group 2' },
+						})
+						const otherGroupId = res.body.data._id
+						return await agent.put(endpoint).send({
+							_id: taskId,
+							groupId: otherGroupId,
+							data: { name: 'Fail' },
+						})
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'Task does not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/task/v1/update/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
+		})
 	})
 
 	describe('/delete/', () => {
@@ -233,6 +480,60 @@ describe('/task/v1/', () => {
 				.send({ _id: taskId, groupId })
 			expect(guard.body.success).toBe(false)
 			expect(guard.statusCode).toBe(403)
+		})
+
+		describe('error request', () => {
+			const cases: ISuitErrorCasesResponse = [
+				{
+					name: 'Missing task id',
+					fn: () => agent.delete(endpoint).send({ groupId }),
+					error: {
+						code: 400,
+						success: false,
+						msg: 'Missing data',
+						description: 'Missing task id',
+					},
+				},
+				{
+					name: 'Unauthorized (not TechLead)',
+					fn: () => agentB.delete(endpoint).send({ _id: taskId, groupId }),
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'You do not have the required role',
+					},
+				},
+				{
+					name: 'Task does not belong to the group',
+					fn: async () => {
+						const res = await agent.post('/group/v1/create').send({
+							data: { ...group, name: 'Other Group 3' },
+						})
+						const otherGroupId = res.body.data._id
+						// We need a task to exist but from another group.
+						// Actually taskId already exists but in 'groupId', so if we use 'otherGroupId' it should fail.
+						return await agent
+							.delete(endpoint)
+							.send({ _id: taskId, groupId: otherGroupId })
+					},
+					error: {
+						code: 403,
+						success: false,
+						msg: 'Access denied',
+						description: 'Task does not belong to the group',
+					},
+				},
+			]
+
+			ValidateResponseError({
+				cases,
+				link: [
+					{ rel: 'self', href: '/task/v1/delete/' },
+					{ rel: 'accessToken', href: '/auth/v1/request/accessToken/' },
+					{ rel: 'login', href: '/auth/v1/request/refreshToken/code/' },
+				],
+			})
 		})
 	})
 })

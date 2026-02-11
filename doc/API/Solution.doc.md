@@ -34,6 +34,24 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "user": "65b2f1...",
+    "groupId": "65b2f1...",
+    "description": "Implemented auth service with JWT",
+    "feature": "Login process",
+    "code": "export const auth = ..."
+  }
+}
+```
+
 ## [/create/]
 
 `[POST]`
@@ -76,6 +94,24 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "user": "65b2f1...",
+    "groupId": "65b2f1...",
+    "description": "Implemented auth service with JWT",
+    "feature": "Login process",
+    "code": "export const auth = ..."
+  }
+}
+```
+
 ## [/update/]
 
 `[PUT]`
@@ -116,6 +152,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/delete/]
 
 `[DELETE]`
@@ -146,4 +190,14 @@
   "_id": "65b2f1...",
   "groupId": "65b2f1..."
 }
+```
+
+---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
 ```

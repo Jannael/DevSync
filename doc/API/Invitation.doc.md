@@ -38,6 +38,21 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "groupId": "65b2f1...",
+    "account": "65b2f1...",
+    "role": "developer"
+  }
+}
+```
+
 ## [/update/role/]
 
 `[PATCH]`
@@ -74,6 +89,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/cancel/]
 
 `[POST]`
@@ -108,6 +131,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/accept/]
 
 `[POST]`
@@ -140,6 +171,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/reject/]
 
 `[POST]`
@@ -168,4 +207,12 @@
 {
   "groupId": "65b2f1..."
 }
+```
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
 ```

@@ -32,6 +32,22 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "name": "My Team",
+    "color": "#4f46e5",
+    "repository": "https://github.com/user/repo"
+  }
+}
+```
+
 ## [/get/invitation/]
 
 `[POST]`
@@ -63,6 +79,23 @@
 ```
 
 ---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "groupId": "65b2f1...",
+      "account": "65b2f1...",
+      "role": "developer"
+    }
+  ]
+}
+```
 
 ## [/create/]
 
@@ -102,6 +135,22 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "name": "My Team",
+    "color": "#4f46e5",
+    "repository": "https://github.com/user/repo"
+  }
+}
+```
+
 ## [/update/]
 
 `[PUT]`
@@ -140,6 +189,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/delete/]
 
 `[DELETE]`
@@ -171,6 +228,14 @@
 ```
 
 ---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
 
 ## [/join/]
 
@@ -204,6 +269,21 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "groupId": "65b2f1...",
+    "account": "65b2f1...",
+    "role": "developer"
+  }
+}
+```
+
 ## [/quit/]
 
 `[POST]`
@@ -232,4 +312,12 @@
 {
   "groupId": "65b2f1..."
 }
+```
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
 ```

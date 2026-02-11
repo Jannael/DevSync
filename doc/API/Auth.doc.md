@@ -30,12 +30,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -76,12 +70,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -113,12 +101,6 @@
 `[NONE]`
 
 ### Output (Response)
-
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
 
 #### Response Body
 
@@ -162,12 +144,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -205,12 +181,6 @@
 ```
 
 ### Output (Response)
-
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
 
 #### Response Body
 
@@ -252,12 +222,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -297,12 +261,6 @@
 ```
 
 ### Output (Response)
-
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
 
 #### Response Body
 
@@ -344,12 +302,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -390,12 +342,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json
@@ -432,12 +378,6 @@
 `[NONE]`
 
 ### Output (Response)
-
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
 
 #### Response Body
 

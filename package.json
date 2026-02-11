@@ -24,7 +24,7 @@
 		"format:md": "prettier --write \"**/*.md\"",
 		"check:md": "prettier --check \"**/*.md\"",
 
-		"fix:all": "pnpm type-check && pnpm lint && pnpm format && pnpm check:md  && pnpm format:md"
+		"fix:all": "pnpm type-check && pnpm lint && pnpm format && pnpm format:md"
 	},
 	"keywords": [],
 	"author": "",

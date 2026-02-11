@@ -32,12 +32,6 @@
 
 ### Output (Response)
 
-#### Body fields
-
-| Parameter | Type      | Description |
-| :-------- | :-------- | :---------- |
-| `success` | `Boolean` | status.     |
-
 #### Response Body
 
 ```json

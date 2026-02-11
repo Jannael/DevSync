@@ -32,6 +32,23 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "groupId": "65b2f1...",
+      "account": "65b2f1...",
+      "role": "developer"
+    }
+  ]
+}
+```
+
 ## [/update/role/]
 
 `[PATCH]`
@@ -68,6 +85,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/remove/]
 
 `[DELETE]`
@@ -98,4 +123,14 @@
   "groupId": "65b2f1...",
   "account": "user@example.com"
 }
+```
+
+---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
 ```

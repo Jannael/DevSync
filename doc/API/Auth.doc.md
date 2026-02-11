@@ -28,6 +28,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/verify/code/]
 
 `[POST]`
@@ -60,6 +74,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/request/accessToken/]
 
 `[GET]`
@@ -83,6 +111,20 @@
 #### Request Body
 
 `[NONE]`
+
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
 
 ## [/request/refreshToken/code/]
 
@@ -118,6 +160,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/request/refreshToken/]
 
 `[POST]`
@@ -146,6 +202,20 @@
 {
   "code": "1234"
 }
+```
+
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
 ```
 
 ## [/account/request/code/]
@@ -180,6 +250,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/change/account/]
 
 `[PATCH]`
@@ -210,6 +294,20 @@
   "codeCurrentAccount": "1234",
   "codeNewAccount": "1234"
 }
+```
+
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
 ```
 
 ## [/password/request/code/]
@@ -244,6 +342,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/change/password/]
 
 `[PATCH]`
@@ -276,6 +388,20 @@
 }
 ```
 
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/request/logout/]
 
 > [!NOTE]
@@ -304,3 +430,17 @@
 #### Request Body
 
 `[NONE]`
+
+### Output (Response)
+
+#### Body fields
+
+| Parameter | Type      | Description |
+| :-------- | :-------- | :---------- |
+| `success` | `Boolean` | status.     |
+
+#### Response Body
+
+```json
+{ "success": true }
+```

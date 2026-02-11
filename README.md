@@ -123,6 +123,7 @@ UPDATE: i've work in refactoring the entire project, and i fixed all the issues 
 - Logger running in the background
 - limitations for group and pretty much everything (limited resources)
 - indexes for db
+- resilient patterns
 
 (low priority)
 

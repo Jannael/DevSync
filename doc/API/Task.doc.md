@@ -138,7 +138,7 @@ When the user's role is not techLead assign will be empty
 | Parameter       | Type       | Required | Description                                      |
 | :-------------- | :--------- | :------- | :----------------------------------------------- |
 | `groupId`       | `String`   | Yes      | The unique ID of the group.                      |
-| `data.title`    | `String`   | Yes      | Title of the task.                               |
+| `data.name`     | `String`   | Yes      | name of the task.                                |
 | `data.content`  | `String`   | Yes      | Detailed content/description of the task.        |
 | `data.user`     | `String[]` | Yes      | Array of accounts (emails) assigned to the task. |
 | `data.priority` | `String`   | Yes      | Task priority (1-10).                            |
@@ -150,7 +150,7 @@ When the user's role is not techLead assign will be empty
 {
   "groupId": "65b2f1...",
   "data": {
-    "title": "Fix bug in login",
+    "name": "Fix bug in login",
     "content": "Verify JWT expiration logic",
     "user": ["dev@example.com"],
     "priority": 10,
@@ -210,7 +210,7 @@ When the user's role is not techLead assign will be empty
 | :----------------- | :--------- | :------- | :-------------------------------- |
 | `_id`              | `String`   | Yes      | The unique ID of the task.        |
 | `groupId`          | `String`   | Yes      | The unique ID of the group.       |
-| `data.title`       | `String`   | No       | Updated title.                    |
+| `data.name`        | `String`   | No       | Updated name.                     |
 | `data.description` | `String`   | No       | Updated description.              |
 | `data.code`        | `String`   | No       | Updated code.                     |
 | `data.user`        | `String[]` | No       | Updated assigned users.           |

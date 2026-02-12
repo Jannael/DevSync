@@ -34,6 +34,30 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "groupId": "65b2f1...",
+    "user": ["dev@example.com"],
+    "name": "Fix bug in login",
+    "description": "Verify JWT expiration logic",
+    "feature": ["auth"],
+    "priority": 10,
+    "code": {
+      "language": "js",
+      "content": "export const auth = ..."
+    },
+    "isComplete": false
+  }
+}
+```
+
 ## [/list/]
 
 `[POST]`
@@ -67,6 +91,31 @@
 ```
 
 ---
+
+### Output (Response)
+
+When the user's role is not techLead assign will be empty
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "task": [
+      {
+        "_id": "65b2f1...",
+        "name": "Fix bug in login",
+        "priority": 10,
+        "user": ["dev@example.com"],
+        "isComplete": false
+      }
+    ],
+    "assign": ["65b2f1...", "65b2f1..."],
+    "metadata": {}
+  }
+}
+```
 
 ## [/create/]
 
@@ -104,7 +153,7 @@
     "title": "Fix bug in login",
     "content": "Verify JWT expiration logic",
     "user": ["dev@example.com"],
-    "priority": "10",
+    "priority": 10,
     "code": {
       "language": "js",
       "content": "export const auth = ..."
@@ -114,6 +163,30 @@
 ```
 
 ---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "65b2f1...",
+    "groupId": "65b2f1...",
+    "user": ["dev@example.com"],
+    "name": "Fix bug in login",
+    "description": "Verify JWT expiration logic",
+    "feature": ["auth"],
+    "priority": 10,
+    "code": {
+      "language": "js",
+      "content": "export const auth = ..."
+    },
+    "isComplete": false
+  }
+}
+```
 
 ## [/update/]
 
@@ -158,6 +231,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/delete/]
 
 `[DELETE]`
@@ -188,4 +269,10 @@
   "_id": "65b2f1...",
   "groupId": "65b2f1..."
 }
+```
+
+#### Response Body
+
+```json
+{ "success": true }
 ```

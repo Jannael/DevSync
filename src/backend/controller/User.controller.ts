@@ -5,8 +5,8 @@ import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
-import type { IInvitation } from '../interface/Invitation'
-import type { IMember } from '../interface/Member'
+import type { IInvitationReturn } from '../interface/Invitation'
+import type { IMemberReturn } from '../interface/Member'
 import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
 import InvitationModel from '../model/Invitation.model'
@@ -40,7 +40,7 @@ const UserController = {
 		req: Request,
 		_res: Response,
 		_session: ClientSession | undefined,
-	): Promise<IMember[]> => {
+	): Promise<IMemberReturn[]> => {
 		const accessToken = GetAccessToken({ req })
 		const groups = await MemberModel.GetForUser({
 			account: accessToken.account,
@@ -56,7 +56,6 @@ const UserController = {
 		const returnObj = groups.map((g) => {
 			return {
 				groupId: g.groupId,
-				account: g.account,
 				role: g.role,
 			}
 		})
@@ -67,7 +66,7 @@ const UserController = {
 		req: Request,
 		_res: Response,
 		_session: ClientSession | undefined,
-	): Promise<IInvitation[]> => {
+	): Promise<IInvitationReturn[]> => {
 		const accessToken = GetAccessToken({ req })
 		const invitations = await InvitationModel.GetByUser({
 			account: accessToken.account,
@@ -80,7 +79,6 @@ const UserController = {
 		const returnObj = invitations.map((invitation) => {
 			return {
 				groupId: invitation.groupId,
-				account: invitation.account,
 				role: invitation.role,
 			}
 		})

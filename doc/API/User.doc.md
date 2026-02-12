@@ -77,7 +77,6 @@
   "data": [
     {
       "groupId": "68e8b0f0b0f0b0f0b0f0b0f0",
-      "account": "[EMAIL_ADDRESS]",
       "role": "techLead"
     }
   ]
@@ -120,7 +119,6 @@
   "data": [
     {
       "groupId": "68e8b0f0b0f0b0f0b0f0b0f0",
-      "account": "[EMAIL_ADDRESS]",
       "role": "techLead"
     }
   ]

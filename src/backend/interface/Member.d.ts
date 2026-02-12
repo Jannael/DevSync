@@ -8,3 +8,5 @@ export interface IMemberCollection {
 }
 
 export interface IMember extends Omit<IMemberCollection, 'isInvitation'> {}
+
+export interface IMemberReturn extends Omit<IMember, 'account'> {}

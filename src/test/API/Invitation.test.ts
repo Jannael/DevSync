@@ -126,7 +126,6 @@ describe('/invitation/v1/', () => {
 				data: [
 					{
 						groupId,
-						account: userB.account,
 						role: Roles.developer,
 					},
 				],

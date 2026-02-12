@@ -26,6 +26,21 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "fullName": "Joel Miller",
+    "account": "[EMAIL_ADDRESS]",
+    "nickName": "The best developer"
+  }
+}
+```
+
 ## [/get/group/]
 
 `[GET]`
@@ -52,6 +67,23 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "groupId": "68e8b0f0b0f0b0f0b0f0b0f0",
+      "account": "[EMAIL_ADDRESS]",
+      "role": "techLead"
+    }
+  ]
+}
+```
+
 ## [/get/invitation/]
 
 `[POST]`
@@ -77,6 +109,23 @@
 `[NONE]`
 
 ---
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "groupId": "68e8b0f0b0f0b0f0b0f0b0f0",
+      "account": "[EMAIL_ADDRESS]",
+      "role": "techLead"
+    }
+  ]
+}
+```
 
 ## [/create/]
 
@@ -116,6 +165,21 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{
+  "success": true,
+  "data": {
+    "fullName": "Joel Miller",
+    "account": "[EMAIL_ADDRESS]",
+    "nickName": "The best developer"
+  }
+}
+```
+
 ## [/update/]
 
 `[PUT]`
@@ -152,6 +216,14 @@
 
 ---
 
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```
+
 ## [/delete/]
 
 `[DELETE]`
@@ -175,3 +247,11 @@
 #### Request Body
 
 `[NONE]`
+
+### Output (Response)
+
+#### Response Body
+
+```json
+{ "success": true }
+```

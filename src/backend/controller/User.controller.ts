@@ -53,7 +53,15 @@ const UserController = {
 			)
 		}
 
-		return groups
+		const returnObj = groups.map((g) => {
+			return {
+				groupId: g.groupId,
+				account: g.account,
+				role: g.role,
+			}
+		})
+
+		return returnObj
 	},
 	GetInvitation: async (
 		req: Request,

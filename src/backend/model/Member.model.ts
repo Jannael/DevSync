@@ -1,15 +1,15 @@
 import type { Types } from 'mongoose'
 import dbModel from '../database/node/Member'
 import { DatabaseError } from '../error/Error.instance'
-import type { IMember } from '../interface/Member'
+import type { IMember, IMemberCollection } from '../interface/Member'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const MemberModel = {
-	GetForUser: CreateModel<{ account: string }, IMember[]>({
+	GetForUser: CreateModel<{ account: string }, IMemberCollection[]>({
 		Model: async ({ account }, session) => {
 			const groups = await dbModel
 				.find({ account, isInvitation: false }, null, { session })
-				.lean<IMember[]>()
+				.lean<IMemberCollection[]>()
 			return groups || []
 		},
 		DefaultError: new DatabaseError(

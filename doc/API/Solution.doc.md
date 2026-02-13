@@ -90,7 +90,9 @@
     "_id": "65b2f1...",
     "feature": "Login process",
     "description": "Implemented auth service with JWT",
-    "code": "export const auth = ..."
+    "code": {
+      "language": "typescript",
+      "content": "console.log('devsync')"
   }
 }
 ```

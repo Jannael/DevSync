@@ -139,10 +139,12 @@ When the user's role is not techLead assign will be empty
 | :-------------- | :--------- | :------- | :----------------------------------------------- |
 | `groupId`       | `String`   | Yes      | The unique ID of the group.                      |
 | `data.name`     | `String`   | Yes      | name of the task.                                |
-| `data.content`  | `String`   | Yes      | Detailed content/description of the task.        |
-| `data.user`     | `String[]` | Yes      | Array of accounts (emails) assigned to the task. |
+| `data.description`  | `String`   | Yes      | Detailed description of the task.        |
+| `data.user`     | `String[]` | No      | Array of accounts (emails) assigned to the task. |
+| `data.feature`     | `String[]` | No      | Array of features. |
 | `data.priority` | `String`   | Yes      | Task priority (1-10).                            |
-| `data.code`     | `String`   | Yes      | Task priority related code.                      |
+| `data.code.language`     | `String`   | No      | Task language code.                      |
+| `data.code.content`     | `String`   | No      | Task content code.                      |
 
 #### Request Body
 

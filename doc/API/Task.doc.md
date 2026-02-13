@@ -142,7 +142,7 @@ When the user's role is not techLead assign will be empty
 | `data.description`  | `String`   | Yes      | Detailed description of the task.        |
 | `data.user`     | `String[]` | No      | Array of accounts (emails) assigned to the task. |
 | `data.feature`     | `String[]` | No      | Array of features. |
-| `data.priority` | `String`   | Yes      | Task priority (1-10).                            |
+| `data.priority` | `String`   | No      | Task priority (1-10).                            |
 | `data.code.language`     | `String`   | No      | Task language code.                      |
 | `data.code.content`     | `String`   | No      | Task content code.                      |
 | `data.isComplete`     | `Boolean`   | No      | Task status.                      |

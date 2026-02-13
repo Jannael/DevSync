@@ -212,7 +212,8 @@ When the user's role is not techLead assign will be empty
 | `groupId`          | `String`   | Yes      | The unique ID of the group.       |
 | `data.name`        | `String`   | No       | Updated name.                     |
 | `data.description` | `String`   | No       | Updated description.              |
-| `data.code`        | `String`   | No       | Updated code.                     |
+| `data.code.language`        | `String `   | No       | Updated language code.                     |
+| `data.code.content`        | `String`   | No       | Updated content code.                     |
 | `data.user`        | `String[]` | No       | Updated assigned users.           |
 | `data.priority`    | `String`   | No       | Updated priority.                 |
 | `data.isComplete`  | `Boolean`  | No       | Mark task as complete/incomplete. |

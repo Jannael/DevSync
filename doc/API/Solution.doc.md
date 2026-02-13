@@ -47,7 +47,9 @@
     "groupId": "65b2f1...",
     "description": "Implemented auth service with JWT",
     "feature": "Login process",
-    "code": "export const auth = ..."
+    "code": {
+      "language": "typescript",
+      "content": ""
   }
 }
 ```

@@ -85,7 +85,7 @@
 
 ## [/get/invitation/]
 
-`[POST]`
+`[GET]`
 
 ### Action
 

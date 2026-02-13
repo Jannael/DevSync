@@ -1,4 +1,4 @@
-# /solution/v1/
+****# /solution/v1/
 
 ## [/get/]
 
@@ -135,9 +135,10 @@
 | :----------------- | :------- | :------- | :---------------------------------------- |
 | `_id`              | `String` | Yes      | The ID of the solution (same as Task ID). |
 | `groupId`          | `String` | Yes      | The unique ID of the group.               |
-| `data.feature`     | `String` | No       | Updated feature description.              |
+| `data.feature`     | `String[]` | No       | Updated feature description.              |
 | `data.description` | `String` | No       | Updated solution description.             |
-| `data.code`        | `String` | No       | Updated code.                             |
+| `data.code.language`        | `String` | No       | Updated language code.                             |
+| `data.code.content`        | `String` | No       | Updated content code.                             |
 
 #### Request Body
 

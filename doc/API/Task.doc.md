@@ -145,6 +145,7 @@ When the user's role is not techLead assign will be empty
 | `data.priority` | `String`   | Yes      | Task priority (1-10).                            |
 | `data.code.language`     | `String`   | No      | Task language code.                      |
 | `data.code.content`     | `String`   | No      | Task content code.                      |
+| `data.isComplete`     | `Boolean`   | No      | Task status.                      |
 
 #### Request Body
 

@@ -74,9 +74,10 @@
 | :----------------- | :------- | :------- | :-------------------------------------------- |
 | `groupId`          | `String` | Yes      | The unique ID of the group.                   |
 | `data._id`         | `String` | Yes      | The ID of the task this solution belongs to.  |
-| `data.feature`     | `String` | Yes      | Short description of the feature implemented. |
 | `data.description` | `String` | Yes      | Detailed description of the solution.         |
-| `data.code`        | `String` | Yes      | The code implementation.                      |
+| `data.feature`     | `String[]` | No      | List of implemented features. |
+| `data.code.language`        | `String` | No     | The language code.                      |
+| `data.code.content`        | `String` | No      | The content code.                      |
 
 #### Request Body
 

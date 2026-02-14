@@ -32,11 +32,7 @@ const TaskModel = {
 	>({
 		Model: async ({ groupId, account, skip, limit }, session) => {
 			const response = await dbModel
-				.find(
-					{ groupId, user: account },
-					Config.ITaskListItem,
-					{ session },
-				)
+				.find({ groupId, user: account }, Config.ITaskListItem, { session })
 				.sort({ _id: -1 })
 				.skip(skip)
 				.limit(limit)

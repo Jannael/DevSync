@@ -135,17 +135,17 @@ When the user's role is not techLead assign will be empty
 
 #### Body fields
 
-| Parameter       | Type       | Required | Description                                      |
-| :-------------- | :--------- | :------- | :----------------------------------------------- |
-| `groupId`       | `String`   | Yes      | The unique ID of the group.                      |
-| `data.name`     | `String`   | Yes      | name of the task.                                |
-| `data.description`  | `String`   | Yes      | Detailed description of the task.        |
-| `data.user`     | `String[]` | No      | Array of accounts (emails) assigned to the task. |
-| `data.feature`     | `String[]` | No      | Array of features. |
-| `data.priority` | `String`   | No      | Task priority (1-10).                            |
-| `data.code.language`     | `String`   | No      | Task language code.                      |
-| `data.code.content`     | `String`   | No      | Task content code.                      |
-| `data.isComplete`     | `Boolean`   | No      | Task status.                      |
+| Parameter            | Type       | Required | Description                                      |
+| :------------------- | :--------- | :------- | :----------------------------------------------- |
+| `groupId`            | `String`   | Yes      | The unique ID of the group.                      |
+| `data.name`          | `String`   | Yes      | name of the task.                                |
+| `data.description`   | `String`   | Yes      | Detailed description of the task.                |
+| `data.user`          | `String[]` | No       | Array of accounts (emails) assigned to the task. |
+| `data.feature`       | `String[]` | No       | Array of features.                               |
+| `data.priority`      | `String`   | No       | Task priority (1-10).                            |
+| `data.code.language` | `String`   | No       | Task language code.                              |
+| `data.code.content`  | `String`   | No       | Task content code.                               |
+| `data.isComplete`    | `Boolean`  | No       | Task status.                                     |
 
 #### Request Body
 
@@ -209,17 +209,17 @@ When the user's role is not techLead assign will be empty
 
 #### Body fields
 
-| Parameter          | Type       | Required | Description                       |
-| :----------------- | :--------- | :------- | :-------------------------------- |
-| `_id`              | `String`   | Yes      | The unique ID of the task.        |
-| `groupId`          | `String`   | Yes      | The unique ID of the group.       |
-| `data.name`        | `String`   | No       | Updated name.                     |
-| `data.description` | `String`   | No       | Updated description.              |
-| `data.code.language`        | `String `   | No       | Updated language code.                     |
-| `data.code.content`        | `String`   | No       | Updated content code.                     |
-| `data.user`        | `String[]` | No       | Updated assigned users.           |
-| `data.priority`    | `String`   | No       | Updated priority.                 |
-| `data.isComplete`  | `Boolean`  | No       | Mark task as complete/incomplete. |
+| Parameter            | Type       | Required | Description                       |
+| :------------------- | :--------- | :------- | :-------------------------------- |
+| `_id`                | `String`   | Yes      | The unique ID of the task.        |
+| `groupId`            | `String`   | Yes      | The unique ID of the group.       |
+| `data.name`          | `String`   | No       | Updated name.                     |
+| `data.description`   | `String`   | No       | Updated description.              |
+| `data.code.language` | `String `  | No       | Updated language code.            |
+| `data.code.content`  | `String`   | No       | Updated content code.             |
+| `data.user`          | `String[]` | No       | Updated assigned users.           |
+| `data.priority`      | `String`   | No       | Updated priority.                 |
+| `data.isComplete`    | `Boolean`  | No       | Mark task as complete/incomplete. |
 
 #### Request Body
 

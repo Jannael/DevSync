@@ -5,10 +5,11 @@ import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
+import type { IUserGroups } from '../interface/Group'
 import type { IInvitationReturn } from '../interface/Invitation'
-import type { IMemberReturn } from '../interface/Member'
 import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
+import GroupModel from '../model/Group.model'
 import InvitationModel from '../model/Invitation.model'
 import MemberModel from '../model/Member.model'
 import UserModel from '../model/User.model'
@@ -40,7 +41,7 @@ const UserController = {
 		req: Request,
 		_res: Response,
 		_session: ClientSession | undefined,
-	): Promise<IMemberReturn[]> => {
+	): Promise<IUserGroups[]> => {
 		const accessToken = GetAccessToken({ req })
 		const groups = await MemberModel.GetForUser({
 			account: accessToken.account,
@@ -52,13 +53,20 @@ const UserController = {
 				'The user groups were not retrieved',
 			)
 		}
-
-		const returnObj = groups.map((g) => {
-			return {
-				groupId: g.groupId,
-				role: g.role,
-			}
-		})
+		const returnObj = await Promise.all(
+			groups.map(async (g) => {
+				const group = await GroupModel.Get({
+					_id: g.groupId,
+					projection: { name: 1, color: 1 },
+				})
+				return {
+					groupId: g.groupId,
+					role: g.role,
+					name: group?.name ?? '',
+					color: group?.color ?? '#000000',
+				}
+			}),
+		)
 
 		return returnObj
 	},

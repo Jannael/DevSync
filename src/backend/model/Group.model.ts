@@ -5,7 +5,10 @@ import type { IGroup } from '../interface/Group'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const GroupModel = {
-	Get: CreateModel<{ _id: Types.ObjectId }, IGroup>({
+	Get: CreateModel<
+		{ _id: Types.ObjectId; projection?: Partial<Record<keyof IGroup, 0 | 1>> },
+		IGroup | undefined
+	>({
 		Model: async ({ _id }, session) => {
 			const res = await dbModel
 				.findOne({ _id }, null, { session })

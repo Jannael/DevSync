@@ -70,10 +70,10 @@ const TaskController = {
 		let count: number | undefined
 
 		// TechLead gets all tasks, other roles get only their assigned tasks
-		if (role === Roles.techLead) {
+		if (role === Roles.techLead || Roles.documenter) {
 			// here i use a session because i do not want one if i do not get the other one
-			tasks = await TaskModel.ListForTechLead({ groupId, skip, limit }, session)
-			count = await TaskModel.CountForTechLead({ groupId }, session)
+			tasks = await TaskModel.ListByGroup({ groupId, skip, limit }, session)
+			count = await TaskModel.CountByGroup({ groupId }, session)
 		} else {
 			tasks = await TaskModel.ListForMember(
 				{

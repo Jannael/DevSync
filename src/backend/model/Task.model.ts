@@ -7,7 +7,7 @@ import type { ITaskListItem } from '../interface/TaskList'
 import CreateModel from '../utils/helper/CreateModel.helper'
 
 const TaskModel = {
-	ListForTechLead: CreateModel<
+	ListByGroup: CreateModel<
 		{ groupId: Types.ObjectId; skip: number; limit: number },
 		ITaskListItem[]
 	>({
@@ -45,7 +45,7 @@ const TaskModel = {
 			'The tasks assigned to the user were not retrieved please try again',
 		),
 	}),
-	CountForTechLead: CreateModel<{ groupId: Types.ObjectId }, number>({
+	CountByGroup: CreateModel<{ groupId: Types.ObjectId }, number>({
 		Model: async ({ groupId }, session) => {
 			const total = await dbModel.countDocuments({ groupId }, { session })
 			return total

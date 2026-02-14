@@ -6,7 +6,7 @@ import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
 import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IUserGroups } from '../interface/Group'
-import type { IInvitationReturn } from '../interface/Invitation'
+import type { IInvitationsUser } from '../interface/Invitation'
 import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
 import GroupModel from '../model/Group.model'
@@ -74,7 +74,7 @@ const UserController = {
 		req: Request,
 		_res: Response,
 		_session: ClientSession | undefined,
-	): Promise<IInvitationReturn[]> => {
+	): Promise<IInvitationsUser[]> => {
 		const accessToken = GetAccessToken({ req })
 		const invitations = await InvitationModel.GetByUser({
 			account: accessToken.account,
@@ -84,12 +84,19 @@ const UserController = {
 				'Operation Failed',
 				'The invitations were not retrieved',
 			)
-		const returnObj = invitations.map((invitation) => {
-			return {
-				groupId: invitation.groupId,
-				role: invitation.role,
-			}
-		})
+		const returnObj: IInvitationsUser[] = await Promise.all(
+			invitations.map(async (invitation) => {
+				const group = await GroupModel.Get({
+					_id: invitation.groupId,
+					projection: { name: 1 },
+				})
+				return {
+					groupId: invitation.groupId,
+					role: invitation.role,
+					name: group?.name ?? '',
+				}
+			}),
+		)
 
 		return returnObj
 	},

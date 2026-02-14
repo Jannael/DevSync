@@ -127,6 +127,7 @@ describe('/invitation/v1/', () => {
 					{
 						groupId,
 						role: Roles.developer,
+						name: group.name,
 					},
 				],
 				link: [

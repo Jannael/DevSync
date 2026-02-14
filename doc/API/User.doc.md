@@ -121,7 +121,8 @@
   "data": [
     {
       "groupId": "68e8b0f0b0f0b0f0b0f0b0f0",
-      "role": "techLead"
+      "role": "techLead",
+      "name": "Group 1"
     }
   ]
 }

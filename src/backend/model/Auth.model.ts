@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import type { Types } from 'mongoose'
 import Config from '../config/Projection.config'
+import UserLimitsConfig from '../config/UserLimits.config'
 import dbModel from '../database/node/User'
 import { DatabaseError } from '../error/Error.instance'
 import type { IRefreshToken } from '../interface/User'
@@ -44,7 +45,14 @@ const AuthModel = {
 			Model: async ({ token, userId }, session) => {
 				const result = await dbModel.updateOne(
 					{ _id: userId },
-					{ $push: { refreshToken: token } },
+					{
+						$push: {
+							refreshToken: {
+								$each: [token],
+								$slice: -UserLimitsConfig.maxSessions,
+							},
+						},
+					},
 					{ session },
 				)
 

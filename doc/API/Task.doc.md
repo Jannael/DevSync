@@ -154,7 +154,7 @@ When the user's role is not techLead assign will be empty
   "groupId": "65b2f1...",
   "data": {
     "name": "Fix bug in login",
-    "content": "Verify JWT expiration logic",
+    "description": "Verify JWT expiration logic",
     "user": ["dev@example.com"],
     "priority": 10,
     "code": {

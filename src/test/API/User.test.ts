@@ -167,8 +167,8 @@ describe('/user/v1/', () => {
 					fn: () => request(app).get(endpoint),
 					error: {
 						success: false,
-						code: 400,
-						msg: 'Missing data',
+						code: 401,
+						msg: 'Access token is invalid',
 						description: 'Missing token = accessToken',
 					},
 				},
@@ -208,8 +208,8 @@ describe('/user/v1/', () => {
 					fn: () => request(app).get(endpoint),
 					error: {
 						success: false,
-						code: 400,
-						msg: 'Missing data',
+						code: 401,
+						msg: 'Access token is invalid',
 						description: 'Missing token = accessToken',
 					},
 				},
@@ -251,8 +251,8 @@ describe('/user/v1/', () => {
 					fn: () => request(app).get(endpoint),
 					error: {
 						success: false,
-						code: 400,
-						msg: 'Missing data',
+						code: 401,
+						msg: 'Access token is invalid',
 						description: 'Missing token = accessToken',
 					},
 				},

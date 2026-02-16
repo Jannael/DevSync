@@ -559,9 +559,9 @@ describe('/auth/v1/', () => {
 						return await request(app).post(endpoint).send({})
 					},
 					error: {
-						code: 400,
+						code: 401,
 						success: false,
-						msg: 'Missing data',
+						msg: 'Refresh token is invalid',
 						description: `Missing token = ${CookiesKeys.refreshToken}`,
 					},
 				},

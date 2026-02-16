@@ -2,7 +2,8 @@ import type { Request } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import CookiesKeys from '../constant/Cookie.constant'
 import { env } from '../Env.validator'
-import { UserBadRequest } from '../error/Error.instance'
+import type { CustomError } from '../error/Error.constructor'
+import { InvalidToken, UserBadRequest } from '../error/Error.instance'
 import type { IRefreshToken } from '../interface/User'
 import Decrypt from './DecryptToken.utils'
 
@@ -47,21 +48,37 @@ function GetToken({
 }
 
 export function GetRefreshToken({ req }: { req: Request }): IRefreshToken {
-	return GetToken({
-		req,
-		tokenName: CookiesKeys.refreshToken,
-		jwtPwd: JWT_REFRESH_TOKEN_ENV,
-		cryptoPwd: CRYPTO_REFRESH_TOKEN_ENV,
-	}) as IRefreshToken
+	try {
+		const token = GetToken({
+			req,
+			tokenName: CookiesKeys.refreshToken,
+			jwtPwd: JWT_REFRESH_TOKEN_ENV,
+			cryptoPwd: CRYPTO_REFRESH_TOKEN_ENV,
+		}) as IRefreshToken
+		return token
+	} catch (e) {
+		throw new InvalidToken(
+			'refresh token is invalid',
+			(e as CustomError).description,
+		)
+	}
 }
 
 export function GetAccessToken({ req }: { req: Request }): IRefreshToken {
-	return GetToken({
-		req,
-		tokenName: CookiesKeys.accessToken,
-		jwtPwd: JWT_ACCESS_TOKEN_ENV,
-		cryptoPwd: CRYPTO_ACCESS_TOKEN_ENV,
-	}) as IRefreshToken
+	try {
+		const token = GetToken({
+			req,
+			tokenName: CookiesKeys.accessToken,
+			jwtPwd: JWT_ACCESS_TOKEN_ENV,
+			cryptoPwd: CRYPTO_ACCESS_TOKEN_ENV,
+		}) as IRefreshToken
+		return token
+	} catch (e) {
+		throw new InvalidToken(
+			'access token is invalid',
+			(e as CustomError).description,
+		)
+	}
 }
 
 export function GetAuth({

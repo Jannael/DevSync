@@ -29,3 +29,6 @@ export const ServerError = CreateError<IServerError>(500, 'ServerError')
 
 type IForbidden = 'Invalid account' | 'Access denied'
 export const Forbidden = CreateError<IForbidden>(403, 'Forbidden')
+
+type IInvalidToken = 'access token is invalid' | 'refresh token is invalid'
+export const InvalidToken = CreateError<IInvalidToken>(401, 'InvalidToken')

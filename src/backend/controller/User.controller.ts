@@ -236,7 +236,7 @@ const UserController = {
 	},
 	Delete: async (
 		req: Request,
-		_res: Response,
+		res: Response,
 		session: ClientSession | undefined,
 	): Promise<boolean> => {
 		const { account: verifiedAccount } = GetAuth({
@@ -320,6 +320,10 @@ const UserController = {
 		if (!result) {
 			throw new ServerError('Operation Failed', 'The user was not deleted')
 		}
+
+		res.clearCookie(CookiesKeys.account)
+		res.clearCookie(CookiesKeys.refreshToken)
+		res.clearCookie(CookiesKeys.accessToken)
 
 		return result
 	},

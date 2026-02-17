@@ -59,7 +59,7 @@ const UserModel = {
 	Delete: CreateModel<{ _id: Types.ObjectId }, boolean>({
 		Model: async ({ _id }, session) => {
 			const result = await dbModel.deleteOne({ _id }, { session })
-			return result.acknowledged && result.deletedCount === 1
+			return result.acknowledged
 		},
 		DefaultError: new DatabaseError(
 			'Failed to remove',

@@ -268,8 +268,17 @@ const AuthController = {
 			if (!result)
 				throw new ServerError('Operation Failed', 'The account was not updated')
 
-			const newAccessToken = GenerateAccessToken({ content: user })
-			const refreshToken = GenerateRefreshToken({ content: user })
+			const newUser = await UserModel.Get(
+				{
+					account: cookieNewAccount.account,
+					projection: ProjectionConfig.IRefreshToken,
+				},
+				session,
+			)
+			if (!newUser) throw new ServerError('Operation Failed', 'User not found')
+
+			const newAccessToken = GenerateAccessToken({ content: newUser })
+			const refreshToken = GenerateRefreshToken({ content: newUser })
 
 			const deleteSessions = await AuthModel.RefreshToken.RemoveAll(
 				{

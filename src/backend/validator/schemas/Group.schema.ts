@@ -8,11 +8,13 @@ export const GroupSchema = z.object({
 		.max(100, 'Name must be 100 characters long'),
 	color: z
 		.string('Color is required')
-		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex code'),
+		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Must be a valid hex code')
+		.transform((val) => val ?? '#000000'),
 	repository: z
 		.string('Repository is required')
 		.url('Must be a valid url')
-		.nullable(),
+		.nullable()
+		.transform((val) => val ?? 'https://github.com/'),
 })
 
 export const GroupSchemaPartial = GroupSchema.partial()

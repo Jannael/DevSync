@@ -88,9 +88,9 @@ const InvitationController = {
 		const accessToken = GetAccessToken({ req })
 
 		const { groupId } = req.body
-		if (!groupId) throw new UserBadRequest('Missing data', 'Missing group id')
+		if (!groupId) throw new UserBadRequest('Missing data', 'Missing invitation id')
 		if (!Types.ObjectId.isValid(groupId))
-			throw new UserBadRequest('Invalid credentials', 'Invalid group id')
+			throw new UserBadRequest('Invalid credentials', 'Invalid invitation id')
 
 		const result = await InvitationModel.Accept({
 			groupId,

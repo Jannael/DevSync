@@ -16,7 +16,7 @@
 
 		"build": "pnpm tsc",
 		"type-check": "pnpm tsc -noEmit",
-		"start": "node ./dist/backend/server.js",
+		"start": "node ./dist/backend/Server.entry.js",
 
 		"format": "pnpm biome check --write",
 		"lint": "pnpm biome check",

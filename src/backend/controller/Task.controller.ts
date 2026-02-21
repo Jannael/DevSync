@@ -69,9 +69,8 @@ const TaskController = {
 		let tasks: ITaskListItem[] | undefined
 		let count: number | undefined
 
-		// TechLead gets all tasks, other roles get only their assigned tasks
-		if (role === Roles.techLead || Roles.documenter) {
-			// here i use a session because i do not want one if i do not get the other one
+		// TechLead gets all tasks and documenter, other roles get only their assigned tasks
+		if (role === Roles.techLead || role === Roles.documenter) {
 			tasks = await TaskModel.ListByGroup({ groupId, skip, limit }, session)
 			count = await TaskModel.CountByGroup({ groupId }, session)
 		} else {
@@ -93,7 +92,7 @@ const TaskController = {
 			)
 		}
 
-		if (!tasks || !count)
+		if (tasks === undefined || count === undefined)
 			throw new ServerError('Operation Failed', 'The tasks were not retrieved')
 
 		const assign = tasks

@@ -48,4 +48,4 @@ export const SolutionValidator = CreateValidator<
 export const SolutionPartialValidator = CreateValidator<
 	typeof SolutionSchemaPartial,
 	Partial<SolutionType>
->(SolutionSchema.partial())
+>(SolutionSchemaPartial)

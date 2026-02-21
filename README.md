@@ -1,4 +1,33 @@
-# Devsync
+<p align="center">
+  <br>
+  <br>
+  <a href="https://devsync.com.mx" target="_blank" rel="noopener noreferrer">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Jannael/devsync-frontend/raw/main/public/FullLogo-dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/Jannael/devsync-frontend/raw/main/public/FullLogo-light.png">
+      <img alt="DevSync logo" src="https://github.com/Jannael/devsync-frontend/raw/main/public/FullLogo-dark.png" height="110">
+    </picture>
+  </a>
+  <br>
+  <br>
+  <br>
+</p>
+
+<div align="center">
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](Typescript)
+[![Express.js](https://img_shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)](Express)
+[![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](MongoDB)
+
+[![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=fff)](pnpm)
+[![Biome](https://img.shields.io/badge/Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev)
+[![prettier](https://img.shields.io/badge/prettier-FF69B4?logo=prettier&logoColor=fff)](prettier)
+
+[![Jest](https://img.shields.io/badge/Jest-99424F?logo=jest&logoColor=fff)](Jest)
+[![ts-jest](https://img.shields.io/badge/ts-jest-99424F?logo=jest&logoColor=fff)](ts-jest)
+[![supertest](https://img.shields.io/badge/supertest-99424F?logo=jest&logoColor=fff)](supertest)
+
+</div>
 
 ## Objective
 

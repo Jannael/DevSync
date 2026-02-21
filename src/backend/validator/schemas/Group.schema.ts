@@ -28,4 +28,4 @@ export const GroupValidator = CreateValidator<typeof GroupSchema, GroupType>(
 export const GroupPartialValidator = CreateValidator<
 	typeof GroupSchemaPartial,
 	Partial<GroupType>
->(GroupSchema.partial())
+>(GroupSchemaPartial)

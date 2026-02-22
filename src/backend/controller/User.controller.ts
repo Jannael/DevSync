@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import type { ClientSession } from 'mongoose'
-import cookieConfig from '../config/Cookie.config'
+import cookieConfig, { config } from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
@@ -175,7 +175,7 @@ const UserController = {
 			newAccessToken,
 			cookieConfig.accessToken,
 		)
-		res.clearCookie(CookiesKeys.account)
+		res.clearCookie(CookiesKeys.account, config)
 		return result
 	},
 	Create: async (
@@ -226,7 +226,7 @@ const UserController = {
 			cookieConfig.refreshToken,
 		)
 		res.cookie(CookiesKeys.accessToken, accessToken, cookieConfig.accessToken)
-		res.clearCookie(CookiesKeys.account)
+		res.clearCookie(CookiesKeys.account, config)
 
 		return {
 			fullName: result.fullName,
@@ -321,9 +321,9 @@ const UserController = {
 			throw new ServerError('Operation Failed', 'The user was not deleted')
 		}
 
-		res.clearCookie(CookiesKeys.account)
-		res.clearCookie(CookiesKeys.refreshToken)
-		res.clearCookie(CookiesKeys.accessToken)
+		res.clearCookie(CookiesKeys.account, config)
+		res.clearCookie(CookiesKeys.refreshToken, config)
+		res.clearCookie(CookiesKeys.accessToken, config)
 
 		return result
 	},

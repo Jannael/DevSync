@@ -1,4 +1,4 @@
-const config = {
+export const config = {
 	httpOnly: true,
 	sameSite: 'lax',
 	secure: false,

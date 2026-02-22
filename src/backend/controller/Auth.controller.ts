@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { ClientSession, Types } from 'mongoose'
-import cookiesConfig from '../config/Cookie.config'
+import cookiesConfig, { config } from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { env } from '../Env.validator'
@@ -151,7 +151,7 @@ const AuthController = {
 		})
 
 		res.cookie(CookiesKeys.account, encrypted, cookiesConfig['5m'])
-		res.clearCookie(CookiesKeys.code)
+		res.clearCookie(CookiesKeys.code, config)
 
 		return true
 	},
@@ -309,8 +309,8 @@ const AuthController = {
 				newAccessToken,
 				cookiesConfig.accessToken,
 			)
-			res.clearCookie(CookiesKeys.codeCurrentAccount)
-			res.clearCookie(CookiesKeys.codeNewAccount)
+			res.clearCookie(CookiesKeys.codeCurrentAccount, config)
+			res.clearCookie(CookiesKeys.codeNewAccount, config)
 
 			return true
 		},
@@ -415,7 +415,7 @@ const AuthController = {
 				accessToken,
 				cookiesConfig.accessToken,
 			)
-			res.clearCookie(CookiesKeys.confirmPwdChange)
+			res.clearCookie(CookiesKeys.confirmPwdChange, config)
 			return true
 		},
 	},
@@ -500,8 +500,8 @@ const AuthController = {
 				accessToken,
 				cookiesConfig.accessToken,
 			)
-			res.clearCookie(CookiesKeys.genericToken)
-			res.clearCookie(CookiesKeys.refreshTokenRequestCode)
+			res.clearCookie(CookiesKeys.genericToken, config)
+			res.clearCookie(CookiesKeys.refreshTokenRequestCode, config)
 
 			return true
 		},

@@ -5,7 +5,12 @@ import cookiesConfig, { config } from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import { env } from '../Env.validator'
-import { NotFound, ServerError, UserBadRequest } from '../error/Error.instance'
+import {
+	InvalidToken,
+	NotFound,
+	ServerError,
+	UserBadRequest,
+} from '../error/Error.instance'
 import type { IRefreshToken } from '../interface/User'
 import AuthModel from '../model/Auth.model'
 import InvitationModel from '../model/Invitation.model'
@@ -53,14 +58,14 @@ const AuthController = {
 		): Promise<boolean> => {
 			// cookies = { refreshToken }
 			if (!req.cookies.refreshToken)
-				throw new UserBadRequest('Missing data', 'Missing refreshToken')
+				throw new InvalidToken('refresh token is invalid')
 
 			let refreshToken: JwtPayload | string
 
 			const jwtRefreshToken = Decrypt({
 				encryptedText: req.cookies.refreshToken,
 				key: CRYPTO_REFRESH_TOKEN_ENV,
-				tokenName: 'refreshToken',
+				tokenName: CookiesKeys.refreshToken,
 			})
 
 			try {
@@ -74,23 +79,22 @@ const AuthController = {
 					decoded._id !== undefined
 				) {
 					await AuthModel.RefreshToken.Remove({
-						token: jwtRefreshToken,
+						token: req.cookies.refreshToken,
 						userId: decoded._id,
 					})
 				}
-				throw e
+				throw new InvalidToken('refresh token is invalid')
 			}
 
 			if (typeof refreshToken === 'string')
-				throw new UserBadRequest('Invalid credentials')
+				throw new InvalidToken('refresh token is invalid')
 
 			const dbValidation = await AuthModel.RefreshToken.Verify({
 				token: req.cookies.refreshToken,
 				userId: refreshToken._id as Types.ObjectId,
 			})
 
-			if (!dbValidation)
-				throw new UserBadRequest('Invalid credentials', 'You need to login')
+			if (!dbValidation) throw new InvalidToken('refresh token is invalid')
 
 			delete refreshToken.iat
 			delete refreshToken.exp

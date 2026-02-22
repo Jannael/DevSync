@@ -319,10 +319,10 @@ describe('/auth/v1/', () => {
 						return await request(app).get(endpoint)
 					},
 					error: {
-						code: 400,
+						code: 401,
 						success: false,
-						msg: 'Missing data',
-						description: 'Missing refreshToken',
+						msg: 'Refresh token is invalid',
+						description: undefined,
 					},
 				},
 			]

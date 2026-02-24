@@ -117,7 +117,7 @@ const TaskController = {
 				}
 			}),
 			// if the role is not techLead assign empty because all the task are assigned to the user
-			assign: role === Roles.techLead ? assign : [],
+			assign: (role === Roles.techLead || role === Roles.documenter) ? assign : [],
 			metadata,
 		}
 	},

@@ -48,7 +48,11 @@ const MemberController = {
 		if (!ValidRoles.includes(newRole))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
 
-		if (req.body.role === Roles.techLead && newRole !== Roles.techLead) {
+		if (
+			req.body.role === Roles.techLead &&
+			newRole !== Roles.techLead &&
+			account === req.body.accessToken.account
+		) {
 			const allMembers = await MemberModel.GetForGroup({ groupId })
 
 			if (!allMembers)

@@ -48,23 +48,25 @@ const MemberController = {
 		if (!ValidRoles.includes(newRole))
 			throw new UserBadRequest('Invalid credentials', 'Invalid role')
 
-		const allMembers = await MemberModel.GetForGroup({ groupId })
+		if (req.body.role === Roles.techLead && newRole !== Roles.techLead) {
+			const allMembers = await MemberModel.GetForGroup({ groupId })
 
-		if (!allMembers)
-			throw new ServerError(
-				'Operation Failed',
-				'Could not verify group members',
-			)
+			if (!allMembers)
+				throw new ServerError(
+					'Operation Failed',
+					'Could not verify group members',
+				)
 
-		const techLeadCount = allMembers.filter(
-			(member) => member.role === Roles.techLead,
-		).length
+			const techLeadCount = allMembers.filter(
+				(member) => member.role === Roles.techLead,
+			).length
 
-		if (techLeadCount <= 1) {
-			throw new Forbidden(
-				'Access denied',
-				'Cannot change the role of the last techLead in the group',
-			)
+			if (techLeadCount <= 1) {
+				throw new Forbidden(
+					'Access denied',
+					'Cannot change the role of the last techLead in the group',
+				)
+			}
 		}
 
 		const result = await MemberModel.UpdateRole({

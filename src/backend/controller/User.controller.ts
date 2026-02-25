@@ -4,7 +4,7 @@ import cookieConfig, { config } from '../config/Cookie.config'
 import ProjectionConfig from '../config/Projection.config'
 import CookiesKeys from '../constant/Cookie.constant'
 import Roles from '../constant/Role.constant'
-import { Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
+import { DuplicateData, Forbidden, ServerError, UserBadRequest } from '../error/Error.instance'
 import type { IUserGroups } from '../interface/Group'
 import type { IInvitationsUser } from '../interface/Invitation'
 import type { IRefreshToken } from '../interface/User'
@@ -189,6 +189,9 @@ const UserController = {
 		if (!data) throw new UserBadRequest('Missing data', 'Missing user data')
 
 		const validatedData = UserValidator({ ...data, account })
+		const exist = await AuthModel.Exists({ account }, session)
+		if (exist) throw new DuplicateData('User already exists', 'User already exists')
+
 		const result = await UserModel.Create({ data: validatedData }, session)
 
 		if (!result) {

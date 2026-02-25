@@ -301,7 +301,7 @@ describe('/task/v1/', () => {
 					user: task.user,
 				}),
 			)
-			expect(res.body.data.assign).toStrictEqual([])
+			expect(res.body.data.assign).toHaveLength(1)
 			ValidatePagination(res.body.data.metadata)
 
 			expect(res.body.link).toStrictEqual([

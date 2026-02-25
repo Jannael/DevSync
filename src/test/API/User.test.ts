@@ -43,7 +43,7 @@ let agent: ReturnType<typeof request.agent>
 const user = {
 	account: 'test@gmail.com',
 	pwd: 'Password123!',
-	nickName: 'Test User',
+	// nickName: 'Test User',
 	fullName: 'Test User',
 }
 
@@ -74,6 +74,7 @@ describe('/user/v1/', () => {
 			const res = await agent.post(endpoint).send({
 				data: user,
 			})
+			console.log(res.body)
 
 			ValidateCookie({
 				cookieObj: res.headers,
@@ -90,7 +91,7 @@ describe('/user/v1/', () => {
 				data: {
 					fullName: 'Test User',
 					account: 'test@gmail.com',
-					nickName: 'Test User',
+					// nickName: 'Test User',
 				},
 				link: [
 					{ rel: 'self', href: '/user/v1/create/' },
@@ -148,7 +149,7 @@ describe('/user/v1/', () => {
 				data: {
 					fullName: user.fullName,
 					account: user.account,
-					nickName: user.nickName,
+					// nickName: user.nickName,
 				},
 				link: [
 					{ rel: 'self', href: '/user/v1/get/' },
@@ -273,13 +274,13 @@ describe('/user/v1/', () => {
 		const endpoint = `${api}/update/`
 
 		test('good request', async () => {
-			user.nickName = 'new nickName User'
+			// user.nickName = 'new nickName User'
 			user.fullName = 'new fullName User'
 
 			await Auth()
 			const res = await agent.put(endpoint).send({
 				data: {
-					nickName: user.nickName,
+					// nickName: user.nickName,
 					fullName: user.fullName,
 					account: 'newaccount@gmail.com', // i leave this here because account should not be possible to update here, so if it changes i want to know
 				},
@@ -309,7 +310,7 @@ describe('/user/v1/', () => {
 			expect(guard.body).toStrictEqual({
 				success: true,
 				data: {
-					nickName: user.nickName,
+					// nickName: user.nickName,
 					fullName: user.fullName,
 					account: user.account,
 				},

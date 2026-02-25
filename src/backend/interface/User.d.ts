@@ -4,7 +4,7 @@ export interface IUser {
 	_id: Types.ObjectId
 	fullName: string
 	account: string
-	nickName: string | null
+	nickName?: string | null
 	// exclude in refreshToken
 	refreshToken: string[] | null
 	pwd: string

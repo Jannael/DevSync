@@ -4,6 +4,7 @@
   "private": false,
   "type": "module",
   "description": "One file to keep your portfolio, CV, Github and linkedin in sync",
+  "license": "CC-BY-NC-4.0",
   "bin": {
     "devsync": "apps/cli/index.ts"
   },

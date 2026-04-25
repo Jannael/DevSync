@@ -31,7 +31,8 @@
     "sync"
   ],
   "files": [
-    "dist"
+    "dist",
+    "DEVSYNC.json"
   ],
   "exports": {
     ".": "./apps/cli/index.ts"

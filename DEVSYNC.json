@@ -1,120 +1,120 @@
 {
   "name": "Devsync",
-  "description": "One command one file: Portfolio, CV, Github Profile and linkedin profile all sync with one file.",
-  "img": "url",
+  "description": "One command one file to keep your portfolio, CV, GitHub profile, and LinkedIn in sync.",
+  "img": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
   "socialMedia": [
     {
       "name": "Github",
-      "url": "url",
-      "icon": "url"
+      "url": "https://github.com/alexrivera-dev",
+      "icon": "https://cdn.simpleicons.org/github"
     }
   ],
   "languages": [
     {
-      "name": "Español",
-      "mdBadge": "",
-      "icon": ""
+      "name": "English",
+      "mdBadge": "![English](https://img.shields.io/badge/Language-English-1f6feb)",
+      "icon": "https://cdn.simpleicons.org/googletranslate"
     }
   ],
   "experience": [
     {
-      "company": "name",
-      "position": "name",
-      "img": "url",
-      "date": "MM/YY - MM/YY",
+      "company": "Northstar Commerce",
+      "position": "Senior Full-Stack Engineer",
+      "img": "https://cdn.simpleicons.org/shopify",
+      "date": "02/23 - Present",
       "links": [
         {
-          "name": "name",
-          "url": "url",
-          "mdBadge": "url",
-          "icon": "url"
+          "name": "Company Site",
+          "url": "https://northstar-commerce.example",
+          "mdBadge": "![Northstar Commerce](https://img.shields.io/badge/Northstar-Commerce-0ea5e9)",
+          "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
-      "description": "",
-      "listName": "What did i learn?",
+      "description": "Led migration from a legacy monolith to a modular TypeScript platform, improving release confidence and checkout reliability for high-traffic campaigns.",
+      "listName": "What I delivered",
       "list": [
         {
-          "title": "edge deployment",
-          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+          "title": "Checkout performance",
+          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
         }
       ],
       "skills": [
         {
-          "name": "name",
-          "mdBadge": "url",
-          "icon": "url"
+          "name": "TypeScript",
+          "mdBadge": "![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)",
+          "icon": "https://cdn.simpleicons.org/typescript"
         }
       ]
     }
   ],
   "projects": [
     {
-      "name": "name",
-      "img": "url",
+      "name": "PulseBoard",
+      "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80",
       "links": [
         {
-          "name": "name",
-          "url": "url",
-          "mdBadge": "url",
-          "icon": "url"
+          "name": "GitHub",
+          "url": "https://github.com/alexrivera-dev/pulseboard",
+          "mdBadge": "![GitHub Repo](https://img.shields.io/badge/Repo-GitHub-181717?logo=github&logoColor=white)",
+          "icon": "https://cdn.simpleicons.org/github"
         }
       ],
-      "description": "description",
-      "listName": "What did i learn?",
+      "description": "A real-time team dashboard for sprint health, CI status, and incident summaries, built for engineering managers and distributed teams.",
+      "listName": "What I learned",
       "list": [
         {
-          "title": "edge deployment",
-          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+          "title": "WebSocket architecture",
+          "description": "Designed resilient real-time updates with fallback polling and connection state recovery."
         }
       ],
       "skills": [
         {
-          "name": "name",
-          "mdBadge": "url",
-          "icon": "url"
+          "name": "React",
+          "mdBadge": "![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)",
+          "icon": "https://cdn.simpleicons.org/react"
         }
       ]
     }
   ],
   "education": [
     {
-      "name": "name",
-      "degree": "degree",
-      "img": "url",
-      "date": "MM/YY - MM/YY",
+      "name": "University of Texas at Austin",
+      "degree": "B.S. in Computer Science",
+      "img": "https://cdn.simpleicons.org/readthedocs",
+      "date": "08/17 - 05/21",
       "links": [
         {
-          "name": "degree",
-          "url": "url-degree",
-          "mdBadge": "url-mdbadge",
-          "icon": "url-degree"
+          "name": "Program Details",
+          "url": "https://www.cs.utexas.edu/undergraduate-program",
+          "mdBadge": "![Computer Science](https://img.shields.io/badge/CS-Program-b45309)",
+          "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
-      "listName": "What did i learn?",
+      "listName": "Highlights",
       "list": [
         {
-          "title": "edge deployment",
-          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+          "title": "Capstone",
+          "description": "Built a campus room-booking system with role-based access and calendar integrations."
         }
       ]
     }
   ],
   "certifications": [
     {
-      "name": "name",
-      "url": "url",
-      "listName": "What did i learn?",
+      "name": "AWS Certified Developer – Associate",
+      "url": "https://www.credly.com/badges/example-aws-developer-associate",
+      "listName": "Skills validated",
       "list": [
         {
-          "title": "edge deployment",
-          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+          "title": "Serverless architecture",
+          "description": "Designed event-driven apps with Lambda, API Gateway, and DynamoDB."
         }
       ],
       "skills": [
         {
-          "name": "name",
-          "mdBadge": "url",
-          "icon": "url"
+          "name": "AWS",
+          "mdBadge": "![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white)",
+          "icon": "https://cdn.simpleicons.org/amazonwebservices"
         }
       ]
     }

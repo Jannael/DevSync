@@ -1,0 +1,122 @@
+{
+  "name": "Devsync",
+  "description": "One command one file: Portfolio, CV, Github Profile and linkedin profile all sync with one file.",
+  "img": "url",
+  "socialMedia": [
+    {
+      "name": "Github",
+      "url": "url",
+      "icon": "url"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Español",
+      "mdBadge": "",
+      "icon": ""
+    }
+  ],
+  "experience": [
+    {
+      "company": "name",
+      "position": "name",
+      "img": "url",
+      "date": "MM/YY - MM/YY",
+      "links": [
+        {
+          "name": "name",
+          "url": "url",
+          "mdBadge": "url",
+          "icon": "url"
+        }
+      ],
+      "description": "",
+      "listName": "What did i learn?",
+      "list": [
+        {
+          "title": "edge deployment",
+          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+        }
+      ],
+      "skills": [
+        {
+          "name": "name",
+          "mdBadge": "url",
+          "icon": "url"
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "name",
+      "img": "url",
+      "links": [
+        {
+          "name": "name",
+          "url": "url",
+          "mdBadge": "url",
+          "icon": "url"
+        }
+      ],
+      "description": "description",
+      "listName": "What did i learn?",
+      "list": [
+        {
+          "title": "edge deployment",
+          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+        }
+      ],
+      "skills": [
+        {
+          "name": "name",
+          "mdBadge": "url",
+          "icon": "url"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "name": "name",
+      "degree": "degree",
+      "img": "url",
+      "date": "MM/YY - MM/YY",
+      "links": [
+        {
+          "name": "degree",
+          "url": "url-degree",
+          "mdBadge": "url-mdbadge",
+          "icon": "url-degree"
+        }
+      ],
+      "listName": "What did i learn?",
+      "list": [
+        {
+          "title": "edge deployment",
+          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+        }
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "name",
+      "url": "url",
+      "listName": "What did i learn?",
+      "list": [
+        {
+          "title": "edge deployment",
+          "description": "deployment of Server Islands on Cloudflare using Wrangler"
+        }
+      ],
+      "skills": [
+        {
+          "name": "name",
+          "mdBadge": "url",
+          "icon": "url"
+        }
+      ]
+    }
+  ]
+}

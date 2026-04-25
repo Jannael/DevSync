@@ -1,0 +1,20 @@
+{
+  "name": "devsync",
+  "private": true,
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "lint": "oxlint --quiet --ignore-pattern \"*.js\"",
+    "lint:fix": "oxlint --fix --ignore-pattern \"*.js\"",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "oxfmt": "0.46.0",
+    "oxlint": "1.61.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

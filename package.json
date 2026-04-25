@@ -1,9 +1,47 @@
 {
   "name": "devsync",
-  "private": true,
+  "version": "develop version",
+  "private": false,
   "type": "module",
-  "module": "index.ts",
+  "description": "One file to keep your portfolio, CV, Github and linkedin in sync",
+  "bin": {
+    "devsync": "apps/cli/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jannael/devsync.git"
+  },
+  "author": {
+    "name": "Jannael",
+    "url": "https://github.com/jannael"
+  },
+  "homepage": "https://devsync.work",
+  "bugs": {
+    "url": "https://github.com/jannael/devsync/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "portfolio",
+    "cv",
+    "github",
+    "linkedin",
+    "sync"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./apps/cli/index.ts"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "scripts": {
+    "build": "bun build ./apps/cli/index.ts --outfile=./dist/index.js --target=bun",
+    "prepublishOnly": "bun run build",
+
     "lint": "oxlint --quiet --ignore-pattern \"*.js\"",
     "lint:fix": "oxlint --fix --ignore-pattern \"*.js\"",
     "fmt": "oxfmt",
@@ -15,6 +53,6 @@
     "oxlint": "1.61.0"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "5"
   }
 }

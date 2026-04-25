@@ -1,3 +1,3 @@
-export default function print() {
+export default async function print() {
   console.log('UPDATE')
 }

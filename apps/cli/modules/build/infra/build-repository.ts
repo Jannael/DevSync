@@ -1,6 +1,6 @@
 import type { BuildRepository } from '@/modules/build/domain/build-repository'
-import { cp, readdir } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { cp, mkdir, readFile as fsReadFile, readdir, writeFile as fsWriteFile } from 'node:fs/promises'
+import { dirname, join, resolve } from 'node:path'
 
 const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..', 'template')
 
@@ -20,8 +20,9 @@ class BuildRepositoryImpl implements BuildRepository {
     }
   }
 
-  async readFile({ path: _path }: { path: string }): Promise<string> {
-    return ''
+  async readFile({ path }: { path: string }): Promise<string> {
+    const fullPath = resolve(process.cwd(), path)
+    return fsReadFile(fullPath, 'utf8')
   }
 
   async getHTMLFromComponent({ component: _component }: { component: string }): Promise<string> {
@@ -30,7 +31,11 @@ class BuildRepositoryImpl implements BuildRepository {
 
   async createPDF({ html: _html, path: _path }: { html: string; path: string }): Promise<void> {}
 
-  async writeFile({ path: _path, data: _data }: { path: string; data: string }): Promise<void> {}
+  async writeFile({ path, data }: { path: string; data: string }): Promise<void> {
+    const fullPath = resolve(process.cwd(), path)
+    await mkdir(dirname(fullPath), { recursive: true })
+    await fsWriteFile(fullPath, data, 'utf8')
+  }
 }
 
 export default BuildRepositoryImpl

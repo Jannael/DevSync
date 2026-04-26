@@ -1,12 +1,6 @@
 import { z } from 'astro/zod'
 import devsync from '../DEVSYNC.json'
 
-const socialMediaSchema = z.object({
-  name: z.string(),
-  url: z.string(),
-  icon: z.string(),
-})
-
 const languageSchema = z.object({
   name: z.string(),
   mdBadge: z.string(),
@@ -36,6 +30,7 @@ const experienceSchema = z.object({
   company: z.string(),
   position: z.string(),
   img: z.string(),
+  imgLink: z.string(),
   date: z.string(),
   links: z.array(linkSchema),
   description: z.string(),
@@ -47,6 +42,7 @@ const experienceSchema = z.object({
 const projectSchema = z.object({
   name: z.string(),
   img: z.string(),
+  imgLink: z.string(),
   links: z.array(linkSchema),
   description: z.string(),
   listName: z.string(),
@@ -74,10 +70,12 @@ const certificationSchema = z.object({
 
 // ---------------------------------------------- //
 const devsyncSchema = z.object({
+  title: z.string(),
   name: z.string(),
   description: z.string(),
   img: z.string(),
-  socialMedia: z.array(socialMediaSchema),
+  githubUserName: z.string(),
+  socialMedia: z.array(linkSchema),
   languages: z.array(languageSchema),
   experience: z.array(experienceSchema),
   projects: z.array(projectSchema),
@@ -87,5 +85,6 @@ const devsyncSchema = z.object({
 
 export type Devsync = z.infer<typeof devsyncSchema>
 const devsyncSchemaPartial = devsyncSchema.partial()
+export type DevsyncPartial = z.infer<typeof devsyncSchemaPartial>
 
 export default devsyncSchemaPartial.parse(devsync)

@@ -2,11 +2,14 @@
   "name": "Devsync",
   "description": "One command one file to keep your portfolio, CV, GitHub profile, and LinkedIn in sync.",
   "img": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
+  "title": "Software Developer",
+  "githubUserName": "Jannael",
   "socialMedia": [
     {
       "name": "Github",
       "url": "https://github.com/alexrivera-dev",
-      "icon": "https://cdn.simpleicons.org/github"
+      "icon": "https://cdn.simpleicons.org/github",
+      "mdBadge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
     }
   ],
   "languages": [
@@ -21,6 +24,7 @@
       "company": "Northstar Commerce",
       "position": "Senior Full-Stack Engineer",
       "img": "https://cdn.simpleicons.org/shopify",
+      "imgLink": "https://github.com/Jannael/Glinter/blob/main/screenshots/web-screenshot.png?raw=true",
       "date": "02/23 - Present",
       "links": [
         {
@@ -51,6 +55,7 @@
     {
       "name": "PulseBoard",
       "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80",
+      "imgLink": "",
       "links": [
         {
           "name": "GitHub",

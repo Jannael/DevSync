@@ -13,6 +13,7 @@ import puppeteer from 'puppeteer'
 
 const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..', 'template')
 const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
+const CV_ROUTE_OUTPUT_PATH = resolve(process.cwd(), 'dist', 'cv', 'index.html')
 
 const runBunCommand = async (args: string[]) => {
   await new Promise<void>((resolvePromise, reject) => {
@@ -68,14 +69,44 @@ class BuildRepositoryImpl implements BuildRepository {
 
     await runBunCommand(['run', 'build'])
 
-    return fsReadFile(resolve(process.cwd(), 'dist', component, 'index.html'), 'utf8')
+    const html = await fsReadFile(CV_ROUTE_OUTPUT_PATH, 'utf8')
+    const stylesheetRegex = /<link[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi
+    const stylesheetLinks = Array.from(html.matchAll(stylesheetRegex))
+    let inlinedHTML = html
+
+    for (const linkMatch of stylesheetLinks) {
+      const [linkTag, href] = linkMatch
+
+      const cssPath = href?.startsWith('/')
+        ? resolve(process.cwd(), 'dist', href.slice(1))
+        : resolve(dirname(CV_ROUTE_OUTPUT_PATH), href ?? '')
+
+      const css = await fsReadFile(cssPath, 'utf8')
+      inlinedHTML = inlinedHTML.replace(linkTag, `<style>${css}</style>`)
+    }
+
+    // component is currently passed by the use-case contract; CV build always targets /cv route.
+    void component
+
+    return inlinedHTML
   }
 
   async createPDF({ html, path }: { html: string; path: string }): Promise<void> {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-    await page.setContent(html)
-    await page.pdf({ path, format: 'A4' })
+    await page.setContent(html, { waitUntil: 'networkidle0' })
+    await page.emulateMediaType('screen')
+    await page.pdf({
+      path,
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '12mm',
+        right: '12mm',
+        bottom: '12mm',
+        left: '12mm',
+      },
+    })
     await browser.close()
   }
 

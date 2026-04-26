@@ -3,7 +3,7 @@ import createPDFUseCase from '@/modules/build/app/create-pdf.use-case'
 import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-component.use-case'
 import readFileUseCase from '@/modules/build/app/read-file.use-case'
 import writeFileUseCase from '@/modules/build/app/write-file.use-case'
-import { pathCVComponent, pathPDF } from '@/constants/cv-component'
+import { pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
 import createLinkedinUseCase from '@/modules/build/app/create-linkedin.use-case'
@@ -34,8 +34,7 @@ class BuildCommand {
     await this.copyTemplateUseCase.execute()
 
     // create pdf from astro component
-    const component = await this.readFileUseCase.execute({ path: pathCVComponent })
-    const html = await this.getHTMLFromComponentUseCase.execute({ component })
+    const html = await this.getHTMLFromComponentUseCase.execute({ component: 'cv' })
     await this.createPDFUseCase.execute({ html, path: pathPDF })
 
     // create README

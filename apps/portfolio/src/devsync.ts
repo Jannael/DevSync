@@ -31,6 +31,7 @@ const listItemSchema = z.object({
   description: z.string(),
 })
 
+// ---------------------------------------------- //
 const experienceSchema = z.object({
   company: z.string(),
   position: z.string(),
@@ -71,6 +72,7 @@ const certificationSchema = z.object({
   skills: z.array(skillsSchema),
 })
 
+// ---------------------------------------------- //
 const devsyncSchema = z.object({
   name: z.string(),
   description: z.string(),

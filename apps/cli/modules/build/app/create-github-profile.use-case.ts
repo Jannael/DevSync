@@ -21,7 +21,7 @@ class CreateGithubProfileUseCase {
     for (const socialMedia of devsync.socialMedia ?? []) {
       md += `[${socialMedia.mdBadge}](${socialMedia.url})`
     }
-    md += `[${academicsBadge}](https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/certifications)`
+    md += `[${academicsBadge}](https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics)`
     for (const lang of devsync.languages ?? []) {
       md += lang.mdBadge
     }

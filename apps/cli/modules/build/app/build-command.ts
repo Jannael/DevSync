@@ -37,6 +37,9 @@ class BuildCommand {
     // create README
     const README = await this.createGithubProfileUseCase.execute()
     await this.writeFileUseCase.execute({ path: './README.md', data: README })
+
+    // create certifications md
+
   }
 }
 

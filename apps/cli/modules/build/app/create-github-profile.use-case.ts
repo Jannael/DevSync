@@ -35,7 +35,7 @@ class CreateGithubProfileUseCase {
     for (const ex of devsync.experience ?? []) {
       let links = ''
       for (const link of ex.links ?? []) {
-        links += `[![${link.name}](${link.mdBadge})](${link.url})`
+        links += `[${link.mdBadge}](${link.url})`
       }
 
       let listItems = ''
@@ -53,14 +53,14 @@ class CreateGithubProfileUseCase {
   <td>
     <h3>${ex.company}</h3>
 
-    ${links}
+${links}
     <p>${ex.description}</p>
     ${ex.listName}
     <ul>
       ${listItems}
     </ul>
     </br>
-    ${skills}
+${skills}
   </td>
   <td width="40%">
     <a href="${ex.imgLink}" target="_blank" rel="noopener noreferrer">
@@ -80,7 +80,7 @@ class CreateGithubProfileUseCase {
     for (const proj of devsync.projects ?? []) {
       let links = ''
       for (const link of proj.links ?? []) {
-        links += `[![${link.name}](${link.mdBadge})](${link.url})`
+        links += `[${link.mdBadge}](${link.url})`
       }
       
       let listItems = ''
@@ -98,14 +98,14 @@ class CreateGithubProfileUseCase {
   <td>
     <h3>${proj.name}</h3>
     
-    ${links}
+${links}
     <p>${proj.description}</p>
     ${proj.listName}
     <ul>
       ${listItems}
     </ul>
     </br>
-    ${skills}
+${skills}
   </td>
   <td width="40%">
     <a href="${proj.imgLink}" target="_blank" rel="noopener noreferrer">

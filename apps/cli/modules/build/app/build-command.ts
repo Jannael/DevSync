@@ -43,6 +43,8 @@ class BuildCommand {
     // create certifications md
     const academics = await this.createAcademicsUseCase.execute()
     await this.writeFileUseCase.execute({ path: './academics/README.md', data: academics })
+
+    // create linkedin md
   }
 }
 

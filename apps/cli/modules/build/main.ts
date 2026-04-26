@@ -1,3 +1,3 @@
-export default async function print() {
+export default async function build() {
 	console.log('BUILD')
 }

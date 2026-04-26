@@ -43,7 +43,6 @@
   "scripts": {
     "build": "bun build ./apps/cli/index.ts --outfile=./dist/index.js --target=bun",
     "prepublishOnly": "bun run build",
-
     "lint": "oxlint --quiet --ignore-pattern \"*.js\"",
     "lint:fix": "oxlint --fix --ignore-pattern \"*.js\"",
     "fmt": "oxfmt",
@@ -56,5 +55,8 @@
   },
   "peerDependencies": {
     "typescript": "5"
+  },
+  "dependencies": {
+    "puppeteer": "24.42.0"
   }
 }

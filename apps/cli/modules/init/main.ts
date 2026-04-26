@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { CHECK, SPACE, X } from '@/utils/icons-terminal'
 import { BG_YELLOW, BLACK, BOLD, GREEN } from '@/utils/colors'
-import template from '../../../portfolio/DEVSYNC.json'
+import template from '@template/DEVSYNC.json'
 
 const TEMPLATE_NAME = 'DEVSYNC.json'
 

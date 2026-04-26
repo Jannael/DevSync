@@ -2,6 +2,21 @@
 import devsync from 'devsync'
 import '@/styles/global.css'
 
+const skillsFromSkillsField = [
+  ...devsync.experience?.map(item => item.skills.map(skill => skill.name)) ?? [],
+  ...devsync.projects?.map(item => item.skills.map(skill => skill.name)) ?? [],
+  ...devsync.certifications?.map(item => item.skills.map(skill => skill.name)) ?? []
+]
+
+const skillsFromListField = [
+  ...devsync.experience?.map(item => item.list.map(li => li.title)) ?? [],
+  ...devsync.projects?.map(item => item.list.map(li => li.title)) ?? [],
+  ...devsync.education?.map(item => item.list.map(li => li.title)) ?? [],
+  ...devsync.certifications?.map(item => item.list.map(li => li.title)) ?? [],
+]
+
+const skills = [...new Set([...skillsFromListField.flat(), ...skillsFromSkillsField.flat()])]
+
 
 ---
 

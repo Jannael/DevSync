@@ -42,6 +42,7 @@ const experienceSchema = z.object({
   list: z.array(listItemSchema),
   skills: z.array(skillsSchema),
 })
+
 const projectSchema = z.object({
   name: z.string(),
   img: z.string(),

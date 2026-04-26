@@ -6,6 +6,7 @@ import writeFileUseCase from '@/modules/build/app/write-file.use-case'
 import { pathCVComponent, pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
+import createLinkedinUseCase from '@/modules/build/app/create-linkedin.use-case'
 
 /*
 To build the project this is how it works
@@ -25,6 +26,7 @@ class BuildCommand {
     private readonly writeFileUseCase: writeFileUseCase,
     private readonly createGithubProfileUseCase: createGithubProfileUseCase,
     private readonly createAcademicsUseCase: createAcademicsUseCase,
+    private readonly createLinkedinUseCase: createLinkedinUseCase,
   ) {}
 
   async execute(): Promise<void> {
@@ -45,6 +47,8 @@ class BuildCommand {
     await this.writeFileUseCase.execute({ path: './academics/README.md', data: academics })
 
     // create linkedin md
+    const linkedin = await this.createLinkedinUseCase.execute()
+    await this.writeFileUseCase.execute({ path: './linkedin.md', data: linkedin })
   }
 }
 

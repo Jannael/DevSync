@@ -1,11 +1,11 @@
 import type { BuildRepository } from '@/modules/build/domain/build-repository'
 
-class CopyTemplateUseCase {
+class CreateGithubProfileUseCase {
   constructor(private readonly buildRepository: BuildRepository) {}
 
-  async execute(): Promise<void> {
-    await this.buildRepository.copyTemplate()
+  async execute() {
+    
   }
 }
 
-export default CopyTemplateUseCase
+export default CreateGithubProfileUseCase

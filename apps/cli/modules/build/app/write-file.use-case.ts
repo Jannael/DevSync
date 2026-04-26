@@ -1,4 +1,4 @@
-import type { BuildRepository } from '../domain/build-repository'
+import type { BuildRepository } from '@/modules/build/domain/build-repository'
 
 class WriteFileUseCase {
   constructor(private readonly buildRepository: BuildRepository) {}

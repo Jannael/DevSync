@@ -6,6 +6,8 @@ import { pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
 import createLinkedinUseCase from '@/modules/build/app/create-linkedin.use-case'
+import { CHECK, SPACE } from '@/utils/icons-terminal'
+import { BOLD, GREEN } from '@/utils/colors'
 
 /*
 To build the project this is how it works
@@ -28,24 +30,41 @@ class BuildCommand {
   ) {}
 
   async execute(): Promise<void> {
+    console.log(`${SPACE}${GREEN('1.')} Copying template files...`)
     // copy template
     await this.copyTemplateUseCase.execute()
+    console.log(`${SPACE}${CHECK('Template ready.')}`)
+    console.log('')
 
+    console.log(`${SPACE}${GREEN('2.')} Building CV and generating PDF...`)
     // create pdf from astro component
     const html = await this.getHTMLFromComponentUseCase.execute({ component: 'cv' })
     await this.createPDFUseCase.execute({ html, path: pathPDF })
+    console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathPDF)}`)}`)
+    console.log('')
 
+    console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
     // create README
     const README = await this.createGithubProfileUseCase.execute()
     await this.writeFileUseCase.execute({ path: './README.md', data: README })
+    console.log(`${SPACE}${CHECK(`README generated at ${BOLD('./README.md')}`)}`)
+    console.log('')
 
+    console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
     // create certifications md
     const academics = await this.createAcademicsUseCase.execute()
     await this.writeFileUseCase.execute({ path: './academics/README.md', data: academics })
+    console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD('./academics/README.md')}`)}`)
+    console.log('')
 
+    console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
     // create linkedin md
     const linkedin = await this.createLinkedinUseCase.execute()
     await this.writeFileUseCase.execute({ path: './linkedin.md', data: linkedin })
+    console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD('./linkedin.md')}`)}`)
+    console.log('')
+
+    console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
   }
 }
 

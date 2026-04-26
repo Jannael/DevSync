@@ -24,7 +24,7 @@ class CreateAcademicsUseCase {
 
       let links = ''
       for (const link of ed.links ?? []) {
-        links += `[![${link.name}](${link.mdBadge})](${link.url})`
+        links += `[${link.mdBadge}](${link.url})`
       }
 
       md += `
@@ -32,7 +32,8 @@ class CreateAcademicsUseCase {
   <td>
     <h3>${ed.degree} | ${ed.date}</h3>
 
-    ${links}
+${links}
+    <br>
     ${ed.listName}
     <ul>
       ${listItems}
@@ -71,8 +72,8 @@ class CreateAcademicsUseCase {
     <ul>
       ${listItems}
     </ul>
-    </br>
-    ${skills}
+    </br>\n
+${skills}
   </td>
   <td> <a href="${cert.url}" target="_blank">View Certificate</a> </td>
 </tr>`

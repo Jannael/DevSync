@@ -1,8 +1,15 @@
 import type { BuildRepository } from '@/modules/build/domain/build-repository'
-import { cp, mkdir, readFile as fsReadFile, readdir, writeFile as fsWriteFile } from 'node:fs/promises'
+import {
+  cp,
+  mkdir,
+  readFile as fsReadFile,
+  readdir,
+  writeFile as fsWriteFile,
+} from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { spawn } from 'node:child_process'
 import { dirname, join, resolve } from 'node:path'
+import puppeteer from 'puppeteer'
 
 const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..', 'template')
 const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
@@ -50,7 +57,9 @@ class BuildRepositoryImpl implements BuildRepository {
 
   async getHTMLFromComponent({ component }: { component: string }): Promise<string> {
     if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
-      throw new Error('package.json not found in current directory. Run devsync build from the project root.')
+      throw new Error(
+        'package.json not found in current directory. Run devsync build from the project root.',
+      )
     }
 
     if (!existsSync(resolve(process.cwd(), 'node_modules'))) {
@@ -62,7 +71,13 @@ class BuildRepositoryImpl implements BuildRepository {
     return fsReadFile(resolve(process.cwd(), 'dist', component, 'index.html'), 'utf8')
   }
 
-  async createPDF({ html: _html, path: _path }: { html: string; path: string }): Promise<void> {}
+  async createPDF({ html, path }: { html: string; path: string }): Promise<void> {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    await page.setContent(html)
+    await page.pdf({ path, format: 'A4' })
+    await browser.close()
+  }
 
   async writeFile({ path, data }: { path: string; data: string }): Promise<void> {
     const fullPath = resolve(process.cwd(), path)

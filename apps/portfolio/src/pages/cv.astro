@@ -1,0 +1,213 @@
+---
+import devsync from 'devsync'
+import '@/styles/global.css'
+
+type Link = {
+  name: string
+  url: string
+}
+
+type Skill = {
+  name: string
+}
+
+type ResumeItem = {
+  name?: string
+  company?: string
+  position?: string
+  degree?: string
+  date?: string
+  description?: string
+  list?: Array<{ title: string; description: string }>
+  skills?: Skill[]
+  links?: Link[]
+  url?: string
+}
+
+const data = devsync as {
+  name: string
+  description: string
+  socialMedia: Link[]
+  languages: Array<{ name: string }>
+  experience: ResumeItem[]
+  projects: ResumeItem[]
+  education: ResumeItem[]
+  certifications: ResumeItem[]
+}
+
+const summary =
+  data.description?.trim() ||
+  'Software engineer focused on building reliable, user-centered products with measurable business impact.'
+
+const skills = Array.from(
+  new Set([
+    ...data.experience.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
+    ...data.projects.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
+    ...data.certifications.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
+  ]),
+).filter(Boolean)
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{data.name} | CV</title>
+    <meta name="description" content={`ATS-ready CV for ${data.name}`} />
+  </head>
+  <body class="bg-white text-slate-900">
+    <main class="mx-auto max-w-4xl px-6 py-10 print:max-w-none print:px-0 print:py-0">
+      <header class="border-b border-slate-300 pb-5">
+        <h1 class="text-3xl font-bold tracking-tight">{data.name}</h1>
+        <p class="mt-3 text-sm leading-6">{summary}</p>
+        <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          {data.socialMedia.map((profile) => (
+            <p>
+              <span class="font-semibold">{profile.name}:</span>{' '}
+              <a class="underline decoration-slate-400 underline-offset-2" href={profile.url}>
+                {profile.url}
+              </a>
+            </p>
+          ))}
+        </div>
+      </header>
+
+      {skills.length > 0 && (
+        <section class="mt-6">
+          <h2 class="text-lg font-semibold uppercase tracking-wide">Core Skills</h2>
+          <p class="mt-2 text-sm leading-6">{skills.join(' | ')}</p>
+        </section>
+      )}
+
+      <section class="mt-6">
+        <h2 class="text-lg font-semibold uppercase tracking-wide">Professional Experience</h2>
+        <div class="mt-3 space-y-6">
+          {data.experience.map((role) => (
+            <article>
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 class="text-base font-semibold">
+                  {role.position} | {role.company}
+                </h3>
+                {role.date && <p class="text-sm">{role.date}</p>}
+              </div>
+              {role.description && <p class="mt-2 text-sm leading-6">{role.description}</p>}
+              {!!role.list?.length && (
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6">
+                  {role.list.map((item) => (
+                    <li>
+                      <span class="font-semibold">{item.title}:</span> {item.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!!role.skills?.length && (
+                <p class="mt-2 text-sm">
+                  <span class="font-semibold">Tech:</span>{' '}
+                  {role.skills.map((skill) => skill.name).join(', ')}
+                </p>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-lg font-semibold uppercase tracking-wide">Projects</h2>
+        <div class="mt-3 space-y-6">
+          {data.projects.map((project) => (
+            <article>
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 class="text-base font-semibold">{project.name}</h3>
+              </div>
+              {project.description && <p class="mt-2 text-sm leading-6">{project.description}</p>}
+              {!!project.list?.length && (
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6">
+                  {project.list.map((item) => (
+                    <li>
+                      <span class="font-semibold">{item.title}:</span> {item.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!!project.links?.length && (
+                <div class="mt-2 space-y-1 text-sm">
+                  {project.links.map((link) => (
+                    <p>
+                      <span class="font-semibold">{link.name}:</span>{' '}
+                      <a class="underline decoration-slate-400 underline-offset-2" href={link.url}>
+                        {link.url}
+                      </a>
+                    </p>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-lg font-semibold uppercase tracking-wide">Education</h2>
+        <div class="mt-3 space-y-4">
+          {data.education.map((education) => (
+            <article>
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 class="text-base font-semibold">
+                  {education.degree} | {education.name}
+                </h3>
+                {education.date && <p class="text-sm">{education.date}</p>}
+              </div>
+              {!!education.list?.length && (
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6">
+                  {education.list.map((item) => (
+                    <li>
+                      <span class="font-semibold">{item.title}:</span> {item.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-lg font-semibold uppercase tracking-wide">Certifications</h2>
+        <div class="mt-3 space-y-4">
+          {data.certifications.map((certification) => (
+            <article>
+              <h3 class="text-base font-semibold">{certification.name}</h3>
+              {certification.url && (
+                <p class="mt-1 text-sm">
+                  <span class="font-semibold">Credential:</span>{' '}
+                  <a class="underline decoration-slate-400 underline-offset-2" href={certification.url}>
+                    {certification.url}
+                  </a>
+                </p>
+              )}
+              {!!certification.list?.length && (
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6">
+                  {certification.list.map((item) => (
+                    <li>
+                      <span class="font-semibold">{item.title}:</span> {item.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {data.languages.length > 0 && (
+        <section class="mt-6">
+          <h2 class="text-lg font-semibold uppercase tracking-wide">Languages</h2>
+          <p class="mt-2 text-sm leading-6">
+            {data.languages.map((language) => language.name).join(' | ')}
+          </p>
+        </section>
+      )}
+    </main>
+  </body>
+</html>

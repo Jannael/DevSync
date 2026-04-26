@@ -33,10 +33,10 @@ class BuildCommand {
     const component = await this.readFileUseCase.execute({ path: pathCVComponent })
     const html = await this.getHTMLFromComponentUseCase.execute({ component })
     await this.createPDFUseCase.execute({ html, path: pathPDF })
-    
-    // create README
-    
 
+    // create README
+    const README = await this.createGithubProfileUseCase.execute()
+    await this.writeFileUseCase.execute({ path: './README.md', data: README })
   }
 }
 

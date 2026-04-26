@@ -45,7 +45,7 @@ class BuildRepositoryImpl implements BuildRepository {
       await cp(sourcePath, destinationPath, {
         recursive: true,
         force: false,
-        errorOnExist: true,
+        errorOnExist: false,
       })
     }
   }

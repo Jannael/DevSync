@@ -1,7 +1,6 @@
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
 import createPDFUseCase from '@/modules/build/app/create-pdf.use-case'
 import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-component.use-case'
-import readFileUseCase from '@/modules/build/app/read-file.use-case'
 import writeFileUseCase from '@/modules/build/app/write-file.use-case'
 import { pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
@@ -22,7 +21,6 @@ class BuildCommand {
     private readonly copyTemplateUseCase: copyTemplateUseCase,
     private readonly createPDFUseCase: createPDFUseCase,
     private readonly getHTMLFromComponentUseCase: getHTMLFromComponentUseCase,
-    private readonly readFileUseCase: readFileUseCase,
     private readonly writeFileUseCase: writeFileUseCase,
     private readonly createGithubProfileUseCase: createGithubProfileUseCase,
     private readonly createAcademicsUseCase: createAcademicsUseCase,

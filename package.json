@@ -32,7 +32,7 @@
   ],
   "files": [
     "dist",
-    "DEVSYNC.json"
+    "apps/portfolio/DEVSYNC.json"
   ],
   "exports": {
     ".": "./apps/cli/index.ts"

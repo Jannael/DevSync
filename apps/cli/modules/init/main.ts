@@ -1,11 +1,11 @@
-import { copyFile } from 'node:fs/promises'
+import { writeFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { join } from 'node:path'
 import { CHECK, SPACE, X } from '@/utils/icons-terminal'
 import { BG_YELLOW, BLACK, BOLD, GREEN } from '@/utils/colors'
+import template from '../../../portfolio/DEVSYNC.json'
 
 const TEMPLATE_NAME = 'DEVSYNC.json'
-const TEMPLATE_PATH = resolve(import.meta.dir, '..', '..', '..', '..', TEMPLATE_NAME)
 
 export default async function init() {
   const destinationPath = join(process.cwd(), TEMPLATE_NAME)
@@ -19,7 +19,7 @@ export default async function init() {
     return
   }
 
-  await copyFile(TEMPLATE_PATH, destinationPath)
+  await writeFile(destinationPath, `${JSON.stringify(template, null, 2)}\n`)
 
   console.log(`${SPACE}${CHECK(`${BOLD(TEMPLATE_NAME)} ${GREEN('created successfully.')}`)}`)
   console.log('')

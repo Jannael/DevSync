@@ -113,7 +113,7 @@
       "skills": [
         {
           "name": "AWS",
-          "mdBadge": "![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white)",
+          // "mdBadge": "![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white)",
           "icon": "https://cdn.simpleicons.org/amazonwebservices"
         }
       ]

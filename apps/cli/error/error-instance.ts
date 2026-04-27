@@ -31,7 +31,7 @@ export const Conflict = CreateError<IConflict>('Conflict')
 type IServerError =
   | 'Failed to read DEVSYNC.json'
   | 'Failed to parse DEVSYNC.json'
-  | 'Failed to write generated files'
+  | 'Failed to write file'
   | 'Build command failed'
   | 'Update command failed'
   | 'CV build failed'

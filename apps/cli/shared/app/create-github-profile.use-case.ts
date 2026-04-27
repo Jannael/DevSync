@@ -17,7 +17,37 @@ class CreateGithubProfileUseCase extends mdUtilsMixin(readFileMixin(BaseClass)) 
     let md = ''
 
     md += this.getHeader({ devsync })
+    md += this.getExperienceSection({ devsync })
+    md += this.getProjectsSection({ devsync })
 
+    return md
+  }
+
+  private getHeader({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
+    //first let's create the header
+    md += `# ${devsync.title} | ${devsync.name}\n\n`
+    md += `Status: ${devsync.status?.badge}\n\n`
+    md += devsync.description + '\n\n'
+
+    // here badges goes this way: social media then certifications badge(with url to md with the details - built from certifications field)
+    for (const socialMedia of devsync.socialMedia ?? []) {
+      md += `[${socialMedia.mdBadge}](${socialMedia.url})`
+    }
+    md += this.badgeWithLink({
+      badge: academicsBadge,
+      link: `https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics`,
+    })
+
+    for (const lang of devsync.languages ?? []) {
+      md += lang.mdBadge
+    }
+    md += '\n\n'
+    return md
+  }
+
+  private getExperienceSection({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
     // then experience section
     md += '## Experience \n\n'
     md += '<table>'
@@ -46,6 +76,11 @@ ${skills}
     }
     md += '</table> \n\n'
 
+    return md
+  }
+
+  private getProjectsSection({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
     //then projects sections
     md += '## Projects \n\n'
     md += '<table>'
@@ -75,29 +110,6 @@ ${skills}
 
     md += '</table> \n\n'
 
-    return md
-  }
-
-  private getHeader({ devsync }: { devsync: DevsyncPartial }) {
-    let md = ''
-    //first let's create the header
-    md += `# ${devsync.title} | ${devsync.name}\n\n`
-    md += `Status: ${devsync.status?.badge}\n\n`
-    md += devsync.description + '\n\n'
-
-    // here badges goes this way: social media then certifications badge(with url to md with the details - built from certifications field)
-    for (const socialMedia of devsync.socialMedia ?? []) {
-      md += `[${socialMedia.mdBadge}](${socialMedia.url})`
-    }
-    md += this.badgeWithLink({
-      badge: academicsBadge,
-      link: `https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics`,
-    })
-
-    for (const lang of devsync.languages ?? []) {
-      md += lang.mdBadge
-    }
-    md += '\n\n'
     return md
   }
 }

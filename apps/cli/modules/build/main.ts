@@ -4,7 +4,7 @@ import createPDFUseCase from '@/modules/build/app/create-pdf.use-case'
 import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-component.use-case'
 import writeFileUseCase from '@/modules/build/app/write-file.use-case'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
-import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
+import createAcademicsUseCase from '@/shared/infra/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/infra/create-linkedin.use-case'
 import BuildRepositoryImpl from '@/modules/build/infra/build-repository'
 

@@ -1,15 +1,16 @@
-import type { BuildRepository } from '@/modules/build/domain/build-repository'
 import type { DevsyncPartial } from '@template/src/devsync'
-
+import { readFileMixin } from '@/shared/infra/read-file'
 // academics md contains education and certifications fields.
 
-class CreateAcademicsUseCase {
-  constructor(private readonly buildRepository: BuildRepository) {}
+class BaseClass {}
+
+class CreateAcademicsUseCase extends readFileMixin(BaseClass) {
+  constructor() {
+    super()
+  }
 
   async execute() {
-    const devsync: DevsyncPartial = JSON.parse(
-      await this.buildRepository.readFile({ path: './DEVSYNC.json' }),
-    )
+    const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
 
     let md = ''
     md += '# Academics \n\n'

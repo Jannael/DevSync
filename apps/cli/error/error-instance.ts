@@ -9,6 +9,7 @@ type INotFound =
   | 'CV target not found'
   | 'GitHub repository not found'
   | 'Workflow file not found'
+  | 'Package.json not found'
 export const NotFound = CreateError<INotFound>('NotFound')
 
 type IForbidden =
@@ -33,6 +34,7 @@ type IServerError =
   | 'Failed to write generated files'
   | 'Build command failed'
   | 'Update command failed'
+  | 'CV build failed'
   | 'Git operation failed'
   | 'Workflow execution failed'
   | 'Unexpected execution error'

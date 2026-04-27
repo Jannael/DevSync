@@ -1,4 +1,4 @@
-import type { DevsyncPartial, ListItem } from '@template/src/devsync'
+import type { DevsyncPartial, ListItem, Skills } from '@template/src/devsync'
 import { academicsBadge } from '@/constants/academics-badge'
 import { readFileMixin } from '@/shared/infra/read-file'
 
@@ -48,11 +48,7 @@ class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
       }
 
       const listItems = this.getListItems({ items: ex.list })
-
-      let skills = ''
-      for (const skill of ex.skills ?? []) {
-        skills += skill.mdBadge
-      }
+      const skills = this.getSkills({ skills: ex.skills })
 
       md += ` 
 <tr>
@@ -93,11 +89,7 @@ ${skills}
       }
 
       const listItems = this.getListItems({ items: proj.list })
-
-      let skills = ''
-      for (const skill of proj.skills ?? []) {
-        skills += skill.mdBadge
-      }
+      const skills = this.getSkills({ skills: proj.skills })
 
       md += `
 <tr>
@@ -137,6 +129,14 @@ ${skills}
       listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
     }
     return listItems
+  }
+
+  private getSkills({ skills }: { skills: Skills[] }) {
+    let innerSkills = ''
+    for (const skill of skills ?? []) {
+      innerSkills += skill.mdBadge
+    }
+    return innerSkills
   }
 }
 

@@ -20,6 +20,8 @@ const skillsSchema = z.object({
   icon: z.string(),
 })
 
+export type Skills = z.infer<typeof skillsSchema>
+
 const listItemSchema = z.object({
   title: z.string(),
   description: z.string(),

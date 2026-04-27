@@ -3,6 +3,10 @@
   "description": "One command one file to keep your portfolio, CV, GitHub profile, and LinkedIn in sync.",
   "img": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
   "title": "Software Developer",
+  "status": {
+    "status": "working",
+    "badge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
+  },
   "githubUserName": "Jannael",
   "socialMedia": [
     {

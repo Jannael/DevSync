@@ -17,17 +17,21 @@ class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
 
     //first let's create the header
     md += `# ${devsync.title} | ${devsync.name}\n\n`
+    md += `Status: ${devsync.status?.badge}\n\n`
     md += devsync.description + '\n\n'
 
     // here badges goes this way: social media then certifications badge(with url to md with the details - built from certifications field)
     for (const socialMedia of devsync.socialMedia ?? []) {
       md += `[${socialMedia.mdBadge}](${socialMedia.url})`
     }
-    md += `[${academicsBadge}](https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics)`
+    md += this.badgeWithLink({
+      badge: academicsBadge,
+      link: 'https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics',
+    })
+
     for (const lang of devsync.languages ?? []) {
       md += lang.mdBadge
     }
-
     md += '\n\n'
 
     // then experience section
@@ -37,7 +41,10 @@ class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
     for (const ex of devsync.experience ?? []) {
       let links = ''
       for (const link of ex.links ?? []) {
-        links += `[${link.mdBadge}](${link.url})`
+        links += this.badgeWithLink({
+          badge: link.mdBadge,
+          link: link.url,
+        })
       }
 
       let listItems = ''
@@ -82,7 +89,10 @@ ${skills}
     for (const proj of devsync.projects ?? []) {
       let links = ''
       for (const link of proj.links ?? []) {
-        links += `[${link.mdBadge}](${link.url})`
+        links += this.badgeWithLink({
+          badge: link.mdBadge,
+          link: link.url,
+        })
       }
 
       let listItems = ''
@@ -121,6 +131,10 @@ ${skills}
     md += '</table> \n\n'
 
     return md
+  }
+
+  private badgeWithLink({ badge, link }: { badge: string; link: string }) {
+    return `[${badge}](${link})`
   }
 }
 

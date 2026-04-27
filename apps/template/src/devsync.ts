@@ -74,6 +74,10 @@ const devsyncSchema = z.object({
   name: z.string(),
   description: z.string(),
   img: z.string(),
+  status: z.object({
+    status: z.string(),
+    badge: z.string(),
+  }),
   githubUserName: z.string(),
   socialMedia: z.array(linkSchema),
   languages: z.array(languageSchema),

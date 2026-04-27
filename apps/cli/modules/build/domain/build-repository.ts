@@ -9,5 +9,4 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 
 export interface BuildRepository {
   copyTemplate: () => Promise<void>
-  getHTMLFromComponent: () => Promise<string>
 }

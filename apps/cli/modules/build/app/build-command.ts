@@ -1,5 +1,4 @@
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
-import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-component.use-case'
 import { pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
@@ -8,6 +7,7 @@ import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 import { writeFileMixin } from '@/shared/infra/write-file'
 import { createPDFMixin } from '@/shared/infra/create-pdf'
+import { getHTMLFromComponentMixin } from '@/shared/infra/get-html-from-component'
 
 /*
 To build the project this is how it works
@@ -20,10 +20,11 @@ To build the project this is how it works
 
 class BaseBuildCommand {}
 
-class BuildCommand extends writeFileMixin(createPDFMixin(BaseBuildCommand)) {
+class BuildCommand extends writeFileMixin(
+  createPDFMixin(getHTMLFromComponentMixin(BaseBuildCommand)),
+) {
   constructor(
     private readonly copyTemplateUseCase: copyTemplateUseCase,
-    private readonly getHTMLFromComponentUseCase: getHTMLFromComponentUseCase,
     private readonly createGithubProfileUseCase: createGithubProfileUseCase,
     private readonly createAcademicsUseCase: createAcademicsUseCase,
     private readonly createLinkedinUseCase: createLinkedinUseCase,
@@ -40,7 +41,7 @@ class BuildCommand extends writeFileMixin(createPDFMixin(BaseBuildCommand)) {
 
     console.log(`${SPACE}${GREEN('2.')} Building CV and generating PDF...`)
     // create pdf from astro component
-    const html = await this.getHTMLFromComponentUseCase.execute()
+    const html = await this.getHTMLFromComponent()
     await this.createPDF({ html, path: pathPDF })
     console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathPDF)}`)}`)
     console.log('')

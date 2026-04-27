@@ -1,7 +1,5 @@
 import BuildCommand from './app/build-command'
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
-import createPDFUseCase from '@/modules/build/app/create-pdf.use-case'
-import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-component.use-case'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
@@ -12,8 +10,6 @@ export default async function build() {
 
   const buildCommand = new BuildCommand(
     new copyTemplateUseCase(repository),
-    new createPDFUseCase(repository),
-    new getHTMLFromComponentUseCase(repository),
     new createGithubProfileUseCase(),
     new createAcademicsUseCase(),
     new createLinkedinUseCase(),

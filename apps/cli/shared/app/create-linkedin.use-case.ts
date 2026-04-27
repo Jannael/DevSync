@@ -35,7 +35,7 @@ class CreateLinkedinUseCase extends baseClass {
   private async getMD({ devsync }: { devsync: DevsyncPartial }) {
     let md = ''
 
-    md += `# ${devsync.title ?? 'Professional Update'}\n\n`
+    md += `# ${devsync.jobTitle ?? 'Professional Update'}\n\n`
     md += `I am ${devsync.name ?? 'a software engineer'}.\n\n`
 
     if (devsync.description) {
@@ -51,8 +51,8 @@ class CreateLinkedinUseCase extends baseClass {
           md += `  - ${ex.description}\n`
         }
 
-        for (const item of ex.list ?? []) {
-          md += `  - ${item.title}: ${item.description}\n`
+        for (const item of ex.list.items ?? []) {
+          md += `  - ${item.highlight}: ${item.description}\n`
         }
       }
 
@@ -68,8 +68,8 @@ class CreateLinkedinUseCase extends baseClass {
           md += `  - ${project.description}\n`
         }
 
-        for (const item of project.list ?? []) {
-          md += `  - ${item.title}: ${item.description}\n`
+        for (const item of project.list.items ?? []) {
+          md += `  - ${item.highlight}: ${item.description}\n`
         }
 
         if ((project.links?.length ?? 0) > 0) {

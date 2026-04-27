@@ -1,4 +1,4 @@
-import type { Link, ListItem, Skills } from '@template/src/devsync'
+import type { Link, ListSchema, Skills } from '@template/src/devsync'
 
 type GConstructor<T = {}> = new (...args: any[]) => T
 
@@ -9,10 +9,10 @@ export function mdUtilsMixin<TBase extends GConstructor>(Base: TBase) {
       return `[${badge}](${link})`
     }
 
-    getListItems({ items }: { items: ListItem[] }) {
+    getListItems({ items }: { items: ListSchema['items'] }) {
       let listItems = ''
       for (const item of items) {
-        listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
+        listItems += `<li><strong>${item.highlight}</strong>${item.description}</li>`
       }
       return listItems
     }

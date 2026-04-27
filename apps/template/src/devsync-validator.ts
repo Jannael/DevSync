@@ -19,32 +19,35 @@ const skillsSchema = z.object({
   icon: z.string(),
 })
 
-const listItemSchema = z.object({
+const ListSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  items: z.array(
+    z.object({
+      highlight: z.string(),
+      description: z.string(),
+    }),
+  ),
 })
 
 const experienceSchema = z.object({
   company: z.string(),
   position: z.string(),
   img: z.string(),
-  imgLink: z.string(),
+  web: z.string(),
   date: z.string(),
   links: z.array(linkSchema),
   description: z.string(),
-  listName: z.string(),
-  list: z.array(listItemSchema),
+  list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
 const projectSchema = z.object({
   name: z.string(),
   img: z.string(),
-  imgLink: z.string(),
+  web: z.string(),
   links: z.array(linkSchema),
   description: z.string(),
-  listName: z.string(),
-  list: z.array(listItemSchema),
+  list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
@@ -54,20 +57,18 @@ const educationSchema = z.object({
   img: z.string(),
   date: z.string(),
   links: z.array(linkSchema),
-  listName: z.string(),
-  list: z.array(listItemSchema),
+  list: ListSchema,
 })
 
 const certificationSchema = z.object({
   name: z.string(),
   url: z.string(),
-  listName: z.string(),
-  list: z.array(listItemSchema),
+  list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
 export const devsyncSchema = z.object({
-  title: z.string(),
+  jobTitle: z.string(),
   name: z.string(),
   description: z.string(),
   img: z.string(),
@@ -86,9 +87,10 @@ export const devsyncSchema = z.object({
 
 export type Link = z.infer<typeof linkSchema>
 export type Skills = z.infer<typeof skillsSchema>
-export type ListItem = z.infer<typeof listItemSchema>
+export type ListSchema = z.infer<typeof ListSchema>
 export type Devsync = z.infer<typeof devsyncSchema>
 export const devsyncSchemaPartial = devsyncSchema.partial()
 export type DevsyncPartial = z.infer<typeof devsyncSchemaPartial>
 
-export const parseDevsync = (devsync: unknown): DevsyncPartial => devsyncSchemaPartial.parse(devsync)
+export const parseDevsync = (devsync: unknown): DevsyncPartial =>
+  devsyncSchemaPartial.parse(devsync)

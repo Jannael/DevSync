@@ -2,7 +2,7 @@
   "name": "Devsync",
   "description": "One command one file to keep your portfolio, CV, GitHub profile, and LinkedIn in sync.",
   "img": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
-  "title": "Software Developer",
+  "jobTitle": "Software Developer",
   "status": {
     "status": "working",
     "badge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
@@ -28,7 +28,8 @@
       "company": "Northstar Commerce",
       "position": "Senior Full-Stack Engineer",
       "img": "https://cdn.simpleicons.org/shopify",
-      "imgLink": "https://github.com/Jannael/Glinter/blob/main/screenshots/web-screenshot.png?raw=true",
+      "web": "https://github.com/Jannael/Glinter/blob/main/screenshots/,web-screenshot.png?raw=true",
+      "description": "Led migration from a legacy monolith to a modular TypeScript platform, improving release confidence and checkout reliability for high-traffic campaigns.",
       "date": "02/23 - Present",
       "links": [
         {
@@ -38,14 +39,16 @@
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
-      "description": "Led migration from a legacy monolith to a modular TypeScript platform, improving release confidence and checkout reliability for high-traffic campaigns.",
-      "listName": "What I delivered",
-      "list": [
-        {
-          "title": "Checkout performance",
+      "list": {
+        "title": "",
+        "items": [
+          {
+            "highlight": "Checkout performance",
           "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
-        }
-      ],
+
+          }
+        ]
+      },
       "skills": [
         {
           "name": "TypeScript",
@@ -59,7 +62,7 @@
     {
       "name": "PulseBoard",
       "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80",
-      "imgLink": "",
+      "web": "",
       "links": [
         {
           "name": "GitHub",
@@ -69,13 +72,16 @@
         }
       ],
       "description": "A real-time team dashboard for sprint health, CI status, and incident summaries, built for engineering managers and distributed teams.",
-      "listName": "What I learned",
-      "list": [
-        {
-          "title": "WebSocket architecture",
-          "description": "Designed resilient real-time updates with fallback polling and connection state recovery."
-        }
-      ],
+      "list": {
+        "title": "",
+        "items": [
+          {
+            "highlight": "Checkout performance",
+          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+
+          }
+        ]
+      },
       "skills": [
         {
           "name": "React",
@@ -99,26 +105,32 @@
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
-      "listName": "Highlights",
-      "list": [
-        {
-          "title": "Capstone",
-          "description": "Built a campus room-booking system with role-based access and calendar integrations."
-        }
-      ]
+      "list": {
+        "title": "",
+        "items": [
+          {
+            "highlight": "Checkout performance",
+          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+
+          }
+        ]
+      }
     }
   ],
   "certifications": [
     {
       "name": "AWS Certified Developer – Associate",
       "url": "https://www.credly.com/badges/example-aws-developer-associate",
-      "listName": "Skills validated",
-      "list": [
-        {
-          "title": "Serverless architecture",
-          "description": "Designed event-driven apps with Lambda, API Gateway, and DynamoDB."
-        }
-      ],
+      "list": {
+        "title": "",
+        "items": [
+          {
+            "highlight": "Checkout performance",
+          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+
+          }
+        ]
+      },
       "skills": [
         {
           "name": "AWS",

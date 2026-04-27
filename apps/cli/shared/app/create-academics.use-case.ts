@@ -25,7 +25,7 @@ class CreateAcademicsUseCase extends mdUtilsMixin(BaseClass) {
     // education timeline
     for (const ed of devsync.education ?? []) {
       const links = this.getLinks({ links: ed.links })
-      const listItems = this.getListItems({ items: ed.list })
+      const listItems = this.getListItems({ items: ed.list.items })
 
       md += `
 <tr>
@@ -34,7 +34,7 @@ class CreateAcademicsUseCase extends mdUtilsMixin(BaseClass) {
 
 ${links}
     <br>
-    ${ed.listName}
+    ${ed.list.title}
     <ul>
       ${listItems}
     </ul>
@@ -57,14 +57,14 @@ ${links}
 
     // certifications
     for (const cert of devsync.certifications ?? []) {
-      const listItems = this.getListItems({ items: cert.list })
+      const listItems = this.getListItems({ items: cert.list.items })
       const skills = this.getSkills({ skills: cert.skills })
 
       md += `
       <tr>
   <td>
     <h3>${cert.name}</h3>
-    ${cert.listName}
+    ${cert.list.title}
     <ul>
       ${listItems}
     </ul>

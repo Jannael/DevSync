@@ -1,10 +1,11 @@
 import type { DevsyncPartial } from '@template/src/devsync'
 import { readFileMixin } from '@/shared/infra/read-file'
-// academics md contains education and certifications fields.
+import { mdUtilsMixin } from '@/utils/md-utils.ts'
 
+// academics md contains education and certifications fields.
 class BaseClass {}
 
-class CreateAcademicsUseCase extends readFileMixin(BaseClass) {
+class CreateAcademicsUseCase extends mdUtilsMixin(readFileMixin(BaseClass)) {
   constructor() {
     super()
   }
@@ -13,20 +14,21 @@ class CreateAcademicsUseCase extends readFileMixin(BaseClass) {
     const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
 
     let md = ''
+    md += this.getEducationTimeline({ devsync })
+    md += this.getCertifications({ devsync })
+
+    return md
+  }
+
+  private getEducationTimeline({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
     md += '# Academics \n\n'
     md += '<table>'
 
     // education timeline
     for (const ed of devsync.education ?? []) {
-      let listItems = ''
-      for (const item of ed.list ?? []) {
-        listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
-      }
-
-      let links = ''
-      for (const link of ed.links ?? []) {
-        links += `[${link.mdBadge}](${link.url})`
-      }
+      const links = this.getLinks({ links: ed.links })
+      const listItems = this.getListItems({ items: ed.list })
 
       md += `
 <tr>
@@ -41,29 +43,25 @@ ${links}
     </ul>
     </br>
   </td>
-  <td width="40%">
-    <picture>
-      <img alt="${ed.degree}" src="${ed.img}" width="100%"/>
-    </picture>
-  </td>
+  ${this.getTdImg({ img: ed.img, link: '#', alt: ed.degree })}
 </tr>`
     }
+
     md += '</table> \n\n'
+
+    return md
+  }
+
+  private getCertifications({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
 
     md += '## Certifications \n\n'
     md += '<table>'
 
     // certifications
     for (const cert of devsync.certifications ?? []) {
-      let listItems = ''
-      for (const item of cert.list ?? []) {
-        listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
-      }
-
-      let skills = ''
-      for (const skill of cert.skills ?? []) {
-        skills += skill.mdBadge
-      }
+      const listItems = this.getListItems({ items: cert.list })
+      const skills = this.getSkills({ skills: cert.skills })
 
       md += `
       <tr>
@@ -79,6 +77,7 @@ ${skills}
   <td> <a href="${cert.url}" target="_blank">View Certificate</a> </td>
 </tr>`
     }
+
     md += '</table> \n\n'
 
     return md

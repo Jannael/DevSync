@@ -9,6 +9,8 @@ import { writeFileMixin } from '@/shared/infra/write-file'
 import { createPDFMixin } from '@/shared/infra/create-pdf'
 import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-component'
 import { errorHandler } from '@/error/error-handler'
+import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
+import type { DevsyncPartial } from '@template/src/devsync-validator'
 
 /*
 To build the project this is how it works
@@ -22,7 +24,7 @@ To build the project this is how it works
 class BaseBuildCommand {}
 
 class BuildCommand extends writeFileMixin(
-  createPDFMixin(getHTMLFromCVComponentMixin(BaseBuildCommand)),
+  createPDFMixin(getHTMLFromCVComponentMixin(validateDevsyncMixin(BaseBuildCommand))),
 ) {
   constructor(
     private readonly copyTemplateUseCase: copyTemplateUseCase,
@@ -35,11 +37,12 @@ class BuildCommand extends writeFileMixin(
 
   async execute(): Promise<void> {
     try {
+      const devsync = await this.validateDevsync()
       await this.copyTemplate()
       await this.buildCV()
-      await this.createGithubProfile()
-      await this.createAcademics()
-      await this.createLinkedin()
+      await this.createGithubProfile({ devsync })
+      await this.createAcademics({ devsync })
+      await this.createLinkedin({ devsync })
 
       console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
     } catch (e) {
@@ -62,26 +65,26 @@ class BuildCommand extends writeFileMixin(
     console.log('')
   }
 
-  private async createGithubProfile() {
+  private async createGithubProfile({ devsync }: { devsync: DevsyncPartial }) {
     console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
-    const README = await this.createGithubProfileUseCase.execute()
+    const README = await this.createGithubProfileUseCase.execute({ devsync })
     await this.writeFile({ path: pathREADME, data: README })
     console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)
     console.log('')
   }
 
-  private async createAcademics() {
+  private async createAcademics({ devsync }: { devsync: DevsyncPartial }) {
     console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
     // create certifications md
-    const academics = await this.createAcademicsUseCase.execute()
+    const academics = await this.createAcademicsUseCase.execute({ devsync })
     await this.writeFile({ path: pathAcademics, data: academics })
     console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(pathAcademics)}`)}`)
     console.log('')
   }
 
-  private async createLinkedin() {
+  private async createLinkedin({ devsync }: { devsync: DevsyncPartial }) {
     console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
-    const linkedin = await this.createLinkedinUseCase.execute()
+    const linkedin = await this.createLinkedinUseCase.execute({ devsync })
     await this.writeFile({ path: pathLinkedin, data: linkedin })
     console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin)}`)}`)
     console.log('')

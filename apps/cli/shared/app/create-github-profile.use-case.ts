@@ -1,34 +1,22 @@
-import type { DevsyncPartial } from '@template/src/devsync'
+import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { academicsBadge } from '@/constants/academics-badge'
-import { readFileMixin } from '@/shared/infra/read-file'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
-import { ServerError } from '@/error/error-instance'
 
 class BaseClass {}
 
-class CreateGithubProfileUseCase extends mdUtilsMixin(readFileMixin(BaseClass)) {
+class CreateGithubProfileUseCase extends mdUtilsMixin(BaseClass) {
   constructor() {
     super()
   }
 
-  async execute() {
-    try {
-      // we import devsync from the directory it's been executed
-      const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
+  async execute({ devsync }: { devsync: DevsyncPartial }) {
+    let md = ''
 
-      let md = ''
+    md += this.getHeader({ devsync })
+    md += this.getExperienceSection({ devsync })
+    md += this.getProjectsSection({ devsync })
 
-      md += this.getHeader({ devsync })
-      md += this.getExperienceSection({ devsync })
-      md += this.getProjectsSection({ devsync })
-
-      return md
-    } catch {
-      throw new ServerError(
-        'Failed to parse DEVSYNC.json',
-        'Check your DEVSYNC.json follows the right format',
-      )
-    }
+    return md
   }
 
   private getHeader({ devsync }: { devsync: DevsyncPartial }) {

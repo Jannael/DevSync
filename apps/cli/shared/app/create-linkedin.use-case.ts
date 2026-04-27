@@ -1,23 +1,14 @@
-import type { DevsyncPartial } from '@template/src/devsync'
-import { readFileMixin } from '@/shared/infra/read-file'
-import { ServerError } from '@/error/error-instance'
+import type { DevsyncPartial } from '@template/src/devsync-validator'
 
 class baseClass {}
 
-class CreateLinkedinUseCase extends readFileMixin(baseClass) {
+class CreateLinkedinUseCase extends baseClass {
   constructor() {
     super()
   }
 
-  async execute() {
-    try {
-      return await this.getMD()
-    } catch {
-      throw new ServerError(
-        'Failed to parse DEVSYNC.json',
-        'Check your DEVSYNC.json follows the right format',
-      )
-    }
+  async execute({ devsync }: { devsync: DevsyncPartial }) {
+    return await this.getMD({ devsync })
   }
 
   private getSkills({ devsync }: { devsync: DevsyncPartial }) {
@@ -40,9 +31,8 @@ class CreateLinkedinUseCase extends readFileMixin(baseClass) {
 
     return skills
   }
-  private async getMD() {
-    const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
 
+  private async getMD({ devsync }: { devsync: DevsyncPartial }) {
     let md = ''
 
     md += `# ${devsync.title ?? 'Professional Update'}\n\n`

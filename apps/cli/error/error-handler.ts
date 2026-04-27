@@ -1,5 +1,5 @@
 import { NotFound, ServerError, Forbidden, Conflict, BadRequest } from '@/error/error-instance'
-import { X } from '@/utils/icons-terminal'
+import { SPACE, X } from '@/utils/icons-terminal'
 
 const errors = [NotFound, ServerError, Forbidden, Conflict, BadRequest]
 
@@ -10,9 +10,9 @@ const errors = [NotFound, ServerError, Forbidden, Conflict, BadRequest]
 export function errorHandler(error: unknown) {
   for (const e of errors) {
     if (error instanceof e) {
-      console.error(X(error.message))
+      console.error(`${SPACE}${X(error.message)}\n`)
       if (error.description) {
-        console.error(`  ${error.description}`)
+        console.log(error.description)
       }
       process.exit(1)
     }

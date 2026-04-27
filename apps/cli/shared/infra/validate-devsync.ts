@@ -4,6 +4,8 @@ import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { DEVSYNC_JSON_PATH } from '@/constants/paths'
 import { BadRequest, ServerError } from '@/error/error-instance'
 import { readFileMixin } from '@/shared/infra/read-file'
+import { SPACE } from '@/utils/icons-terminal'
+import { BOLD, GREEN } from '@/utils/colors'
 
 export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends readFileMixin(Base) {
@@ -15,7 +17,9 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
       } catch {
         throw new ServerError(
           'Failed to read DEVSYNC.json',
-          'Run devsync init and then fill DEVSYNC.json in your project root',
+          `${SPACE}${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n` +
+          `${SPACE}${SPACE}${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')} with your information\n` +
+          `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`,
         )
       }
 

@@ -1,4 +1,4 @@
-import type { BuildRepository } from '@/modules/build/domain/build-repository'
+import type { BuildRepository as IBuildRepository } from '../domain/build-repository'
 import {
   cp,
   mkdir,
@@ -7,35 +7,18 @@ import {
   writeFile as fsWriteFile,
 } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import { spawn } from 'node:child_process'
 import { dirname, join, resolve } from 'node:path'
 import puppeteer from 'puppeteer'
+import { readFileMixin } from '../../../shared/infra/read-file'
+import { runBunCommand } from '../../../utils/run-bun-command'
 
 const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..', 'template')
 const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
 const CV_ROUTE_OUTPUT_PATH = resolve(process.cwd(), 'dist', 'cv', 'index.html')
 
-const runBunCommand = async (args: string[]) => {
-  await new Promise<void>((resolvePromise, reject) => {
-    const child = spawn('bun', args, {
-      cwd: process.cwd(),
-      stdio: 'inherit',
-      shell: true,
-    })
+class BaseRepo {}
 
-    child.on('error', reject)
-    child.on('exit', (code) => {
-      if (code === 0) {
-        resolvePromise()
-        return
-      }
-
-      reject(new Error(`bun ${args.join(' ')} failed with exit code ${code ?? 'unknown'}`))
-    })
-  })
-}
-
-class BuildRepositoryImpl implements BuildRepository {
+class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepository {
   async copyTemplate(): Promise<void> {
     const entries = await readdir(TEMPLATE_DIRECTORY, { withFileTypes: true })
 
@@ -49,11 +32,6 @@ class BuildRepositoryImpl implements BuildRepository {
         errorOnExist: false,
       })
     }
-  }
-
-  async readFile({ path }: { path: string }): Promise<string> {
-    const fullPath = resolve(process.cwd(), path)
-    return fsReadFile(fullPath, 'utf8')
   }
 
   async getHTMLFromComponent({ component }: { component: string }): Promise<string> {
@@ -116,5 +94,7 @@ class BuildRepositoryImpl implements BuildRepository {
     await fsWriteFile(fullPath, data, 'utf8')
   }
 }
+
+export const BuildRepositoryImpl = readFileMixin(BuildRepository)
 
 export default BuildRepositoryImpl

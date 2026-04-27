@@ -58,22 +58,7 @@ class CreateLinkedinUseCase extends readFileMixin(baseClass) {
       md += '\n'
     }
 
-    const skills = new Set<string>()
-    for (const ex of devsync.experience ?? []) {
-      for (const skill of ex.skills ?? []) {
-        skills.add(skill.name)
-      }
-    }
-    for (const project of devsync.projects ?? []) {
-      for (const skill of project.skills ?? []) {
-        skills.add(skill.name)
-      }
-    }
-    for (const cert of devsync.certifications ?? []) {
-      for (const skill of cert.skills ?? []) {
-        skills.add(skill.name)
-      }
-    }
+    const skills = this.getSkills({ devsync })
 
     if (skills.size > 0) {
       md += '## Core Skills\n\n'
@@ -98,6 +83,27 @@ class CreateLinkedinUseCase extends readFileMixin(baseClass) {
     }
 
     return md
+  }
+
+  private getSkills({ devsync }: { devsync: DevsyncPartial }) {
+    const skills = new Set<string>()
+    for (const ex of devsync.experience ?? []) {
+      for (const skill of ex.skills ?? []) {
+        skills.add(skill.name)
+      }
+    }
+    for (const project of devsync.projects ?? []) {
+      for (const skill of project.skills ?? []) {
+        skills.add(skill.name)
+      }
+    }
+    for (const cert of devsync.certifications ?? []) {
+      for (const skill of cert.skills ?? []) {
+        skills.add(skill.name)
+      }
+    }
+
+    return skills
   }
 }
 

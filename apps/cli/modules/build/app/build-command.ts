@@ -1,5 +1,5 @@
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
-import { pathPDF } from '@/constants/cv-component'
+import { pathPDF } from '@/constants/cv'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'

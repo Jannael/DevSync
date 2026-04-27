@@ -1,10 +1,8 @@
 import type { BuildRepository as IBuildRepository } from '../domain/build-repository'
 import {
   cp,
-  mkdir,
   readFile as fsReadFile,
   readdir,
-  writeFile as fsWriteFile,
 } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -34,7 +32,7 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
     }
   }
 
-  async getHTMLFromComponent({ component }: { component: string }): Promise<string> {
+  async getHTMLFromComponent(): Promise<string> {
     if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
       throw new Error(
         'package.json not found in current directory. Run devsync build from the project root.',
@@ -63,9 +61,6 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
       inlinedHTML = inlinedHTML.replace(linkTag, `<style>${css}</style>`)
     }
 
-    // component is currently passed by the use-case contract; CV build always targets /cv route.
-    void component
-
     return inlinedHTML
   }
 
@@ -86,12 +81,6 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
       },
     })
     await browser.close()
-  }
-
-  async writeFile({ path, data }: { path: string; data: string }): Promise<void> {
-    const fullPath = resolve(process.cwd(), path)
-    await mkdir(dirname(fullPath), { recursive: true })
-    await fsWriteFile(fullPath, data, 'utf8')
   }
 }
 

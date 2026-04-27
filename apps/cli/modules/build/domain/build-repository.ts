@@ -9,8 +9,6 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 
 export interface BuildRepository {
   copyTemplate: () => Promise<void>
-  readFile: ({ path }: { path: string }) => Promise<string>
-  getHTMLFromComponent: ({ component }: { component: string }) => Promise<string>
+  getHTMLFromComponent: () => Promise<string>
   createPDF: ({ html, path }: { html: string; path: string }) => Promise<void>
-  writeFile: ({ path, data }: { path: string; data: string }) => Promise<void>
 }

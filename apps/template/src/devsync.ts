@@ -25,6 +25,8 @@ const listItemSchema = z.object({
   description: z.string(),
 })
 
+export type ListItem = z.infer<typeof listItemSchema>
+
 // ---------------------------------------------- //
 const experienceSchema = z.object({
   company: z.string(),

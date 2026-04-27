@@ -5,7 +5,7 @@ import writeFileUseCase from '@/modules/build/app/write-file.use-case'
 import { pathPDF } from '@/constants/cv-component'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
-import createLinkedinUseCase from '@/modules/build/app/create-linkedin.use-case'
+import createLinkedinUseCase from '@/shared/infra/create-linkedin.use-case'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 

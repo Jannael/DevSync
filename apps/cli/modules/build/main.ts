@@ -5,8 +5,8 @@ import getHTMLFromComponentUseCase from '@/modules/build/app/get-html-from-compo
 import writeFileUseCase from '@/modules/build/app/write-file.use-case'
 import createGithubProfileUseCase from '@/modules/build/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/modules/build/app/create-academics.use-case'
-import createLinkedinUseCase from '@/modules/build/app/create-linkedin.use-case'
-import BuildRepositoryImpl from './infra/build-repository'
+import createLinkedinUseCase from '@/shared/infra/create-linkedin.use-case'
+import BuildRepositoryImpl from '@/modules/build/infra/build-repository'
 
 export default async function build() {
   const repository = new BuildRepositoryImpl()
@@ -18,7 +18,7 @@ export default async function build() {
     new writeFileUseCase(repository),
     new createGithubProfileUseCase(repository),
     new createAcademicsUseCase(repository),
-    new createLinkedinUseCase(repository),
+    new createLinkedinUseCase(),
   )
 
   await buildCommand.execute()

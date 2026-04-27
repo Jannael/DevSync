@@ -35,5 +35,16 @@ export function mdUtilsMixin<TBase extends GConstructor>(Base: TBase) {
       }
       return innerLinks
     }
+
+    getTdImg({ img, link, alt }: { img: string; link: string; alt: string }) {
+      return `
+<td width="40%">
+  <a href="${link}" target="_blank" rel="noopener noreferrer">
+    <picture>
+      <img alt="${alt}" src="${img}" width="100%"/>
+    </picture>
+  </a>
+</td>`
+    }
   }
 }

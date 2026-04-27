@@ -92,15 +92,10 @@ ${links}
     </br>
 ${skills}
   </td>
-  <td width="40%">
-    <a href="${proj.imgLink}" target="_blank" rel="noopener noreferrer">
-    <picture>
-      <img alt="${proj.name}" src="${proj.img}" width="100%"/>
-    </picture>
-    </a>
-  </td>
+  ${this.getTdImg({ img: proj.img, link: proj.imgLink, alt: proj.name })}
 </tr>`
     }
+
     md += '</table> \n\n'
 
     return md

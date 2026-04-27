@@ -10,7 +10,7 @@ const errors = [NotFound, ServerError, Forbidden, Conflict, BadRequest]
 export function errorHandler(error: unknown) {
   for (const e of errors) {
     if (error instanceof e) {
-      console.error(`${SPACE}${X(error.message)}\n`)
+      console.error(`${SPACE}${X(error.message)}`)
       if (error.description) {
         console.log(error.description)
       }

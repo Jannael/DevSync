@@ -1,5 +1,6 @@
 import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
+import { MD_SEPARATOR } from '@/constants/md-separator'
 
 class BaseClass {}
 
@@ -28,10 +29,10 @@ class CreateAcademicsUseCase extends mdUtilsMixin(BaseClass) {
       md += `
       <tr>
         <td>
-          <h3>${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>
+          <h3>${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>\n
 ${links}
           <br>
-          ${ed.list?.title ?? ''}
+          ${ed.list?.title.length > 1 ? ed.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>
@@ -60,11 +61,11 @@ ${links}
       <tr>
         <td>
           <h3>${cert.name ?? 'Certification'}</h3>
-          ${cert.list?.title ?? ''}
+          ${cert.list?.title.length > 1 ? cert.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>
-          </br>
+          </br>\n
 ${skills}
         </td>
         <td> <a href="${cert.url ?? '#'}" target="_blank">View Certificate</a> </td>

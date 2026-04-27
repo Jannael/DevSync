@@ -1,6 +1,7 @@
 import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { academicsBadge } from '@/constants/academics-badge'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
+import { MD_SEPARATOR } from '@/constants/md-separator'
 
 class BaseClass {}
 
@@ -53,10 +54,10 @@ class CreateGithubProfileUseCase extends mdUtilsMixin(BaseClass) {
       md += `
       <tr>
         <td>
-          <h3>${ex.company ?? 'Company'}</h3>
+          <h3>${ex.company ?? 'Company'}</h3>\n
 ${links}
           <p>${ex.description ?? ''}</p>
-          ${ex.list?.title ?? ''}
+          ${ex.list?.title.length > 1 ? ex.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>
@@ -84,10 +85,10 @@ ${skills}
       md += `
       <tr>
         <td>
-          <h3>${proj.name ?? 'Project'}</h3>
+          <h3>${proj.name ?? 'Project'}</h3>\n
 ${links}
           <p>${proj.description ?? ''}</p>
-          ${proj.list?.title ?? ''}
+          ${proj.list?.title.length > 1 ? proj.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>

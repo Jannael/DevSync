@@ -2,7 +2,7 @@ import { readFile as fsReadFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { runBunCommand } from '@/utils/run-bun-command'
-import { CWD_PACKAGE_JSON_PATH, CV_ROUTE_OUTPUT_PATH } from '@/constants/cv'
+import { CWD_PACKAGE_JSON_PATH, CV_ROUTE_OUTPUT_PATH } from '@/constants/paths'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 
 // Mixins pattern for shared infrastructure code

@@ -8,3 +8,4 @@ export const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..
 export const pathREADME = './README.md'
 export const pathLinkedin = './linkedin.md'
 export const pathAcademics = './academics/README.md'
+export const DEVSYNC_JSON_PATH = resolve(process.cwd(), 'DEVSYNC.json')

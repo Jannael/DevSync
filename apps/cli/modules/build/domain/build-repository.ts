@@ -8,5 +8,6 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 */
 
 export interface BuildRepository {
+  validateDevsyncJSONInCWD: () => void
   copyTemplate: () => Promise<void>
 }

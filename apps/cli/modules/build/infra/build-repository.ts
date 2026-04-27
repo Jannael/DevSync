@@ -41,8 +41,7 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
         })
       }
     } catch {
-      console.error(new ServerError('Build command failed'))
-      process.exit(1)
+      throw new ServerError('Failed to copy template')
     }
   }
 }

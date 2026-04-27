@@ -32,6 +32,8 @@ type IServerError =
   | 'Failed to read DEVSYNC.json'
   | 'Failed to parse DEVSYNC.json'
   | 'Failed to write file'
+  | 'Failed to copy template'
+  | 'Failed to run bun command'
   | 'Build command failed'
   | 'Update command failed'
   | 'CV build failed'

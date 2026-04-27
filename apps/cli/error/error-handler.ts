@@ -3,6 +3,10 @@ import { X } from '@/utils/icons-terminal'
 
 const errors = [NotFound, ServerError, Forbidden, Conflict, BadRequest]
 
+/*
+  error handler is only use in app/ in mixins, functions, etc, just throw an error 
+*/
+
 export function errorHandler(error: unknown) {
   for (const e of errors) {
     if (error instanceof e) {

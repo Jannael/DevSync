@@ -34,6 +34,7 @@ type IServerError =
   | 'Failed to write file'
   | 'Failed to read file'
   | 'Failed to copy template'
+  | 'Failed to create PDF'
   | 'Failed to run bun command'
   | 'Build command failed'
   | 'Update command failed'

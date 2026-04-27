@@ -1,7 +1,6 @@
 import { mkdir, writeFile as fsWriteFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
-
-type GConstructor<T = {}> = new (...args: any[]) => T
+import type { GConstructor } from '@/shared/infra/mixin-constructor'
 
 // Mixins pattern for shared infrastructure code
 export function writeFileMixin<TBase extends GConstructor>(Base: TBase) {

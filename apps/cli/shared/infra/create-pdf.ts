@@ -1,6 +1,5 @@
 import puppeteer from 'puppeteer'
-
-type GConstructor<T = {}> = new (...args: any[]) => T
+import type { GConstructor } from '@/shared/infra/mixin-constructor'
 
 // Mixins pattern for shared infrastructure code
 export function createPDFMixin<TBase extends GConstructor>(Base: TBase) {

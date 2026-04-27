@@ -2,11 +2,8 @@ import { readFile as fsReadFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { runBunCommand } from '@/utils/run-bun-command'
-
-type GConstructor<T = {}> = new (...args: any[]) => T
-
-const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
-const CV_ROUTE_OUTPUT_PATH = resolve(process.cwd(), 'dist', 'cv', 'index.html')
+import { CWD_PACKAGE_JSON_PATH, CV_ROUTE_OUTPUT_PATH } from '@/constants/cv'
+import type { GConstructor } from '@/shared/infra/mixin-constructor'
 
 // Mixins pattern for shared infrastructure code
 export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {

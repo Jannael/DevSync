@@ -1,6 +1,7 @@
 import type { DevsyncPartial } from '@template/src/devsync'
 import { readFileMixin } from '@/shared/infra/read-file'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
+import { ServerError } from '@/error/error-instance'
 
 // academics md contains education and certifications fields.
 class BaseClass {}
@@ -11,13 +12,20 @@ class CreateAcademicsUseCase extends mdUtilsMixin(readFileMixin(BaseClass)) {
   }
 
   async execute() {
-    const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
+    try {
+      const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
 
-    let md = ''
-    md += this.getEducationTimeline({ devsync })
-    md += this.getCertifications({ devsync })
+      let md = ''
+      md += this.getEducationTimeline({ devsync })
+      md += this.getCertifications({ devsync })
 
-    return md
+      return md
+    } catch {
+      throw new ServerError(
+        'Failed to parse DEVSYNC.json',
+        'Check your DEVSYNC.json follows the right format',
+      )
+    }
   }
 
   private getEducationTimeline({ devsync }: { devsync: DevsyncPartial }) {

@@ -21,5 +21,6 @@ export function errorHandler(error: unknown) {
   console.error(X('An unexpected error occurred'))
   if (error instanceof Error) {
     console.error(`  ${error.message}`)
+    process.exit(1)
   }
 }

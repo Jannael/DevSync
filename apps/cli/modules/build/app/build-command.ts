@@ -8,6 +8,7 @@ import { BOLD, GREEN } from '@/utils/colors'
 import { writeFileMixin } from '@/shared/infra/write-file'
 import { createPDFMixin } from '@/shared/infra/create-pdf'
 import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-component'
+import { errorHandler } from '@/error/error-handler'
 
 /*
 To build the project this is how it works
@@ -33,13 +34,17 @@ class BuildCommand extends writeFileMixin(
   }
 
   async execute(): Promise<void> {
-    await this.copyTemplate()
-    await this.buildCV()
-    await this.createGithubProfile()
-    await this.createAcademics()
-    await this.createLinkedin()
+    try {
+      await this.copyTemplate()
+      await this.buildCV()
+      await this.createGithubProfile()
+      await this.createAcademics()
+      await this.createLinkedin()
 
-    console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
+      console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
+    } catch (e) {
+      errorHandler(e)
+    }
   }
 
   private async copyTemplate() {

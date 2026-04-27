@@ -1,15 +1,17 @@
-import type { BuildRepository } from '@/modules/build/domain/build-repository'
 import type { DevsyncPartial } from '@template/src/devsync'
 import { academicsBadge } from '@/constants/academics-badge'
+import { readFileMixin } from '@/shared/infra/read-file'
 
-class CreateGithubProfileUseCase {
-  constructor(private readonly buildRepository: BuildRepository) {}
+class BaseClass {}
+
+class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
+  constructor() {
+    super()
+  }
 
   async execute() {
     // we import devsync from the directory it's been executed
-    const devsync: DevsyncPartial = JSON.parse(
-      await this.buildRepository.readFile({ path: './DEVSYNC.json' }),
-    )
+    const devsync: DevsyncPartial = JSON.parse(await this.readFile({ path: './DEVSYNC.json' }))
 
     let md = ''
 
@@ -72,27 +74,27 @@ ${skills}
 </tr>`
     }
     md += '</table> \n\n'
-    
+
     //then projects sections
     md += '## Projects \n\n'
     md += '<table>'
-    
+
     for (const proj of devsync.projects ?? []) {
       let links = ''
       for (const link of proj.links ?? []) {
         links += `[${link.mdBadge}](${link.url})`
       }
-      
+
       let listItems = ''
       for (const item of proj.list ?? []) {
         listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
       }
-      
+
       let skills = ''
       for (const skill of proj.skills ?? []) {
         skills += skill.mdBadge
       }
-      
+
       md += `
 <tr>
   <td>

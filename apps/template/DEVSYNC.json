@@ -1,41 +1,41 @@
 {
-  "name": "Devsync",
-  "description": "One command one file to keep your portfolio, CV, GitHub profile, and LinkedIn in sync.",
-  "img": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
-  "jobTitle": "Software Developer",
+  "name": "Camila Torres",
+  "description": "Full-stack engineer focused on building scalable developer tools and reliable web platforms with clean UX and strong performance.",
+  "img": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80",
+  "jobTitle": "Senior Full-Stack Engineer",
   "status": {
-    "status": "working",
-    "badge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
+    "status": "open-to-work",
+    "badge": "![Open to work](https://img.shields.io/badge/Status-Open%20to%20Work-22c55e)"
   },
-  "githubUserName": "Jannael",
+  "githubUserName": "camilatorres-dev",
   "socialMedia": [
     {
       "name": "Github",
-      "url": "https://github.com/alexrivera-dev",
+      "url": "https://github.com/camilatorres-dev",
       "icon": "https://cdn.simpleicons.org/github",
       "mdBadge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
     }
   ],
   "languages": [
     {
-      "name": "English",
-      "mdBadge": "![English](https://img.shields.io/badge/Language-English-1f6feb)",
+      "name": "Spanish / English",
+      "mdBadge": "![Spanish-English](https://img.shields.io/badge/Languages-Spanish%20%7C%20English-1f6feb)",
       "icon": "https://cdn.simpleicons.org/googletranslate"
     }
   ],
   "experience": [
     {
-      "company": "Northstar Commerce",
+      "company": "Nexa Platform",
       "position": "Senior Full-Stack Engineer",
-      "img": "https://cdn.simpleicons.org/shopify",
-      "web": "https://github.com/Jannael/Glinter/blob/main/screenshots/,web-screenshot.png?raw=true",
-      "description": "Led migration from a legacy monolith to a modular TypeScript platform, improving release confidence and checkout reliability for high-traffic campaigns.",
-      "date": "02/23 - Present",
+      "img": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
+      "web": "https://nexa-platform.example.com",
+      "description": "Led backend and frontend modernization for a SaaS analytics platform used by distributed product teams.",
+      "date": "03/22 - Present",
       "links": [
         {
-          "name": "Company Site",
-          "url": "https://northstar-commerce.example",
-          "mdBadge": "![Northstar Commerce](https://img.shields.io/badge/Northstar-Commerce-0ea5e9)",
+          "name": "Product Website",
+          "url": "https://nexa-platform.example.com",
+          "mdBadge": "![Nexa Platform](https://img.shields.io/badge/Nexa-Platform-0ea5e9)",
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
@@ -43,40 +43,40 @@
         "title": "key-responsibilities",
         "items": [
           {
-            "highlight": "Checkout performance",
-            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+            "highlight": "Platform performance",
+            "description": "Reduced p95 API latency from 760ms to 230ms by adding cache layers and optimizing PostgreSQL queries."
           }
         ]
       },
       "skills": [
         {
-          "name": "TypeScript",
-          "mdBadge": "![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)",
-          "icon": "https://cdn.simpleicons.org/typescript"
+          "name": "Node.js",
+          "mdBadge": "![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)",
+          "icon": "https://cdn.simpleicons.org/nodedotjs"
         }
       ]
     }
   ],
   "projects": [
     {
-      "name": "PulseBoard",
-      "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1000&q=80",
-      "web": "",
+      "name": "Sprint Pulse",
+      "img": "https://images.unsplash.com/photo-1551281044-8b9a0b7f67c3?auto=format&fit=crop&w=1000&q=80",
+      "web": "https://sprint-pulse-demo.vercel.app",
       "links": [
         {
           "name": "GitHub",
-          "url": "https://github.com/alexrivera-dev/pulseboard",
+          "url": "https://github.com/camilatorres-dev/sprint-pulse",
           "mdBadge": "![GitHub Repo](https://img.shields.io/badge/Repo-GitHub-181717?logo=github&logoColor=white)",
           "icon": "https://cdn.simpleicons.org/github"
         }
       ],
-      "description": "A real-time team dashboard for sprint health, CI status, and incident summaries, built for engineering managers and distributed teams.",
+      "description": "A real-time engineering dashboard for delivery metrics, release signals, and incident summaries.",
       "list": {
-        "title": "",
+        "title": "project-impact",
         "items": [
           {
-            "highlight": "Checkout performance",
-            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+            "highlight": "Realtime collaboration",
+            "description": "Implemented websocket updates with resilient reconnect logic to keep dashboards synchronized for remote teams."
           }
         ]
       },
@@ -91,24 +91,24 @@
   ],
   "education": [
     {
-      "name": "University of Texas at Austin",
-      "degree": "B.S. in Computer Science",
-      "img": "https://cdn.simpleicons.org/readthedocs",
-      "date": "08/17 - 05/21",
+      "name": "Tecnologico de Monterrey",
+      "degree": "B.S. in Software Engineering",
+      "img": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=80",
+      "date": "08/14 - 06/19",
       "links": [
         {
           "name": "Program Details",
-          "url": "https://www.cs.utexas.edu/undergraduate-program",
-          "mdBadge": "![Computer Science](https://img.shields.io/badge/CS-Program-b45309)",
+          "url": "https://tec.mx/en/engineering-and-sciences",
+          "mdBadge": "![Software Engineering](https://img.shields.io/badge/Software-Engineering-b45309)",
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
       "list": {
-        "title": "",
+        "title": "academic-highlights",
         "items": [
           {
-            "highlight": "Checkout performance",
-            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+            "highlight": "Capstone project",
+            "description": "Built a campus scheduling platform with role-based permissions and calendar synchronization."
           }
         ]
       }
@@ -116,14 +116,14 @@
   ],
   "certifications": [
     {
-      "name": "AWS Certified Developer – Associate",
-      "url": "https://www.credly.com/badges/example-aws-developer-associate",
+      "name": "AWS Certified Developer - Associate",
+      "url": "https://www.credly.com/badges/aws-developer-associate-example",
       "list": {
-        "title": "",
+        "title": "validated-skills",
         "items": [
           {
-            "highlight": "Checkout performance",
-            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
+            "highlight": "Serverless architecture",
+            "description": "Designed event-driven services with Lambda, API Gateway, and secure IAM-based deployments."
           }
         ]
       },

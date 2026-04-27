@@ -7,7 +7,7 @@ import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 import { writeFileMixin } from '@/shared/infra/write-file'
 import { createPDFMixin } from '@/shared/infra/create-pdf'
-import { getHTMLFromComponentMixin } from '@/shared/infra/get-html-from-component'
+import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-component'
 
 /*
 To build the project this is how it works
@@ -21,7 +21,7 @@ To build the project this is how it works
 class BaseBuildCommand {}
 
 class BuildCommand extends writeFileMixin(
-  createPDFMixin(getHTMLFromComponentMixin(BaseBuildCommand)),
+  createPDFMixin(getHTMLFromCVComponentMixin(BaseBuildCommand)),
 ) {
   constructor(
     private readonly copyTemplateUseCase: copyTemplateUseCase,

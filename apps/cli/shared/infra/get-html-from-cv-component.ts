@@ -9,7 +9,7 @@ const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
 const CV_ROUTE_OUTPUT_PATH = resolve(process.cwd(), 'dist', 'cv', 'index.html')
 
 // Mixins pattern for shared infrastructure code
-export function getHTMLFromComponentMixin<TBase extends GConstructor>(Base: TBase) {
+export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
     async getHTMLFromComponent(): Promise<string> {
       if (!existsSync(CWD_PACKAGE_JSON_PATH)) {

@@ -1,82 +1,82 @@
 import { z } from 'zod'
 
 const languageSchema = z.object({
-  name: z.string(),
-  mdBadge: z.string(),
-  icon: z.string(),
+  name: z.string({ message: "Language name is required" }),
+  mdBadge: z.string({ message: "Markdown badge is required" }),
+  icon: z.string({ message: "Icon is required" }),
 })
 
 const linkSchema = z.object({
-  name: z.string(),
-  url: z.string(),
-  mdBadge: z.string(),
-  icon: z.string(),
+  name: z.string({ message: "Link name is required" }),
+  url: z.string({ message: "URL is required" }),
+  mdBadge: z.string({ message: "Markdown badge is required" }),
+  icon: z.string({ message: "Icon is required" }),
 })
 
 const skillsSchema = z.object({
-  name: z.string(),
-  mdBadge: z.string(),
-  icon: z.string(),
+  name: z.string({ message: "Skill name is required" }),
+  mdBadge: z.string({ message: "Markdown badge is required" }),
+  icon: z.string({ message: "Icon is required" }),
 })
 
 const ListSchema = z.object({
-  title: z.string(),
+  title: z.string({ message: "List title is required" }),
   items: z.array(
     z.object({
-      highlight: z.string(),
-      description: z.string(),
+      highlight: z.string({ message: "Highlight is required" }),
+      description: z.string({ message: "Description is required" }),
     }),
   ),
 })
 
 const experienceSchema = z.object({
-  company: z.string(),
-  position: z.string(),
-  img: z.string(),
-  web: z.string(),
-  date: z.string(),
+  company: z.string({ message: "Company is required" }),
+  position: z.string({ message: "Position is required" }),
+  img: z.string({ message: "Image is required" }),
+  web: z.string({ message: "Web is required" }),
+  date: z.string({ message: "Date is required" }),
   links: z.array(linkSchema),
-  description: z.string(),
+  description: z.string({ message: "Description is required" }),
   list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
 const projectSchema = z.object({
-  name: z.string(),
-  img: z.string(),
-  web: z.string(),
+  name: z.string({ message: "Project name is required" }),
+  img: z.string({ message: "Image is required" }),
+  web: z.string({ message: "Web is required" }),
   links: z.array(linkSchema),
-  description: z.string(),
+  description: z.string({ message: "Description is required" }),
   list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
 const educationSchema = z.object({
-  name: z.string(),
-  degree: z.string(),
-  img: z.string(),
-  date: z.string(),
+  name: z.string({ message: "Institution name is required" }),
+  degree: z.string({ message: "Degree is required" }),
+  img: z.string({ message: "Image is required" }),
+  date: z.string({ message: "Date is required" }),
   links: z.array(linkSchema),
   list: ListSchema,
 })
 
 const certificationSchema = z.object({
-  name: z.string(),
-  url: z.string(),
+  name: z.string({ message: "Certification name is required" }),
+  url: z.string({ message: "URL is required" }),
   list: ListSchema,
   skills: z.array(skillsSchema),
 })
 
 export const devsyncSchema = z.object({
-  jobTitle: z.string(),
-  name: z.string(),
-  description: z.string(),
-  img: z.string(),
+  jobTitle: z.string({ message: "Job title is required" }),
+  name: z.string({ message: "Name is required" }),
+  description: z.string({ message: "Description is required" }),
+  img: z.string({ message: "Image is required" }),
   status: z.object({
-    status: z.string(),
-    badge: z.string(),
+    status: z.string({ message: "Status is required" }),
+    badge: z.string({ message: "Badge is required" }),
   }),
-  githubUserName: z.string(),
+  githubUserName: z.string({ message: "GitHub username is required" }),
   socialMedia: z.array(linkSchema),
   languages: z.array(languageSchema),
   experience: z.array(experienceSchema),

@@ -1,10 +1,11 @@
-import type { DevsyncPartial, Link, ListItem, Skills } from '@template/src/devsync'
+import type { DevsyncPartial } from '@template/src/devsync'
 import { academicsBadge } from '@/constants/academics-badge'
 import { readFileMixin } from '@/shared/infra/read-file'
+import { mdUtilsMixin } from '@/utils/md-utils.ts'
 
 class BaseClass {}
 
-class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
+class CreateGithubProfileUseCase extends mdUtilsMixin(readFileMixin(BaseClass)) {
   constructor() {
     super()
   }
@@ -103,37 +104,6 @@ ${skills}
     md += '</table> \n\n'
 
     return md
-  }
-
-  private badgeWithLink({ badge, link }: { badge: string; link: string }) {
-    return `[${badge}](${link})`
-  }
-
-  private getListItems({ items }: { items: ListItem[] }) {
-    let listItems = ''
-    for (const item of items) {
-      listItems += `<li><strong>${item.title}</strong>${item.description}</li>`
-    }
-    return listItems
-  }
-
-  private getSkills({ skills }: { skills: Skills[] }) {
-    let innerSkills = ''
-    for (const skill of skills ?? []) {
-      innerSkills += skill.mdBadge
-    }
-    return innerSkills
-  }
-
-  private getLinks({ links }: { links: Link[] }) {
-    let innerLinks = ''
-    for (const link of links ?? []) {
-      innerLinks += this.badgeWithLink({
-        badge: link.mdBadge,
-        link: link.url,
-      })
-    }
-    return innerLinks
   }
 }
 

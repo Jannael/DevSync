@@ -1,5 +1,5 @@
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
-import { pathPDF } from '@/constants/cv'
+import { pathAcademics, pathCvPDF, pathREADME, pathLinkedin } from '@/constants/paths'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
@@ -33,41 +33,53 @@ class BuildCommand extends writeFileMixin(
   }
 
   async execute(): Promise<void> {
+    await this.copyTemplate()
+    await this.buildCV()
+    await this.createGithubProfile()
+    await this.createAcademics()
+    await this.createLinkedin()
+
+    console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
+  }
+
+  private async copyTemplate() {
     console.log(`${SPACE}${GREEN('1.')} Copying template files...`)
-    // copy template
     await this.copyTemplateUseCase.execute()
     console.log(`${SPACE}${CHECK('Template ready.')}`)
     console.log('')
+  }
 
+  private async buildCV() {
     console.log(`${SPACE}${GREEN('2.')} Building CV and generating PDF...`)
-    // create pdf from astro component
     const html = await this.getHTMLFromComponent()
-    await this.createPDF({ html, path: pathPDF })
-    console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathPDF)}`)}`)
+    await this.createPDF({ html, path: pathCvPDF })
+    console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathCvPDF)}`)}`)
     console.log('')
+  }
 
+  private async createGithubProfile() {
     console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
-    // create README
     const README = await this.createGithubProfileUseCase.execute()
-    await this.writeFile({ path: './README.md', data: README })
-    console.log(`${SPACE}${CHECK(`README generated at ${BOLD('./README.md')}`)}`)
+    await this.writeFile({ path: pathREADME, data: README })
+    console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)
     console.log('')
+  }
 
+  private async createAcademics() {
     console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
     // create certifications md
     const academics = await this.createAcademicsUseCase.execute()
-    await this.writeFile({ path: './academics/README.md', data: academics })
-    console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD('./academics/README.md')}`)}`)
+    await this.writeFile({ path: pathAcademics, data: academics })
+    console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(pathAcademics)}`)}`)
     console.log('')
+  }
 
+  private async createLinkedin() {
     console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
-    // create linkedin md
     const linkedin = await this.createLinkedinUseCase.execute()
-    await this.writeFile({ path: './linkedin.md', data: linkedin })
-    console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD('./linkedin.md')}`)}`)
+    await this.writeFile({ path: pathLinkedin, data: linkedin })
+    console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin)}`)}`)
     console.log('')
-
-    console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
   }
 }
 

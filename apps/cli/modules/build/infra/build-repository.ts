@@ -1,12 +1,8 @@
 import type { BuildRepository as IBuildRepository } from '../domain/build-repository'
-import {
-  cp,
-  readdir,
-} from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { cp, readdir } from 'node:fs/promises'
+import { join } from 'node:path'
 import { readFileMixin } from '@/shared/infra/read-file'
-
-const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', '..', '..', 'template')
+import { TEMPLATE_DIRECTORY } from '@/constants/paths'
 
 class BaseRepo {}
 

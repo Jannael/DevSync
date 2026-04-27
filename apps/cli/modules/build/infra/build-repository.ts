@@ -6,7 +6,6 @@ import {
 } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
-import puppeteer from 'puppeteer'
 import { readFileMixin } from '../../../shared/infra/read-file'
 import { runBunCommand } from '../../../utils/run-bun-command'
 
@@ -62,25 +61,6 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
     }
 
     return inlinedHTML
-  }
-
-  async createPDF({ html, path }: { html: string; path: string }): Promise<void> {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-    await page.setContent(html, { waitUntil: 'networkidle0' })
-    await page.emulateMediaType('screen')
-    await page.pdf({
-      path,
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '12mm',
-        right: '12mm',
-        bottom: '12mm',
-        left: '12mm',
-      },
-    })
-    await browser.close()
   }
 }
 

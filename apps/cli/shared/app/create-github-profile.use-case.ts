@@ -1,4 +1,4 @@
-import type { DevsyncPartial, ListItem, Skills } from '@template/src/devsync'
+import type { DevsyncPartial, Link, ListItem, Skills } from '@template/src/devsync'
 import { academicsBadge } from '@/constants/academics-badge'
 import { readFileMixin } from '@/shared/infra/read-file'
 
@@ -39,14 +39,7 @@ class CreateGithubProfileUseCase extends readFileMixin(BaseClass) {
     md += '<table>'
 
     for (const ex of devsync.experience ?? []) {
-      let links = ''
-      for (const link of ex.links ?? []) {
-        links += this.badgeWithLink({
-          badge: link.mdBadge,
-          link: link.url,
-        })
-      }
-
+      const links = this.getLinks({ links: ex.links })
       const listItems = this.getListItems({ items: ex.list })
       const skills = this.getSkills({ skills: ex.skills })
 
@@ -80,14 +73,7 @@ ${skills}
     md += '<table>'
 
     for (const proj of devsync.projects ?? []) {
-      let links = ''
-      for (const link of proj.links ?? []) {
-        links += this.badgeWithLink({
-          badge: link.mdBadge,
-          link: link.url,
-        })
-      }
-
+      const links = this.getLinks({ links: proj.links })
       const listItems = this.getListItems({ items: proj.list })
       const skills = this.getSkills({ skills: proj.skills })
 
@@ -137,6 +123,17 @@ ${skills}
       innerSkills += skill.mdBadge
     }
     return innerSkills
+  }
+
+  private getLinks({ links }: { links: Link[] }) {
+    let innerLinks = ''
+    for (const link of links ?? []) {
+      innerLinks += this.badgeWithLink({
+        badge: link.mdBadge,
+        link: link.url,
+      })
+    }
+    return innerLinks
   }
 }
 

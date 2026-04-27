@@ -14,6 +14,8 @@ const linkSchema = z.object({
   icon: z.string(),
 })
 
+export type Link = z.infer<typeof linkSchema>
+
 const skillsSchema = z.object({
   name: z.string(),
   mdBadge: z.string(),

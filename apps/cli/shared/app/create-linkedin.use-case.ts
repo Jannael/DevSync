@@ -46,13 +46,15 @@ class CreateLinkedinUseCase extends baseClass {
       md += '## Experience\n\n'
 
       for (const ex of devsync.experience ?? []) {
-        md += `- **${ex.position}** at **${ex.company}** (${ex.date})\n`
+        md += `- **${ex.position ?? 'Position'}** at **${ex.company ?? 'Company'}** (${ex.date ?? 'Date'})\n`
         if (ex.description) {
-          md += `  - ${ex.description}\n`
+          md += ` - ${ex.description}\n`
         }
 
-        for (const item of ex.list.items ?? []) {
-          md += `  - ${item.highlight}: ${item.description}\n`
+        if (ex.list?.items?.length) {
+          for (const item of ex.list.items) {
+            md += ` - ${item.highlight}: ${item.description}\n`
+          }
         }
       }
 
@@ -63,17 +65,19 @@ class CreateLinkedinUseCase extends baseClass {
       md += '## Selected Projects\n\n'
 
       for (const project of devsync.projects ?? []) {
-        md += `- **${project.name}**\n`
+        md += `- **${project.name ?? 'Project'}**\n`
         if (project.description) {
-          md += `  - ${project.description}\n`
+          md += ` - ${project.description}\n`
         }
 
-        for (const item of project.list.items ?? []) {
-          md += `  - ${item.highlight}: ${item.description}\n`
+        if (project.list?.items?.length) {
+          for (const item of project.list.items) {
+            md += ` - ${item.highlight}: ${item.description}\n`
+          }
         }
 
         if ((project.links?.length ?? 0) > 0) {
-          md += `  - Links: ${(project.links ?? []).map((link) => link.url).join(' | ')}\n`
+          md += ` - Links: ${(project.links ?? []).map((link) => link.url).join(' | ')}\n`
         }
       }
 
@@ -95,7 +99,7 @@ class CreateLinkedinUseCase extends baseClass {
       md += '\n'
     }
 
-    md += '## Let’s connect\n\n'
+    md += "## Let's connect\n\n"
     for (const social of devsync.socialMedia ?? []) {
       md += `- ${social.name}: ${social.url}\n`
     }

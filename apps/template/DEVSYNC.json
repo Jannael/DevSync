@@ -44,8 +44,7 @@
         "items": [
           {
             "highlight": "Checkout performance",
-          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
-
+            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
           }
         ]
       },
@@ -77,8 +76,7 @@
         "items": [
           {
             "highlight": "Checkout performance",
-          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
-
+            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
           }
         ]
       },
@@ -110,8 +108,7 @@
         "items": [
           {
             "highlight": "Checkout performance",
-          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
-
+            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
           }
         ]
       }
@@ -126,8 +123,7 @@
         "items": [
           {
             "highlight": "Checkout performance",
-          "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
-
+            "description": "Reduced p95 checkout API latency from 820ms to 240ms by introducing Redis caching and query optimization."
           }
         ]
       },

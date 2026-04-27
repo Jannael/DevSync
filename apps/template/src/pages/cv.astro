@@ -13,190 +13,192 @@ const socialMedia = profile.socialMedia ?? []
 const languages = profile.languages ?? []
 
 const skillsFromSkillBlocks = [
-  ...experience.flatMap((item) => item.skills.map((skill) => skill.name)),
-  ...projects.flatMap((item) => item.skills.map((skill) => skill.name)),
-  ...certifications.flatMap((item) => item.skills.map((skill) => skill.name)),
+  ...experience.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
+  ...projects.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
+  ...certifications.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
 ]
 
 const skillsFromAchievements = [
-  ...experience.flatMap((item) => item.list.map((entry) => entry.title)),
-  ...projects.flatMap((item) => item.list.map((entry) => entry.title)),
-  ...education.flatMap((item) => item.list.map((entry) => entry.title)),
-  ...certifications.flatMap((item) => item.list.map((entry) => entry.title)),
+  ...experience.flatMap((item) => (item.list?.items ?? []).map((entry) => entry.highlight)),
+  ...projects.flatMap((item) => (item.list?.items ?? []).map((entry) => entry.highlight)),
+  ...education.flatMap((item) => (item.list?.items ?? []).map((entry) => entry.highlight)),
+  ...certifications.flatMap((item) => (item.list?.items ?? []).map((entry) => entry.highlight)),
 ]
 
 const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchievements])].filter(Boolean)
 ---
 
 <html lang='en'>
-  <head>
-    <meta charset='utf-8' />
-    <meta name='viewport' content='width=device-width' />
-    <meta name='generator' content={Astro.generator} />
-    <title>{profile.name ?? 'Candidate'} | CV</title>
-    <link rel="preload" href={robotoLatinWoff2} as="font" type="font/woff2" crossorigin />
-    <meta
-      name='description'
-      content={`ATS-ready CV generated from DEVSYNC.json for ${profile.name ?? 'candidate profile'}`}
-    />
-    <style>
-      body {
-        font-family: 'Roboto Variable', sans-serif;
-      }
-    </style>
-  </head>
-  <body class='bg-white text-slate-900 antialiased'>
-    <main class='mx-auto max-w-4xl px-6 py-5 print:max-w-none print:px-0 print:py-0'>
-      <header class='border-b border-slate-300 pb-5'>
-        <h1 class='text-3xl font-bold tracking-tight'>{(profile.name ?? 'Candidate Name') + (profile.title ? ' | ' + profile.title : '')}</h1>
-        {profile.description && <p class='mt-3 text-sm leading-6'>{profile.description}</p>}
-        {socialMedia.length > 0 && (
-          <div class='mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm leading-6'>
-            {socialMedia.map((item) => (
-              <p>
-                <span class='font-semibold'>{item.name}:</span>{' '}
-                <a class='underline decoration-slate-400 underline-offset-2' href={item.url}>
-                  {item.url}
-                </a>
-              </p>
-            ))}
-          </div>
-        )}
-      </header>
-
-      {coreSkills.length > 0 && (
-        <section class='mt-5'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Core Skills</h2>
-          <p class='mt-2 text-sm leading-6'>{coreSkills.join(' | ')}</p>
-        </section>
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width' />
+  <meta name='generator' content={Astro.generator} />
+  <title>{profile.name ?? 'Candidate'} | CV</title>
+  <link rel="preload" href={robotoLatinWoff2} as="font" type="font/woff2" crossorigin />
+  <meta
+    name='description'
+    content={`ATS-ready CV generated from DEVSYNC.json for ${profile.name ?? 'candidate profile'}`}
+  />
+  <style>
+    body {
+      font-family: 'Roboto Variable', sans-serif;
+    }
+  </style>
+</head>
+<body class='bg-white text-slate-900 antialiased'>
+  <main class='mx-auto max-w-4xl px-6 py-5 print:max-w-none print:px-0 print:py-0'>
+    <header class='border-b border-slate-300 pb-5'>
+      <h1 class='text-3xl font-bold tracking-tight'>{(profile.name ?? 'Candidate Name') + (profile.jobTitle ? ' | ' + profile.jobTitle : '')}</h1>
+      {profile.description && <p class='mt-3 text-sm leading-6'>{profile.description}</p>}
+      {socialMedia.length > 0 && (
+        <div class='mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm leading-6'>
+          {socialMedia.map((item) => (
+            <p>
+              <span class='font-semibold'>{item.name}:</span>{' '}
+              <a class='underline decoration-slate-400 underline-offset-2' href={item.url}>
+                {item.url}
+              </a>
+            </p>
+          ))}
+        </div>
       )}
+    </header>
 
-      {experience.length > 0 && (
-        <section class='mt-7'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Professional Experience</h2>
-          <div class='mt-3 space-y-6'>
-            {experience.map((item) => (
-              <article>
-                <div class='flex flex-wrap items-baseline justify-between gap-2'>
-                  <h3 class='text-base font-semibold'>
-                    {item.position} | {item.company}
-                  </h3>
-                  <p class='text-sm'>{item.date}</p>
+    {coreSkills.length > 0 && (
+      <section class='mt-5'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Core Skills</h2>
+        <p class='mt-2 text-sm leading-6'>{coreSkills.join(' | ')}</p>
+      </section>
+    )}
+
+    {experience.length > 0 && (
+      <section class='mt-7'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Professional Experience</h2>
+        <div class='mt-3 space-y-6'>
+          {experience.map((item) => (
+            <article>
+              <div class='flex flex-wrap items-baseline justify-between gap-2'>
+                <h3 class='text-base font-semibold'>
+                  {item.position ?? 'Position'} | {item.company ?? 'Company'}
+                </h3>
+                <p class='text-sm'>{item.date ?? ''}</p>
+              </div>
+              {item.description && <p class='mt-2 text-sm leading-6'>{item.description}</p>}
+              {item.list?.items && item.list.items.length > 0 && (
+                <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
+                  {item.list.items.map((entry) => (
+                    <li>
+                      <span class='font-semibold'>{entry.highlight}:</span> {entry.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {projects.length > 0 && (
+      <section class='mt-7'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Projects</h2>
+        <div class='mt-3 space-y-6'>
+          {projects.map((item) => (
+            <article>
+              <h3 class='text-base font-semibold'>{item.name ?? 'Project'}</h3>
+              {item.description && <p class='mt-2 text-sm leading-6'>{item.description}</p>}
+              {item.list?.items && item.list.items.length > 0 && (
+                <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
+                  {item.list.items.map((entry) => (
+                    <li>
+                      <span class='font-semibold'>{entry.highlight}:</span> {entry.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {item.links && item.links.length > 0 && (
+                <div class='mt-2 space-y-1 text-sm leading-6'>
+                  {item.links.map((link) => (
+                    <p>
+                      <span class='font-semibold'>{link.name}:</span>{' '}
+                      <a class='underline decoration-slate-400 underline-offset-2' href={link.url}>
+                        {link.url}
+                      </a>
+                    </p>
+                  ))}
                 </div>
-                {item.description && <p class='mt-2 text-sm leading-6'>{item.description}</p>}
-                {item.list.length > 0 && (
-                  <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
-                    {item.list.map((entry) => (
-                      <li>
-                        <span class='font-semibold'>{entry.title}:</span> {entry.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
 
-      {projects.length > 0 && (
-        <section class='mt-7'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Projects</h2>
-          <div class='mt-3 space-y-6'>
-            {projects.map((item) => (
-              <article>
-                <h3 class='text-base font-semibold'>{item.name}</h3>
-                {item.description && <p class='mt-2 text-sm leading-6'>{item.description}</p>}
-                {item.list.length > 0 && (
-                  <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
-                    {item.list.map((entry) => (
-                      <li>
-                        <span class='font-semibold'>{entry.title}:</span> {entry.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {item.links.length > 0 && (
-                  <div class='mt-2 space-y-1 text-sm leading-6'>
-                    {item.links.map((link) => (
-                      <p>
-                        <span class='font-semibold'>{link.name}:</span>{' '}
-                        <a class='underline decoration-slate-400 underline-offset-2' href={link.url}>
-                          {link.url}
-                        </a>
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+    {education.length > 0 && (
+      <section class='mt-7'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Education</h2>
+        <div class='mt-3 space-y-5'>
+          {education.map((item) => (
+            <article>
+              <div class='flex flex-wrap items-baseline justify-between gap-2'>
+                <h3 class='text-base font-semibold'>
+                  {item.degree ?? 'Degree'} | {item.name ?? 'Institution'}
+                </h3>
+                <p class='text-sm'>{item.date ?? ''}</p>
+              </div>
+              {item.list?.items && item.list.items.length > 0 && (
+                <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
+                  {item.list.items.map((entry) => (
+                    <li>
+                      <span class='font-semibold'>{entry.highlight}:</span> {entry.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
 
-      {education.length > 0 && (
-        <section class='mt-7'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Education</h2>
-          <div class='mt-3 space-y-5'>
-            {education.map((item) => (
-              <article>
-                <div class='flex flex-wrap items-baseline justify-between gap-2'>
-                  <h3 class='text-base font-semibold'>
-                    {item.degree} | {item.name}
-                  </h3>
-                  <p class='text-sm'>{item.date}</p>
-                </div>
-                {item.list.length > 0 && (
-                  <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
-                    {item.list.map((entry) => (
-                      <li>
-                        <span class='font-semibold'>{entry.title}:</span> {entry.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {certifications.length > 0 && (
-        <section class='mt-7'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Certifications</h2>
-          <div class='mt-3 space-y-5'>
-            {certifications.map((item) => (
-              <article>
-                <h3 class='text-base font-semibold'>{item.name}</h3>
+    {certifications.length > 0 && (
+      <section class='mt-7'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Certifications</h2>
+        <div class='mt-3 space-y-5'>
+          {certifications.map((item) => (
+            <article>
+              <h3 class='text-base font-semibold'>{item.name ?? 'Certification'}</h3>
+              {item.url && (
                 <p class='mt-1 text-sm leading-6'>
                   <span class='font-semibold'>Credential:</span>{' '}
                   <a class='underline decoration-slate-400 underline-offset-2' href={item.url}>
                     {item.url}
                   </a>
                 </p>
-                {item.list.length > 0 && (
-                  <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
-                    {item.list.map((entry) => (
-                      <li>
-                        <span class='font-semibold'>{entry.title}:</span> {entry.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+              )}
+              {item.list?.items && item.list.items.length > 0 && (
+                <ul class='mt-2 list-disc space-y-1 pl-5 text-sm leading-6'>
+                  {item.list.items.map((entry) => (
+                    <li>
+                      <span class='font-semibold'>{entry.highlight}:</span> {entry.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
 
-      {languages.length > 0 && (
-        <section class='mt-7 flex items-center'>
-          <h2 class='text-base font-semibold uppercase tracking-wider'>Languages:</h2>
-          <p class='pl-2 text-sm leading-6'>
-            {languages.map((item) => item.name).join(' | ')}
-          </p>
-        </section>
-      )}
-    </main>
-  </body>
+    {languages.length > 0 && (
+      <section class='mt-7 flex items-center'>
+        <h2 class='text-base font-semibold uppercase tracking-wider'>Languages:</h2>
+        <p class='pl-2 text-sm leading-6'>
+          {languages.map((item) => item.name).join(' | ')}
+        </p>
+      </section>
+    )}
+  </main>
+</body>
 </html>

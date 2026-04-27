@@ -21,18 +21,16 @@ class CreateGithubProfileUseCase extends mdUtilsMixin(BaseClass) {
 
   private getHeader({ devsync }: { devsync: DevsyncPartial }) {
     let md = ''
-    //first let's create the header
-    md += `# ${devsync.jobTitle} | ${devsync.name}\n\n`
-    md += `Status: ${devsync.status?.badge}\n\n`
-    md += devsync.description + '\n\n'
+    md += `# ${devsync.jobTitle ?? 'Professional'} | ${devsync.name ?? 'Name'}\n\n`
+    md += `Status: ${devsync.status?.badge ?? 'Active'}\n\n`
+    md += `${devsync.description ?? ''}\n\n`
 
-    // here badges goes this way: social media then certifications badge(with url to md with the details - built from certifications field)
     for (const socialMedia of devsync.socialMedia ?? []) {
       md += `[${socialMedia.mdBadge}](${socialMedia.url})`
     }
     md += this.badgeWithLink({
       badge: academicsBadge,
-      link: `https://github.com/${devsync.githubUserName}/${devsync.githubUserName}/tree/main/academics`,
+      link: `https://github.com/${devsync.githubUserName ?? ''}/${devsync.githubUserName ?? ''}/tree/main/academics`,
     })
 
     for (const lang of devsync.languages ?? []) {
@@ -44,31 +42,29 @@ class CreateGithubProfileUseCase extends mdUtilsMixin(BaseClass) {
 
   private getExperienceSection({ devsync }: { devsync: DevsyncPartial }) {
     let md = ''
-    // then experience section
     md += '## Experience \n\n'
     md += '<table>'
 
     for (const ex of devsync.experience ?? []) {
       const links = this.getLinks({ links: ex.links })
-      const listItems = this.getListItems({ items: ex.list.items })
+      const listItems = ex.list?.items ? this.getListItems({ items: ex.list.items }) : ''
       const skills = this.getSkills({ skills: ex.skills })
 
-      md += ` 
-<tr>
-  <td>
-    <h3>${ex.company}</h3>
-
+      md += `
+      <tr>
+        <td>
+          <h3>${ex.company ?? 'Company'}</h3>
 ${links}
-    <p>${ex.description}</p>
-    ${ex.list.title}
-    <ul>
-      ${listItems}
-    </ul>
-    </br>
+          <p>${ex.description ?? ''}</p>
+          ${ex.list?.title ?? ''}
+          <ul>
+            ${listItems}
+          </ul>
+          </br>
 ${skills}
-  </td>
-  ${this.getTdImg({ img: ex.img, link: ex.web, alt: ex.company })}
-</tr>`
+        </td>
+        ${this.getTdImg({ img: ex.img ?? '', link: ex.web ?? '#', alt: ex.company ?? 'Company' })}
+      </tr>`
     }
     md += '</table> \n\n'
 
@@ -77,31 +73,29 @@ ${skills}
 
   private getProjectsSection({ devsync }: { devsync: DevsyncPartial }) {
     let md = ''
-    //then projects sections
     md += '## Projects \n\n'
     md += '<table>'
 
     for (const proj of devsync.projects ?? []) {
       const links = this.getLinks({ links: proj.links })
-      const listItems = this.getListItems({ items: proj.list.items })
+      const listItems = proj.list?.items ? this.getListItems({ items: proj.list.items }) : ''
       const skills = this.getSkills({ skills: proj.skills })
 
       md += `
-<tr>
-  <td>
-    <h3>${proj.name}</h3>
-    
+      <tr>
+        <td>
+          <h3>${proj.name ?? 'Project'}</h3>
 ${links}
-    <p>${proj.description}</p>
-    ${proj.list.title}
-    <ul>
-      ${listItems}
-    </ul>
-    </br>
+          <p>${proj.description ?? ''}</p>
+          ${proj.list?.title ?? ''}
+          <ul>
+            ${listItems}
+          </ul>
+          </br>
 ${skills}
-  </td>
-  ${this.getTdImg({ img: proj.img, link: proj.web, alt: proj.name })}
-</tr>`
+        </td>
+        ${this.getTdImg({ img: proj.img ?? '', link: proj.web ?? '#', alt: proj.name ?? 'Project' })}
+      </tr>`
     }
 
     md += '</table> \n\n'

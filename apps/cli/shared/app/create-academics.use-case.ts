@@ -1,7 +1,6 @@
 import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
 
-// academics md contains education and certifications fields.
 class BaseClass {}
 
 class CreateAcademicsUseCase extends mdUtilsMixin(BaseClass) {
@@ -22,26 +21,24 @@ class CreateAcademicsUseCase extends mdUtilsMixin(BaseClass) {
     md += '# Academics \n\n'
     md += '<table>'
 
-    // education timeline
     for (const ed of devsync.education ?? []) {
       const links = this.getLinks({ links: ed.links })
-      const listItems = this.getListItems({ items: ed.list.items })
+      const listItems = ed.list?.items ? this.getListItems({ items: ed.list.items }) : ''
 
       md += `
-<tr>
-  <td>
-    <h3>${ed.degree} | ${ed.date}</h3>
-
+      <tr>
+        <td>
+          <h3>${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>
 ${links}
-    <br>
-    ${ed.list.title}
-    <ul>
-      ${listItems}
-    </ul>
-    </br>
-  </td>
-  ${this.getTdImg({ img: ed.img, link: '#', alt: ed.degree })}
-</tr>`
+          <br>
+          ${ed.list?.title ?? ''}
+          <ul>
+            ${listItems}
+          </ul>
+          </br>
+        </td>
+        ${this.getTdImg({ img: ed.img ?? '', link: '#', alt: ed.degree ?? 'Degree' })}
+      </tr>`
     }
 
     md += '</table> \n\n'
@@ -55,24 +52,23 @@ ${links}
     md += '## Certifications \n\n'
     md += '<table>'
 
-    // certifications
     for (const cert of devsync.certifications ?? []) {
-      const listItems = this.getListItems({ items: cert.list.items })
+      const listItems = cert.list?.items ? this.getListItems({ items: cert.list.items }) : ''
       const skills = this.getSkills({ skills: cert.skills })
 
       md += `
       <tr>
-  <td>
-    <h3>${cert.name}</h3>
-    ${cert.list.title}
-    <ul>
-      ${listItems}
-    </ul>
-    </br>\n
+        <td>
+          <h3>${cert.name ?? 'Certification'}</h3>
+          ${cert.list?.title ?? ''}
+          <ul>
+            ${listItems}
+          </ul>
+          </br>
 ${skills}
-  </td>
-  <td> <a href="${cert.url}" target="_blank">View Certificate</a> </td>
-</tr>`
+        </td>
+        <td> <a href="${cert.url ?? '#'}" target="_blank">View Certificate</a> </td>
+      </tr>`
     }
 
     md += '</table> \n\n'

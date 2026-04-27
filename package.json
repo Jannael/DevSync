@@ -2,43 +2,40 @@
   "name": "devsync",
   "version": "develop version",
   "private": false,
-  "type": "module",
   "description": "One file to keep your portfolio, CV, Github and linkedin in sync",
+  "keywords": [
+    "cv",
+    "github",
+    "linkedin",
+    "portfolio",
+    "sync"
+  ],
+  "homepage": "https://devsync.work",
+  "bugs": {
+    "url": "https://github.com/jannael/devsync/issues"
+  },
   "license": "CC-BY-NC-4.0",
-  "bin": {
-    "devsync": "apps/cli/index.ts"
+  "author": {
+    "name": "Jannael",
+    "url": "https://github.com/jannael"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Jannael/devsync.git"
   },
-  "author": {
-    "name": "Jannael",
-    "url": "https://github.com/jannael"
+  "bin": {
+    "devsync": "apps/cli/index.ts"
   },
-  "homepage": "https://devsync.work",
-  "bugs": {
-    "url": "https://github.com/jannael/devsync/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "portfolio",
-    "cv",
-    "github",
-    "linkedin",
-    "sync"
-  ],
   "files": [
     "dist",
     "apps/portfolio/DEVSYNC.json"
   ],
+  "type": "module",
   "exports": {
     ".": "./apps/cli/index.ts"
   },
-  "engines": {
-    "bun": ">=1.0.0"
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "bun build ./apps/cli/index.ts --outfile=./dist/index.js --target=bun",
@@ -48,6 +45,9 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
   },
+  "dependencies": {
+    "puppeteer": "24.42.0"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "oxfmt": "0.46.0",
@@ -56,7 +56,7 @@
   "peerDependencies": {
     "typescript": "5"
   },
-  "dependencies": {
-    "puppeteer": "24.42.0"
+  "engines": {
+    "bun": ">=1.0.0"
   }
 }

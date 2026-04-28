@@ -7,7 +7,7 @@ import { ServerError } from '@/error/error-instance'
 
 class BaseRepo {}
 
-class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepository {
+class BuildRepositoryImpl extends readFileMixin(BaseRepo) implements IBuildRepository {
   async copyTemplate(): Promise<void> {
     try {
       const entries = await readdir(TEMPLATE_DIRECTORY, { withFileTypes: true })
@@ -27,7 +27,5 @@ class BuildRepository extends readFileMixin(BaseRepo) implements IBuildRepositor
     }
   }
 }
-
-export const BuildRepositoryImpl = readFileMixin(BuildRepository)
 
 export default BuildRepositoryImpl

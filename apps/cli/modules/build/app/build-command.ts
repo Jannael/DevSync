@@ -3,10 +3,7 @@ import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { BOLD, GREEN } from '@/utils/colors'
-import { writeFileMixin } from '@/shared/infra/write-file'
-import { createPDFMixin } from '@/shared/infra/create-pdf'
-import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-component'
+import { BOLD } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
@@ -24,13 +21,7 @@ class BaseBuildCommand {}
 
 class BuildCommand extends createCVMixin(
   CreateLinkedinMixin(
-    CreateAcademicsMixin(
-      CreateGithubProfileMixin(
-        writeFileMixin(
-          createPDFMixin(getHTMLFromCVComponentMixin(validateDevsyncMixin(BaseBuildCommand))),
-        ),
-      ),
-    ),
+    CreateAcademicsMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseBuildCommand))),
   ),
 ) {
   constructor(private readonly copyTemplateUseCase: copyTemplateUseCase) {
@@ -40,7 +31,7 @@ class BuildCommand extends createCVMixin(
   async execute(): Promise<void> {
     try {
       const devsync = await this.validateDevsync()
-      await this.copyTemplate()
+      await this.copyTemplateUseCase.copyTemplate()
       await this.buildCV()
       await this.createGithubProfile({ devsync })
       await this.createAcademics({ devsync })
@@ -50,13 +41,6 @@ class BuildCommand extends createCVMixin(
     } catch (e) {
       errorHandler(e)
     }
-  }
-
-  private async copyTemplate() {
-    console.log(`${SPACE}${GREEN('1.')} Copying template files...`)
-    await this.copyTemplateUseCase.execute()
-    console.log(`${SPACE}${CHECK('Template ready.')}`)
-    console.log('')
   }
 }
 

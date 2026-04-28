@@ -1,7 +1,6 @@
 import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD } from '@/utils/colors'
-import { writeFileMixin } from '@/shared/infra/write-file'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
@@ -21,9 +20,7 @@ class BaseUpdateCommand {}
 
 class UpdateCommand extends CreateLinkedinMixin(
   CreateAcademicsMixin(
-    createCVMixin(
-      CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand))),
-    ),
+    createCVMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseUpdateCommand))),
   ),
 ) {
   constructor() {

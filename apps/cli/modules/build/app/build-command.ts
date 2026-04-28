@@ -1,7 +1,7 @@
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
 import { pathAcademics, pathCvPDF, pathREADME, pathLinkedin } from '@/constants/paths'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
-import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
+import createAcademicsUseCase from '@/shared/app/create-academics'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'

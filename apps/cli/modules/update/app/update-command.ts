@@ -1,6 +1,5 @@
-import { pathAcademics, pathLinkedin } from '@/constants/paths'
+import { pathLinkedin } from '@/constants/paths'
 import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
-import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
@@ -9,6 +8,7 @@ import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { createCVMixin } from '@/shared/app/build-cv'
+import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 
 /*
 IMPORTANT: the portfolio must have a github action to run `devsync update` every time the users pushes to main branch.
@@ -21,13 +21,10 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 
 class BaseUpdateCommand {}
 
-class UpdateCommand extends createCVMixin(
-  CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand))),
+class UpdateCommand extends CreateAcademicsMixin(createCVMixin(
+  CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand)))),
 ) {
-  constructor(
-    private readonly createAcademicsUseCase: createAcademicsUseCase,
-    private readonly createLinkedinUseCase: createLinkedinUseCase,
-  ) {
+  constructor(private readonly createLinkedinUseCase: createLinkedinUseCase) {
     super()
   }
 
@@ -43,15 +40,6 @@ class UpdateCommand extends createCVMixin(
     } catch (e) {
       errorHandler(e)
     }
-  }
-
-  private async createAcademics({ devsync }: { devsync: DevsyncPartial }) {
-    console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
-    // create certifications md
-    const academics = await this.createAcademicsUseCase.execute({ devsync })
-    await this.writeFile({ path: pathAcademics, data: academics })
-    console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(pathAcademics)}`)}`)
-    console.log('')
   }
 
   private async createLinkedin({ devsync }: { devsync: DevsyncPartial }) {

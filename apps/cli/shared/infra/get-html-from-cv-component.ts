@@ -15,9 +15,9 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
       if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
         throw new NotFound(
           'Package.json not found',
-          `${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n
-          ${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')}\n
-          ${GREEN('3.')} Run ${BOLD('devsync build')}\n`,
+          `${SPACE}${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n` +
+            `${SPACE}${SPACE}${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')} with your information\n` +
+            `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`,
         )
       }
 

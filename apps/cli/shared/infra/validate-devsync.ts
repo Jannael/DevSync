@@ -18,8 +18,8 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
         throw new ServerError(
           'Failed to read DEVSYNC.json',
           `${SPACE}${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n` +
-          `${SPACE}${SPACE}${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')} with your information\n` +
-          `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`,
+            `${SPACE}${SPACE}${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')} with your information\n` +
+            `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`,
         )
       }
 

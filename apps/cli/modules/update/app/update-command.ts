@@ -35,7 +35,7 @@ class UpdateCommand extends CreateLinkedinMixin(
       await this.createAcademics({ devsync })
       await this.createLinkedin({ devsync })
 
-      console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
+      console.log(`${SPACE}${CHECK(`${BOLD('Updated successfully.')}`)}`)
     } catch (e) {
       errorHandler(e)
     }

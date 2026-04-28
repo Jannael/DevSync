@@ -29,7 +29,7 @@ export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
         md += `
       <tr>
         <td>
-          <h3>${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>\n
+          <h3>${ed.name ?? 'Name'} | ${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>\n
 ${links}
           <br>
           ${ed.list?.title.length > 1 ? ed.list?.title : MD_SEPARATOR}

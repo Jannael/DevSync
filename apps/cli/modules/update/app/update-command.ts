@@ -1,4 +1,3 @@
-import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
 import { pathAcademics, pathCvPDF, pathREADME, pathLinkedin } from '@/constants/paths'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
@@ -13,21 +12,20 @@ import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import type { DevsyncPartial } from '@template/src/devsync-validator'
 
 /*
-To build the project this is how it works
-1. Copy the template in the current directory (portfolio), where the DEVSYNC.json is.
-2. Compile CV.astro component to static html.
-3. Use puppeteer to convert the static html to pdf (CV).
-4. Create README.md (Github Profile).
-5. Create LinkedIn.md (LinkedIn Profile).
+IMPORTANT: the portfolio must have a github action to run `devsync update` every time the users pushes to main branch.
+
+Devsync update:
+since the user should be able to change the style of cv and portfolio, update function won't modify or update the portfolio where the cv component is. Only will update Linkedin.md, README.md and create the CV pdf file.
+
+The idea is the user to deploy his portfolio with vercel or cloudflare or netlify or any of those serverless providers, so when the user makes a push to the repo the provider will build and deploy the portfolio automatically. Like this everything is covered, portfolio, CV(will only create the pdf file not the cv component), Linkedin.md and README.md (these two will be overwritten).
 */
 
-class BaseBuildCommand {}
+class BaseUpdateCommand {}
 
-class BuildCommand extends writeFileMixin(
-  createPDFMixin(getHTMLFromCVComponentMixin(validateDevsyncMixin(BaseBuildCommand))),
+class UpdateCommand extends writeFileMixin(
+  createPDFMixin(getHTMLFromCVComponentMixin(validateDevsyncMixin(BaseUpdateCommand))),
 ) {
   constructor(
-    private readonly copyTemplateUseCase: copyTemplateUseCase,
     private readonly createGithubProfileUseCase: createGithubProfileUseCase,
     private readonly createAcademicsUseCase: createAcademicsUseCase,
     private readonly createLinkedinUseCase: createLinkedinUseCase,
@@ -38,7 +36,6 @@ class BuildCommand extends writeFileMixin(
   async execute(): Promise<void> {
     try {
       const devsync = await this.validateDevsync()
-      await this.copyTemplate()
       await this.buildCV()
       await this.createGithubProfile({ devsync })
       await this.createAcademics({ devsync })
@@ -50,15 +47,8 @@ class BuildCommand extends writeFileMixin(
     }
   }
 
-  private async copyTemplate() {
-    console.log(`${SPACE}${GREEN('1.')} Copying template files...`)
-    await this.copyTemplateUseCase.execute()
-    console.log(`${SPACE}${CHECK('Template ready.')}`)
-    console.log('')
-  }
-
   private async buildCV() {
-    console.log(`${SPACE}${GREEN('2.')} Building CV and generating PDF...`)
+    console.log(`${SPACE}${GREEN('1.')} Building CV and generating PDF...`)
     const html = await this.getHTMLFromCvComponent()
     await this.createPDF({ html, path: pathCvPDF })
     console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathCvPDF)}`)}`)
@@ -91,4 +81,4 @@ class BuildCommand extends writeFileMixin(
   }
 }
 
-export default BuildCommand
+export default UpdateCommand

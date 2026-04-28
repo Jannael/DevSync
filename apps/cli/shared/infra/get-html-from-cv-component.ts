@@ -9,7 +9,7 @@ import { NotFound, ServerError } from '@/error/error-instance'
 // Mixins pattern for shared infrastructure code
 export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
-    async getHTMLFromComponent(): Promise<string> {
+    async getHTMLFromCvComponent(): Promise<string> {
       if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
         throw new NotFound('Package.json not found')
       }

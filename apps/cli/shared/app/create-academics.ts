@@ -9,7 +9,7 @@ import { pathAcademics } from '@/constants/paths'
 
 export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends mdUtilsMixin(writeFileMixin(Base)) {
-    async createAcademicsMd({ devsync }: { devsync: DevsyncPartial }) {
+    private async createAcademicsMd({ devsync }: { devsync: DevsyncPartial }) {
       let md = ''
       md += this.getEducationTimeline({ devsync })
       md += this.getCertifications({ devsync })

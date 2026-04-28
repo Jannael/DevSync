@@ -10,7 +10,7 @@ import type { GConstructor } from '../infra/mixin-constructor'
 
 export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends writeFileMixin(mdUtilsMixin(Base)) {
-    async createGithubProfileMd({ devsync }: { devsync: DevsyncPartial }) {
+    private async createGithubProfileMd({ devsync }: { devsync: DevsyncPartial }) {
       let md = ''
 
       md += this.getHeader({ devsync })

@@ -1,5 +1,5 @@
-import { pathAcademics, pathREADME, pathLinkedin } from '@/constants/paths'
-import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
+import { pathAcademics, pathLinkedin } from '@/constants/paths'
+import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
 import createAcademicsUseCase from '@/shared/app/create-academics.use-case'
 import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
@@ -8,7 +8,7 @@ import { writeFileMixin } from '@/shared/infra/write-file'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import type { DevsyncPartial } from '@template/src/devsync-validator'
-import { createCVMixin } from '@/shared/app/build-cv.use-case'
+import { createCVMixin } from '@/shared/app/build-cv'
 
 /*
 IMPORTANT: the portfolio must have a github action to run `devsync update` every time the users pushes to main branch.
@@ -21,9 +21,10 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 
 class BaseUpdateCommand {}
 
-class UpdateCommand extends writeFileMixin(createCVMixin(validateDevsyncMixin(BaseUpdateCommand))) {
+class UpdateCommand extends createCVMixin(
+  CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand))),
+) {
   constructor(
-    private readonly createGithubProfileUseCase: createGithubProfileUseCase,
     private readonly createAcademicsUseCase: createAcademicsUseCase,
     private readonly createLinkedinUseCase: createLinkedinUseCase,
   ) {
@@ -42,14 +43,6 @@ class UpdateCommand extends writeFileMixin(createCVMixin(validateDevsyncMixin(Ba
     } catch (e) {
       errorHandler(e)
     }
-  }
-
-  private async createGithubProfile({ devsync }: { devsync: DevsyncPartial }) {
-    console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
-    const README = await this.createGithubProfileUseCase.execute({ devsync })
-    await this.writeFile({ path: pathREADME, data: README })
-    console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)
-    console.log('')
   }
 
   private async createAcademics({ devsync }: { devsync: DevsyncPartial }) {

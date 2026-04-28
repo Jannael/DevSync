@@ -1,114 +1,114 @@
 {
-  "name": "Camila Torres",
-  "description": "Full-stack engineer focused on building scalable developer tools and reliable web platforms with clean UX and strong performance.",
-  "img": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80",
-  "jobTitle": "Senior Full-Stack Engineer",
+  "name": "Your Full Name",
+  "description": "Write a short professional summary about yourself. Example: Full-stack developer focused on developer experience, performance, and product quality.",
+  "img": "https://your-image-url.com/profile-photo.jpg",
+  "jobTitle": "Your Current Job Title",
   "status": {
-    "status": "open-to-work",
-    "badge": "![Open to work](https://img.shields.io/badge/Status-Open%20to%20Work-22c55e)"
+    "status": "your-status",
+    "badge": "![Status](https://img.shields.io/badge/Status-Your%20Status-blue)"
   },
-  "githubUserName": "camilatorres-dev",
+  "githubUserName": "your-github-username",
   "socialMedia": [
     {
-      "name": "Github",
-      "url": "https://github.com/camilatorres-dev",
-      "icon": "https://cdn.simpleicons.org/github",
-      "mdBadge": "![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)"
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/your-linkedin-handle",
+      "icon": "https://cdn.simpleicons.org/linkedin",
+      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
     }
   ],
   "languages": [
     {
-      "name": "Spanish / English",
-      "mdBadge": "![Spanish-English](https://img.shields.io/badge/Languages-Spanish%20%7C%20English-1f6feb)",
+      "name": "Your Language 1 / Your Language 2",
+      "mdBadge": "![Languages](https://img.shields.io/badge/Languages-Your%20Languages-1f6feb)",
       "icon": "https://cdn.simpleicons.org/googletranslate"
     }
   ],
   "experience": [
     {
-      "company": "Nexa Platform",
-      "position": "Senior Full-Stack Engineer",
-      "img": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=900&q=80",
-      "web": "https://nexa-platform.example.com",
-      "description": "Led backend and frontend modernization for a SaaS analytics platform used by distributed product teams.",
-      "date": "03/22 - Present",
+      "company": "Your Company Name",
+      "position": "Your Position Title",
+      "img": "https://your-image-url.com/company-image.jpg",
+      "web": "https://your-company-website.com",
+      "description": "Describe your role and impact in one concise sentence.",
+      "date": "MM/YY - Present",
       "links": [
         {
-          "name": "Product Website",
-          "url": "https://nexa-platform.example.com",
-          "mdBadge": "![Nexa Platform](https://img.shields.io/badge/Nexa-Platform-0ea5e9)",
+          "name": "Company Website",
+          "url": "https://your-company-website.com",
+          "mdBadge": "![Company](https://img.shields.io/badge/Company-Website-0ea5e9)",
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
       "list": {
-        "title": "key-responsibilities",
+        "title": "key-achievements",
         "items": [
           {
-            "highlight": "Platform performance",
-            "description": "Reduced p95 API latency from 760ms to 230ms by adding cache layers and optimizing PostgreSQL queries."
+            "highlight": "Achievement headline",
+            "description": "Describe one measurable result you delivered (performance, revenue, growth, reliability, etc.)."
           }
         ]
       },
       "skills": [
         {
-          "name": "Node.js",
-          "mdBadge": "![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)",
-          "icon": "https://cdn.simpleicons.org/nodedotjs"
+          "name": "Your Key Skill",
+          "mdBadge": "![Skill](https://img.shields.io/badge/Skill-Your%20Skill-339933)",
+          "icon": "https://cdn.simpleicons.org/codeforces"
         }
       ]
     }
   ],
   "projects": [
     {
-      "name": "Sprint Pulse",
-      "img": "https://images.unsplash.com/photo-1551281044-8b9a0b7f67c3?auto=format&fit=crop&w=1000&q=80",
-      "web": "https://sprint-pulse-demo.vercel.app",
+      "name": "Your Project Name",
+      "img": "https://your-image-url.com/project-image.jpg",
+      "web": "https://your-project-url.com",
       "links": [
         {
           "name": "GitHub",
-          "url": "https://github.com/camilatorres-dev/sprint-pulse",
+          "url": "https://github.com/your-github-username/your-project-repo",
           "mdBadge": "![GitHub Repo](https://img.shields.io/badge/Repo-GitHub-181717?logo=github&logoColor=white)",
           "icon": "https://cdn.simpleicons.org/github"
         }
       ],
-      "description": "A real-time engineering dashboard for delivery metrics, release signals, and incident summaries.",
+      "description": "Describe what the project does and why it matters.",
       "list": {
-        "title": "project-impact",
+        "title": "project-highlights",
         "items": [
           {
-            "highlight": "Realtime collaboration",
-            "description": "Implemented websocket updates with resilient reconnect logic to keep dashboards synchronized for remote teams."
+            "highlight": "Technical highlight",
+            "description": "Describe one concrete technical decision or outcome from this project."
           }
         ]
       },
       "skills": [
         {
-          "name": "React",
-          "mdBadge": "![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)",
-          "icon": "https://cdn.simpleicons.org/react"
+          "name": "Project Skill",
+          "mdBadge": "![Skill](https://img.shields.io/badge/Skill-Project%20Skill-61DAFB)",
+          "icon": "https://cdn.simpleicons.org/git"
         }
       ]
     }
   ],
   "education": [
     {
-      "name": "Tecnologico de Monterrey",
-      "degree": "B.S. in Software Engineering",
-      "img": "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=80",
-      "date": "08/14 - 06/19",
+      "name": "Your University or Institution",
+      "degree": "Your Degree / Program",
+      "img": "https://your-image-url.com/education-image.jpg",
+      "date": "MM/YY - MM/YY",
       "links": [
         {
-          "name": "Program Details",
-          "url": "https://tec.mx/en/engineering-and-sciences",
-          "mdBadge": "![Software Engineering](https://img.shields.io/badge/Software-Engineering-b45309)",
+          "name": "Program URL",
+          "url": "https://your-program-link.com",
+          "mdBadge": "![Program](https://img.shields.io/badge/Program-Details-b45309)",
           "icon": "https://cdn.simpleicons.org/googlechrome"
         }
       ],
       "list": {
-        "title": "academic-highlights",
+        "title": "education-highlights",
         "items": [
           {
-            "highlight": "Capstone project",
-            "description": "Built a campus scheduling platform with role-based permissions and calendar synchronization."
+            "highlight": "Academic highlight",
+            "description": "Describe a relevant course, thesis, capstone, or achievement."
           }
         ]
       }
@@ -116,22 +116,22 @@
   ],
   "certifications": [
     {
-      "name": "AWS Certified Developer - Associate",
-      "url": "https://www.credly.com/badges/aws-developer-associate-example",
+      "name": "Your Certification Name",
+      "url": "https://your-certification-url.com",
       "list": {
-        "title": "validated-skills",
+        "title": "what-this-validates",
         "items": [
           {
-            "highlight": "Serverless architecture",
-            "description": "Designed event-driven services with Lambda, API Gateway, and secure IAM-based deployments."
+            "highlight": "Validated area",
+            "description": "Describe what this certification validates for your profile."
           }
         ]
       },
       "skills": [
         {
-          "name": "AWS",
-          "mdBadge": "![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white)",
-          "icon": "https://cdn.simpleicons.org/amazonwebservices"
+          "name": "Certification Skill",
+          "mdBadge": "![Certification Skill](https://img.shields.io/badge/Skill-Certification-232F3E)",
+          "icon": "https://cdn.simpleicons.org/coursera"
         }
       ]
     }

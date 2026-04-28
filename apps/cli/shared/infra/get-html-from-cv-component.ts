@@ -5,13 +5,20 @@ import { runBunCommand } from '@/utils/run-bun-command'
 import { CWD_PACKAGE_JSON_PATH, CV_ROUTE_OUTPUT_PATH } from '@/constants/paths'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { NotFound, ServerError } from '@/error/error-instance'
+import { SPACE } from '@/utils/icons-terminal'
+import { BOLD, GREEN } from '@/utils/colors'
 
 // Mixins pattern for shared infrastructure code
 export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
     async getHTMLFromCvComponent(): Promise<string> {
       if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
-        throw new NotFound('Package.json not found')
+        throw new NotFound(
+          'Package.json not found',
+          `${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n
+          ${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')}\n
+          ${GREEN('3.')} Run ${BOLD('devsync build')}\n`,
+        )
       }
 
       if (!existsSync(resolve(process.cwd(), 'node_modules'))) {

@@ -1,14 +1,12 @@
-import { pathLinkedin } from '@/constants/paths'
 import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
-import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { BOLD, GREEN } from '@/utils/colors'
+import { BOLD } from '@/utils/colors'
 import { writeFileMixin } from '@/shared/infra/write-file'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
-import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { createCVMixin } from '@/shared/app/build-cv'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
+import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
 
 /*
 IMPORTANT: the portfolio must have a github action to run `devsync update` every time the users pushes to main branch.
@@ -21,10 +19,14 @@ The idea is the user to deploy his portfolio with vercel or cloudflare or netlif
 
 class BaseUpdateCommand {}
 
-class UpdateCommand extends CreateAcademicsMixin(createCVMixin(
-  CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand)))),
+class UpdateCommand extends CreateLinkedinMixin(
+  CreateAcademicsMixin(
+    createCVMixin(
+      CreateGithubProfileMixin(writeFileMixin(validateDevsyncMixin(BaseUpdateCommand))),
+    ),
+  ),
 ) {
-  constructor(private readonly createLinkedinUseCase: createLinkedinUseCase) {
+  constructor() {
     super()
   }
 
@@ -40,14 +42,6 @@ class UpdateCommand extends CreateAcademicsMixin(createCVMixin(
     } catch (e) {
       errorHandler(e)
     }
-  }
-
-  private async createLinkedin({ devsync }: { devsync: DevsyncPartial }) {
-    console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
-    const linkedin = await this.createLinkedinUseCase.execute({ devsync })
-    await this.writeFile({ path: pathLinkedin, data: linkedin })
-    console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin)}`)}`)
-    console.log('')
   }
 }
 

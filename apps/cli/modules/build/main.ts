@@ -2,7 +2,7 @@ import BuildCommand from './app/build-command'
 import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
 import createGithubProfileUseCase from '@/shared/app/create-github-profile.use-case'
 import createAcademicsUseCase from '@/shared/app/create-academics'
-import createLinkedinUseCase from '@/shared/app/create-linkedin.use-case'
+import createLinkedinUseCase from '@/shared/app/create-linkedin'
 import BuildRepositoryImpl from '@/modules/build/infra/build-repository'
 
 export default async function build() {

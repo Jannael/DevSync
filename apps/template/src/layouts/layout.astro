@@ -112,9 +112,9 @@ const structuredData = {
 			const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
 			const theme = localStorageTheme ? localStorageTheme : matchMedia.matches ? 'dark' : 'light'
 
-			// if (theme === 'dark') {
-			// 	document.documentElement.classList.toggle('dark')
-			// }
+			if (theme === 'dark') {
+				document.documentElement.classList.toggle('dark')
+			}
 			
 			matchMedia.addEventListener('change', () => {
 				document.documentElement.classList.toggle('dark')

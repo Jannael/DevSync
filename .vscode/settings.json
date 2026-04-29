@@ -2,5 +2,8 @@
   "oxc.fmt.configPath": ".oxfmtrc.json",
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
-  "cSpell.words": ["devsync", "jannael"]
+  "cSpell.words": ["devsync", "jannael"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }

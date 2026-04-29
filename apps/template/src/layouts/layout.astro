@@ -71,7 +71,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -106,8 +106,23 @@ const structuredData = {
 		<meta property="og:image:height" content="1254" />
 		
 		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+		<script>
+			const localStorageTheme = localStorage.getItem('theme')
+			const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
+			const theme = localStorageTheme ? localStorageTheme : matchMedia.matches ? 'dark' : 'light'
+
+			if (theme === 'dark') {
+				document.documentElement.classList.toggle('dark')
+			}
+			
+			matchMedia.addEventListener('change', () => {
+				document.documentElement.classList.toggle('dark')
+			})
+		</script>
+
 	</head>
-	<body class="min-h-screen max-w-9xl m-auto">
+	<body class="min-h-screen max-w-9xl m-auto bg-main">
 		<main>
 			<slot />
 		</main>

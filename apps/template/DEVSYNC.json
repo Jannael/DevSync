@@ -3,6 +3,7 @@
   "description": "Write a short professional summary about yourself. Example: Full-stack developer focused on developer experience, performance, and product quality.",
   "img": "https://your-image-url.com/profile-photo.jpg",
   "jobTitle": "Your Current Job Title",
+  "site": "https://devsync.work",
   "status": {
     "status": "your-status",
     "badge": "![Status](https://img.shields.io/badge/Status-Your%20Status-blue)"

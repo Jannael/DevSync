@@ -72,6 +72,7 @@ export const devsyncSchema = z.object({
   name: z.string({ message: 'Name is required' }),
   description: z.string({ message: 'Description is required' }),
   img: z.string({ message: 'Image is required' }),
+  site: z.string({ message: 'Site is required' }),
   status: z.object({
     status: z.string({ message: 'Status is required' }),
     badge: z.string({ message: 'Badge is required' }),

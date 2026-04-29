@@ -26,16 +26,19 @@ bun run preview # Preview build
 ## Code Style
 
 ### Formatter (oxfmt) - `.oxfmtrc.json`
+
 - **Single quotes**: `true` (use `'` not `"`)
 - **Semicolons**: `false` (no trailing semicolons)
 - **Ignore patterns**: `*.js`
 
 ### Linter (oxlint) - `.oxlintrc.json`
+
 - **Plugins**: `typescript`, `unicorn`, `oxc`
 - **Category**: `correctness` set to `error`
 - **Env**: `builtin` enabled (Node.js globals)
 
 ### TypeScript (tsconfig.json)
+
 - `strict: true`, `noImplicitOverride: true`, `noUncheckedIndexedAccess: true`
 - `verbatimModuleSyntax: true` (use `import type` for type-only imports)
 - `moduleResolution: bundler`, `module: Preserve`
@@ -57,13 +60,13 @@ import type { DevsyncPartial } from '@template/src/devsync-validator'
 
 ## Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Files | kebab-case | `error-instance.ts`, `md-utils.ts` |
-| Functions/variables | camelCase | `createGithubProfile`, `devsync` |
-| Types/Classes | PascalCase | `CreateGithubProfileMixin`, `ServerError` |
-| Constants | SCREAMING_SNAKE_CASE | `AVAILABLE_COMMANDS` |
-| Error type unions | PascalCase prefix + descriptive | `INotFound`, `IServerError` |
+| Element             | Convention                      | Example                                   |
+| ------------------- | ------------------------------- | ----------------------------------------- |
+| Files               | kebab-case                      | `error-instance.ts`, `md-utils.ts`        |
+| Functions/variables | camelCase                       | `createGithubProfile`, `devsync`          |
+| Types/Classes       | PascalCase                      | `CreateGithubProfileMixin`, `ServerError` |
+| Constants           | SCREAMING_SNAKE_CASE            | `AVAILABLE_COMMANDS`                      |
+| Error type unions   | PascalCase prefix + descriptive | `INotFound`, `IServerError`               |
 
 ---
 
@@ -89,6 +92,7 @@ Error instances: `apps/cli/error/error-instance.ts`
 ## Architecture
 
 ### CLI App (`apps/cli`)
+
 - `index.ts` - Entrypoint
 - `commands.ts` - Command declarations
 - `commands-fn.ts` - Handler mappings
@@ -100,9 +104,13 @@ Error instances: `apps/cli/error/error-instance.ts`
 - `constants/` - Constants (paths, badges)
 
 ### Template App (`apps/template`)
+
 - `src/devsync.ts` - Zod schema validation, typed data export
+- `src/devsync-validator.ts` - DEVSYNC.json type definitions
+- `src/layouts/layout.astro` - SEO-optimized layout with dynamic metadata from DEVSYNC.json
 - `src/pages/cv.astro` - ATS-oriented CV renderer
 - `src/pages/index.astro` - Landing page
+- `DEVSYNC.json` - Source of truth for portfolio/CV/LinkedIn/GitHub data
 
 ---
 

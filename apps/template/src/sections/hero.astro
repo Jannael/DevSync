@@ -4,6 +4,7 @@ import devsync from '@/devsync'
 import { defaultLang } from '@/devsync'
 import LangSwitcher from '@/sections/lang-switcher.astro'
 import ThemeSwitcher from '@/sections/theme-switcher.astro'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 const lang = (Astro.params.lang || defaultLang).toLowerCase()
 const profile = devsync[lang] ?? devsync[defaultLang]
@@ -25,6 +26,7 @@ const profile = devsync[lang] ?? devsync[defaultLang]
             {devsync.socialMedia.map((social) => (
               <Badge name={social.name} url={social.url} icon={social.icon} />
             ))}
+            <Badge name="cv" url={getRelativeLocaleUrl(lang, 'cv')} icon="/icons/cv.svg" />
           </ul>
         )
       }

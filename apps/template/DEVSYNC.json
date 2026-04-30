@@ -1,24 +1,24 @@
 {
   "defaultLang": "en",
+  "site": "https://devsync.work",
+  "name": "Your Full Name",
+  "img": "https://your-image-url.com/your-image.jpg",
+  "socialMedia": [
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/your-linkedin-handle",
+      "icon": "/icons/linkedin.svg",
+      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
+    }
+  ],
+  "githubUserName": "your-github-username",
   "en": {
-    "name": "Your Full Name",
     "description": "Write a short professional summary about yourself. Example: Full-stack developer focused on developer experience, performance, and product quality.",
-    "img": "https://your-image-url.com/your-image.jpg",
     "jobTitle": "Your Current Job Title",
-    "site": "https://devsync.work",
     "status": {
       "status": "your-status",
       "badge": "![Status](https://img.shields.io/badge/Status-Your%20Status-blue)"
     },
-    "githubUserName": "your-github-username",
-    "socialMedia": [
-      {
-        "name": "LinkedIn",
-        "url": "https://www.linkedin.com/in/your-linkedin-handle",
-        "icon": "/icons/linkedin.svg",
-        "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
-      }
-    ],
     "languages": [
       {
         "name": "Your Language 1 / Your Language 2",

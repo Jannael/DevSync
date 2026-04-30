@@ -69,16 +69,11 @@ const certificationSchema = z.object({
 
 export const devsyncObjectSchema = z.object({
   jobTitle: z.string({ message: 'Job title is required' }),
-  name: z.string({ message: 'Name is required' }),
   description: z.string({ message: 'Description is required' }),
-  img: z.string({ message: 'Image is required' }),
-  site: z.string({ message: 'Site is required' }),
   status: z.object({
     status: z.string({ message: 'Status is required' }),
     badge: z.string({ message: 'Badge is required' }),
   }),
-  githubUserName: z.string({ message: 'GitHub username is required' }),
-  socialMedia: z.array(linkSchema),
   languages: z.array(languageSchema),
   experience: z.array(experienceSchema),
   projects: z.array(projectSchema),
@@ -89,6 +84,11 @@ export const devsyncObjectSchema = z.object({
 const devsyncSchema = z
   .object({
     defaultLang: z.string({ message: 'Default language is required' }),
+    site: z.string({ message: 'Site is required' }),
+    name: z.string({ message: 'Name is required' }),
+    img: z.string({ message: 'Image is required' }),
+    socialMedia: z.array(linkSchema),
+    githubUserName: z.string({ message: 'GitHub username is required' }),
   })
   .catchall(devsyncObjectSchema)
 

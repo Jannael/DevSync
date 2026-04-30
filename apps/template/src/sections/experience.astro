@@ -1,0 +1,93 @@
+---
+import devsync from '@/devsync'
+import { defaultLang } from '@/devsync'
+import { translations, type availableLangsType } from '@/const/fields-translations'
+
+const lang = (Astro.params.lang || defaultLang).toLowerCase() as availableLangsType
+const profile = devsync[lang] ?? devsync[defaultLang]
+const experience = profile.experience ?? []
+const translation = translations[lang]
+---
+
+<section
+  class="relative m-auto flex h-fit w-full max-w-5xl flex-col items-center justify-center lg:pb-20"
+>
+  <h2 class="mb-20 text-xl lg:text-5xl">{translation['Professional Experience']}</h2>
+  <ul class="relative flex w-full flex-col gap-10 px-10 lg:px-0">
+    {
+      experience.map(({ company, position, img, web, date, links, description, list, skills }) => (
+        <li class="relative mb-10">
+          <article class="bg-third/50 flex flex-col items-center justify-center rounded-2xl p-10 lg:block">
+            <div class="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+              <div class="mb-8 flex items-center gap-5">
+                {img && (
+                  <img
+                    src={img}
+                    alt={company}
+                    width="44"
+                    height="44"
+                    class="h-11 w-11 rounded-full object-cover"
+                  />
+                )}
+                <div>
+                  <h3 class="flex flex-col items-center gap-5 text-xl font-semibold lg:flex-row lg:text-2xl">
+                    {position}
+                    <span class="text-text/70 hidden w-fit text-lg lg:block"> | </span>
+                    <span class="text-text/70 text-sm lg:text-lg">{company}</span>{' '}
+                  </h3>
+                </div>
+              </div>
+
+              {date && (
+                <p class="bg-main/60 border-text/50 text-text/80 mb-5 w-fit rounded-full border px-5 py-3 text-sm font-medium lg:mb-0 lg:self-start">
+                  {date}
+                </p>
+              )}
+            </div>
+
+            {links?.length ? (
+              <div class="mb-8 mt-4 flex flex-wrap gap-2">
+                {links.map((link) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bg-third/70 hover:bg-third text-text/80 border-text/50 rounded-full border px-3 py-1 text-sm transition-transform hover:scale-105"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+            ) : null}
+
+            {description && <p class="text-text/70 mb-10 mt-4 text-xl leading-6">{description}</p>}
+
+            {list?.items?.length ? (
+              <>
+                <header class="mb-3 text-xl font-bold">{list.title}</header>
+                <ul class="text-text/90 mb-16 mt-4 list-disc space-y-2 pl-8 text-sm">
+                  {list.items.map((item) => (
+                    <li class="text-text/60 text-lg">
+                      <span class="text-text">{item.highlight}:</span> {item.description}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+
+            {skills?.length ? (
+              <div class="mt-4 flex flex-wrap justify-around gap-2 lg:px-10">
+                {skills.map((skill) => (
+                  <span class="bg-third/70 hover:bg-third text-text/80 border-text/50 rounded-full border px-3 py-1 text-sm transition-transform hover:scale-105">
+                    <img src={skill.icon} alt={skill.name} class="mr-2 inline h-4 w-4" />
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</section>

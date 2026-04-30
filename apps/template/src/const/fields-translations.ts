@@ -12,6 +12,12 @@ export const translations = {
     Certifications: 'Certifications',
     'Core Skills': 'Core Skills',
     credential: 'Credential',
+
+    academics: 'Academics',
+    'View Certificate': 'View Certificate',
+    'Selected projects': 'Selected projects',
+    "Let's connect": "Let's connect",
+    'Github Profile': 'Github Profile',
   },
   es: {
     Description: 'Descripción',
@@ -24,6 +30,12 @@ export const translations = {
     Certifications: 'Certificaciones',
     'Core Skills': 'Habilidades principales',
     credential: 'Credencial',
+
+    academics: 'Historial académico',
+    'View Certificate': 'Ver certificado',
+    'Selected projects': 'Proyectos destacados',
+    "Let's connect": 'Conectemos',
+    'Github Profile': 'Perfil de Github',
   },
 } as const
 

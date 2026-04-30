@@ -6,6 +6,7 @@ import { writeFileMixin } from '../infra/write-file'
 import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { pathAcademics } from '@/constants/paths'
+import { translations, type availableLangsType } from '@template/src/const/fields-translations'
 
 export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends mdUtilsMixin(writeFileMixin(Base)) {
@@ -31,8 +32,9 @@ export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
       defaultLang: string
     }) {
       const devsyncTranslation = devsync[defaultLang]
+      const translation = translations[defaultLang as availableLangsType]
       let md = ''
-      md += '# Academics \n\n'
+      md += `# ${translation['academics']} \n\n`
       md += '<table>'
 
       for (const ed of devsyncTranslation?.education ?? []) {
@@ -68,9 +70,10 @@ ${links}
       defaultLang: string
     }) {
       const devsyncTranslation = devsync[defaultLang]
+      const translation = translations[defaultLang as availableLangsType]
       let md = ''
 
-      md += '## Certifications \n\n'
+      md += `## ${translation['Certifications']} \n\n`
       md += '<table>'
 
       for (const cert of devsyncTranslation?.certifications ?? []) {
@@ -88,7 +91,7 @@ ${links}
           </br>\n
 ${skills}
         </td>
-        <td> <a href="${cert.url ?? '#'}" target="_blank">View Certificate</a> </td>
+        <td> <a href="${cert.url ?? '#'}" target="_blank">${translation['View Certificate']}</a> </td>
       </tr>`
       }
 

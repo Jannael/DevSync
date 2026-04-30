@@ -7,6 +7,7 @@ import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { writeFileMixin } from '../infra/write-file'
 import type { GConstructor } from '../infra/mixin-constructor'
+import { translations, type availableLangsType } from '@template/src/const/fields-translations'
 
 export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends writeFileMixin(mdUtilsMixin(Base)) {
@@ -30,12 +31,16 @@ export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase
       const devsyncTranslation = devsync[defaultLang]
       let md = ''
       md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'} | ${devsync?.name ?? 'Name'}\n\n`
-      md += `Status: ${devsyncTranslation?.status?.badge ?? 'Active'}\n\n`
+      md += `${devsyncTranslation?.status?.badge ?? 'Active'}\n\n`
       md += `${devsyncTranslation?.description ?? ''}\n\n`
 
       for (const socialMedia of devsync?.socialMedia ?? []) {
-        md += `[${socialMedia.mdBadge}](${socialMedia.url})`
+        md += this.badgeWithLink({
+          badge: socialMedia.mdBadge,
+          link: socialMedia.url,
+        })
       }
+
       md += this.badgeWithLink({
         badge: academicsBadge,
         link: `https://github.com/${devsync?.githubUserName ?? ''}/${devsync?.githubUserName ?? ''}/tree/main/academics`,
@@ -56,8 +61,10 @@ export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase
       defaultLang: string
     }) {
       const devsyncTranslation = devsync[defaultLang]
+      const translation = translations[defaultLang as availableLangsType]
+
       let md = ''
-      md += '## Experience \n\n'
+      md += `## ${translation['Professional Experience']} \n\n`
       md += '<table>'
 
       for (const ex of devsyncTranslation?.experience ?? []) {
@@ -94,8 +101,9 @@ ${skills}
       defaultLang: string
     }) {
       const devsyncTranslation = devsync[defaultLang]
+      const translation = translations[defaultLang as availableLangsType]
       let md = ''
-      md += '## Projects \n\n'
+      md += `## ${translation['Projects']} \n\n`
       md += '<table>'
 
       for (const proj of devsyncTranslation?.projects ?? []) {

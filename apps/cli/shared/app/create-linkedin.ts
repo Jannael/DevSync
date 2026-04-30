@@ -4,6 +4,7 @@ import { BOLD, GREEN } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { pathLinkedin } from '@/constants/paths'
 import { writeFileMixin } from '@/shared/infra/write-file'
+import { translations, type availableLangsType } from '@template/src/const/fields-translations'
 
 /*
 Linkedin.md will have a version with each translation
@@ -42,6 +43,8 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
     private async getMD({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
       let md = ''
       const translation = devsync[lang]
+      const innerTranslation = translations[lang as availableLangsType]
+
       md += `# ${translation?.jobTitle ?? 'Professional Update'}\n\n`
       md += `I am ${devsync?.name ?? 'a software engineer'}.\n\n`
 
@@ -50,7 +53,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       }
 
       if ((translation?.experience?.length ?? 0) > 0) {
-        md += '## Experience\n\n'
+        md += `## ${innerTranslation['Professional Experience']} \n\n`
 
         for (const ex of translation?.experience ?? []) {
           md += `- **${ex.position ?? 'Position'}** at **${ex.company ?? 'Company'}** (${ex.date ?? 'Date'})\n`
@@ -69,7 +72,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       }
 
       if ((translation?.projects?.length ?? 0) > 0) {
-        md += '## Selected Projects\n\n'
+        md += `## ${innerTranslation['Selected projects']} \n\n`
 
         for (const project of translation?.projects ?? []) {
           md += `- **${project.name ?? 'Project'}**\n`
@@ -94,25 +97,25 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       const skills = this.getLinkedinSkills({ devsync, lang })
 
       if (skills.size > 0) {
-        md += '## Core Skills\n\n'
+        md += `## ${innerTranslation['Core Skills']} \n\n`
         md += `${Array.from(skills).join(' | ')}\n\n`
       }
 
       if ((translation?.certifications?.length ?? 0) > 0) {
-        md += '## Certifications\n\n'
+        md += `## ${innerTranslation['Certifications']} \n\n`
         for (const cert of translation?.certifications ?? []) {
           md += `- ${cert.name}${cert.url ? ` — ${cert.url}` : ''}\n`
         }
         md += '\n'
       }
 
-      md += "## Let's connect\n\n"
+      md += `## ${innerTranslation["Let's connect"]} \n\n`
       for (const social of devsync?.socialMedia ?? []) {
         md += `- ${social.name}: ${social.url}\n`
       }
 
       if (devsync?.githubUserName) {
-        md += `- GitHub profile: https://github.com/${devsync?.githubUserName}\n`
+        md += `- ${innerTranslation['Github Profile']}: https://github.com/${devsync?.githubUserName}\n`
       }
 
       return md

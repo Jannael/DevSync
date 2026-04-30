@@ -4,6 +4,7 @@ import { defaultLang } from '@/devsync'
 import '@/styles/global.css'
 import '@fontsource-variable/jost'
 import jostLatinWoff2 from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url'
+import { ogLocale } from '@/const/fields-translations'
 
 interface Props {
   title?: string
@@ -12,11 +13,6 @@ interface Props {
 
 const lang = (Astro.params.lang || defaultLang).toLowerCase()
 const profile = devsync[lang] ?? devsync[defaultLang]
-const localeMap = {
-  en: 'en_US',
-  es: 'es_ES',
-} as const
-const ogLocale = localeMap[lang as keyof typeof localeMap] ?? 'en_US'
 
 // Build dynamic SEO from DEVSYNC.json data
 const seoTitle = profile?.jobTitle ? `${devsync.name} | ${profile.jobTitle}` : devsync.name
@@ -121,7 +117,7 @@ const structuredData = {
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:site_name" content={seoTitle} />
-    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale" content={ogLocale(lang)} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

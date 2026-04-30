@@ -45,3 +45,9 @@ export const translations = {
 
 export type availableLangsType = keyof typeof translations
 export const availableLangs = Object.keys(translations)
+
+export const localeMap: Record<availableLangsType, string> = {
+  en: 'en_US',
+  es: 'es_ES',
+} as const
+export const ogLocale = (lang: string) => localeMap[lang as keyof typeof localeMap] ?? 'en_US'

@@ -133,16 +133,20 @@ const structuredData = {
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <script>
-      const localStorageTheme = localStorage.getItem('theme')
       const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
-      const theme = localStorageTheme ? localStorageTheme : matchMedia.matches ? 'dark' : 'light'
-
-      if (theme === 'dark') {
-        document.documentElement.classList.toggle('dark')
+      const hasStoredTheme = () => localStorage.getItem('theme') !== null
+      const getTheme = () =>
+        localStorage.getItem('theme') ?? (matchMedia.matches ? 'dark' : 'light')
+      const applyTheme = () => {
+        document.documentElement.classList.toggle('dark', getTheme() === 'dark')
       }
 
+      applyTheme()
+
       matchMedia.addEventListener('change', () => {
-        document.documentElement.classList.toggle('dark')
+        if (!hasStoredTheme()) {
+          applyTheme()
+        }
       })
     </script>
   </head>

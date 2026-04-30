@@ -6,6 +6,7 @@ import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
+import { defaultLang, languages } from '@template/src/devsync'
 
 /*
 IMPORTANT: the portfolio must have a github action to run `devsync update` every time the users pushes to main branch.
@@ -30,10 +31,12 @@ class UpdateCommand extends CreateLinkedinMixin(
   async execute(): Promise<void> {
     try {
       const devsync = await this.validateDevsync()
-      await this.buildCV()
-      await this.createGithubProfile({ devsync })
-      await this.createAcademics({ devsync })
-      await this.createLinkedin({ devsync })
+      for (const lang of languages) {
+        await this.buildCV({ lang })
+        await this.createGithubProfile({ devsync, defaultLang })
+        await this.createAcademics({ devsync, defaultLang })
+        await this.createLinkedin({ devsync, lang })
+      }
 
       console.log(`${SPACE}${CHECK(`${BOLD('Updated successfully.')}`)}`)
     } catch (e) {

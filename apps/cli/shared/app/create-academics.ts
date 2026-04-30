@@ -9,20 +9,33 @@ import { pathAcademics } from '@/constants/paths'
 
 export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends mdUtilsMixin(writeFileMixin(Base)) {
-    private async createAcademicsMd({ devsync }: { devsync: DevsyncPartial }) {
+    private async createAcademicsMd({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
       let md = ''
-      md += this.getEducationTimeline({ devsync })
-      md += this.getCertifications({ devsync })
+      md += this.getEducationTimeline({ devsync, defaultLang })
+      md += this.getCertifications({ devsync, defaultLang })
 
       return md
     }
 
-    private getEducationTimeline({ devsync }: { devsync: DevsyncPartial }) {
+    private getEducationTimeline({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
+      const devsyncTranslation = devsync[defaultLang]
       let md = ''
       md += '# Academics \n\n'
       md += '<table>'
 
-      for (const ed of devsync.education ?? []) {
+      for (const ed of devsyncTranslation?.education ?? []) {
         const links = this.getLinks({ links: ed.links })
         const listItems = ed.list?.items ? this.getListItems({ items: ed.list.items }) : ''
 
@@ -47,13 +60,20 @@ ${links}
       return md
     }
 
-    private getCertifications({ devsync }: { devsync: DevsyncPartial }) {
+    private getCertifications({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
+      const devsyncTranslation = devsync[defaultLang]
       let md = ''
 
       md += '## Certifications \n\n'
       md += '<table>'
 
-      for (const cert of devsync.certifications ?? []) {
+      for (const cert of devsyncTranslation?.certifications ?? []) {
         const listItems = cert.list?.items ? this.getListItems({ items: cert.list.items }) : ''
         const skills = this.getSkills({ skills: cert.skills })
 
@@ -77,10 +97,16 @@ ${skills}
       return md
     }
 
-    async createAcademics({ devsync }: { devsync: DevsyncPartial }) {
+    async createAcademics({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
       console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
       // create certifications md
-      const academics = await this.createAcademicsMd({ devsync })
+      const academics = await this.createAcademicsMd({ devsync, defaultLang })
       await this.writeFile({ path: pathAcademics, data: academics })
       console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(pathAcademics)}`)}`)
       console.log('')

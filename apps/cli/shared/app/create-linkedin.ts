@@ -46,7 +46,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       const innerTranslation = translations[lang as availableLangsType]
 
       md += `# ${translation?.jobTitle ?? 'Professional Update'}\n\n`
-      md += `I am ${devsync?.name ?? 'a software engineer'}.\n\n`
+      md += `${innerTranslation['I am']} ${devsync?.name ?? 'a software engineer'}.\n\n`
 
       if (translation?.description) {
         md += `${translation.description}\n\n`
@@ -87,7 +87,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
           }
 
           if ((project.links?.length ?? 0) > 0) {
-            md += ` - Links: ${(project.links ?? []).map((link) => link.url).join(' | ')}\n`
+            md += ` - ${innerTranslation['Links']}: ${(project.links ?? []).map((link) => link.url).join(' | ')}\n`
           }
         }
 

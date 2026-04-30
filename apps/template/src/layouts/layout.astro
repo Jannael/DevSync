@@ -1,5 +1,6 @@
 ---
 import devsync from '@/devsync'
+import { defaultLang } from '@/devsync'
 import '@/styles/global.css'
 import '@fontsource-variable/jost'
 import jostLatinWoff2 from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url'
@@ -9,11 +10,19 @@ interface Props {
   description?: string
 }
 
+const lang = (Astro.params.lang || defaultLang).toLowerCase()
+const profile = devsync[lang] ?? devsync[defaultLang]
+const localeMap = {
+  en: 'en_US',
+  es: 'es_ES',
+} as const
+const ogLocale = localeMap[lang as keyof typeof localeMap] ?? 'en_US'
+
 // Build dynamic SEO from DEVSYNC.json data
-const seoTitle = devsync.jobTitle ? `${devsync.name} | ${devsync.jobTitle}` : devsync.name
+const seoTitle = profile?.jobTitle ? `${devsync.name} | ${profile.jobTitle}` : devsync.name
 
 const seoDescription =
-  devsync.description?.split('. ').slice(0, 2).join('. ') || devsync.description
+  profile?.description?.split('. ').slice(0, 2).join('. ') || profile?.description
 
 // Extract social links for structured data
 const socialLinks = [
@@ -31,7 +40,7 @@ if (!Astro.site && !devsync.site) {
 const site = Astro.site ?? new URL(devsync.site ?? 'https://devsync.work').toString()
 const canonicalUrl = new URL(Astro.url.pathname, site).toString()
 const ogImageUrl = new URL('/logo-og.png', site).toString()
-const ogImageAlt = `${devsync.name} - ${devsync.jobTitle || 'Professional Profile'}`
+const ogImageAlt = `${devsync.name} - ${profile?.jobTitle || 'Professional Profile'}`
 const homeUrl = new URL('/', site).toString()
 const websiteId = `${homeUrl}#website`
 const personId = `${homeUrl}#person`
@@ -45,8 +54,8 @@ const structuredData = {
       '@type': 'Person',
       '@id': personId,
       name: devsync.name,
-      jobTitle: devsync.jobTitle,
-      description: devsync.description,
+      jobTitle: profile?.jobTitle,
+      description: profile?.description,
       url: homeUrl,
       image: devsync.img,
       sameAs: socialLinks,
@@ -57,7 +66,7 @@ const structuredData = {
       url: homeUrl,
       name: seoTitle,
       description,
-      inLanguage: 'en-US',
+      inLanguage: lang,
       publisher: {
         '@id': personId,
       },
@@ -67,7 +76,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -112,7 +121,7 @@ const structuredData = {
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:site_name" content={seoTitle} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={ogLocale} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

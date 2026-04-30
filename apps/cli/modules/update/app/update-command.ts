@@ -33,10 +33,10 @@ class UpdateCommand extends CreateLinkedinMixin(
       const devsync = await this.validateDevsync()
       for (const lang of languages) {
         await this.buildCV({ lang })
-        await this.createGithubProfile({ devsync, defaultLang })
-        await this.createAcademics({ devsync, defaultLang })
         await this.createLinkedin({ devsync, lang })
       }
+      await this.createGithubProfile({ devsync, defaultLang })
+      await this.createAcademics({ devsync, defaultLang })
 
       console.log(`${SPACE}${CHECK(`${BOLD('Updated successfully.')}`)}`)
     } catch (e) {

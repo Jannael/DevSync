@@ -18,6 +18,8 @@ export const translations = {
     'Selected projects': 'Selected projects',
     "Let's connect": "Let's connect",
     'Github Profile': 'Github Profile',
+    'I am': 'I am',
+    Links: 'Links',
   },
   es: {
     Description: 'Descripción',
@@ -36,6 +38,8 @@ export const translations = {
     'Selected projects': 'Proyectos destacados',
     "Let's connect": 'Conectemos',
     'Github Profile': 'Perfil de Github',
+    'I am': 'Soy',
+    Links: 'Enlaces',
   },
 } as const
 

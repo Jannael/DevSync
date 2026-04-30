@@ -108,10 +108,18 @@ Error instances: `apps/cli/error/error-instance.ts`
 
 - `src/devsync.ts` - Zod schema validation, typed data export
 - `src/devsync-validator.ts` - DEVSYNC.json type definitions
+- `src/const/fields-translations.ts` - UI label translations used by template + CLI markdown generators
 - `src/layouts/layout.astro` - SEO-optimized layout with dynamic metadata from DEVSYNC.json
-- `src/pages/cv.astro` - ATS-oriented CV renderer
-- `src/pages/index.astro` - Landing page
+- `src/pages/index.astro` - Browser-language redirect (`/` -> `/<lang>/` with default fallback)
+- `src/pages/[lang]/index.astro` - Localized landing page
+- `src/pages/[lang]/cv.astro` - Localized ATS-oriented CV renderer
 - `DEVSYNC.json` - Source of truth for portfolio/CV/LinkedIn/GitHub data
+
+### DEVSYNC i18n shape
+
+- Global fields live at root: `defaultLang`, `site`, `name`, `img`, `socialMedia`, `githubUserName`
+- Localized content lives under language keys (e.g. `en`, `es`) with translated `jobTitle`, `description`, `experience`, etc.
+- Any new language key in `DEVSYNC.json` must also be added to `src/const/fields-translations.ts`
 
 ---
 

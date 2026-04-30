@@ -1,5 +1,7 @@
 import { ZodError } from 'zod'
 import { parseDevsync, type DevsyncPartial } from '@template/src/devsync-validator'
+import { availableLangs } from '@template/src/const/fields-translations'
+import { devsyncGlobalFields } from '@template/src/devsync'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { DEVSYNC_JSON_PATH } from '@/constants/paths'
 import { BadRequest, ServerError } from '@/error/error-instance'
@@ -34,8 +36,39 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
       }
 
       try {
-        return parseDevsync(parsed)
+        const validated = parseDevsync(parsed)
+        const configuredLangs = Object.keys(validated).filter(
+          (key) => !devsyncGlobalFields.includes(key as (typeof devsyncGlobalFields)[number])
+        )
+
+        if (configuredLangs.length === 0) {
+          throw new BadRequest(
+            'Invalid DEVSYNC.json structure',
+            'Add at least one localized object key (e.g. "en", "es") in DEVSYNC.json'
+          )
+        }
+
+        const unsupportedLang = configuredLangs.find((lang) => !availableLangs.includes(lang))
+        if (unsupportedLang) {
+          throw new BadRequest(
+            'Invalid DEVSYNC.json structure',
+            `Language "${unsupportedLang}" is not supported in fields-translations.ts`
+          )
+        }
+
+        if (validated.defaultLang && !configuredLangs.includes(validated.defaultLang)) {
+          throw new BadRequest(
+            'Invalid DEVSYNC.json structure',
+            `defaultLang "${validated.defaultLang}" must exist as a localized key in DEVSYNC.json`
+          )
+        }
+
+        return validated
       } catch (error) {
+        if (error instanceof BadRequest) {
+          throw error
+        }
+
         if (error instanceof ZodError) {
           throw new BadRequest(
             'Invalid DEVSYNC.json structure',

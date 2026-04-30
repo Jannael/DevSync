@@ -34,9 +34,10 @@ This repository has two main pieces:
 
 2. **Template Astro app (`apps/template`)**
    - Uses Astro + Tailwind.
-   - `apps/template/src/devsync.ts` defines and validates the DEVSYNC schema using Zod, and exports typed data.
-   - `apps/template/src/pages/cv.astro` renders an ATS-oriented CV from DEVSYNC data.
-   - `apps/template/src/pages/index.astro` is still minimal/scaffolded.
+   - `apps/template/src/devsync.ts` defines and validates the DEVSYNC schema using Zod, and exports language helpers (`defaultLang`, `languages`).
+   - `apps/template/src/const/fields-translations.ts` stores localized UI labels used across template and CLI markdown outputs.
+   - `apps/template/src/pages/index.astro` redirects from `/` to a best-match locale based on browser language, then falls back to `defaultLang`.
+   - `apps/template/src/pages/[lang]/index.astro` and `apps/template/src/pages/[lang]/cv.astro` render localized pages.
 
 The intended product flow (from module docs and command descriptions): one `DEVSYNC.json` drives generated portfolio/CV/README/LinkedIn artifacts through CLI commands (`init`, `build`, and future update automation via GitHub Actions).
 
@@ -48,6 +49,10 @@ The intended product flow (from module docs and command descriptions): one `DEVS
   - `@template/*` → `apps/template/*`
 - **Template app alias** (`apps/template/tsconfig.json`):
   - `devsync` → `./src/devsync.ts`
+- **DEVSYNC i18n structure**:
+  - Keep global fields at root (`defaultLang`, `site`, `name`, `img`, `socialMedia`, `githubUserName`).
+  - Keep translated profile content under language keys (`en`, `es`, etc.).
+  - If adding a new locale key, update `apps/template/src/const/fields-translations.ts` as well.
 - **CLI command wiring pattern**:
   - Add command metadata to `commands.ts`.
   - Add handler mapping in `commands-fn.ts`.

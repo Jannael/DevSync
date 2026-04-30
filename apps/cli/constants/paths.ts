@@ -9,4 +9,6 @@ export const DEVSYNC_JSON_PATH = resolve(process.cwd(), 'DEVSYNC.json')
 
 // Multi-language outputs
 export const pathLinkedin = (lang: string) => `./linkedin-${lang}.md`
-export const pathCvPDF = (lang: string) => resolve(process.cwd(), 'dist', lang, 'cv', 'index.html') // astro generates the routes => /lang/cv/index.html
+export const pathCvPDF = (lang: string) => `./CV-${lang}.pdf`
+export const CV_ROUTE_OUTPUT_PATH = (lang: string) =>
+  resolve(process.cwd(), 'dist', lang, 'cv', 'index.html')

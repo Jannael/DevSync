@@ -2,7 +2,7 @@ import { readFile as fsReadFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { runBunCommand } from '@/utils/run-bun-command'
-import { CWD_PACKAGE_JSON_PATH, pathCvPDF } from '@/constants/paths'
+import { CWD_PACKAGE_JSON_PATH, CV_ROUTE_OUTPUT_PATH } from '@/constants/paths'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { NotFound, ServerError } from '@/error/error-instance'
 import { SPACE } from '@/utils/icons-terminal'
@@ -28,7 +28,7 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
       await runBunCommand(['run', 'build'])
 
       try {
-        const html = await fsReadFile(pathCvPDF(lang), 'utf8')
+        const html = await fsReadFile(CV_ROUTE_OUTPUT_PATH(lang), 'utf8')
         const stylesheetRegex = /<link[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi
         const stylesheetLinks = Array.from(html.matchAll(stylesheetRegex))
         let inlinedHTML = html
@@ -38,7 +38,7 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
 
           const cssPath = href?.startsWith('/')
             ? resolve(process.cwd(), 'dist', href.slice(1))
-            : resolve(dirname(pathCvPDF(lang)), href ?? '')
+            : resolve(dirname(CV_ROUTE_OUTPUT_PATH(lang)), href ?? '')
 
           const css = await fsReadFile(cssPath, 'utf8')
           inlinedHTML = inlinedHTML.replace(linkTag, `<style>${css}</style>`)

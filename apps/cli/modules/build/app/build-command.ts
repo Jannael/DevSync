@@ -35,10 +35,10 @@ class BuildCommand extends createCVMixin(
       await this.copyTemplateUseCase.copyTemplate()
       for (const lang of languages) {
         await this.buildCV({ lang })
-        await this.createGithubProfile({ devsync, defaultLang })
-        await this.createAcademics({ devsync, defaultLang })
         await this.createLinkedin({ devsync, lang })
       }
+      await this.createGithubProfile({ devsync, defaultLang })
+      await this.createAcademics({ devsync, defaultLang })
 
       console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
     } catch (e) {

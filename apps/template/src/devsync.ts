@@ -3,7 +3,7 @@ import { parseDevsync } from './devsync-validator'
 
 export * from './devsync-validator'
 
-const devsyncGlobalFields = [
+export const devsyncGlobalFields = [
   'name',
   'img',
   'socialMedia',

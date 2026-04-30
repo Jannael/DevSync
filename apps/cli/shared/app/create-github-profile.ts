@@ -29,16 +29,16 @@ export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase
     private getHeader({ devsync, defaultLang }: { devsync: DevsyncPartial; defaultLang: string }) {
       const devsyncTranslation = devsync[defaultLang]
       let md = ''
-      md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'} | ${devsyncTranslation?.name ?? 'Name'}\n\n`
+      md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'} | ${devsync?.name ?? 'Name'}\n\n`
       md += `Status: ${devsyncTranslation?.status?.badge ?? 'Active'}\n\n`
       md += `${devsyncTranslation?.description ?? ''}\n\n`
 
-      for (const socialMedia of devsyncTranslation?.socialMedia ?? []) {
+      for (const socialMedia of devsync?.socialMedia ?? []) {
         md += `[${socialMedia.mdBadge}](${socialMedia.url})`
       }
       md += this.badgeWithLink({
         badge: academicsBadge,
-        link: `https://github.com/${devsyncTranslation?.githubUserName ?? ''}/${devsyncTranslation?.githubUserName ?? ''}/tree/main/academics`,
+        link: `https://github.com/${devsync?.githubUserName ?? ''}/${devsync?.githubUserName ?? ''}/tree/main/academics`,
       })
 
       for (const lang of devsyncTranslation?.languages ?? []) {

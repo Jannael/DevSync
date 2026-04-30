@@ -24,9 +24,21 @@ const profile = devsync[lang] ?? devsync[defaultLang]
         devsync.socialMedia && devsync.socialMedia.length > 0 && (
           <ul class="flex w-full items-center justify-center gap-3 pl-0 lg:w-fit lg:justify-start">
             {devsync.socialMedia.map((social) => (
-              <Badge name={social.name} url={social.url} icon={social.icon} />
+              <Badge
+                name={social.name}
+                url={social.url}
+                icon={social.icon}
+                bg="bg-third"
+                text="text-accent"
+              />
             ))}
-            <Badge name="cv" url={getRelativeLocaleUrl(lang, 'cv')} icon="/icons/cv.svg" />
+            <Badge
+              name="cv"
+              url={getRelativeLocaleUrl(lang, 'cv')}
+              icon="/icons/cv.svg"
+              bg="bg-third"
+              text="text-accent"
+            />
           </ul>
         )
       }

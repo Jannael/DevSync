@@ -1,7 +1,7 @@
 {
   "name": "Your Full Name",
   "description": "Write a short professional summary about yourself. Example: Full-stack developer focused on developer experience, performance, and product quality.",
-  "img": "https://avatars.githubusercontent.com/u/177653963?v=4",
+  "img": "https://your-image-url.com/your-image.jpg",
   "jobTitle": "Your Current Job Title",
   "site": "https://devsync.work",
   "status": {
@@ -14,18 +14,6 @@
       "name": "LinkedIn",
       "url": "https://www.linkedin.com/in/your-linkedin-handle",
       "icon": "/icons/linkedin.svg",
-      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
-    },
-    {
-      "name": "",
-      "url": "https://www.linkedin.com/in/your-linkedin-handle",
-      "icon": "/icons/x.svg",
-      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
-    },
-    {
-      "name": "Github",
-      "url": "https://www.linkedin.com/in/your-linkedin-handle",
-      "icon": "/icons/github.svg",
       "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
     }
   ],

@@ -2,7 +2,7 @@
 import devsync from '@/devsync'
 ---
 
-<section class="w-full h-screen max-w-5xl m-auto flex justify-center items-center">
+<section class="w-full h-screen lg:h-dvh max-w-5xl m-auto flex justify-center items-center">
   <main class="flex justify-center items-center gap-5 flex-col lg:flex-row">
     <div class="lg:flex-1 order-1 lg:order-0 w-full px-10 text-center lg:text-start">
       <h1 class="lg:text-6xl mb-10 text-3xl">{devsync.name}</h1>
@@ -26,9 +26,10 @@ import devsync from '@/devsync'
       <img 
         src={devsync.img} 
         alt={devsync.name + ' ' + devsync.jobTitle} 
-        class="rounded-full order-0 lg:order-1 w-60 mb-10 lg:mb-0 lg:w-[350px]" 
-        width="350" 
-        height="350"
+        class="rounded-full order-0 lg:order-1 w-60 mb-10 lg:mb-0 lg:w-[450px]"
+        style="mask-image: radial-gradient(circle, black 50%, transparent 70%);"
+        width="450" 
+        height="450"
         loading="eager"
       />
     </div>

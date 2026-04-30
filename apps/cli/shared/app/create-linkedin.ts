@@ -5,25 +5,32 @@ import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { pathLinkedin } from '@/constants/paths'
 import { writeFileMixin } from '@/shared/infra/write-file'
 
+/*
+Linkedin.md will have a version with each translation
+linkedin-{lang}.md
+
+example:
+linkedin-en.md
+linkedin-es.md
+
+*/
+
 export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends writeFileMixin(Base) {
-    private async createLinkedinMd({ devsync }: { devsync: DevsyncPartial }) {
-      return await this.getMD({ devsync })
-    }
-
-    private getLinkedinSkills({ devsync }: { devsync: DevsyncPartial }) {
+    private getLinkedinSkills({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
+      const translation = devsync[lang]
       const skills = new Set<string>()
-      for (const ex of devsync.experience ?? []) {
+      for (const ex of translation?.experience ?? []) {
         for (const skill of ex.skills ?? []) {
           skills.add(skill.name)
         }
       }
-      for (const project of devsync.projects ?? []) {
+      for (const project of translation?.projects ?? []) {
         for (const skill of project.skills ?? []) {
           skills.add(skill.name)
         }
       }
-      for (const cert of devsync.certifications ?? []) {
+      for (const cert of translation?.certifications ?? []) {
         for (const skill of cert.skills ?? []) {
           skills.add(skill.name)
         }
@@ -32,20 +39,20 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       return skills
     }
 
-    private async getMD({ devsync }: { devsync: DevsyncPartial }) {
+    private async getMD({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
       let md = ''
+      const translation = devsync[lang]
+      md += `# ${translation?.jobTitle ?? 'Professional Update'}\n\n`
+      md += `I am ${translation?.name ?? 'a software engineer'}.\n\n`
 
-      md += `# ${devsync.jobTitle ?? 'Professional Update'}\n\n`
-      md += `I am ${devsync.name ?? 'a software engineer'}.\n\n`
-
-      if (devsync.description) {
-        md += `${devsync.description}\n\n`
+      if (translation?.description) {
+        md += `${translation.description}\n\n`
       }
 
-      if ((devsync.experience?.length ?? 0) > 0) {
+      if ((translation?.experience?.length ?? 0) > 0) {
         md += '## Experience\n\n'
 
-        for (const ex of devsync.experience ?? []) {
+        for (const ex of translation?.experience ?? []) {
           md += `- **${ex.position ?? 'Position'}** at **${ex.company ?? 'Company'}** (${ex.date ?? 'Date'})\n`
           if (ex.description) {
             md += ` - ${ex.description}\n`
@@ -61,10 +68,10 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
         md += '\n'
       }
 
-      if ((devsync.projects?.length ?? 0) > 0) {
+      if ((translation?.projects?.length ?? 0) > 0) {
         md += '## Selected Projects\n\n'
 
-        for (const project of devsync.projects ?? []) {
+        for (const project of translation?.projects ?? []) {
           md += `- **${project.name ?? 'Project'}**\n`
           if (project.description) {
             md += ` - ${project.description}\n`
@@ -84,38 +91,38 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
         md += '\n'
       }
 
-      const skills = this.getLinkedinSkills({ devsync })
+      const skills = this.getLinkedinSkills({ devsync, lang })
 
       if (skills.size > 0) {
         md += '## Core Skills\n\n'
         md += `${Array.from(skills).join(' | ')}\n\n`
       }
 
-      if ((devsync.certifications?.length ?? 0) > 0) {
+      if ((translation?.certifications?.length ?? 0) > 0) {
         md += '## Certifications\n\n'
-        for (const cert of devsync.certifications ?? []) {
+        for (const cert of translation?.certifications ?? []) {
           md += `- ${cert.name}${cert.url ? ` — ${cert.url}` : ''}\n`
         }
         md += '\n'
       }
 
       md += "## Let's connect\n\n"
-      for (const social of devsync.socialMedia ?? []) {
+      for (const social of translation?.socialMedia ?? []) {
         md += `- ${social.name}: ${social.url}\n`
       }
 
-      if (devsync.githubUserName) {
-        md += `- GitHub profile: https://github.com/${devsync.githubUserName}\n`
+      if (translation?.githubUserName) {
+        md += `- GitHub profile: https://github.com/${translation?.githubUserName}\n`
       }
 
       return md
     }
 
-    async createLinkedin({ devsync }: { devsync: DevsyncPartial }) {
+    async createLinkedin({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
       console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
-      const linkedin = await this.createLinkedinMd({ devsync })
-      await this.writeFile({ path: pathLinkedin, data: linkedin })
-      console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin)}`)}`)
+      const linkedin = await this.getMD({ devsync, lang })
+      await this.writeFile({ path: pathLinkedin(lang), data: linkedin })
+      console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin(lang))}`)}`)
       console.log('')
     }
   }

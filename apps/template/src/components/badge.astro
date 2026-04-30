@@ -1,0 +1,23 @@
+---
+interface Props {
+  name: string
+  url: string
+  icon: string
+}
+
+const { name, url, icon } = Astro.props
+---
+
+<li
+  class="bg-third/70 hover:bg-third/80 my-0 flex items-center justify-center rounded-full transition-transform hover:scale-105"
+>
+  <a
+    href={url}
+    class={`flex h-12 w-full items-center justify-center gap-2 py-1 pl-2 ${name.length > 0 && 'px-5 pl-2'}`}
+  >
+    <img src={icon} alt={name} class="text-accent mb-0 mt-0" width="30" height="30" />
+    <span class="flex h-8 grow items-center justify-center text-white/80">
+      {name}
+    </span>
+  </a>
+</li>

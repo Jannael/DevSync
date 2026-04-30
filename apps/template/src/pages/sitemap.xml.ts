@@ -35,7 +35,7 @@ export const GET: APIRoute = async ({ site }) => {
     <lastmod>${page.lastModified}</lastmod>
     <changefreq>${page.changeFrequency}</changefreq>
     <priority>${page.priority}</priority>
-  </url>`,
+  </url>`
     )
     .join('\n')}
 </urlset>`

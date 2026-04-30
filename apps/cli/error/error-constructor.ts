@@ -3,7 +3,7 @@ export type CustomError = Error & {
 }
 
 export function CreateError<T extends string>(
-  name: string,
+  name: string
 ): new (message: T, description?: string) => CustomError {
   const capitalize = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1)
 

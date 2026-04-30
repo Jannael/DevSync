@@ -25,7 +25,7 @@ const ListSchema = z.object({
     z.object({
       highlight: z.string({ message: 'Highlight is required' }),
       description: z.string({ message: 'Description is required' }),
-    }),
+    })
   ),
 })
 

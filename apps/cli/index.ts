@@ -18,5 +18,5 @@ if (command) {
 
 console.log('')
 console.log(
-  `${SPACE}Enjoying devsync?, please star the repo: ${GREEN('https://github.com/jannael/devsync')}`,
+  `${SPACE}Enjoying devsync?, please star the repo: ${GREEN('https://github.com/jannael/devsync')}`
 )

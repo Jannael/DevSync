@@ -15,6 +15,6 @@ Sitemap: ${new URL('sitemap.xml', siteUrl)}
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
       },
-    },
+    }
   )
 }

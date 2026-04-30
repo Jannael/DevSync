@@ -14,7 +14,7 @@ export default async function init() {
     console.log(`${SPACE}${X(`${TEMPLATE_NAME} already exists in this directory.`)}`)
     console.log('')
     console.log(
-      `${SPACE}${BG_YELLOW(BLACK('NOTE:'))} If you already filled this file, run ${BOLD('npx devsync build')}`,
+      `${SPACE}${BG_YELLOW(BLACK('NOTE:'))} If you already filled this file, run ${BOLD('npx devsync build')}`
     )
     return
   }

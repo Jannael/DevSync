@@ -2,37 +2,53 @@
 import devsync from '@/devsync'
 ---
 
-<section class="w-full h-screen lg:h-dvh max-w-5xl m-auto flex justify-center items-center">
-  <main class="flex justify-center items-center gap-5 flex-col lg:flex-row">
-    <div class="lg:flex-1 order-1 lg:order-0 w-full px-10 text-center lg:text-start">
-      <h1 class="lg:text-6xl mb-10 text-3xl">{devsync.name}</h1>
-      <h2 class="text-xl text-accent lg:text-2xl mb-8">{devsync.jobTitle}</h2>
-      <p class="text-text/80 text-balance mb-13 lg:text-xl text-sm">{devsync.description}</p>
-      {devsync.socialMedia && devsync.socialMedia.length > 0 && (
-        <ul class="flex w-full justify-center items-center gap-3 pl-0 lg:justify-start lg:w-fit">
-          {devsync.socialMedia.map(social => (
-            <li class="flex justify-center items-center my-0 bg-third/70 rounded-full hover:bg-third/80 hover:scale-105 transition-transform">
-              <a href={social.url} class={`flex justify-center w-full h-12 items-center gap-2 py-1 pl-2 ${social.name.length > 0 && 'px-5 pl-2'}`}>
-                <img src={social.icon} alt={social.name} class="mb-0 mt-0 text-accent" width="30" height="30"/>
-                <span class="text-white/80 grow flex items-center justify-center h-8">{social.name}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+<section class="m-auto flex h-screen w-full max-w-5xl items-center justify-center lg:h-dvh">
+  <main class="flex flex-col items-center justify-center gap-5 lg:flex-row">
+    <div class="lg:order-0 order-1 w-full px-10 text-center lg:flex-1 lg:text-start">
+      <h1 class="mb-10 text-3xl lg:text-6xl">{devsync.name}</h1>
+      <h2 class="text-accent mb-8 text-xl lg:text-2xl">{devsync.jobTitle}</h2>
+      <p class="text-text/80 mb-13 text-balance text-sm lg:text-xl">{devsync.description}</p>
+      {
+        devsync.socialMedia && devsync.socialMedia.length > 0 && (
+          <ul class="flex w-full items-center justify-center gap-3 pl-0 lg:w-fit lg:justify-start">
+            {devsync.socialMedia.map((social) => (
+              <li class="bg-third/70 hover:bg-third/80 my-0 flex items-center justify-center rounded-full transition-transform hover:scale-105">
+                <a
+                  href={social.url}
+                  class={`flex h-12 w-full items-center justify-center gap-2 py-1 pl-2 ${social.name.length > 0 && 'px-5 pl-2'}`}
+                >
+                  <img
+                    src={social.icon}
+                    alt={social.name}
+                    class="text-accent mb-0 mt-0"
+                    width="30"
+                    height="30"
+                  />
+                  <span class="flex h-8 grow items-center justify-center text-white/80">
+                    {social.name}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
 
-    {devsync.img && devsync.img.length > 1 && <div class="flex-1 flex justify-center items-center">
-      <img 
-        src={devsync.img} 
-        alt={devsync.name + ' ' + devsync.jobTitle} 
-        class="rounded-full order-0 lg:order-1 w-60 mb-10 lg:mb-0 lg:w-[450px]"
-        style="mask-image: radial-gradient(circle, black 50%, transparent 70%);"
-        width="450" 
-        height="450"
-        loading="eager"
-      />
-    </div>
+    {
+      devsync.img && devsync.img.length > 1 && (
+        <div class="flex flex-1 items-center justify-center">
+          <img
+            src={devsync.img}
+            alt={devsync.name + ' ' + devsync.jobTitle}
+            class="order-0 mb-10 w-60 rounded-full lg:order-1 lg:mb-0 lg:w-[450px]"
+            style="mask-image: radial-gradient(circle, black 50%, transparent 70%);"
+            width="450"
+            height="450"
+            loading="eager"
+          />
+        </div>
+      )
     }
   </main>
 </section>

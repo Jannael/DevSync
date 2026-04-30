@@ -21,8 +21,8 @@ class BaseBuildCommand {}
 
 class BuildCommand extends createCVMixin(
   CreateLinkedinMixin(
-    CreateAcademicsMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseBuildCommand))),
-  ),
+    CreateAcademicsMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseBuildCommand)))
+  )
 ) {
   constructor(private readonly copyTemplateUseCase: copyTemplateUseCase) {
     super()

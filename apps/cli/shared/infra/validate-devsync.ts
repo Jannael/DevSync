@@ -19,7 +19,7 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
           'Failed to read DEVSYNC.json',
           `${SPACE}${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n` +
             `${SPACE}${SPACE}${GREEN('2.')} Fill ${BOLD('DEVSYNC.json')} with your information\n` +
-            `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`,
+            `${SPACE}${SPACE}${GREEN('3.')} Run ${BOLD('devsync build')}`
         )
       }
 
@@ -29,7 +29,7 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
       } catch {
         throw new ServerError(
           'Failed to parse DEVSYNC.json',
-          'DEVSYNC.json must be valid JSON before running devsync build',
+          'DEVSYNC.json must be valid JSON before running devsync build'
         )
       }
 
@@ -39,7 +39,7 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
         if (error instanceof ZodError) {
           throw new BadRequest(
             'Invalid DEVSYNC.json structure',
-            `Fix schema errors in DEVSYNC.json: ${error.issues[0]?.path.join('.') ?? 'unknown field'}`,
+            `Fix schema errors in DEVSYNC.json: ${error.issues[0]?.path.join('.') ?? 'unknown field'}`
           )
         }
 

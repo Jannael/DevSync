@@ -10,16 +10,15 @@ interface Props {
 }
 
 // Build dynamic SEO from DEVSYNC.json data
-const seoTitle = devsync.jobTitle 
-  ? `${devsync.name} | ${devsync.jobTitle}`
-  : devsync.name
+const seoTitle = devsync.jobTitle ? `${devsync.name} | ${devsync.jobTitle}` : devsync.name
 
-const seoDescription = devsync.description?.split('. ').slice(0, 2).join('. ') || devsync.description
+const seoDescription =
+  devsync.description?.split('. ').slice(0, 2).join('. ') || devsync.description
 
 // Extract social links for structured data
 const socialLinks = [
   `https://github.com/${devsync.githubUserName}`,
-  ...devsync.socialMedia?.map(s => s.url) || [],
+  ...(devsync.socialMedia?.map((s) => s.url) || []),
 ].filter(Boolean)
 
 if (!Astro.site && !devsync.site) {
@@ -37,10 +36,7 @@ const homeUrl = new URL('/', site).toString()
 const websiteId = `${homeUrl}#website`
 const personId = `${homeUrl}#person`
 
-const {
-  title = seoTitle,
-  description = seoDescription,
-} = Astro.props
+const { title = seoTitle, description = seoDescription } = Astro.props
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -65,72 +61,91 @@ const structuredData = {
       publisher: {
         '@id': personId,
       },
-		},
+    },
   ],
 }
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="canonical" href={canonicalUrl} />
-		<link rel="icon" href="/favicon-32x32.svg" sizes="32x32" type="image/svg+xml" />
-		<link rel="icon" href="/favicon-16x16.svg" sizes="16x16" type="image/svg+xml" />
-		<link rel="icon" href="/logo-192-black.webp" sizes="192x192" type="image/webp" media="(prefers-color-scheme: light)" />
-		<link rel="icon" href="/logo-192-white.webp" sizes="192x192" type="image/webp" media="(prefers-color-scheme: dark)" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon-black.webp" media="(prefers-color-scheme: light)" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon-white.webp" media="(prefers-color-scheme: dark)" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon-white.webp" />
-		<link rel="manifest" href="/site.webmanifest" />
-		<link rel="preload" href={jostLatinWoff2} as="font" type="font/woff2" crossorigin />
-		<meta name="theme-color" content="#0a0a0a" />
-		<meta name="robots" content="index, follow" />
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={canonicalUrl} />
-		<meta property="og:image" content={ogImageUrl} />
-		<meta property="og:image:alt" content={ogImageAlt} />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon-32x32.svg" sizes="32x32" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-16x16.svg" sizes="16x16" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href="/logo-192-black.webp"
+      sizes="192x192"
+      type="image/webp"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      href="/logo-192-white.webp"
+      sizes="192x192"
+      type="image/webp"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon-black.webp"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon-white.webp"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-white.webp" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href={jostLatinWoff2} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="robots" content="index, follow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:site_name" content={seoTitle} />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={ogImageUrl} />
-		<meta name="twitter:image:alt" content={ogImageAlt} />
-		<meta property="og:image:width" content="1254" />
-		<meta property="og:image:height" content="1254" />
-		
-		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <meta property="og:image:width" content="1254" />
+    <meta property="og:image:height" content="1254" />
 
-		<script>
-			const localStorageTheme = localStorage.getItem('theme')
-			const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
-			const theme = localStorageTheme ? localStorageTheme : matchMedia.matches ? 'dark' : 'light'
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
-			if (theme === 'dark') {
-				document.documentElement.classList.toggle('dark')
-			}
-			
-			matchMedia.addEventListener('change', () => {
-				document.documentElement.classList.toggle('dark')
-			})
-		</script>
+    <script>
+      const localStorageTheme = localStorage.getItem('theme')
+      const matchMedia = window.matchMedia('(prefers-color-scheme: dark)')
+      const theme = localStorageTheme ? localStorageTheme : matchMedia.matches ? 'dark' : 'light'
 
-	</head>
-	<body class="min-h-screen max-w-9xl m-auto bg-main text-text">
-		<main>
-			<slot />
-		</main>
-	</body>
+      if (theme === 'dark') {
+        document.documentElement.classList.toggle('dark')
+      }
 
-	<style is:global>
-		html {
-			font-family: 'Jost Variable', sans-serif;
-		}
-	</style>
+      matchMedia.addEventListener('change', () => {
+        document.documentElement.classList.toggle('dark')
+      })
+    </script>
+  </head>
+  <body class="max-w-9xl bg-main text-text m-auto min-h-screen">
+    <main>
+      <slot />
+    </main>
+  </body>
+
+  <style is:global>
+    html {
+      font-family: 'Jost Variable', sans-serif;
+    }
+  </style>
 </html>

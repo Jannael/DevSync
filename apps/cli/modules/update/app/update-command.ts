@@ -20,8 +20,8 @@ class BaseUpdateCommand {}
 
 class UpdateCommand extends CreateLinkedinMixin(
   CreateAcademicsMixin(
-    createCVMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseUpdateCommand))),
-  ),
+    createCVMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseUpdateCommand)))
+  )
 ) {
   constructor() {
     super()

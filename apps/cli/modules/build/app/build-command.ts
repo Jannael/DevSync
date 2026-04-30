@@ -7,6 +7,7 @@ import { BOLD } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
+import { defaultLang, languages } from '@template/src/devsync'
 
 /*
 To build the project this is how it works
@@ -32,10 +33,12 @@ class BuildCommand extends createCVMixin(
     try {
       const devsync = await this.validateDevsync()
       await this.copyTemplateUseCase.copyTemplate()
-      await this.buildCV()
-      await this.createGithubProfile({ devsync })
-      await this.createAcademics({ devsync })
-      await this.createLinkedin({ devsync })
+      for (const lang of languages) {
+        await this.buildCV({ lang })
+        await this.createGithubProfile({ devsync, defaultLang })
+        await this.createAcademics({ devsync, defaultLang })
+        await this.createLinkedin({ devsync, lang })
+      }
 
       console.log(`${SPACE}${CHECK(`${BOLD('Build completed successfully.')}`)}`)
     } catch (e) {

@@ -8,11 +8,11 @@ import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-com
 // Mixins pattern for shared infrastructure code
 export function createCVMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends getHTMLFromCVComponentMixin(createPDFMixin(Base)) {
-    async buildCV() {
+    async buildCV({ lang }: { lang: string }) {
       console.log(`${SPACE}${GREEN('1.')} Building CV and generating PDF...`)
-      const html = await this.getHTMLFromCvComponent()
-      await this.createPDF({ html, path: pathCvPDF })
-      console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathCvPDF)}`)}`)
+      const html = await this.getHTMLFromCvComponent({ lang })
+      await this.createPDF({ html, path: pathCvPDF(lang) })
+      console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathCvPDF(lang))}`)}`)
       console.log('')
     }
   }

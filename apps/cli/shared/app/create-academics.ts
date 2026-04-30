@@ -107,7 +107,7 @@ ${skills}
       devsync: DevsyncPartial
       defaultLang: string
     }) {
-      console.log(`${SPACE}${GREEN('4.')} Generating academics README...`)
+      console.log(`${SPACE}${GREEN('-')} Generating academics README...`)
       // create certifications md
       const academics = await this.createAcademicsMd({ devsync, defaultLang })
       await this.writeFile({ path: pathAcademics, data: academics })

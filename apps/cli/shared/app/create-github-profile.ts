@@ -140,7 +140,7 @@ ${skills}
       devsync: DevsyncPartial
       defaultLang: string
     }) {
-      console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
+      console.log(`${SPACE}${GREEN('-')} Generating GitHub profile README...`)
       const README = await this.createGithubProfileMd({ devsync, defaultLang })
       await this.writeFile({ path: pathREADME, data: README })
       console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)

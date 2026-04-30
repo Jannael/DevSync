@@ -122,7 +122,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
     }
 
     async createLinkedin({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
-      console.log(`${SPACE}${GREEN('5.')} Generating LinkedIn presentation...`)
+      console.log(`${SPACE}${GREEN('-')} Generating LinkedIn presentation...`)
       const linkedin = await this.getMD({ devsync, lang })
       await this.writeFile({ path: pathLinkedin(lang), data: linkedin })
       console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin(lang))}`)}`)

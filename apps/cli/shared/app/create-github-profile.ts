@@ -10,43 +10,57 @@ import type { GConstructor } from '../infra/mixin-constructor'
 
 export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends writeFileMixin(mdUtilsMixin(Base)) {
-    private async createGithubProfileMd({ devsync }: { devsync: DevsyncPartial }) {
+    private async createGithubProfileMd({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
       let md = ''
 
-      md += this.getHeader({ devsync })
-      md += this.getExperienceSection({ devsync })
-      md += this.getProjectsSection({ devsync })
+      md += this.getHeader({ devsync, defaultLang })
+      md += this.getExperienceSection({ devsync, defaultLang })
+      md += this.getProjectsSection({ devsync, defaultLang })
 
       return md
     }
 
-    private getHeader({ devsync }: { devsync: DevsyncPartial }) {
+    private getHeader({ devsync, defaultLang }: { devsync: DevsyncPartial; defaultLang: string }) {
+      const devsyncTranslation = devsync[defaultLang]
       let md = ''
-      md += `# ${devsync.jobTitle ?? 'Professional'} | ${devsync.name ?? 'Name'}\n\n`
-      md += `Status: ${devsync.status?.badge ?? 'Active'}\n\n`
-      md += `${devsync.description ?? ''}\n\n`
+      md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'} | ${devsyncTranslation?.name ?? 'Name'}\n\n`
+      md += `Status: ${devsyncTranslation?.status?.badge ?? 'Active'}\n\n`
+      md += `${devsyncTranslation?.description ?? ''}\n\n`
 
-      for (const socialMedia of devsync.socialMedia ?? []) {
+      for (const socialMedia of devsyncTranslation?.socialMedia ?? []) {
         md += `[${socialMedia.mdBadge}](${socialMedia.url})`
       }
       md += this.badgeWithLink({
         badge: academicsBadge,
-        link: `https://github.com/${devsync.githubUserName ?? ''}/${devsync.githubUserName ?? ''}/tree/main/academics`,
+        link: `https://github.com/${devsyncTranslation?.githubUserName ?? ''}/${devsyncTranslation?.githubUserName ?? ''}/tree/main/academics`,
       })
 
-      for (const lang of devsync.languages ?? []) {
+      for (const lang of devsyncTranslation?.languages ?? []) {
         md += lang.mdBadge
       }
       md += '\n\n'
       return md
     }
 
-    private getExperienceSection({ devsync }: { devsync: DevsyncPartial }) {
+    private getExperienceSection({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
+      const devsyncTranslation = devsync[defaultLang]
       let md = ''
       md += '## Experience \n\n'
       md += '<table>'
 
-      for (const ex of devsync.experience ?? []) {
+      for (const ex of devsyncTranslation?.experience ?? []) {
         const links = this.getLinks({ links: ex.links })
         const listItems = ex.list?.items ? this.getListItems({ items: ex.list.items }) : ''
         const skills = this.getSkills({ skills: ex.skills })
@@ -72,12 +86,19 @@ ${skills}
       return md
     }
 
-    private getProjectsSection({ devsync }: { devsync: DevsyncPartial }) {
+    private getProjectsSection({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
+      const devsyncTranslation = devsync[defaultLang]
       let md = ''
       md += '## Projects \n\n'
       md += '<table>'
 
-      for (const proj of devsync.projects ?? []) {
+      for (const proj of devsyncTranslation?.projects ?? []) {
         const links = this.getLinks({ links: proj.links })
         const listItems = proj.list?.items ? this.getListItems({ items: proj.list.items }) : ''
         const skills = this.getSkills({ skills: proj.skills })
@@ -104,9 +125,15 @@ ${skills}
       return md
     }
 
-    async createGithubProfile({ devsync }: { devsync: DevsyncPartial }) {
+    async createGithubProfile({
+      devsync,
+      defaultLang,
+    }: {
+      devsync: DevsyncPartial
+      defaultLang: string
+    }) {
       console.log(`${SPACE}${GREEN('3.')} Generating GitHub profile README...`)
-      const README = await this.createGithubProfileMd({ devsync })
+      const README = await this.createGithubProfileMd({ devsync, defaultLang })
       await this.writeFile({ path: pathREADME, data: README })
       console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)
       console.log('')

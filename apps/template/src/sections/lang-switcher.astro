@@ -1,0 +1,38 @@
+---
+import { defaultLang, languages } from '@/devsync'
+
+interface Props {
+  currentLang?: string
+  class?: string
+}
+
+const { currentLang = defaultLang, class: className } = Astro.props
+---
+
+{
+  languages.length > 1 && (
+    <nav
+      aria-label="Language selector"
+      class={`${className} mb-6 flex justify-center lg:justify-start`}
+    >
+      <ul class="bg-third/70 flex items-center gap-2 rounded-full p-1">
+        {languages.map((lang) => {
+          const isActive = lang === currentLang
+          return (
+            <li>
+              <a
+                href={`/${lang}/`}
+                aria-current={isActive ? 'page' : undefined}
+                class={`block rounded-full px-4 py-2 text-sm font-semibold uppercase transition-colors ${
+                  isActive ? 'bg-accent text-main' : 'text-white/80 hover:text-white'
+                }`}
+              >
+                {lang}
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}

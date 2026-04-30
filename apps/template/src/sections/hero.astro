@@ -1,14 +1,16 @@
 ---
 import devsync from '@/devsync'
 import { defaultLang } from '@/devsync'
+import LangSwitcher from '@/sections/lang-switcher.astro'
 
-const lang = Astro.params.lang || defaultLang
-const profile = devsync[lang]
+const lang = (Astro.params.lang || defaultLang).toLowerCase()
+const profile = devsync[lang] ?? devsync[defaultLang]
 ---
 
-<section
-  class="lg:py-50 m-auto flex h-screen w-full max-w-5xl items-center justify-center lg:h-fit"
->
+<section class="relative m-auto flex h-screen w-full max-w-5xl items-center justify-center">
+  <div class="absolute left-0 top-0 flex w-full items-center justify-end gap-5 pt-10">
+    <LangSwitcher currentLang={lang} class="" />
+  </div>
   <main class="flex flex-col items-center justify-center gap-5 lg:flex-row">
     <div class="lg:order-0 order-1 w-full px-10 text-center lg:flex-1 lg:text-start">
       <h1 class="mb-10 text-3xl lg:text-6xl">{devsync.name}</h1>

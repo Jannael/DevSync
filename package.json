@@ -42,8 +42,8 @@
     "prepublishOnly": "bun run build",
     "lint": "oxlint --quiet --ignore-pattern \"*.js\"",
     "lint:fix": "oxlint --fix --ignore-pattern \"*.js\"",
-    "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
     "prepare": "husky"
   },
   "dependencies": {
@@ -53,8 +53,10 @@
     "@types/bun": "latest",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
-    "oxfmt": "0.46.0",
-    "oxlint": "1.61.0"
+    "oxlint": "1.61.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.9"
   },
   "peerDependencies": {
     "typescript": "5"
@@ -63,6 +65,9 @@
     "bun": ">=1.0.0"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["bun run lint:fix", "bun run fmt"]
+    "*.{ts,tsx,js,jsx,astro}": [
+      "bun run lint:fix",
+      "bun run fmt"
+    ]
   }
 }

@@ -25,11 +25,12 @@ bun run preview # Preview build
 
 ## Code Style
 
-### Formatter (oxfmt) - `.oxfmtrc.json`
+### Formatter (Prettier) - `.prettierrc`
 
 - **Single quotes**: `true` (use `'` not `"`)
 - **Semicolons**: `false` (no trailing semicolons)
-- **Ignore patterns**: `*.js`
+- **Print width**: `100`
+- **Plugins**: `prettier-plugin-astro`, `prettier-plugin-tailwindcss`
 
 ### Linter (oxlint) - `.oxlintrc.json`
 
@@ -158,8 +159,7 @@ Use the `skill` tool to load a skill when relevant.
 
 ```json
 {
-  "oxc.fmt.configPath": ".oxfmtrc.json",
-  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true
 }
 ```

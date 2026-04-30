@@ -3,14 +3,23 @@ import devsync from 'devsync'
 import '@/styles/global.css'
 import '@fontsource-variable/roboto/wght.css'
 import robotoLatinWoff2 from '@fontsource-variable/roboto/files/roboto-latin-wght-normal.woff2?url'
+import { defaultLang, languages } from '@/devsync'
+import { translations, type availableLangsType } from '@/const/fields-translations'
 
-const profile = devsync
+export function getStaticPaths() {
+  return languages.map((lang) => ({
+    params: { lang },
+  }))
+}
+const lang = (Astro.params.lang || defaultLang) as availableLangsType
+
+const profile = devsync[lang]
 const experience = profile.experience ?? []
 const projects = profile.projects ?? []
 const education = profile.education ?? []
 const certifications = profile.certifications ?? []
-const socialMedia = profile.socialMedia ?? []
-const languages = profile.languages ?? []
+const socialMedia = devsync.socialMedia ?? []
+const userLanguages = profile.languages ?? []
 
 const skillsFromSkillBlocks = [
   ...experience.flatMap((item) => (item.skills ?? []).map((skill) => skill.name)),
@@ -35,11 +44,11 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{profile.name ?? 'Candidate'} | CV</title>
+    <title>{devsync.name ?? 'Candidate'} | CV</title>
     <link rel="preload" href={robotoLatinWoff2} as="font" type="font/woff2" crossorigin />
     <meta
       name="description"
-      content={`ATS-ready CV generated from DEVSYNC.json for ${profile.name ?? 'candidate profile'}`}
+      content={`ATS-ready CV generated from DEVSYNC.json for ${devsync.name ?? 'candidate profile'}`}
     />
     <style>
       body {
@@ -51,7 +60,7 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
     <main class="mx-auto max-w-4xl px-6 py-5 print:max-w-none print:px-0 print:py-0">
       <header class="border-b border-slate-300 pb-5">
         <h1 class="text-3xl font-bold tracking-tight">
-          {(profile.name ?? 'Candidate Name') + (profile.jobTitle ? ' | ' + profile.jobTitle : '')}
+          {(devsync.name ?? 'Candidate Name') + (profile.jobTitle ? ' | ' + profile.jobTitle : '')}
         </h1>
         {profile.description && <p class="mt-3 text-sm leading-6">{profile.description}</p>}
         {
@@ -73,7 +82,9 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
       {
         coreSkills.length > 0 && (
           <section class="mt-5">
-            <h2 class="text-base font-semibold uppercase tracking-wider">Core Skills</h2>
+            <h2 class="text-base font-semibold uppercase tracking-wider">
+              {translations[lang]['Core Skills']}
+            </h2>
             <p class="mt-2 text-sm leading-6">{coreSkills.join(' | ')}</p>
           </section>
         )
@@ -83,7 +94,7 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
         experience.length > 0 && (
           <section class="mt-7">
             <h2 class="text-base font-semibold uppercase tracking-wider">
-              Professional Experience
+              {translations[lang]['Professional Experience']}
             </h2>
             <div class="mt-3 space-y-6">
               {experience.map((item) => (
@@ -114,7 +125,9 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
       {
         projects.length > 0 && (
           <section class="mt-7">
-            <h2 class="text-base font-semibold uppercase tracking-wider">Projects</h2>
+            <h2 class="text-base font-semibold uppercase tracking-wider">
+              {translations[lang]['Projects']}
+            </h2>
             <div class="mt-3 space-y-6">
               {projects.map((item) => (
                 <article>
@@ -154,7 +167,9 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
       {
         education.length > 0 && (
           <section class="mt-7">
-            <h2 class="text-base font-semibold uppercase tracking-wider">Education</h2>
+            <h2 class="text-base font-semibold uppercase tracking-wider">
+              {translations[lang]['Education']}
+            </h2>
             <div class="mt-3 space-y-5">
               {education.map((item) => (
                 <article>
@@ -183,14 +198,16 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
       {
         certifications.length > 0 && (
           <section class="mt-7">
-            <h2 class="text-base font-semibold uppercase tracking-wider">Certifications</h2>
+            <h2 class="text-base font-semibold uppercase tracking-wider">
+              {translations[lang]['Certifications']}
+            </h2>
             <div class="mt-3 space-y-5">
               {certifications.map((item) => (
                 <article>
                   <h3 class="text-base font-semibold">{item.name ?? 'Certification'}</h3>
                   {item.url && (
                     <p class="mt-1 text-sm leading-6">
-                      <span class="font-semibold">Credential:</span>{' '}
+                      <span class="font-semibold">{translations[lang]['credential']}</span>{' '}
                       <a class="underline decoration-slate-400 underline-offset-2" href={item.url}>
                         {item.url}
                       </a>
@@ -213,10 +230,14 @@ const coreSkills = [...new Set([...skillsFromSkillBlocks, ...skillsFromAchieveme
       }
 
       {
-        languages.length > 0 && (
+        userLanguages.length > 0 && (
           <section class="mt-7 flex items-center">
-            <h2 class="text-base font-semibold uppercase tracking-wider">Languages:</h2>
-            <p class="pl-2 text-sm leading-6">{languages.map((item) => item.name).join(' | ')}</p>
+            <h2 class="text-base font-semibold uppercase tracking-wider">
+              {translations[lang]['Languages']}
+            </h2>
+            <p class="pl-2 text-sm leading-6">
+              {userLanguages.map((item) => item.name).join(' | ')}
+            </p>
           </section>
         )
       }

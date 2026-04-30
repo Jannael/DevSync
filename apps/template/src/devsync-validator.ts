@@ -67,7 +67,7 @@ const certificationSchema = z.object({
   skills: z.array(skillsSchema),
 })
 
-export const devsyncSchema = z.object({
+export const devsyncObjectSchema = z.object({
   jobTitle: z.string({ message: 'Job title is required' }),
   name: z.string({ message: 'Name is required' }),
   description: z.string({ message: 'Description is required' }),
@@ -85,6 +85,12 @@ export const devsyncSchema = z.object({
   education: z.array(educationSchema),
   certifications: z.array(certificationSchema),
 })
+
+const devsyncSchema = z
+  .object({
+    defaultLang: z.string({ message: 'Default language is required' }),
+  })
+  .catchall(devsyncObjectSchema)
 
 export type Link = z.infer<typeof linkSchema>
 export type Skills = z.infer<typeof skillsSchema>

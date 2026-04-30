@@ -11,7 +11,13 @@ import { BOLD, GREEN } from '@/utils/colors'
 // Mixins pattern for shared infrastructure code
 export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
-    async getHTMLFromCvComponent({ lang }: { lang: string }): Promise<string> {
+    async getHTMLFromCvComponent({
+      lang,
+      runBuild,
+    }: {
+      lang: string
+      runBuild: boolean
+    }): Promise<string> {
       if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
         throw new NotFound(
           'Package.json not found',
@@ -25,7 +31,7 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
         await runBunCommand(['install'])
       }
 
-      await runBunCommand(['run', 'build'])
+      if (runBuild) await runBunCommand(['run', 'build'])
 
       try {
         const html = await fsReadFile(CV_ROUTE_OUTPUT_PATH(lang), 'utf8')

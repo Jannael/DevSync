@@ -76,7 +76,7 @@ const translation = translations[lang]
             ) : null}
 
             {skills?.length ? (
-              <div class="mt-4 flex flex-wrap justify-around gap-2 lg:px-10">
+              <div class="mt-4 flex flex-wrap justify-around lg:justify-start">
                 {skills.map((skill) => (
                   <span class="bg-third/70 hover:bg-third text-text/80 border-text/50 rounded-full border px-3 py-1 text-sm transition-transform hover:scale-105">
                     <img src={skill.icon} alt={skill.name} class="mr-2 inline h-4 w-4" />

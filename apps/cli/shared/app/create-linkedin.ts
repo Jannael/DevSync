@@ -43,7 +43,7 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       let md = ''
       const translation = devsync[lang]
       md += `# ${translation?.jobTitle ?? 'Professional Update'}\n\n`
-      md += `I am ${translation?.name ?? 'a software engineer'}.\n\n`
+      md += `I am ${devsync?.name ?? 'a software engineer'}.\n\n`
 
       if (translation?.description) {
         md += `${translation.description}\n\n`
@@ -107,12 +107,12 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       }
 
       md += "## Let's connect\n\n"
-      for (const social of translation?.socialMedia ?? []) {
+      for (const social of devsync?.socialMedia ?? []) {
         md += `- ${social.name}: ${social.url}\n`
       }
 
-      if (translation?.githubUserName) {
-        md += `- GitHub profile: https://github.com/${translation?.githubUserName}\n`
+      if (devsync?.githubUserName) {
+        md += `- GitHub profile: https://github.com/${devsync?.githubUserName}\n`
       }
 
       return md

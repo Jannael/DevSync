@@ -1,5 +1,9 @@
 ---
 import devsync from '@/devsync'
+import { defaultLang } from '@/devsync'
+
+const lang = Astro.params.lang || defaultLang
+const profile = devsync[lang]
 ---
 
 <section
@@ -8,8 +12,8 @@ import devsync from '@/devsync'
   <main class="flex flex-col items-center justify-center gap-5 lg:flex-row">
     <div class="lg:order-0 order-1 w-full px-10 text-center lg:flex-1 lg:text-start">
       <h1 class="mb-10 text-3xl lg:text-6xl">{devsync.name}</h1>
-      <h2 class="text-accent mb-8 text-xl lg:text-2xl">{devsync.jobTitle}</h2>
-      <p class="text-text/80 mb-13 text-balance text-sm lg:text-xl">{devsync.description}</p>
+      <h2 class="text-accent mb-8 text-xl lg:text-2xl">{profile.jobTitle}</h2>
+      <p class="text-text/80 mb-13 text-balance text-sm lg:text-xl">{profile.description}</p>
       {
         devsync.socialMedia && devsync.socialMedia.length > 0 && (
           <ul class="flex w-full items-center justify-center gap-3 pl-0 lg:w-fit lg:justify-start">
@@ -42,7 +46,7 @@ import devsync from '@/devsync'
         <div class="flex flex-1 items-center justify-center">
           <img
             src={devsync.img}
-            alt={devsync.name + ' ' + devsync.jobTitle}
+            alt={devsync.name + ' ' + profile.jobTitle}
             class="order-0 mb-10 w-60 rounded-full lg:order-1 lg:mb-0 lg:w-[450px]"
             style="mask-image: radial-gradient(circle, black 50%, transparent 70%);"
             width="450"

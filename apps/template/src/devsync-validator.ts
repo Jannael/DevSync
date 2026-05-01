@@ -90,7 +90,7 @@ const devsyncSchema = z
     socialMedia: z.array(linkSchema),
     githubUserName: z.string({ message: 'GitHub username is required' }),
   })
-  .catchall(devsyncObjectSchema)
+  .catchall(devsyncObjectSchema.deepPartial())
 
 export type Link = z.infer<typeof linkSchema>
 export type Skills = z.infer<typeof skillsSchema>

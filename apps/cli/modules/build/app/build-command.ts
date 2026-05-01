@@ -1,4 +1,4 @@
-import copyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
+import CopyTemplateUseCase from './copy-template.use-case'
 import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
@@ -25,7 +25,7 @@ class BuildCommand extends createCVMixin(
     CreateAcademicsMixin(CreateGithubProfileMixin(validateDevsyncMixin(BaseBuildCommand)))
   )
 ) {
-  constructor(private readonly copyTemplateUseCase: copyTemplateUseCase) {
+  constructor(private readonly copyTemplateUseCase: CopyTemplateUseCase) {
     super()
   }
 

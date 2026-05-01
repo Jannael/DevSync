@@ -1,13 +1,12 @@
-import type { BuildRepository } from '@/modules/build/domain/build-repository'
 import { GREEN } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
+import { copyDirectory } from '@/shared/infra/copy-directory'
+import { TEMPLATE_DIRECTORY } from '@/constants/paths'
 
 class CopyTemplateUseCase {
-  constructor(private readonly buildRepository: BuildRepository) {}
-
   async copyTemplate(): Promise<void> {
     console.log(`${SPACE}${GREEN('-')} Copying template files...`)
-    await this.buildRepository.copyTemplate()
+    await copyDirectory(TEMPLATE_DIRECTORY, process.cwd())
     console.log(`${SPACE}${CHECK('Template ready.')}`)
     console.log('')
   }

@@ -2,6 +2,7 @@
 import devsync from '@/devsync'
 import { defaultLang } from '@/devsync'
 import '@/styles/global.css'
+import Footer from '@/sections/footer.astro'
 import '@fontsource-variable/jost'
 import jostLatinWoff2 from '@fontsource-variable/jost/files/jost-latin-wght-normal.woff2?url'
 import { ogLocale } from '@/const/fields-translations'
@@ -147,9 +148,10 @@ const structuredData = {
     </script>
   </head>
   <body class="max-w-9xl bg-main text-text m-auto min-h-screen">
-    <main>
+    <main class="min-h-[calc(100vh-120px)]">
       <slot />
     </main>
+    <Footer />
   </body>
 
   <style is:global>

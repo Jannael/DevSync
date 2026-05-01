@@ -23,3 +23,7 @@ img[src^='/icons/'] {
 .dark img[src^='/icons/'] {
   filter: brightness(0) saturate(100%) invert(1) opacity(60%);
 }
+
+.dark .footer-logo {
+  filter: brightness(0) saturate(100%) invert(1);
+}

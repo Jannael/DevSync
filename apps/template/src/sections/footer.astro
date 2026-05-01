@@ -1,0 +1,43 @@
+---
+import devsync from '@/devsync'
+
+const fullName = devsync.name ?? 'Portfolio'
+const year = new Date().getFullYear()
+const socialMedia = devsync.socialMedia ?? []
+---
+
+<footer class="border-text/20 mt-16 border-t px-6 py-6">
+  <div
+    class="m-auto flex w-full max-w-5xl flex-col items-center justify-between gap-3 text-sm lg:flex-row"
+  >
+    <p class="text-text/75 flex items-center gap-2">
+      <img
+        src="/logo-192-black.webp"
+        alt="Devsync logo"
+        width="16"
+        height="16"
+        class="footer-logo h-4 w-4 rounded-sm"
+      />
+      <span>© {year} {fullName}</span>
+      <span class="text-text/45">·</span>
+      <span class="text-text/65">Built with Devsync</span>
+    </p>
+
+    {
+      socialMedia.length > 0 && (
+        <div class="flex flex-wrap items-center gap-3">
+          {socialMedia.slice(0, 3).map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text/70 hover:text-text text-xs underline decoration-transparent transition-colors hover:decoration-current"
+            >
+              {social.name}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</footer>

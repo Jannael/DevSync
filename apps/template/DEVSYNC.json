@@ -70,7 +70,7 @@
             "name": "GitHub",
             "url": "https://github.com/your-github-username/your-project-repo",
             "mdBadge": "![GitHub Repo](https://img.shields.io/badge/Repo-GitHub-181717?logo=github&logoColor=white)",
-            "icon": "https://cdn.simpleicons.org/github"
+            "icon": "/icons/github.svg"
           }
         ],
         "description": "Describe what the project does and why it matters.",

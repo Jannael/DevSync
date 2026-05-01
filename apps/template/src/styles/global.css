@@ -15,3 +15,11 @@
   --color-accent: #b0e4cc;
   --color-text: #f4f7f6;
 }
+
+img[src^='/icons/'] {
+  filter: brightness(0) saturate(100%) opacity(40%);
+}
+
+.dark img[src^='/icons/'] {
+  filter: brightness(0) saturate(100%) invert(1) opacity(60%);
+}

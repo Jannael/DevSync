@@ -23,17 +23,23 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
       const skills = new Set<string>()
       for (const ex of translation?.experience ?? []) {
         for (const skill of ex.skills ?? []) {
-          skills.add(skill.name)
+          if (skill.name) {
+            skills.add(skill.name)
+          }
         }
       }
       for (const project of translation?.projects ?? []) {
         for (const skill of project.skills ?? []) {
-          skills.add(skill.name)
+          if (skill.name) {
+            skills.add(skill.name)
+          }
         }
       }
       for (const cert of translation?.certifications ?? []) {
         for (const skill of cert.skills ?? []) {
-          skills.add(skill.name)
+          if (skill.name) {
+            skills.add(skill.name)
+          }
         }
       }
 

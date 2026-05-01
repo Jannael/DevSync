@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import devsync from '@/devsync'
+import devsync from '../devsync'
 
 export const GET: APIRoute = async ({ site }) => {
   const siteUrl = site?.toString() ?? devsync.site ?? 'https://devsync.work'

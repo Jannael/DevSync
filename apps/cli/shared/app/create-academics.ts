@@ -47,7 +47,7 @@ export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
           <h3>${ed.name ?? 'Name'} | ${ed.degree ?? 'Degree'} | ${ed.date ?? 'Date'}</h3>\n
 ${links}
           <br>
-          ${ed.list?.title.length > 1 ? ed.list?.title : MD_SEPARATOR}
+          ${(ed.list?.title?.length ?? 0) > 1 ? ed.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>
@@ -84,7 +84,7 @@ ${links}
       <tr>
         <td>
           <h3>${cert.name ?? 'Certification'}</h3>
-          ${cert.list?.title.length > 1 ? cert.list?.title : MD_SEPARATOR}
+          ${(cert.list?.title?.length ?? 0) > 1 ? cert.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>

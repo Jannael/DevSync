@@ -78,7 +78,7 @@ export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase
           <h3>${ex.company ?? 'Company'}</h3>\n
 ${links}
           <p>${ex.description ?? ''}</p>
-          ${ex.list?.title.length > 1 ? ex.list?.title : MD_SEPARATOR}
+          ${(ex.list?.title?.length ?? 0) > 1 ? ex.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>
@@ -117,7 +117,7 @@ ${skills}
           <h3>${proj.name ?? 'Project'}</h3>\n
 ${links}
           <p>${proj.description ?? ''}</p>
-          ${proj.list?.title.length > 1 ? proj.list?.title : MD_SEPARATOR}
+          ${(proj.list?.title?.length ?? 0) > 1 ? proj.list?.title : MD_SEPARATOR}
           <ul>
             ${listItems}
           </ul>

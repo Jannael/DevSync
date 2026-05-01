@@ -9,28 +9,28 @@ export function mdUtilsMixin<TBase extends GConstructor>(Base: TBase) {
       return `[${badge}](${link})`
     }
 
-    getListItems({ items }: { items: ListSchema['items'] }) {
+    getListItems({ items }: { items: Partial<ListSchema['items'][number]>[] }) {
       let listItems = ''
       for (const item of items) {
-        listItems += `<li><strong>${item.highlight}</strong>${item.description}</li>`
+        listItems += `<li><strong>${item.highlight ?? ''}</strong>${item.description ?? ''}</li>`
       }
       return listItems
     }
 
-    getSkills({ skills }: { skills: Skills[] }) {
+    getSkills({ skills }: { skills: Partial<Skills>[] | undefined }) {
       let innerSkills = ''
       for (const skill of skills ?? []) {
-        innerSkills += skill.mdBadge
+        innerSkills += skill.mdBadge ?? ''
       }
       return innerSkills
     }
 
-    getLinks({ links }: { links: Link[] }) {
+    getLinks({ links }: { links: Partial<Link>[] | undefined }) {
       let innerLinks = ''
       for (const link of links ?? []) {
         innerLinks += this.badgeWithLink({
-          badge: link.mdBadge,
-          link: link.url,
+          badge: link?.mdBadge ?? '',
+          link: link?.url ?? '',
         })
       }
       return innerLinks

@@ -1,0 +1,35 @@
+name: Update CV, README, LinkedIn & Academics
+
+on:
+  push:
+    paths:
+      - 'DEVSYNC.json'
+      - 'apps/template/DEVSYNC.json'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Update artifacts
+        run: bunx devsync update
+
+      - name: Push changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: 'docs: auto-update artifacts from DEVSYNC.json'

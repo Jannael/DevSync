@@ -52,7 +52,7 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
         if (unsupportedLang) {
           throw new BadRequest(
             'Invalid DEVSYNC.json structure',
-            `Language "${unsupportedLang}" is not supported in fields-translations.ts`
+            `Language "${unsupportedLang}" is not supported`
           )
         }
 

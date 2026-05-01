@@ -3,6 +3,7 @@ import Layout from '@/layouts/layout.astro'
 import Hero from '@/sections/hero.astro'
 import { languages } from '@/devsync'
 import Experience from '@/sections/experience.astro'
+import Projects from '@/sections/projects.astro'
 
 export function getStaticPaths() {
   return languages.map((lang) => ({
@@ -14,4 +15,5 @@ export function getStaticPaths() {
 <Layout>
   <Hero />
   <Experience />
+  <Projects />
 </Layout>

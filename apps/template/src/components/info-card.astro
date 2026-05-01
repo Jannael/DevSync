@@ -1,0 +1,137 @@
+---
+interface Props {
+  company?: string
+  position?: string
+  img?: string
+  web?: string
+  date?: string
+  links?: {
+    name?: string
+    url?: string
+    mdBadge?: string
+    icon?: string
+  }[]
+  description?: string
+  list?: {
+    title?: string
+    items?: {
+      highlight?: string
+      description?: string
+    }[]
+  }
+  skills?: {
+    name?: string
+    mdBadge?: string
+    icon?: string
+  }[]
+  name?: string
+
+  expand?: boolean
+}
+
+const { company, position, img, web, date, links, description, list, skills, name, expand } =
+  Astro.props
+---
+
+<li class="min-w-100 relative mb-10 flex-1">
+  <article class="bg-third/50 flex flex-col items-center justify-center rounded-2xl p-10 lg:block">
+    <div class="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+      <div class="mb-8 flex items-center gap-5">
+        {
+          img && (
+            <img
+              src={img}
+              alt={company}
+              width="44"
+              height="44"
+              class="h-11 w-11 rounded-full object-cover"
+            />
+          )
+        }
+        <div>
+          {
+            company && position && (
+              <h3
+                class={`flex flex-col items-center font-semibold lg:text-2xl ${expand ? 'gap-5' : 'gap-1'} ${expand ? 'text-2xl' : 'text-[20px]'} ${expand ? 'lg:flex-row' : 'lg:flex-col'}`}
+              >
+                {position}
+                {expand && <span class="text-text/70 hidden w-fit text-lg lg:block"> | </span>}
+                <span class="text-text/70 text-sm lg:text-lg">{company}</span>
+              </h3>
+            )
+          }
+          {
+            name && (
+              <h3
+                class={`flex flex-col items-center font-semibold lg:text-2xl ${expand ? 'gap-5' : 'gap-1'} ${expand ? 'text-2xl' : 'text-[20px]'} ${expand ? 'lg:flex-row' : 'lg:flex-col'}`}
+              >
+                {name}
+                {expand && <span class="text-text/70 hidden w-fit text-lg lg:block"> | </span>}
+              </h3>
+            )
+          }
+        </div>
+      </div>
+
+      {
+        date && (
+          <p
+            class={`bg-main/60 border-text/50 text-text/80 mb-5 w-fit rounded-full border px-5 py-3 lg:mb-0 lg:self-start ${
+              expand ? 'text-font-medium' : 'text-[10px]'
+            }`}
+          >
+            {date}
+          </p>
+        )
+      }
+    </div>
+
+    {
+      links?.length ? (
+        <div class="mb-8 mt-4 flex flex-wrap gap-2">
+          {links.map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="bg-third/70 hover:bg-third text-text/80 border-text/50 flex items-center justify-center rounded-full border px-3 py-1 text-sm transition-transform hover:scale-105"
+            >
+              <img src={link.icon} alt={link.name} class="mr-2 inline h-4 w-4" />
+              {link.name}
+            </a>
+          ))}
+        </div>
+      ) : null
+    }
+
+    {description && <p class="text-text/70 mb-10 mt-4 text-xl leading-6">{description}</p>}
+
+    {
+      list?.items?.length ? (
+        <>
+          <header class="mb-3 text-xl font-bold">{list.title}</header>
+          <ul class="text-text/90 mb-16 mt-4 list-disc space-y-2 pl-8 text-sm">
+            {list.items.map((item) => (
+              <li class="text-text/60 text-lg">
+                <span class="text-text">{item.highlight}:</span> {item.description}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null
+    }
+
+    {
+      skills?.length ? (
+        <div class="mt-4 flex flex-wrap justify-around lg:justify-start">
+          {skills.map((skill) => (
+            <span class="bg-third/70 hover:bg-third text-text/80 border-text/50 rounded-full border px-3 py-1 text-sm transition-transform hover:scale-105">
+              <img src={skill.icon} alt={skill.name} class="mr-2 inline h-4 w-4" />
+              {skill.name}
+            </span>
+          ))}
+        </div>
+      ) : null
+    }
+  </article>
+</li>

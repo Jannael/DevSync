@@ -26,7 +26,8 @@
     "noUnusedParameters": false,
     "paths": {
       "@template/*": ["./apps/template/*"],
-      "@/*": ["./apps/cli/*"]
+      "@/*": ["./apps/cli/*"],
+      "@devsync/*": ["./apps/devsync/*"]
     }
   }
 }

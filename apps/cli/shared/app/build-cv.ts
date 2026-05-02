@@ -11,7 +11,7 @@ import { $ } from 'bun'
 export function createCVMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends getHTMLFromCVComponentMixin(createPDFMixin(Base)) {
     async buildCV({ lang }: { lang: string }) {
-      const CVPath = (await $`bun pm pkg get devsync.pathToCompiledCv`.text())
+      const CVPath = (await $`bun pm pkg get devsync.pathToCompiledCV`.text())
         .trim()
         .replace('[lang]', lang)
         .replace(/"/g, '')

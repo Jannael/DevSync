@@ -30,7 +30,7 @@ export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase
     private getHeader({ devsync, defaultLang }: { devsync: DevsyncPartial; defaultLang: string }) {
       const devsyncTranslation = devsync[defaultLang]
       let md = ''
-      md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'} | ${devsync?.name ?? 'Name'}\n\n`
+      md += `# ${devsyncTranslation?.jobTitle ?? 'Professional'}\n\n`
       md += `${devsyncTranslation?.status?.badge ?? 'Active'}\n\n`
       md += `${devsyncTranslation?.description ?? ''}\n\n`
 

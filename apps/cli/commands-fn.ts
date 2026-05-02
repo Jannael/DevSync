@@ -1,12 +1,10 @@
 import type { CommandNames } from '@/commands'
-import build from '@/modules/build/main'
 import init from '@/modules/init/main'
-import update from '@/modules/update/main'
+import build from '@/modules/build/main'
 
 type CommandHandler = (args: string[]) => Promise<void>
 
 export const COMMANDS_FN: Record<CommandNames, CommandHandler> = {
   init,
   build,
-  update,
 } as const

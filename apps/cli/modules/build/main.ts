@@ -1,8 +1,6 @@
-import BuildCommand from './app/build-command'
-import CopyTemplateUseCase from './app/copy-template.use-case'
+import UpdateCommand from './app/update-command'
 
-export default async function build() {
-  const copyTemplateUseCase = new CopyTemplateUseCase()
-  const buildCommand = new BuildCommand(copyTemplateUseCase)
-  await buildCommand.execute()
+export default async function update() {
+  const updateCommand = new UpdateCommand()
+  await updateCommand.execute()
 }

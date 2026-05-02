@@ -6,6 +6,7 @@ export class CloneRepository implements GitHubRepository {
   cloneRepository(url: string): void {
     try {
       execSync(`git clone ${url} .`, { stdio: 'inherit' })
+      execSync(`git remote remove origin`, { stdio: 'inherit' })
     } catch {
       throw new ServerError('Failed to clone repository')
     }

@@ -1,7 +1,7 @@
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { pathCvPDF } from '@/constants/paths'
+import { CV_PDF } from '@/constants/paths'
 import { createPDFMixin } from '@/shared/infra/create-pdf'
 import { getHTMLFromCVComponentMixin } from '@/shared/infra/get-html-from-cv-component'
 import { $ } from 'bun'
@@ -18,9 +18,9 @@ export function createCVMixin<TBase extends GConstructor>(Base: TBase) {
 
       console.log(`${SPACE}${GREEN('-')} Building CV and generating PDF...`)
       const html = await this.getHTMLFromCvComponent({ CVPath })
-      await this.createPDF({ html, path: pathCvPDF(lang) })
+      await this.createPDF({ html, path: CV_PDF(lang) })
 
-      console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(pathCvPDF(lang))}`)}`)
+      console.log(`${SPACE}${CHECK(`CV generated at ${BOLD(CV_PDF(lang))}`)}`)
       console.log('')
     }
   }

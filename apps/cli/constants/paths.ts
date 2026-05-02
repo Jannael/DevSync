@@ -6,6 +6,7 @@ export const DEVSYNC_DIRECTORY = resolve(import.meta.dir, '..', '..', 'devsync')
 export const README = './README.md'
 export const ACADEMICS = './academics/README.md'
 export const DEVSYNC_JSON = resolve(process.cwd(), 'DEVSYNC.json')
+export const DEFAULT_TEMPLATE_URL = 'https://github.com/jannael/devsync-default-template'
 
 // Multi-language outputs
 export const LINKEDIN = (lang: string) => `./linkedin-${lang}.md`

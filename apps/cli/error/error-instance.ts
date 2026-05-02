@@ -33,6 +33,7 @@ type IServerError =
   | 'Failed to parse DEVSYNC.json'
   | 'Failed to write file'
   | 'Failed to read file'
+  | 'Failed to clone repository'
   | 'Failed to copy template'
   | 'Failed to copy directory'
   | 'Failed to create PDF'

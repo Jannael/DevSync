@@ -31,8 +31,8 @@ class UpdateCommand extends CreateLinkedinMixin(
   async execute(): Promise<void> {
     try {
       const devsync = await this.validateDevsync()
-      for (const [index, lang] of languages.entries()) {
-        await this.buildCV({ lang, runBuild: index === 0 })
+      for (const lang of languages) {
+        await this.buildCV({ lang })
         await this.createLinkedin({ devsync, lang })
       }
       await this.createGithubProfile({ devsync, defaultLang })

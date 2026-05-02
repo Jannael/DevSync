@@ -1,7 +1,7 @@
-import devsync from './DEVSYNC.json'
-import { parseDevsync } from './devsync-validator'
+import devsync from '../DEVSYNC.json'
+import { parseDevsync } from '../src/devsync-validator'
 
-export * from './devsync-validator'
+export * from '../src/devsync-validator'
 
 export const devsyncGlobalFields = [
   'name',

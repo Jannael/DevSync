@@ -1,4 +1,4 @@
-import CopyTemplateUseCase from './copy-template.use-case'
+import CopyTemplateUseCase from '@/modules/build/app/copy-template.use-case'
 import { CreateGithubProfileMixin } from '@/shared/app/create-github-profile'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
@@ -7,7 +7,7 @@ import { BOLD } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
-import { defaultLang, languages } from '@template/src/devsync'
+import { defaultLang, languages } from '@devsync/src/devsync'
 
 /*
 To build the project this is how it works
@@ -33,10 +33,12 @@ class BuildCommand extends createCVMixin(
     try {
       const devsync = await this.validateDevsync()
       await this.copyTemplateUseCase.copyTemplate()
-      for (const [index, lang] of languages.entries()) {
-        await this.buildCV({ lang, runBuild: index === 0 })
+
+      for (const lang of languages) {
+        await this.buildCV({ lang })
         await this.createLinkedin({ devsync, lang })
       }
+
       await this.createGithubProfile({ devsync, defaultLang })
       await this.createAcademics({ devsync, defaultLang })
 

@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 export const pathCVComponent = './src/pages/cv.astro'
 export const CWD_PACKAGE_JSON_PATH = resolve(process.cwd(), 'package.json')
 export const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', 'template')
+export const DEVSYNC_DIRECTORY = resolve(import.meta.dir, '..', '..', 'devsync')
 export const pathREADME = './README.md'
 export const pathAcademics = './academics/README.md'
 export const DEVSYNC_JSON_PATH = resolve(process.cwd(), 'DEVSYNC.json')

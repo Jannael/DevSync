@@ -1,0 +1,17 @@
+{
+  "name": "@devsync/template",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'add build command'"
+  },
+  "dependencies": {
+    "zod": "3.25.76"
+  },
+  "devsync": {
+    "pathToCompiledCV": "add path to compiled cv"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

@@ -7,7 +7,7 @@ import { BOLD } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
 import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
-import { defaultLang, languages } from '@devsync/src/devsync'
+import { defaultLang, languages } from '@devsync/src/devsync/devsync'
 
 /*
 To build the project this is how it works

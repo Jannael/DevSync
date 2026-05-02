@@ -1,7 +1,7 @@
 import { readFile as fsReadFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { CWD_PACKAGE_JSON_PATH } from '@/constants/paths'
+import { CWD_PACKAGE_JSON } from '@/constants/paths'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { NotFound, ServerError } from '@/error/error-instance'
 import { SPACE } from '@/utils/icons-terminal'
@@ -11,7 +11,7 @@ import { BOLD, GREEN } from '@/utils/colors'
 export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
     async getHTMLFromCvComponent({ CVPath }: { CVPath: string }): Promise<string> {
-      if (!existsSync(CWD_PACKAGE_JSON_PATH)) {
+      if (!existsSync(CWD_PACKAGE_JSON)) {
         throw new NotFound(
           'Package.json not found',
           `${SPACE}${SPACE}${GREEN('1.')} Run ${BOLD('devsync init')}\n` +

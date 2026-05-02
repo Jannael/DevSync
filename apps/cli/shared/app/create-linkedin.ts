@@ -2,7 +2,7 @@ import type { DevsyncPartial } from '@template/src/devsync-validator'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { BOLD, GREEN } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { pathLinkedin } from '@/constants/paths'
+import { LINKEDIN } from '@/constants/paths'
 import { writeFileMixin } from '@/shared/infra/write-file'
 import { translations, type availableLangsType } from '@template/src/const/fields-translations'
 
@@ -130,8 +130,8 @@ export function CreateLinkedinMixin<TBase extends GConstructor>(Base: TBase) {
     async createLinkedin({ devsync, lang }: { devsync: DevsyncPartial; lang: string }) {
       console.log(`${SPACE}${GREEN('-')} Generating LinkedIn presentation...`)
       const linkedin = await this.getMD({ devsync, lang })
-      await this.writeFile({ path: pathLinkedin(lang), data: linkedin })
-      console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(pathLinkedin(lang))}`)}`)
+      await this.writeFile({ path: LINKEDIN(lang), data: linkedin })
+      console.log(`${SPACE}${CHECK(`LinkedIn markdown generated at ${BOLD(LINKEDIN(lang))}`)}`)
       console.log('')
     }
   }

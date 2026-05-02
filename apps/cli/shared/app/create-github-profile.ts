@@ -2,7 +2,7 @@ import type { DevsyncPartial } from '@template/src/devsync-validator'
 import { academicsBadge } from '@/constants/academics-badge'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
 import { MD_SEPARATOR } from '@/constants/md-separator'
-import { pathREADME } from '@/constants/paths'
+import { README as README_PATH } from '@/constants/paths'
 import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { writeFileMixin } from '../infra/write-file'
@@ -142,8 +142,8 @@ ${skills}
     }) {
       console.log(`${SPACE}${GREEN('-')} Generating GitHub profile README...`)
       const README = await this.createGithubProfileMd({ devsync, defaultLang })
-      await this.writeFile({ path: pathREADME, data: README })
-      console.log(`${SPACE}${CHECK(`README generated at ${BOLD(pathREADME)}`)}`)
+      await this.writeFile({ path: README_PATH, data: README })
+      console.log(`${SPACE}${CHECK(`README generated at ${BOLD(README_PATH)}`)}`)
       console.log('')
     }
   }

@@ -5,7 +5,7 @@ import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { writeFileMixin } from '../infra/write-file'
 import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { pathAcademics } from '@/constants/paths'
+import { ACADEMICS } from '@/constants/paths'
 import { translations, type availableLangsType } from '@template/src/const/fields-translations'
 
 export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
@@ -110,8 +110,8 @@ ${skills}
       console.log(`${SPACE}${GREEN('-')} Generating academics README...`)
       // create certifications md
       const academics = await this.createAcademicsMd({ devsync, defaultLang })
-      await this.writeFile({ path: pathAcademics, data: academics })
-      console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(pathAcademics)}`)}`)
+      await this.writeFile({ path: ACADEMICS, data: academics })
+      console.log(`${SPACE}${CHECK(`Academics file generated at ${BOLD(ACADEMICS)}`)}`)
       console.log('')
     }
   }

@@ -3,7 +3,7 @@ import { parseDevsync, type DevsyncPartial } from '@devsync/src/devsync/devsync-
 import { availableLangs } from '@devsync/src/devsync/fields-translations'
 import { devsyncGlobalFields } from '@devsync/src/devsync/devsync'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
-import { DEVSYNC_JSON_PATH } from '@/constants/paths'
+import { DEVSYNC_JSON } from '@/constants/paths'
 import { BadRequest, ServerError } from '@/error/error-instance'
 import { readFileMixin } from '@/shared/infra/read-file'
 import { SPACE } from '@/utils/icons-terminal'
@@ -15,7 +15,7 @@ export function validateDevsyncMixin<TBase extends GConstructor>(Base: TBase) {
       let raw = ''
 
       try {
-        raw = await this.readFile({ path: DEVSYNC_JSON_PATH })
+        raw = await this.readFile({ path: DEVSYNC_JSON })
       } catch {
         throw new ServerError(
           'Failed to read DEVSYNC.json',

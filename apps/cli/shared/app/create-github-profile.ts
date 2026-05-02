@@ -1,4 +1,4 @@
-import type { DevsyncPartial } from '@template/src/devsync-validator'
+import type { DevsyncPartial } from '@devsync/src/devsync/devsync-validator'
 import { academicsBadge } from '@/constants/academics-badge'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
 import { MD_SEPARATOR } from '@/constants/md-separator'
@@ -7,7 +7,7 @@ import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { writeFileMixin } from '../infra/write-file'
 import type { GConstructor } from '../infra/mixin-constructor'
-import { translations, type availableLangsType } from '@template/src/const/fields-translations'
+import { translations, type availableLangsType } from '@devsync/src/devsync/fields-translations'
 
 export function CreateGithubProfileMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends writeFileMixin(mdUtilsMixin(Base)) {

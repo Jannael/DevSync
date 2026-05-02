@@ -1,10 +1,10 @@
-import type { DevsyncPartial } from '@template/src/devsync-validator'
+import type { DevsyncPartial } from '@devsync/src/devsync/devsync-validator'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { BOLD, GREEN } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { LINKEDIN } from '@/constants/paths'
 import { writeFileMixin } from '@/shared/infra/write-file'
-import { translations, type availableLangsType } from '@template/src/const/fields-translations'
+import { translations, type availableLangsType } from '@devsync/src/devsync/fields-translations'
 
 /*
 Linkedin.md will have a version with each translation

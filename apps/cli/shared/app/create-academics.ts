@@ -1,4 +1,4 @@
-import type { DevsyncPartial } from '@template/src/devsync-validator'
+import type { DevsyncPartial } from '@devsync/src/devsync/devsync-validator'
 import { mdUtilsMixin } from '@/utils/md-utils.ts'
 import { MD_SEPARATOR } from '@/constants/md-separator'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
@@ -6,7 +6,7 @@ import { writeFileMixin } from '../infra/write-file'
 import { GREEN, BOLD } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { ACADEMICS } from '@/constants/paths'
-import { translations, type availableLangsType } from '@template/src/const/fields-translations'
+import { translations, type availableLangsType } from '@devsync/src/devsync/fields-translations'
 
 export function CreateAcademicsMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends mdUtilsMixin(writeFileMixin(Base)) {

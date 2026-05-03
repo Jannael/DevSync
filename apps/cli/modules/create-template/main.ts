@@ -5,5 +5,5 @@ import { CHECK, SPACE } from '@/utils/icons-terminal'
 export default async function createTemplate() {
   console.log(`${SPACE}Creating template...`)
   await copyDirectory(DEVSYNC_DIRECTORY, process.cwd())
-  console.log(`${SPACE}${CHECK}Template created successfully!`)
+  console.log(`${SPACE}${CHECK('Template created successfully!')}`)
 }

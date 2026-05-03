@@ -9,6 +9,11 @@ export const AVAILABLE_COMMANDS = [
     command: 'devsync build',
     description: 'Build linkedin.md, Github Profile, academics and create PDF from cv component',
   },
+  {
+    name: 'create-template',
+    command: 'devsync create-template',
+    description: 'Create a new template for devsync',
+  },
 ] as const
 
 export type CommandNames = (typeof AVAILABLE_COMMANDS)[number]['name']

@@ -8,9 +8,9 @@ import { SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 
 // Mixins pattern for shared infrastructure code
-export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TBase) {
+export function getHTMLMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
-    async getHTMLFromCvComponent({ CVPath }: { CVPath: string }): Promise<string> {
+    async getHTML({ path }: { path: string }): Promise<string> {
       if (!existsSync(CWD_PACKAGE_JSON)) {
         throw new NotFound(
           'Package.json not found',
@@ -21,7 +21,7 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
       }
 
       try {
-        const html = await fsReadFile(CVPath, 'utf8')
+        const html = await fsReadFile(path, 'utf8')
         const stylesheetRegex = /<link[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+)["'][^>]*>/gi
         const stylesheetLinks = Array.from(html.matchAll(stylesheetRegex))
         let inlinedHTML = html
@@ -31,7 +31,7 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
 
           const cssPath = href?.startsWith('/')
             ? resolve(process.cwd(), 'dist', href.slice(1))
-            : resolve(dirname(CVPath), href ?? '')
+            : resolve(dirname(path), href ?? '')
 
           const css = await fsReadFile(cssPath, 'utf8')
           inlinedHTML = inlinedHTML.replace(linkTag, `<style>${css}</style>`)

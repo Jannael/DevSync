@@ -1,7 +1,6 @@
 import { resolve } from 'node:path'
 
 export const CWD_PACKAGE_JSON = resolve(process.cwd(), 'package.json')
-export const TEMPLATE_DIRECTORY = resolve(import.meta.dir, '..', '..', 'template')
 export const DEVSYNC_DIRECTORY = resolve(import.meta.dir, '..', '..', 'devsync')
 export const README = './README.md'
 export const ACADEMICS = './academics/README.md'

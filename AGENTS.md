@@ -1,198 +1,166 @@
 # AGENTS.md - Devsync Codebase Guide
 
-## Build, Lint, and Test Commands
+## Project Overview
+
+Devsync is a CLI tool for syncing portfolio/CV across GitHub, LinkedIn, and PDF outputs. Built with Bun + TypeScript.
+
+## Commands
 
 ```bash
-bun install        # Install dependencies
-bun run lint       # Lint CLI code (ignores .js files)
-bun run lint:fix   # Auto-fix lint issues
-bun run fmt        # Format code
-bun run fmt:check  # Check formatting
-bun run build      # Build CLI bundle -> dist/index.js
+# Install dependencies
+bun install
+
+# Build CLI (outputs to dist/index.js)
+bun run build
+
+# Lint (oxlint - quiet mode, ignores .js files)
+bun run lint
+
+# Auto-fix lint issues
+bun run lint:fix
+
+# Format code (prettier)
+bun run fmt
+
+# Check formatting without fixing
+bun run fmt:check
+
+# Run all tests
+bun test
+
+# Run single test file
+bun test test/cli/shared/infra/write-file.test.ts
+bun test --run test/cli/utils/run-bun-command.test.ts  # alternative syntax
+
+# Run tests matching pattern
+bun test --run -t "writeFileMixin"
 ```
-
-**Template app** (run in `apps/template`):
-
-```bash
-bun run dev     # Dev server
-bun run build   # Static site build
-bun run preview # Preview build
-```
-
-**Note**: Tests run with `bun test`.
-
----
 
 ## Code Style
 
-### Formatter (Prettier) - `.prettierrc`
+### General
 
-- **Single quotes**: `true` (use `'` not `"`)
-- **Semicolons**: `false` (no trailing semicolons)
-- **Print width**: `100`
-- **Plugins**: `prettier-plugin-astro`, `prettier-plugin-tailwindcss`
+- No comments unless explaining complex logic
+- Prefer named exports where practical
+- Default exports for classes used with `import type`
 
-### Linter (oxlint) - `.oxlintrc.json`
+### Formatting (Prettier)
 
-- **Plugins**: `typescript`, `unicorn`, `oxc`
-- **Category**: `correctness` set to `error`
-- **Env**: `builtin` enabled (Node.js globals)
+- Single quotes: `true`
+- Semicolons: `false`
+- Trailing commas: `es5`
+- Print width: `100`
+- Tab width: `2` spaces, no tabs
 
-### TypeScript (tsconfig.json)
+### Linting (oxlint)
 
-- `strict: true`, `noImplicitOverride: true`, `noUncheckedIndexedAccess: true`
-- `verbatimModuleSyntax: true` (use `import type` for type-only imports)
-- `moduleResolution: bundler`, `module: Preserve`
+- Uses TypeScript, Unicorn, and OXC plugins
+- Correctness rules set to `error`
+- Environment: `builtin` (Node.js)
 
----
+### TypeScript
 
-## Path Aliases
+- Strict mode enabled
+- `moduleResolution: bundler`
+- `verbatimModuleSyntax: true`
+- `noUncheckedIndexedAccess: true`
+- `noImplicitOverride: true`
+- Path aliases:
+  - `@/*` → `apps/cli/*`
+  - `@devsync/*` → `apps/devsync/*`
 
-```typescript
-// CLI code (@ -> apps/cli)
-import { GREEN } from '@/utils/colors'
+### Imports
 
-// Template app (@template -> apps/template)
-import template from '@template/DEVSYNC.json'
-import type { DevsyncPartial } from '@template/src/devsync-validator'
+- Use path aliases: `import { X } from '@/utils/icons-terminal'`
+- Node.js builtins: `import { spawn } from 'node:child_process'`
+- Type imports: `import type { CloneRepositoryUseCase } from './...'` (when not used at runtime)
+
+### File Naming
+
+- TypeScript files: `kebab-case.ts` or `camelCase.ts` based on content
+- Classes: `PascalCase.ts`
+- Test files: `*.test.ts`
+
+### Architecture Pattern
+
+```
+modules/    - Feature modules (init, build, create-template)
+  app/      - Use cases with execute() methods
+  domain/   - Business logic interfaces
+  infra/    - External integrations (git, file system)
+
+shared/
+  app/      - Shared application logic
+  infra/    - Shared infrastructure (write-file, read-file, etc.)
+
+error/      - Error types using discriminated unions
+utils/      - Pure utility functions
 ```
 
----
+### Error Handling
 
-## Naming Conventions
+- Use custom error classes from `@/error/error-instance`
+- Discriminated union types for error messages
+- Wrap errors with descriptive context using second arg to constructors
+- Use `errorHandler()` in CLI entry points to exit with proper messaging
 
-| Element             | Convention                      | Example                                   |
-| ------------------- | ------------------------------- | ----------------------------------------- |
-| Files               | kebab-case                      | `error-instance.ts`, `md-utils.ts`        |
-| Functions/variables | camelCase                       | `createGithubProfile`, `devsync`          |
-| Types/Classes       | PascalCase                      | `CreateGithubProfileMixin`, `ServerError` |
-| Constants           | SCREAMING_SNAKE_CASE            | `AVAILABLE_COMMANDS`                      |
-| Error type unions   | PascalCase prefix + descriptive | `INotFound`, `IServerError`               |
-
----
-
-## Error Handling Pattern
-
-Use typed literal-union errors via `CreateError<T>('ErrorName')`:
+### Error Pattern
 
 ```typescript
-import { CreateError } from '@/error/error-constructor'
+type IServerError = 'Failed to read file' | 'Failed to write file'
+export const ServerError = CreateError<IServerError>('ServerError')
 
-type INotFound = 'DEVSYNC.json not found' | 'Template DEVSYNC.json not found'
-export const NotFound = CreateError<INotFound>('NotFound')
-
-// Usage
-throw new NotFound('DEVSYNC.json not found')
-```
-
-Error constructors: `apps/cli/error/error-constructor.ts`
-Error instances: `apps/cli/error/error-instance.ts`
-
----
-
-## Architecture
-
-### CLI App (`apps/cli`)
-
-- `index.ts` - Entrypoint
-- `commands.ts` - Command declarations
-- `commands-fn.ts` - Handler mappings
-- `error/` - Typed error definitions
-- `modules/<command>/main.ts` - Command implementations (`init`, `build`, `update`)
-- `shared/app/` - Business logic mixins
-- `shared/infra/` - Infrastructure (file I/O, PDF)
-- `utils/` - Helpers (colors, icons, markdown)
-- `constants/` - Constants (paths, badges)
-
-### Template App (`apps/template`)
-
-- `src/devsync.ts` - Zod schema validation, typed data export
-- `src/devsync-validator.ts` - DEVSYNC.json type definitions
-- `src/const/fields-translations.ts` - UI label translations used by template + CLI markdown generators
-- `src/layouts/layout.astro` - SEO-optimized layout with dynamic metadata from DEVSYNC.json
-- `src/pages/index.astro` - Browser-language redirect (`/` -> `/<lang>/` with default fallback)
-- `src/pages/[lang]/index.astro` - Localized landing page
-- `src/pages/[lang]/cv.astro` - Localized ATS-oriented CV renderer
-- `DEVSYNC.json` - Source of truth for portfolio/CV/LinkedIn/GitHub data
-
-### DEVSYNC i18n shape
-
-- Global fields live at root: `defaultLang`, `site`, `name`, `img`, `socialMedia`, `githubUserName`
-- Localized content lives under language keys (e.g. `en`, `es`) with translated `jobTitle`, `description`, `experience`, etc.
-- Any new language key in `DEVSYNC.json` must also be added to `src/const/fields-translations.ts`
-
----
-
-## Terminal Output Style
-
-Use color/icon helpers from `apps/cli/utils/`:
-
-```typescript
-import { GREEN, BOLD, RED } from '@/utils/colors'
-import { CHECK, SPACE, X } from '@/utils/icons-terminal'
-
-console.log(`${SPACE}${CHECK(`${BOLD('Success')} ${GREEN('message')}`)}`)
-console.log(`${SPACE}${X('Error: something went wrong')}`)
-```
-
-Available colors: `GREEN`, `YELLOW`, `RED`, `MAGENTA`, `BLUE`, `BOLD`, `BLACK`, `BG_YELLOW`
-
----
-
-## Adding New Commands
-
-1. Add command metadata to `apps/cli/commands.ts`
-2. Add handler mapping in `apps/cli/commands-fn.ts`
-3. Implement command module under `apps/cli/modules/<command>/main.ts`
-
----
-
-## Agent Skills Available
-
-Skills in `.agents/skills/`:
-
-- `typescript-advanced-types` - TypeScript type system mastery
-- `oxlint` - Linter configuration and usage
-- `tailwind-css-patterns` - Tailwind CSS styling
-- `astro` - Astro framework best practices
-- `frontend-design` - UI design patterns
-- `accessibility` - WCAG 2.2 compliance
-- `seo` - Search engine optimization
-
-Use the `skill` tool to load a skill when relevant.
-
----
-
-## VSCode Setup
-
-```json
-{
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+// Usage in infrastructure code:
+try {
+  await fs.writeFile(path, data)
+} catch {
+  throw new ServerError('Failed to write file', 'Check permissions...')
 }
 ```
 
----
+### Mixin Pattern
+
+For shared infrastructure methods on classes:
+
+```typescript
+export function writeFileMixin<TBase extends GConstructor>(Base: TBase) {
+  return class extends Base {
+    async writeFile({ path, data }: { path: string; data: string }) {
+      // implementation
+    }
+  }
+}
+```
+
+### Class Structure
+
+```typescript
+class BaseInitCommand {}
+
+class InitCommand extends BaseInitCommand {
+  constructor(private readonly cloneRepository: CloneRepositoryUseCase) {
+    super()
+  }
+
+  async execute(): Promise<void> {
+    // implementation
+  }
+}
+```
 
 ## Testing
 
-Use simple, minimal test names. Clean output is easier to scan than verbose descriptions.
+- Framework: Vitest with Node environment
+- Test files: `*.test.ts` in `test/` mirroring `apps/cli/` structure
+- Mock with `vi.mock()` and `vi.mocked()`
+- Use `beforeEach` with `vi.clearAllMocks()`
+- Helper: `createChildMock()` for EventEmitter mocks
 
-```typescript
-// Good - clean output
-it('good request', async () => { ... })
-it('throws on invalid input', async () => { ... })
+## Directories
 
-// Avoid - verbose and noisy
-it('should return 200 OK when making a GET request to /api/users', async () => { ... })
-it('should remove the item from the list when calling /remove/', async () => { ... })
 ```
-
----
-
-## Dependencies
-
-- **Runtime**: Bun (`>=1.0.0`) - use Bun for all scripts
-- **Template runtime**: Node.js (`>=22.12.0`)
-- **Peer dependency**: TypeScript 5
-- **Template deps**: Astro 6, Tailwind 4, Zod 3, Puppeteer 24
+apps/cli/          - Main CLI entry, commands, modules
+apps/devsync/      - Template package (zod-based validation)
+test/cli/          - Tests mirroring apps/cli structure
+dist/              - Build output
+```

@@ -19,7 +19,7 @@ bun run build   # Static site build
 bun run preview # Preview build
 ```
 
-**Note**: No automated test suite configured yet.
+**Note**: Tests run with `bun test`.
 
 ---
 
@@ -170,6 +170,22 @@ Use the `skill` tool to load a skill when relevant.
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true
 }
+```
+
+---
+
+## Testing
+
+Use simple, minimal test names. Clean output is easier to scan than verbose descriptions.
+
+```typescript
+// Good - clean output
+it('good request', async () => { ... })
+it('throws on invalid input', async () => { ... })
+
+// Avoid - verbose and noisy
+it('should return 200 OK when making a GET request to /api/users', async () => { ... })
+it('should remove the item from the list when calling /remove/', async () => { ... })
 ```
 
 ---

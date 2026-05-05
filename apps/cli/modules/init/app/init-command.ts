@@ -2,6 +2,7 @@ import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
 import type CloneRepositoryUseCase from './clone-repository.use-case'
+import PrintASCII from '@/ascii'
 
 /*
 Copy template repository to cwd
@@ -16,6 +17,8 @@ class InitCommand extends BaseInitCommand {
 
   async execute(): Promise<void> {
     try {
+      PrintASCII()
+
       await this.cloneRepository.execute()
       console.log(`${SPACE}${CHECK(`${BOLD('Init completed successfully.')}`)}`)
 

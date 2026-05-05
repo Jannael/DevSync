@@ -1,6 +1,6 @@
 {
   "name": "devsync",
-  "version": "develop version",
+  "version": "0.0.0-beta",
   "private": false,
   "description": "One file to keep your portfolio, CV, Github and linkedin in sync",
   "keywords": [
@@ -47,6 +47,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "gradient-string": "3.0.0",
     "puppeteer": "24.42.0"
   },
   "devDependencies": {

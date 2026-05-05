@@ -4,14 +4,6 @@ import { readFile as fsReadFile } from 'node:fs/promises'
 
 vi.mock('@/constants/paths', () => ({
   CWD_PACKAGE_JSON: '/mock/package.json',
-  DEVSYNC_DIRECTORY: '/mock/devsync',
-  README: './README.md',
-  ACADEMICS: './academics/README.md',
-  DEVSYNC_JSON: '/mock/DEVSYNC.json',
-  DEFAULT_TEMPLATE_URL: 'https://github.com/jannael/devsync-default-template',
-  LINKEDIN: (lang: string) => `./linkedin-${lang}.md`,
-  CV_PDF: (lang: string) => `./public/CV-${lang}.pdf`,
-  CV_ROUTE_OUTPUT: (lang: string) => `/mock/dist/${lang}/cv/index.html`,
 }))
 
 vi.mock('node:fs/promises', () => ({

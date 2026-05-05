@@ -26,6 +26,7 @@ Tests:
 This repository has two main pieces:
 
 1. **CLI app (`apps/cli`)**
+
    - Entrypoint is `apps/cli/index.ts`.
    - Commands are declared in `apps/cli/commands.ts` and mapped to handlers in `apps/cli/commands-fn.ts`.
    - `init` (`apps/cli/modules/init/main.ts`) writes a starter `DEVSYNC.json` into the current working directory using the template JSON imported via `@template/DEVSYNC.json`.

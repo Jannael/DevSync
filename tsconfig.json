@@ -25,7 +25,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "@template/*": ["./apps/template/*"],
       "@/*": ["./apps/cli/*"],
       "@devsync/*": ["./apps/devsync/*"]
     }

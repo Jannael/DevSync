@@ -1,5 +1,6 @@
 import { ServerError } from '@/error/error-instance'
 import { spawn } from 'node:child_process'
+import { SPACE } from '@/utils/icons-terminal'
 
 export const runBunCommand = async (args: string[]) => {
   try {
@@ -21,6 +22,10 @@ export const runBunCommand = async (args: string[]) => {
       })
     })
   } catch {
-    throw new ServerError('Failed to run bun command')
+    throw new ServerError(
+      'Failed to run bun command',
+      `${SPACE}${SPACE}Ensure bun is installed and accessible in your PATH.\n` +
+        `${SPACE}${SPACE}Check if the command is correct.`
+    )
   }
 }

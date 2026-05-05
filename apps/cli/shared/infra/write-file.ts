@@ -2,6 +2,7 @@ import { mkdir, writeFile as fsWriteFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { ServerError } from '@/error/error-instance'
+import { SPACE } from '@/utils/icons-terminal'
 
 // Mixins pattern for shared infrastructure code
 export function writeFileMixin<TBase extends GConstructor>(Base: TBase) {
@@ -12,7 +13,11 @@ export function writeFileMixin<TBase extends GConstructor>(Base: TBase) {
         await mkdir(dirname(fullPath), { recursive: true })
         await fsWriteFile(fullPath, data, 'utf8')
       } catch {
-        throw new ServerError('Failed to write file')
+        throw new ServerError(
+          'Failed to write file',
+          `${SPACE}${SPACE}Check if the directory is writable.\n` +
+            `${SPACE}${SPACE}Verify you have sufficient permissions.`
+        )
       }
     }
   }

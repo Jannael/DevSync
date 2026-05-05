@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { ServerError } from '@/error/error-instance'
+import { SPACE } from '@/utils/icons-terminal'
 
 // Mixins pattern for shared infrastructure code
 export function createPDFMixin<TBase extends GConstructor>(Base: TBase) {
@@ -24,7 +25,11 @@ export function createPDFMixin<TBase extends GConstructor>(Base: TBase) {
         })
         await browser.close()
       } catch {
-        throw new ServerError('Failed to create PDF')
+        throw new ServerError(
+          'Failed to create PDF',
+          `${SPACE}${SPACE}Ensure puppeteer is properly installed.\n` +
+            `${SPACE}${SPACE}Check if the system has required dependencies.`
+        )
       }
     }
   }

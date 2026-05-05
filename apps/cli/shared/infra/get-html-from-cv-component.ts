@@ -40,7 +40,11 @@ export function getHTMLFromCVComponentMixin<TBase extends GConstructor>(Base: TB
         return inlinedHTML
       } catch (e) {
         console.log(e)
-        throw new ServerError('CV build failed')
+        throw new ServerError(
+          'CV build failed',
+          `${SPACE}${SPACE}Check if the build process completed successfully.\n` +
+            `${SPACE}${SPACE}Verify that all required files exist.`
+        )
       }
     }
   }

@@ -67,7 +67,8 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,astro}": [
       "bun run lint:fix",
-      "bun run fmt"
+      "bun run fmt",
+      "bunx tsc --noEmit"
     ]
   }
 }

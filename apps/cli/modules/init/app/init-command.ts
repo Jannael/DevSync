@@ -22,10 +22,13 @@ class InitCommand extends BaseInitCommand {
       await this.cloneRepository.execute()
       console.log(`${SPACE}${CHECK(`${BOLD('Init completed successfully.')}`)}`)
 
-      console.log(`${SPACE}${GREEN('1.')}${BOLD('Fill DEVSYNC.json with your information')}`)
-      console.log(`${SPACE}${GREEN('2.')}${BOLD('Create a repository with your username')}`)
+      console.log(`${SPACE}${GREEN('1.')}${BOLD('Create a repository with your username')}`)
       console.log(
-        `${SPACE}${GREEN('3.')}Run ${BOLD('git remote add origin https://github.com/[username]/[username].git')}`
+        `${SPACE}${GREEN('2.')}Run ${BOLD('git remote add origin https://github.com/[username]/[username].git')}`
+      )
+      console.log(`${SPACE}${GREEN('3.')}${BOLD('Push')} your project`)
+      console.log(
+        `${SPACE}${GREEN('4.')}${BOLD('Fill DEVSYNC.json')} with your information and ${BOLD('push your changes')}`
       )
     } catch (e) {
       errorHandler(e)

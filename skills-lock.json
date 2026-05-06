@@ -41,6 +41,12 @@
       "sourceType": "github",
       "computedHash": "f71138e885d3e0df8c78b4814554ae146a1a6dbe76bafcc32e95f2ba6d4073c9"
     },
+    "create-skill": {
+      "source": "siviter-xyz/dot-agent",
+      "sourceType": "github",
+      "skillPath": "skills/create-skill/SKILL.md",
+      "computedHash": "bf243df18661e667efc259681398709f2cea8672ba4ffada02e144b5e3fb0ec0"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "autoskills-registry",

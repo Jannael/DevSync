@@ -1,166 +1,94 @@
-# AGENTS.md - Devsync Codebase Guide
+# AGENTS.md - Developer Guide for Agentic Coding
 
-## Project Overview
+## Build / Lint / Test Commands
 
-Devsync is a CLI tool for syncing portfolio/CV across GitHub, LinkedIn, and PDF outputs. Built with Bun + TypeScript.
+| Command                 | Description                      |
+| ----------------------- | -------------------------------- |
+| `bun install`           | Install dependencies             |
+| `bun run build`         | Build CLI with Bun               |
+| `bun run lint`          | Run oxlint (ignores \*.js files) |
+| `bun run lint:fix`      | Auto-fix lint issues             |
+| `bun run fmt`           | Format with Prettier             |
+| `bun run fmt:check`     | Check formatting without writing |
+| `bun test`              | Run all tests (vitest)           |
+| `bun test <path>`       | Run single test file             |
+| `bun test -t <pattern>` | Run tests matching pattern       |
 
-## Commands
+**Running a single test:** `bun test test/cli/utils/run-bun-command.test.ts`
 
-```bash
-# Install dependencies
-bun install
-
-# Build CLI (outputs to dist/index.js)
-bun run build
-
-# Lint (oxlint - quiet mode, ignores .js files)
-bun run lint
-
-# Auto-fix lint issues
-bun run lint:fix
-
-# Format code (prettier)
-bun run fmt
-
-# Check formatting without fixing
-bun run fmt:check
-
-# Run all tests
-bun test
-
-# Run single test file
-bun test test/cli/shared/infra/write-file.test.ts
-bun test --run test/cli/utils/run-bun-command.test.ts  # alternative syntax
-
-# Run tests matching pattern
-bun test --run -t "writeFileMixin"
-```
-
-## Code Style
-
-### General
-
-- No comments unless explaining complex logic
-- Prefer named exports where practical
-- Default exports for classes used with `import type`
-
-### Formatting (Prettier)
-
-- Single quotes: `true`
-- Semicolons: `false`
-- Trailing commas: `es5`
-- Print width: `100`
-- Tab width: `2` spaces, no tabs
-
-### Linting (oxlint)
-
-- Uses TypeScript, Unicorn, and OXC plugins
-- Correctness rules set to `error`
-- Environment: `builtin` (Node.js)
-
-### TypeScript
-
-- Strict mode enabled
-- `moduleResolution: bundler`
-- `verbatimModuleSyntax: true`
-- `noUncheckedIndexedAccess: true`
-- `noImplicitOverride: true`
-- Path aliases:
-  - `@/*` → `apps/cli/*`
-  - `@devsync/*` → `apps/devsync/*`
+## Code Style Guidelines
 
 ### Imports
 
-- Use path aliases: `import { X } from '@/utils/icons-terminal'`
-- Node.js builtins: `import { spawn } from 'node:child_process'`
-- Type imports: `import type { CloneRepositoryUseCase } from './...'` (when not used at runtime)
+- Use absolute imports with aliases: `@/` for cli, `@devsync/` for devsync app
+- Order: node built-ins → external packages → internal modules → relative imports
+- Use type imports for types: `import type { GConstructor } from '@/shared/infra/mixin-constructor'`
 
-### File Naming
+### Formatting (Prettier)
 
-- TypeScript files: `kebab-case.ts` or `camelCase.ts` based on content
-- Classes: `PascalCase.ts`
-- Test files: `*.test.ts`
+- Single quotes, no semicolons, trailing commas (ES5)
+- Print width: 100, tab width: 2, spaces (no tabs)
+- Plugins: prettier-plugin-astro, prettier-plugin-tailwindcss
 
-### Architecture Pattern
+### TypeScript
 
-```
-modules/    - Feature modules (init, build, create-template)
-  app/      - Use cases with execute() methods
-  domain/   - Business logic interfaces
-  infra/    - External integrations (git, file system)
+- Target: ESNext, Module: Preserve, Module Resolution: Bundler
+- Strict mode enabled, no implicit override, no unchecked indexed access
+- Use `noEmit: true` for bundler workflow
+- Paths: `@/*` → `./apps/cli/*`, `@devsync/*` → `./apps/devsync/*`
 
-shared/
-  app/      - Shared application logic
-  infra/    - Shared infrastructure (write-file, read-file, etc.)
+### Naming Conventions
 
-error/      - Error types using discriminated unions
-utils/      - Pure utility functions
-```
+- **Files:** kebab-case (e.g., `run-bun-command.ts`)
+- **Functions/Variables:** camelCase
+- **Types/Interfaces:** PascalCase
+- **Constants:** UPPER_SNAKE_CASE
+- **Error classes:** PascalCase with error type suffix (e.g., `ServerError`)
 
 ### Error Handling
 
-- Use custom error classes from `@/error/error-instance`
-- Discriminated union types for error messages
-- Wrap errors with descriptive context using second arg to constructors
-- Use `errorHandler()` in CLI entry points to exit with proper messaging
+- Use custom error classes from `error-instance.ts`: `NotFound`, `Forbidden`, `Conflict`, `ServerError`, `BadRequest`
+- Errors created via `CreateError<T>()` factory with typed messages
+- Use `errorHandler()` function in CLI entry points for consistent output
+- Always provide helpful descriptions in error messages
 
-### Error Pattern
+### Architecture Patterns
 
-```typescript
-type IServerError = 'Failed to read file' | 'Failed to write file'
-export const ServerError = CreateError<IServerError>('ServerError')
+- **Mixin pattern** for shared infrastructure (e.g., `readFile`, `writeFile`, `createPdf`)
+- Mixins extend a base constructor: `function readFileMixin<TBase extends GConstructor>(Base: TBase)`
+- Domain logic in `app/` and `domain/` folders
+- Infrastructure code in `shared/infra/`
 
-// Usage in infrastructure code:
-try {
-  await fs.writeFile(path, data)
-} catch {
-  throw new ServerError('Failed to write file', 'Check permissions...')
-}
-```
+### Testing (Vitest)
 
-### Mixin Pattern
+- Test files: `*.test.ts` or `*.spec.ts`
+- Use `describe`, `it`, `expect`, `vi`, `beforeEach` from vitest
+- Mock external dependencies with `vi.mock()`
+- Test file path mirrors source: `test/cli/utils/run-bun-command.test.ts`
 
-For shared infrastructure methods on classes:
+### Linting (Oxlint)
 
-```typescript
-export function writeFileMixin<TBase extends GConstructor>(Base: TBase) {
-  return class extends Base {
-    async writeFile({ path, data }: { path: string; data: string }) {
-      // implementation
-    }
-  }
-}
-```
+- Config: `.oxlintrc.json`
+- Plugins: typescript, unicorn, oxc
+- Category: correctness = error
+- Ignores `*.js` files
 
-### Class Structure
+### Git Hooks (Husky)
 
-```typescript
-class BaseInitCommand {}
+- Pre-commit: runs `lint:fix` and `fmt` on staged TS/JS/JSX/Astro files
+- Configured in `lint-staged` section of package.json
 
-class InitCommand extends BaseInitCommand {
-  constructor(private readonly cloneRepository: CloneRepositoryUseCase) {
-    super()
-  }
-
-  async execute(): Promise<void> {
-    // implementation
-  }
-}
-```
-
-## Testing
-
-- Framework: Vitest with Node environment
-- Test files: `*.test.ts` in `test/` mirroring `apps/cli/` structure
-- Mock with `vi.mock()` and `vi.mocked()`
-- Use `beforeEach` with `vi.clearAllMocks()`
-- Helper: `createChildMock()` for EventEmitter mocks
-
-## Directories
+### Project Structure
 
 ```
-apps/cli/          - Main CLI entry, commands, modules
-apps/devsync/      - Template package (zod-based validation)
-test/cli/          - Tests mirroring apps/cli structure
-dist/              - Build output
+apps/
+  cli/              # Main CLI application
+    modules/        # Feature modules (init, build, etc.)
+    shared/         # Shared utilities and mixins
+    error/          # Error handling
+    utils/          # Utility functions
+    constants/      # Constants and icons
+  devsync/          # Devsync core logic
+test/
+  cli/              # CLI tests (mirrors apps/cli structure)
 ```

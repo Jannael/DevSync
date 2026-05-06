@@ -109,6 +109,25 @@ Use `parseDevsync(devsync)` from `@devsync/src/devsync/devsync.ts` for validatio
 import devsync, { devsyncGlobalFields, languages, defaultLang, parseDevsync } from '@devsync/src/devsync/devsync'
 ```
 
+## Publishing Templates
+
+When publishing your Devsync template, include poster images for preview:
+
+```json
+{
+  "name": "@your-username/devsync-template",
+  "devsync": {
+    "pathToCompiledCV": "src/[lang]/cv.html"
+  }
+}
+```
+
+**Poster images** (required for template preview):
+- `public/poster-light-mode.webp` - Light theme preview (recommended: 600x315px)
+- `public/poster-dark-mode.webp` - Dark theme preview (recommended: 600x315px)
+
+If posters are not provided, the default Devsync posters will be shown.
+
 ## Best Practices
 
 1. **Never hardcode** - Always use translation keys
@@ -117,3 +136,4 @@ import devsync, { devsyncGlobalFields, languages, defaultLang, parseDevsync } fr
 4. **Icon paths** - Use `/icons/` for local, CDN URLs for external
 5. **Date format** - Use `MM/YY - Present` or `MM/YY - MM/YY`
 6. **Skills reuse** - Same skill can appear across experience, projects, certifications
+7. **Template publishing** - Include both poster images for gallery preview

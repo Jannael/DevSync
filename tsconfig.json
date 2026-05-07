@@ -26,7 +26,7 @@
     "noUnusedParameters": false,
     "paths": {
       "@/*": ["./apps/cli/*"],
-      "@devsync/*": ["./apps/devsync/*"]
+      "@devsync/core": ["./apps/@core/src/devsync/devsync"]
     }
   }
 }

@@ -6,7 +6,7 @@ import { validateDevsyncMixin } from '@/shared/infra/validate-devsync'
 import { createCVMixin } from '@/shared/app/build-cv'
 import { CreateAcademicsMixin } from '@/shared/app/create-academics'
 import { CreateLinkedinMixin } from '@/shared/app/create-linkedin'
-import { devsyncGlobalFields } from '@devsync/src/devsync/devsync'
+import { devsyncGlobalFields } from '@devsync/core'
 import { runBunCommand } from '@/utils/run-bun-command'
 /*
 get defaultLang and languages from cwd

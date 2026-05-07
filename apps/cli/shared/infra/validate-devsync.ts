@@ -1,7 +1,10 @@
 import { ZodError } from 'zod'
-import { parseDevsync, type DevsyncPartial } from '@devsync/src/devsync/devsync-validator'
-import { availableLangs } from '@devsync/src/devsync/fields-translations'
-import { devsyncGlobalFields } from '@devsync/src/devsync/devsync'
+import {
+  availableLangs,
+  parseDevsync,
+  type DevsyncPartial,
+  devsyncGlobalFields,
+} from '@devsync/core'
 import type { GConstructor } from '@/shared/infra/mixin-constructor'
 import { DEVSYNC_JSON } from '@/constants/paths'
 import { BadRequest, ServerError } from '@/error/error-instance'

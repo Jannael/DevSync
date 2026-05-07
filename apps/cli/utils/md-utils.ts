@@ -1,4 +1,4 @@
-import type { Link, ListSchema, Skills } from '@devsync/src/devsync/devsync'
+import type { Link, ListSchema, Skills } from '@devsync/core'
 
 type GConstructor<T = {}> = new (...args: any[]) => T
 

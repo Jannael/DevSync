@@ -1,9 +1,9 @@
-import InitCommand from './app/init-command'
-import CopyTemplateUseCase from './app/clone-repository.use-case'
-import { CloneRepository } from './infra/clone-repository'
+import InitCommand from '@/modules/init/app/init-command'
+import CopyTemplateUseCase from '@/modules/init/app/clone-repository.use-case'
+import { CloneRepository } from '@/modules/init/infra/clone-repository'
 
-export default async function build() {
+export default async function build(args: string[]) {
   const cloneRepositoryUseCase = new CopyTemplateUseCase(new CloneRepository())
   const initCommand = new InitCommand(cloneRepositoryUseCase)
-  await initCommand.execute()
+  await initCommand.execute(args)
 }

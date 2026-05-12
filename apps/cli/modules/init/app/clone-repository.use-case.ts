@@ -1,14 +1,13 @@
 import { GREEN } from '@/utils/colors'
 import { CHECK, SPACE } from '@/utils/icons-terminal'
-import { DEFAULT_TEMPLATE_URL } from '@/constants/paths'
-import type { GitHubRepository } from '../domain/github-repository'
+import type { GitHubRepository } from '@/modules/init/domain/github-repository'
 
 class CloneRepositoryUseCase {
   constructor(private readonly githubRepository: GitHubRepository) {}
 
-  async execute(): Promise<void> {
+  async execute(template: string): Promise<void> {
     console.log(`${SPACE}${GREEN('-')} Cloning default template...`)
-    this.githubRepository.cloneRepository(DEFAULT_TEMPLATE_URL)
+    this.githubRepository.cloneRepository(template)
 
     console.log(`${SPACE}${CHECK('Default template cloned.')}`)
     console.log('')

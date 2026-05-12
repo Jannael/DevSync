@@ -1,6 +1,6 @@
 {
-  "name": "devsync",
-  "version": "0.0.0-beta",
+  "name": "@jannael/devsync",
+  "version": "1.0.0",
   "private": false,
   "description": "One file to keep your portfolio, CV, Github and linkedin in sync",
   "keywords": [
@@ -24,15 +24,14 @@
     "url": "https://github.com/Jannael/devsync.git"
   },
   "bin": {
-    "devsync": "apps/cli/index.ts"
+    "@jannael/devsync": "./dist/index.js"
   },
   "files": [
-    "dist",
-    "apps/portfolio/DEVSYNC.json"
+    "dist"
   ],
   "type": "module",
   "exports": {
-    ".": "./apps/cli/index.ts"
+    ".": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public"

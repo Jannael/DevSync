@@ -1,5 +1,5 @@
 import { ServerError } from '@/error/error-instance'
-import type { GitHubRepository } from '../domain/github-repository'
+import type { GitHubRepository } from '@/modules/init/domain/github-repository'
 import { execSync } from 'child_process'
 import { SPACE } from '@/utils/icons-terminal'
 

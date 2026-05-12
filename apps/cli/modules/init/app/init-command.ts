@@ -1,7 +1,7 @@
 import { CHECK, SPACE } from '@/utils/icons-terminal'
 import { BOLD, GREEN } from '@/utils/colors'
 import { errorHandler } from '@/error/error-handler'
-import type CloneRepositoryUseCase from './clone-repository.use-case'
+import type CloneRepositoryUseCase from '@/modules/init/app/clone-repository.use-case'
 import PrintASCII from '@/ascii'
 import { DEFAULT_TEMPLATE_URL } from '@/constants/paths'
 

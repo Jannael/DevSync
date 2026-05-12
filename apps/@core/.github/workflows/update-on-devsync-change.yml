@@ -26,7 +26,7 @@ jobs:
         run: bun install
 
       - name: Update artifacts
-        run: bunx devsync build
+        run: bunx @jannael/devsync build
 
       - name: Push changes
         uses: stefanzweifel/git-auto-commit-action@v7

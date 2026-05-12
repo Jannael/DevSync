@@ -22,7 +22,7 @@ class InitCommand extends BaseInitCommand {
     const templateFlag = args.indexOf('--template')
 
     try {
-      if (templateFlag !== -1) {
+      if (templateFlag === -1) {
         // if no template is provided clone the default template
         await this.cloneRepository.execute(DEFAULT_TEMPLATE_URL)
       } else {

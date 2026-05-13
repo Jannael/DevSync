@@ -8,7 +8,7 @@ export function createPDFMixin<TBase extends GConstructor>(Base: TBase) {
   return class extends Base {
     async createPDF({ html, path }: { html: string; path: string }): Promise<void> {
       try {
-        const browser = await puppeteer.launch()
+        const browser = await puppeteer.launch({ headless: true })
         const page = await browser.newPage()
         await page.setContent(html, { waitUntil: 'networkidle0' })
         await page.emulateMediaType('screen')

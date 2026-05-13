@@ -37,7 +37,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "bun build ./apps/cli/index.ts --outfile=./dist/index.js --target=bun",
+    "build": "bun build ./apps/cli/index.ts --outfile=./dist/index.js --target=bun && bun run copy-template",
+    "copy-template": "node -e \"const fs = require('fs'); fs.cpSync('apps/@core', 'dist/@core', {recursive: true})\"",
     "prepublishOnly": "bun run build",
     "lint": "oxlint --quiet --ignore-pattern \"*.js\"",
     "lint:fix": "oxlint --fix --ignore-pattern \"*.js\"",

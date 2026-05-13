@@ -1,7 +1,13 @@
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname =
+  typeof import.meta !== 'undefined' && import.meta.url
+    ? resolve(fileURLToPath(import.meta.url), '..')
+    : process.cwd()
 
 export const CWD_PACKAGE_JSON = resolve(process.cwd(), 'package.json')
-export const DEVSYNC_DIRECTORY = resolve(import.meta.dir, '..', '..', '@core')
+export const DEVSYNC_DIRECTORY = resolve(__dirname, '@core')
 export const README = './README.md'
 export const ACADEMICS = './academics/README.md'
 export const DEVSYNC_JSON = resolve(process.cwd(), 'DEVSYNC.json')

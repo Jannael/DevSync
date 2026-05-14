@@ -8,49 +8,16 @@ export default defineConfig({
     starlight({
       title: 'Devsync documentation',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/jannael/devsync' }],
-      sidebar: [
-        {
-          label: 'Getting Started',
-          link: '/',
+      defaultLocale: 'root',
+      locales: {
+        root: {
+          label: 'English',
+          lang: 'en',
         },
-        {
-          label: 'Commands',
-          link: '/commands/',
+        es: {
+          label: 'Español',
         },
-        {
-          label: 'Configuration',
-          link: '/configuration/',
-        },
-        {
-          label: 'Create Custom Template',
-          link: '/create-template/',
-        },
-        {
-          label: 'GitHub Actions',
-          link: '/github-actions/',
-        },
-        {
-          label: 'How It Works',
-          items: [
-            {
-              label: 'Init Command',
-              link: '/how-it-works/init-command/',
-            },
-            {
-              label: 'Build Command',
-              link: '/how-it-works/build-command/',
-            },
-            {
-              label: 'Create Template',
-              link: '/how-it-works/create-template/',
-            },
-          ],
-        },
-        {
-          label: 'Troubleshooting',
-          link: '/troubleshooting/',
-        },
-      ],
+      },
     }),
   ],
 })

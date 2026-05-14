@@ -1,0 +1,32 @@
+---
+title: "How the build command works"
+description: "Learn about the build command and how it works."
+---
+import { Steps, Aside } from '@astrojs/starlight/components'
+
+## Build command
+this command does the next steps:
+
+<Aside type="note">
+
+This command is meant to run on github actions workflows, but it can be run locally too if you have bun and puppeteer installed.
+
+</Aside>
+
+<Steps>
+
+1. this command installs dependencies using `bun install`.
+
+2. builds the project using `bun run build`.
+
+3. validates the devsync file.
+
+4. builds the CV for each language.
+
+5. creates the Linkedin profile for each language.
+
+6. creates the Github profile using the `default lang`.
+
+7. creates the Academics profile using the `default lang`.
+
+</Steps>

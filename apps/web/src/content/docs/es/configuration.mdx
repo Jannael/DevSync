@@ -1,0 +1,303 @@
+---
+title: DEVSYNC.json Schema
+description: Complete reference for DEVSYNC.json configuration fields and structure.
+tableOfContents: true
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+## Overview
+
+`DEVSYNC.json` is the single source of truth for your portfolio, CV, GitHub profile, LinkedIn, and academics. All your information is defined here and synchronized across platforms.
+
+<Aside type="tip">
+You can omit fields you don't need. The template will simply not display them. However, the ability to generate outputs depends on the template you're using.
+</Aside>
+
+## Global Fields
+
+These fields apply to all languages and outputs:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `defaultLang` | `string` | Yes | Default language code (e.g., `"en"`, `"es"`, `"fr"`) |
+| `site` | `string` | Yes | Your portfolio website URL |
+| `name` | `string` | Yes | Your full name |
+| `img` | `string` | Yes | Profile image URL |
+| `socialMedia` | `array` | No | Array of social media profiles |
+| `githubUserName` | `string` | Yes | Your GitHub username |
+
+### Example: Global Fields
+
+```json
+{
+  "defaultLang": "en",
+  "site": "https://devsync.work",
+  "name": "Your Full Name",
+  "img": "https://your-image-url.com/your-image.jpg",
+  "socialMedia": [
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/your-linkedin-handle",
+      "icon": "/icons/linkedin.svg",
+      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
+    }
+  ],
+  "githubUserName": "your-github-username"
+}
+```
+
+## Language-Specific Fields
+
+All fields under language codes (e.g., `en`, `es`, `fr`) are translated per language.
+
+### Structure
+
+```json
+{
+  "en": {
+    "description": "Professional summary",
+    "jobTitle": "Your Job Title",
+    "status": { ... },
+    "languages": [ ... ],
+    "experience": [ ... ],
+    "projects": [ ... ],
+    "education": [ ... ],
+    "certifications": [ ... ]
+  }
+}
+```
+
+### Fields Reference
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `description` | `string` | Yes | Professional summary/bio |
+| `jobTitle` | `string` | Yes | Current job title |
+| `status` | `object` | No | Current availability status with badge |
+| `languages` | `array` | No | Spoken languages |
+| `experience` | `array` | No | Work experience entries |
+| `projects` | `array` | No | Project entries |
+| `education` | `array` | No | Education entries |
+| `certifications` | `array` | No | Certification entries |
+
+## Status Object
+
+```json
+{
+  "status": "Open to work",
+  "badge": "![Status](https://img.shields.io/badge/Status-Open%20to%20Work-green)"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | `string` | Status text (e.g., "Open to work", "Employed") |
+| `badge` | `string` | Markdown badge for the status |
+
+## Language Entry (Spoken)
+
+```json
+{
+  "name": "English / Spanish",
+  "mdBadge": "![Languages](https://img.shields.io/badge/Languages-English%2C%20Spanish-1f6feb)",
+  "icon": "https://cdn.simpleicons.org/googletranslate"
+}
+```
+
+## Experience Entry
+
+```json
+{
+  "company": "Company Name",
+  "position": "Your Position",
+  "img": "https://company-logo.com/logo.jpg",
+  "web": "https://company-website.com",
+  "description": "One sentence describing your role",
+  "date": "MM/YY - Present",
+  "links": [ ... ],
+  "list": {
+    "title": "key-achievements",
+    "items": [ ... ]
+  },
+  "skills": [ ... ]
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `company` | `string` | Yes | Company name |
+| `position` | `string` | Yes | Your job title |
+| `img` | `string` | No | Company logo URL |
+| `web` | `string` | No | Company website |
+| `description` | `string` | Yes | Role description |
+| `date` | `string` | Yes | Date range (e.g., "01/23 - Present") |
+| `links` | `array` | No | Additional links |
+| `list.title` | `string` | No | Section title |
+| `list.items` | `array` | No | Achievement items |
+| `skills` | `array` | No | Skills used |
+
+### Achievement Item
+
+```json
+{
+  "highlight": "Achievement headline",
+  "description": "Describe one measurable result you delivered"
+}
+```
+
+## Project Entry
+
+```json
+{
+  "name": "Project Name",
+  "img": "https://project-image.com.jpg",
+  "web": "https://project-url.com",
+  "links": [ ... ],
+  "description": "What the project does and why it matters",
+  "list": {
+    "title": "project-highlights",
+    "items": [ ... ]
+  },
+  "skills": [ ... ]
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | `string` | Yes | Project name |
+| `img` | `string` | No | Project image URL |
+| `web` | `string` | No | Project website |
+| `links` | `array` | No | Related links (GitHub, demo, etc.) |
+| `description` | `string` | Yes | Project description |
+| `list` | `object` | No | Highlights section |
+| `skills` | `array` | No | Skills/technologies used |
+
+## Education Entry
+
+```json
+{
+  "name": "University Name",
+  "degree": "Degree / Program",
+  "img": "https://university-logo.com.jpg",
+  "date": "MM/YY - MM/YY",
+  "links": [ ... ],
+  "list": {
+    "title": "education-highlights",
+    "items": [ ... ]
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | `string` | Yes | Institution name |
+| `degree` | `string` | Yes | Degree or program |
+| `img` | `string` | No | Institution logo |
+| `date` | `string` | Yes | Date range |
+| `links` | `array` | No | Program links |
+| `list` | `object` | No | Highlights section |
+
+## Certification Entry
+
+```json
+{
+  "name": "Certification Name",
+  "url": "https://certification-url.com",
+  "list": {
+    "title": "what-this-validates",
+    "items": [ ... ]
+  },
+  "skills": [ ... ]
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | `string` | Yes | Certification name |
+| `url` | `string` | Yes | Certification URL |
+| `list` | `object` | No | What it validates |
+| `skills` | `array` | No | Related skills |
+
+## Complete Example
+
+```json
+{
+  "defaultLang": "en",
+  "site": "https://devsync.work",
+  "name": "Jane Doe",
+  "img": "https://example.com/jane.jpg",
+  "socialMedia": [
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/janedoe",
+      "icon": "/icons/linkedin.svg",
+      "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
+    }
+  ],
+  "githubUserName": "janedoe",
+  "en": {
+    "description": "Full-stack developer focused on developer experience and performance.",
+    "jobTitle": "Senior Software Engineer",
+    "status": {
+      "status": "Open to work",
+      "badge": "![Status](https://img.shields.io/badge/Status-Open%20to%20Work-green)"
+    },
+    "languages": [
+      {
+        "name": "English / Spanish",
+        "mdBadge": "![Languages](https://img.shields.io/badge/Languages-English%2C%20Spanish-1f6feb)",
+        "icon": "https://cdn.simpleicons.org/googletranslate"
+      }
+    ],
+    "experience": [
+      {
+        "company": "Tech Corp",
+        "position": "Senior Developer",
+        "img": "https://techcorp.com/logo.jpg",
+        "web": "https://techcorp.com",
+        "description": "Leading frontend architecture for core products.",
+        "date": "01/23 - Present",
+        "links": [
+          {
+            "name": "Company Website",
+            "url": "https://techcorp.com",
+            "mdBadge": "![Company](https://img.shields.io/badge/Company-Website-0ea5e9)",
+            "icon": "https://cdn.simpleicons.org/googlechrome"
+          }
+        ],
+        "list": {
+          "title": "key-achievements",
+          "items": [
+            {
+              "highlight": "Improved performance by 40%",
+              "description": "Reduced bundle size and optimized render cycles."
+            }
+          ]
+        },
+        "skills": [
+          {
+            "name": "React",
+            "mdBadge": "![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)",
+            "icon": "https://cdn.simpleicons.org/react"
+          }
+        ]
+      }
+    ],
+    "projects": [],
+    "education": [],
+    "certifications": []
+  }
+}
+```
+
+## Validation
+
+The configuration is validated using Zod. If validation fails, you'll see an error like:
+
+```
+Invalid DEVSYNC.json structure
+Missing required profile field
+```
+
+Check that all required fields are present and properly formatted.

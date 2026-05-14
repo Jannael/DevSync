@@ -1,0 +1,269 @@
+---
+title: GitHub Actions Guide
+description: Automate your portfolio updates with GitHub Actions workflows.
+tableOfContents: true
+---
+
+import { Aside } from '@astrojs/starlight/components'
+import { Steps } from '@astrojs/starlight/components'
+
+## Overview
+
+Devsync is designed to work seamlessly with GitHub Actions. You can automatically update your LinkedIn profile, GitHub README, CV, and academics whenever you change `DEVSYNC.json`.
+
+<Aside type="tip">
+  The `build` command is primarily intended for CI/CD, but you can run it locally if you have Bun and Puppeteer installed.
+</Aside>
+
+## Complete Workflow Example
+
+Here's the full workflow that powers the `update-on-devsync-change.yml`:
+
+```yaml
+name: Update CV, README, LinkedIn & Academics
+
+on:
+  push:
+    paths:
+      - 'DEVSYNC.json'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Puppeteer dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libx11-6 libxcomposite1 libxcursor1 libxdamage1 libxext6 \
+            libxfixes3 libxi6 libxtst6 libnss3 libglib2.0-0 libgtk-3-0t64 \
+            libasound2t64 libxrandr2 libpangocairo-1.0-0 libatk1.0-0 \
+            libatk-bridge2.0-0 libcups2 libdbus-1-3 libdrm2 libgbm1 \
+            libgdk-pixbuf2.0-0
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Update artifacts
+        run: bunx @jannael/devsync build
+
+      - name: Push changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: 'docs: auto-update artifacts from DEVSYNC.json'
+```
+
+## Workflow Breakdown
+
+### 1. Trigger
+
+```yaml
+on:
+  push:
+    paths:
+      - 'DEVSYNC.json'
+```
+
+Triggers only when `DEVSYNC.json` changes, avoiding unnecessary runs.
+
+### 2. Checkout
+
+```yaml
+- name: Checkout repository
+  uses: actions/checkout@v6
+  with:
+    persist-credentials: true
+    fetch-depth: 0
+```
+
+- `persist-credentials: true` - Allows pushing changes back
+- `fetch-depth: 0` - Gets full history (needed for some Git operations)
+
+### 3. Setup Runtimes
+
+```yaml
+- name: Setup Bun
+  uses: oven-sh/setup-bun@v2
+  with:
+    bun-version: latest
+
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+```
+
+Both Bun and Node.js are required:
+- **Bun** - Runs the CLI and builds the project
+- **Node.js** - Required by Puppeteer for PDF generation
+
+### 4. Install System Dependencies
+
+```yaml
+- name: Install Puppeteer dependencies
+  run: |
+    sudo apt-get update
+    sudo apt-get install -y \
+      libx11-6 libxcomposite1 libxcursor1 libxdamage1 libxext6 \
+      libxfixes3 libxi6 libxtst6 libnss3 libglib2.0-0 libgtk-3-0t64 \
+      libasound2t64 libxrandr2 libpangocairo-1.0-0 libatk1.0-0 \
+      libatk-bridge2.0-0 libcups2 libdbus-1-3 libdrm2 libgbm1 \
+      libgdk-pixbuf2.0-0
+```
+
+These are Chrome/Chromium libraries needed for headless PDF generation.
+
+<Aside type="caution">
+  Don't skip the system dependencies step! Without them, PDF generation will fail with errors like "Chrome not found" or "Cannot start Chrome".
+</Aside>
+
+### 5. Install Dependencies
+
+```yaml
+- name: Install dependencies
+  run: bun install
+```
+
+Installs project dependencies including Puppeteer.
+
+### 6. Run Build
+
+```yaml
+- name: Update artifacts
+  run: bunx @jannael/devsync build
+```
+
+This command:
+1. Validates `DEVSYNC.json`
+2. Builds CV for each language
+3. Creates LinkedIn profile
+4. Creates GitHub profile
+5. Creates academics profile
+6. Generates PDFs
+
+### 7. Push Changes
+
+```yaml
+- name: Push changes
+  uses: stefanzweifel/git-auto-commit-action@v7
+  with:
+    commit_message: 'docs: auto-update artifacts from DEVSYNC.json'
+```
+
+Automatically commits and pushes generated files back to the repository.
+
+## Customization Examples
+
+### Add Notification on Success
+
+```yaml
+- name: Notify on success
+  if: success()
+  run: |
+    echo "Build completed successfully!"
+    # Add Discord/Slack notification here
+```
+
+### Cache Dependencies
+
+Speed up builds by caching Bun dependencies:
+
+```yaml
+- name: Cache Bun dependencies
+  uses: actions/cache@v4
+  with:
+    path: ~/.bun/install/cache
+    key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+    restore-keys: |
+      ${{ runner.os }}-bun-
+```
+
+### Multiple Jobs (Parallel)
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bunx @jannael/devsync build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        run: echo "Deploy..."
+```
+
+## Security Considerations
+
+### Permissions
+
+```yaml
+permissions:
+  contents: write  # Required to push changes
+```
+
+Only grant the minimum permissions needed. For Devsync, `contents: write` is required to commit generated files.
+
+### Secrets
+
+If your workflow needs secrets (e.g., deploy tokens):
+
+```yaml
+env:
+  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+```
+
+Store secrets in repository settings → Secrets → Actions.
+
+## Troubleshooting
+
+### Workflow Not Triggering
+
+- Check that `DEVSYNC.json` is in the root directory
+- Verify the path pattern matches exactly
+- Check Actions tab for disabled workflows
+
+### Build Fails
+
+Common issues:
+
+1. **Permission denied** - Check `permissions: contents: write`
+2. **Build fails**: If you are using a custom template, ensure that all necessary system dependencies are installed within the workflow.
+
+### PDF Generation Fails
+
+- Verify all Chrome dependencies are installed
+- Check that `node-version: '22'` is set
+- Ensure `fetch-depth: 0` in checkout step
+
+## Next Steps
+
+- See [Configuration Reference](/configuration/) for `DEVSYNC.json` fields
+- Check [Troubleshooting](/troubleshooting/) for common issues
+- Learn about [Create Template](/how-it-works/create-template/) for custom setups

@@ -16,6 +16,7 @@ export default defineConfig({
         },
         es: {
           label: 'Español',
+          lang: 'es'
         },
       },
     }),

@@ -1,0 +1,48 @@
+---
+title: Commands
+description: All available Devsync CLI commands and what they do.
+tableOfContents: false
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components'
+import { Aside } from '@astrojs/starlight/components'
+
+<Aside type="note"> 
+
+The `build` command is meant to be run on a GitHub Action, but you can run it locally if you have all the dependencies installed.
+
+</Aside>
+
+## Available Commands
+
+<CardGrid>
+  <Card title="init" icon="rocket">
+
+    Copy the default portfolio template to your current folder.
+
+    ```sh
+    bunx @jannael/devsync init
+    ```
+
+  </Card>
+
+  <Card title="build" icon="setting">
+
+    Build `linkedin.md`, your `GitHub Profile`, `academics`, and generate a PDF from your `CV` component.
+
+    ```sh
+    bunx @jannael/devsync build
+    ```
+
+  </Card>
+
+  <Card title="create-template" icon="document">
+
+    Create a new custom template for Devsync.
+
+    ```sh
+    bunx @jannael/devsync create-template
+    ```
+
+  </Card>
+</CardGrid>

@@ -1,0 +1,41 @@
+---
+title: "How the Build Command Works"
+description: "Learn about the build command and how it works."
+tableOfContents: false
+---
+import { Steps, Aside } from '@astrojs/starlight/components'
+
+## Build Command
+
+The `build` command generates all your portfolio artifacts from `DEVSYNC.json`.
+
+<Aside type="note">
+This command is primarily intended for GitHub Actions, but you can run it locally if you have Bun and Puppeteer installed.
+</Aside>
+
+<Steps>
+
+1. **Install dependencies** using `bun install`.
+
+2. **Build the project** using `bun run build`.
+
+3. **Validate `DEVSYNC.json`** to ensure configuration is correct.
+
+4. **Build CV for each language** - Reads the `devsync` configuration to determine the path to the compiled CV HTML.
+
+5. **Create LinkedIn profile** for each language configured.
+
+6. **Create GitHub profile** using the `defaultLang`.
+
+7. **Create academics profile** using the `defaultLang`.
+
+</Steps>
+
+## What Gets Generated
+
+After running `build`, you'll have:
+
+- **CV PDF** - Generated from HTML for each language
+- **LinkedIn markdown** - Formatted profile for LinkedIn
+- **GitHub Profile README** - Your `README.md` for GitHub profile
+- **Academics profile** - Academic credentials in markdown

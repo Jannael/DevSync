@@ -1,20 +1,44 @@
 ---
 title: "How the Init Command Works"
 description: "Learn about the init command and how it works."
+tableOfContents: false
 ---
 import {Steps} from '@astrojs/starlight/components'
+import { Aside } from '@astrojs/starlight/components'
 
 ## Init Command
-The `init` command performs the following steps:
+
+The `init` command copies a Devsync template to your current directory, setting up everything you need to start building your portfolio.
 
 <Steps>
 
-1. First, it checks if the `--template` flag is provided. If it is, the command splits the string by `/` and cleans it up.
+1. **Check for template flag**: First, it checks if the `--template` flag is provided. If it is, the command splits the string by `/` and cleans it up.
 
-2. Clones the repository. If the `--template` flag is not provided, it clones the default template: `https://github.com/jannael/devsync-default-template`.
+2. **Clone the repository**: If the `--template` flag is not provided, it clones the default template: `https://github.com/jannael/devsync-default-template`.
 
-3. Deletes the `.git` directory to ensure a clean Git history, separate from the template's history.
+3. **Clean Git history**: Deletes the `.git` directory to ensure a clean Git history, separate from the template's history.
 
-4. Initializes a new Git repository and makes the first commit, allowing the user to add their own remote origin.
+4. **Initialize new repository**: Initializes a new Git repository and makes the first commit, allowing you to add your own remote origin.
 
 </Steps>
+
+<Aside type="tip">
+After running `init`, follow the on-screen instructions to create your repository and push your changes.
+</Aside>
+
+## What Gets Created
+
+After running `init`, you'll have:
+
+- `DEVSYNC.json` - Your portfolio configuration
+- Template source files - Your portfolio code
+- GitHub Actions workflow - Auto-updates on `DEVSYNC.json` changes
+- Agent skills - AI helper for portfolio operations
+
+## Next Steps
+
+1. Create a GitHub repository with your username
+2. Add remote origin: `git remote add origin https://github.com/[username]/[username].git`
+3. Push your changes: `git push -u origin main`
+4. Fill in `DEVSYNC.json` with your information
+5. Push to see your portfolio update automatically

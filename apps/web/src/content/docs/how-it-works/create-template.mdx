@@ -1,13 +1,14 @@
 ---
 title: "How the Create Template Command Works"
 description: "Learn about the create-template command and how it works."
+tableOfContents: false
 ---
 import { FileTree } from '@astrojs/starlight/components'
+import { Aside } from '@astrojs/starlight/components'
 
 ## Create Template Command
-The `create-template` command performs the following steps:
 
-This command copies the necessary files from the local source to generate a complete template.
+The `create-template` command generates a complete Devsync template structure that you can customize for your portfolio or distribute to others.
 
 <FileTree>
 
@@ -28,13 +29,18 @@ This command copies the necessary files from the local source to generate a comp
     - fields-translations.ts
 - DEVSYNC.json
 - package.json
+
 </FileTree>
 
 ### File Usage
 
-- `.agents`: This directory contains an agent skill that helps AI understand how to operate the template and build portfolios from prompts.
-- `update-on-devsync-change.yml`: A GitHub Action that automatically updates your portfolio files whenever `DEVSYNC.json` is modified.
-- `devsync-validator.ts`: A validator for the `DEVSYNC.json` file.
-- `devsync.ts`: A wrapper that simplifies using Devsync files within your project.
-- `fields-translations.ts`: A translation file for localized content.
-- `poster-[theme]-mode.webp`: A preview image used to display your portfolio on the Devsync website.
+- **`.agents/skills/devsync-portfolio/`**: Agent skill that helps AI understand how to operate the template and build portfolios from prompts.
+- **`.github/workflows/update-on-devsync-change.yml`**: GitHub Action that automatically updates your portfolio files whenever `DEVSYNC.json` is modified.
+- **`src/devsync/devsync-validator.ts`**: Zod validator for the `DEVSYNC.json` file.
+- **`src/devsync/devsync.ts`**: Wrapper that simplifies using Devsync files within your project.
+- **`src/devsync/fields-translations.ts`**: Translation file for localized content.
+- **`public/poster-[theme]-mode.webp`**: Preview images used to display your portfolio on the Devsync website.
+
+<Aside type="tip">
+You don't need to create all these files manually. Run `bunx @jannael/devsync create-template` to generate the complete structure.
+</Aside>

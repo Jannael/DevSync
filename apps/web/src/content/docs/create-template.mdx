@@ -1,6 +1,7 @@
 ---
-title: "Create a Custom Template"
-description: "If you want to create your own template and use it with Devsync, or if you already have a portfolio, follow this guide."
+title: Create a Custom Template
+description: If you want to create your own template and use it with Devsync, or if you already have a portfolio, follow this guide.
+tableOfContents: true
 ---
 
 import {Steps} from '@astrojs/starlight/components'
@@ -9,23 +10,21 @@ import { Aside } from '@astrojs/starlight/components';
 
 Devsync templates do not require a specific framework as long as they compile to HTML. And let's be honest—if you're considering SSR (Server-Side Rendering) for a portfolio, is everything okay at home?
 
-<Aside type="note"> 
-
+<Aside type="note">
 If you already have a portfolio, you can migrate it to use `Devsync` by following this guide; however, you will need to install `zod` manually.
-
 </Aside>
 
-<Steps> 
+<Steps>
 
 1. Run the `create-template` command:
 
-   ```sh
-   bunx @jannael/devsync create-template
-   ```
+    ```sh
+    bunx @jannael/devsync create-template
+    ```
 
 2. This will generate a template structure like this:
 
-   <FileTree>
+    <FileTree>
     
     - .agents
       - skills
@@ -44,29 +43,35 @@ If you already have a portfolio, you can migrate it to use `Devsync` by followin
         - fields-translations.ts
     - DEVSYNC.json
     - package.json
-   </FileTree>
-
-   The important files are:
-    - `fields-translations.ts`: This file contains the translations the `Devsync CLI` uses to build the `GitHub Profile`, `LinkedIn`, `CV`, and `academics`. This defines which languages are available for the build.
-    - `skills`: This directory contains an agent skill that helps AI understand how to operate the template and build portfolios from prompts.
-    - `update-on-devsync-change.yml`: This is a GitHub Action that automatically updates your `GitHub Profile`, `LinkedIn`, `CV`, and `academics` whenever you update the `DEVSYNC.json` file.
-    - `devsync.ts`: This file exports everything necessary to use the template within your project.
-
+    
+    </FileTree>
+    
+    The important files are:
+    
+    - **`fields-translations.ts`**: This file contains the translations the `Devsync CLI` uses to build the `GitHub Profile`, `LinkedIn`, `CV`, and `academics`. This defines which languages are available for the build.
+    - **`skills`**: This directory contains an agent skill that helps AI understand how to operate the template and build portfolios from prompts.
+    - **`update-on-devsync-change.yml`**: This is a GitHub Action that automatically updates your `GitHub Profile`, `LinkedIn`, `CV`, and `academics` whenever you update the `DEVSYNC.json` file.
+    - **`devsync.ts`**: This file exports everything necessary to use the template within your project.
+    
 3. Create your portfolio or refactor your current portfolio to use `Devsync`, you can use the `skill` to ask AI to do it for you.
 
 4. Add the `devsync` configuration to your `package.json`:
 
     ```json
-      "devsync": {
-        "pathToCompiledCV": "./dist/[lang]/cv/index.html"
-      },
+    "devsync": {
+      "pathToCompiledCV": "./dist/[lang]/cv/index.html"
+    },
     ```
     
     `Devsync` generates the CV PDF from pure HTML, so ensure this path points to the HTML file containing your CV.
     
     If you are using internationalization for your template, the `[lang]` placeholder will be replaced with the language codes defined in `DEVSYNC.json`. If you do not need this feature, simply remove `[lang]` from the path and point it directly to your CV file.
-
+    
 </Steps>
+
+<Aside>
+**GitHub Action**: The GitHub Action only includes Bun and Node.js setup. If your portfolio requires additional system dependencies to perform the `build`, you will need to install them within the GitHub Action.
+</Aside>
 
 ## Using Devsync with types
 

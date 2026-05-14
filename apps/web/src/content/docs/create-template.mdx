@@ -52,6 +52,18 @@ If you already have a portfolio, you can migrate it to use `Devsync` by followin
 
 3. Create your portfolio or refactor your current portfolio to use `Devsync`.
 
+4. Add the `devsync` configuration to your `package.json`:
+
+```json
+  "devsync": {
+    "pathToCompiledCV": "./dist/[lang]/cv/index.html"
+  },
+```
+
+`Devsync` generates the CV PDF from pure HTML, so ensure this path points to the HTML file containing your CV.
+
+If you are using internationalization for your template, the `[lang]` placeholder will be replaced with the language codes defined in `DEVSYNC.json`. If you do not need this feature, simply remove `[lang]` from the path and point it directly to your CV file.
+
 </Steps>
 
 ## Using Devsync with types

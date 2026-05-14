@@ -1,0 +1,81 @@
+---
+title: "How to create my own template for devsync"
+description: "If you want to create your own template and use it with devsync, or you already have a portfolio, follow this guide."
+---
+
+import {Steps} from '@astrojs/starlight/components'
+import { FileTree } from '@astrojs/starlight/components';
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="note"> 
+If you already have a portfolio, you can migrate it to use `devsync` by following this guide, but you will need to install 'zod' manually.
+</Aside>
+
+<Steps> 
+
+1. Run 'create-template' command:
+
+   ```sh
+   bunx @jannael/devsync create-template
+   ```
+
+2. This will copy a template like this
+
+   <FileTree>
+    
+    - .agents
+      - skills
+        - devsync-portfolio
+          - SKILL.md
+    - .github
+      - workflows
+        - update-on-devsync-change.yml
+    - public
+      - poster-dark-mode.webp
+      - poster-light-mode.webp
+    - src
+      - devsync
+        - devsync-validator.ts
+        - devsync.ts
+        - fields-translations.ts
+    - DEVSYNC.json
+    - package.json
+   </FileTree>
+
+   The important files here are 
+    - `fields-translations.ts`: this file contains the translations `devsync cli` uses to build the `github profile`, `linkedin`, `cv` and `academics`, so this tell you what languages are available for the build.
+    - `skills`: this file is a agent skill for AI to understand how to operate the template and build portfolios just from prompts.
+    - `update-on-devsync-change.yml`: this is a github action to automatically update the `github profile`, `linkedin`, `cv` and `academics` when you update the `DEVSYNC.json` file.
+    - `devsync.ts`: this file exports everything you need to use the template in your project.
+
+3. Create your portfolio or refactor your current portfolio to use `devsync`.
+
+</Steps>
+
+## Using devsync with types
+
+you have to ways to import `DEVSYNC.json` to use the template in your project:
+
+```ts
+import devsync from './DEVSYNC.json'
+```
+
+```ts
+import devsync from './src/devsync'
+```
+
+the first import is for the local `DEVSYNC.json` file, and the second import is for the `@jannael/devsync` package with zod schema validation.
+
+### Personal advice
+
+Create a path in your `tsconfig` to import 'devsync'
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@core": ["./src/devsync/devsync"],
+    }
+  }
+}
+```

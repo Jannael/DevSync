@@ -1,60 +1,58 @@
 ---
-title: Getting Started
-description: Learn how to use Devsync to create your portfolio, resume, GitHub profile, and more.
+title: Primeros Pasos
+description: Aprende a usar Devsync para crear tu portafolio, currículum, perfil de GitHub y más.
 tableOfContents: false
 sidebar:
-   order: 0
+  order: 0
 ---
 
 import { Steps } from '@astrojs/starlight/components'
 import { Aside } from '@astrojs/starlight/components'
 
 <Aside type="tip">
-I personally recommend using serverless hosting like Vercel, Cloudflare Pages, or Netlify to host your portfolio. These platforms are free and easy to use, and they automatically deploy your changes when you push them to your repository. You can also use a custom domain to make your portfolio more professional.
+Personalmente recomiendo usar hosting sin servidor como Vercel, Cloudflare Pages o Netlify para alojar tu portafolio. Estas plataformas son gratuitas y fáciles de usar, y despliegan automáticamente tus cambios cuando los subes a tu repositorio. También puedes usar un dominio personalizado para hacer tu portafolio más profesional.
 </Aside>
 
 <Aside type="tip">
-  Do you already have a CV? You can easily migrate it to Devsync! In most cases, you won't even need
-  to rewrite everything manually. Just use the `Devsync Skill` and provide your current CV; the AI
-  will handle the conversion for you.
+¿Ya tienes un currículum o un portafolio? ¡Puedes migrarlo fácilmente a Devsync! En la mayoría de los casos, ni siquiera necesitarás reescribir todo manualmente. Solo usa el `Devsync Skill` y proporciona tu CV actual; la IA manejará la conversión por ti.
 </Aside>
 
-This guide will help you get started with Devsync. Follow the steps below to create your portfolio, resume, GitHub profile, LinkedIn, and academics all at once.
+Esta guía te ayudará a comenzar con Devsync. Sigue los pasos a continuación para crear tu portafolio, currículum, perfil de GitHub, LinkedIn y académicos todo a la vez.
 
 <Steps>
 
-1. Initialize a project using Devsync:
+1. Inicializa un proyecto usando Devsync:
 
-   ```sh
-   bunx @jannael/devsync init
-   ```
+    ```sh
+    bunx @jannael/devsync init
+    ```
 
-2. Create a repository with your username (example using GitHub CLI)
+2. Crea un repositorio con tu nombre de usuario (ejemplo usando GitHub CLI)
 
-   ```sh
-   gh repo create [username]/[username] --public
-   ```
+    ```sh
+    gh repo create [username]/[username] --public
+    ```
 
-3. Add a remote origin:
+3. Agrega un remote origin:
 
-   ```sh
-   git remote add origin https://github.com/[username]/[username].git
-   ```
+    ```sh
+    git remote add origin https://github.com/[username]/[username].git
+    ```
 
-4. Push your project
+4. Sube tu proyecto
 
-   ```sh
-   git push -u origin main
-   ```
+    ```sh
+    git push -u origin main
+    ```
 
-5. Fill DEVSYNC.json with your information
+5. Rellena DEVSYNC.json con tu información
 
-6. Push your changes
+6. Sube tus cambios
 
 </Steps>
 
-Now you can update `DEVSYNC.json` to refresh your portfolio, resume, GitHub profile, LinkedIn, and academics all at once, whenever you want.
+Ahora puedes actualizar `DEVSYNC.json` para refrescar tu portafolio, currículum, perfil de GitHub, LinkedIn y académicos todo a la vez, cuando quieras.
 
-## Tips
+## Consejos
 
-- `DEVSYNC.json` is not set in stone; you can delete most of its fields if you don't need them, and they simply won't be displayed. However, keep in mind that the ability to generate a `portfolio` and `resume` while omitting certain fields depends entirely on the template you are using.
+- `DEVSYNC.json` no está escrito en piedra; puedes eliminar la mayoría de sus campos si no los necesitas, y simplemente no se mostrarán. Sin embargo, ten en cuenta que la capacidad de generar un `portafolio` y `currículum` omitiendo ciertos campos depende completamente de la plantilla que estés usando.

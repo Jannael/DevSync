@@ -1,41 +1,45 @@
 ---
-title: "How the Build Command Works"
-description: "Learn about the build command and how it works."
+title: "Cómo Funciona el Comando Build"
+description: "Aprende sobre el comando build y cómo funciona."
 tableOfContents: false
 ---
 import { Steps, Aside } from '@astrojs/starlight/components'
 
-## Build Command
+## Comando Build
 
-The `build` command generates all your portfolio artifacts from `DEVSYNC.json`.
+El comando `build` genera todos los artefactos de tu portafolio desde `DEVSYNC.json`.
 
 <Aside type="note">
-This command is primarily intended for GitHub Actions, but you can run it locally if you have Bun and Puppeteer installed.
+Este comando está pensado principalmente para GitHub Actions, pero puedes ejecutarlo localmente si tienes Bun y Puppeteer instalados.
 </Aside>
 
 <Steps>
 
-1. **Install dependencies** using `bun install`.
+1. **Instalar dependencias** usando `bun install`.
 
-2. **Build the project** using `bun run build`.
+2. **Construir el proyecto** usando `bun run build`.
 
-3. **Validate `DEVSYNC.json`** to ensure configuration is correct.
+3. **Validar `DEVSYNC.json`** para asegurar que la configuración sea correcta.
 
-4. **Build CV for each language** - Reads the `devsync` configuration to determine the path to the compiled CV HTML.
+4. **Construir CV para cada idioma** - Lee la configuración `devsync` para determinar la ruta al CV HTML compilado.
 
-5. **Create LinkedIn profile** for each language configured.
+5. **Crear perfil de LinkedIn** para cada idioma configurado.
 
-6. **Create GitHub profile** using the `defaultLang`.
+6. **Crear perfil de GitHub** usando el `defaultLang`.
 
-7. **Create academics profile** using the `defaultLang`.
+7. **Crear perfil académico** usando el `defaultLang`.
 
 </Steps>
 
-## What Gets Generated
+## Qué Se Genera
 
-After running `build`, you'll have:
+Después de ejecutar `build`, tendrás:
 
-- **CV PDF** - Generated from HTML for each language
-- **LinkedIn markdown** - Formatted profile for LinkedIn
-- **GitHub Profile README** - Your `README.md` for GitHub profile
-- **Academics profile** - Academic credentials in markdown
+- **CV PDF** - Generado desde HTML para cada idioma
+- **LinkedIn markdown** - Perfil formateado para LinkedIn
+- **GitHub Profile README** - Tu `README.md` para perfil de GitHub
+- **Academics profile** - Credenciales académicas en markdown
+
+<Aside type="tip">
+Revisa tu `package.json` para el campo `devsync.pathToCompiledCV` para ver dónde se genera tu CV HTML.
+</Aside>

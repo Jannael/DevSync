@@ -1,39 +1,39 @@
 ---
-title: DEVSYNC.json Schema
-description: Complete reference for DEVSYNC.json configuration fields and structure.
+title: Referencia de Configuración
+description: Referencia completa de los campos y estructura de configuración de DEVSYNC.json.
 tableOfContents: true
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 
-## Overview
+## Resumen
 
-`DEVSYNC.json` is the single source of truth for your portfolio, CV, GitHub profile, LinkedIn, and academics. All your information is defined here and synchronized across platforms.
+`DEVSYNC.json` es la única fuente de verdad para tu portafolio, CV, perfil de GitHub, LinkedIn y académicos. Toda tu información se define aquí y se sincroniza en todas las plataformas.
 
 <Aside type="tip">
-You can omit fields you don't need. The template will simply not display them. However, the ability to generate outputs depends on the template you're using.
+Puedes omitir campos que no necesites. La plantilla simplemente no los mostrará. Sin embargo, la capacidad de generar salidas depende de la plantilla que estés usando.
 </Aside>
 
-## Global Fields
+## Campos Globales
 
-These fields apply to all languages and outputs:
+Estos campos aplican a todos los idiomas y salidas:
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `defaultLang` | `string` | Yes | Default language code (e.g., `"en"`, `"es"`, `"fr"`) |
-| `site` | `string` | Yes | Your portfolio website URL |
-| `name` | `string` | Yes | Your full name |
-| `img` | `string` | Yes | Profile image URL |
-| `socialMedia` | `array` | No | Array of social media profiles |
-| `githubUserName` | `string` | Yes | Your GitHub username |
+| `defaultLang` | `string` | Sí | Código de idioma predeterminado (ej. `"en"`, `"es"`, `"fr"`) |
+| `site` | `string` | Sí | URL de tu sitio web del portafolio |
+| `name` | `string` | Sí | Tu nombre completo |
+| `img` | `string` | Sí | URL de la imagen de perfil |
+| `socialMedia` | `array` | No | Array de perfiles de redes sociales |
+| `githubUserName` | `string` | Sí | Tu nombre de usuario de GitHub |
 
-### Example: Global Fields
+### Ejemplo: Campos Globales
 
 ```json
 {
   "defaultLang": "en",
   "site": "https://devsync.work",
-  "name": "Your Full Name",
+  "name": "Tu Nombre Completo",
   "img": "https://your-image-url.com/your-image.jpg",
   "socialMedia": [
     {
@@ -43,21 +43,21 @@ These fields apply to all languages and outputs:
       "mdBadge": "![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)"
     }
   ],
-  "githubUserName": "your-github-username"
+  "githubUserName": "tu-usuario-github"
 }
 ```
 
-## Language-Specific Fields
+## Campos Específicos por Idioma
 
-All fields under language codes (e.g., `en`, `es`, `fr`) are translated per language.
+Todos los campos bajo códigos de idioma (ej. `en`, `es`, `fr`) se traducen por idioma.
 
-### Structure
+### Estructura
 
 ```json
 {
-  "en": {
-    "description": "Professional summary",
-    "jobTitle": "Your Job Title",
+  "es": {
+    "description": "Resumen profesional",
+    "jobTitle": "Tu Título de Trabajo",
     "status": { ... },
     "languages": [ ... ],
     "experience": [ ... ],
@@ -68,162 +68,162 @@ All fields under language codes (e.g., `en`, `es`, `fr`) are translated per lang
 }
 ```
 
-### Fields Reference
+### Referencia de Campos
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `description` | `string` | Yes | Professional summary/bio |
-| `jobTitle` | `string` | Yes | Current job title |
-| `status` | `object` | No | Current availability status with badge |
-| `languages` | `array` | No | Spoken languages |
-| `experience` | `array` | No | Work experience entries |
-| `projects` | `array` | No | Project entries |
-| `education` | `array` | No | Education entries |
-| `certifications` | `array` | No | Certification entries |
+| `description` | `string` | Sí | Resumen profesional/biografía |
+| `jobTitle` | `string` | Sí | Título de trabajo actual |
+| `status` | `object` | No | Estado de disponibilidad actual con badge |
+| `languages` | `array` | No | Idiomas hablados |
+| `experience` | `array` | No | Experiencias laborales |
+| `projects` | `array` | No | Proyectos |
+| `education` | `array` | No | Educación |
+| `certifications` | `array` | No | Certificaciones |
 
-## Status Object
+## Objeto de Estado
 
 ```json
 {
-  "status": "Open to work",
-  "badge": "![Status](https://img.shields.io/badge/Status-Open%20to%20Work-green)"
+  "status": "Abierto a ofertas",
+  "badge": "![Estado](https://img.shields.io/badge/Estado-Abierto%20a%20ofertas-green)"
 }
 ```
 
-| Field | Type | Description |
+| Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `status` | `string` | Status text (e.g., "Open to work", "Employed") |
-| `badge` | `string` | Markdown badge for the status |
+| `status` | `string` | Texto de estado (ej. "Abierto a ofertas", "Empleado") |
+| `badge` | `string` | Badge markdown para el estado |
 
-## Language Entry (Spoken)
+## Entrada de Idioma (Hablado)
 
 ```json
 {
-  "name": "English / Spanish",
-  "mdBadge": "![Languages](https://img.shields.io/badge/Languages-English%2C%20Spanish-1f6feb)",
+  "name": "Español / Inglés",
+  "mdBadge": "![Idiomas](https://img.shields.io/badge/Idiomas-Espa%C3%B1ol%2C%20Ingl%C3%A9s-1f6feb)",
   "icon": "https://cdn.simpleicons.org/googletranslate"
 }
 ```
 
-## Experience Entry
+## Entrada de Experiencia
 
 ```json
 {
-  "company": "Company Name",
-  "position": "Your Position",
+  "company": "Nombre de la Empresa",
+  "position": "Tu Puesto",
   "img": "https://company-logo.com/logo.jpg",
   "web": "https://company-website.com",
-  "description": "One sentence describing your role",
-  "date": "MM/YY - Present",
+  "description": "Una oración describiendo tu rol",
+  "date": "MM/YY - Presente",
   "links": [ ... ],
   "list": {
-    "title": "key-achievements",
+    "title": "logros-clave",
     "items": [ ... ]
   },
   "skills": [ ... ]
 }
 ```
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `company` | `string` | Yes | Company name |
-| `position` | `string` | Yes | Your job title |
-| `img` | `string` | No | Company logo URL |
-| `web` | `string` | No | Company website |
-| `description` | `string` | Yes | Role description |
-| `date` | `string` | Yes | Date range (e.g., "01/23 - Present") |
-| `links` | `array` | No | Additional links |
-| `list.title` | `string` | No | Section title |
-| `list.items` | `array` | No | Achievement items |
-| `skills` | `array` | No | Skills used |
+| `company` | `string` | Sí | Nombre de la empresa |
+| `position` | `string` | Sí | Tu título de trabajo |
+| `img` | `string` | No | URL del logo de la empresa |
+| `web` | `string` | No | Sitio web de la empresa |
+| `description` | `string` | Sí | Descripción del rol |
+| `date` | `string` | Sí | Rango de fechas (ej. "01/23 - Presente") |
+| `links` | `array` | No | Enlaces adicionales |
+| `list.title` | `string` | No | Título de la sección |
+| `list.items` | `array` | No | Elementos de logros |
+| `skills` | `array` | No | Habilidades usadas |
 
-### Achievement Item
+### Elemento de Logro
 
 ```json
 {
-  "highlight": "Achievement headline",
-  "description": "Describe one measurable result you delivered"
+  "highlight": "Título del logro",
+  "description": "Describe un resultado medible que lograste"
 }
 ```
 
-## Project Entry
+## Entrada de Proyecto
 
 ```json
 {
-  "name": "Project Name",
+  "name": "Nombre del Proyecto",
   "img": "https://project-image.com.jpg",
   "web": "https://project-url.com",
   "links": [ ... ],
-  "description": "What the project does and why it matters",
+  "description": "Lo que hace el proyecto y por qué importa",
   "list": {
-    "title": "project-highlights",
+    "title": "aspectos-destacados",
     "items": [ ... ]
   },
   "skills": [ ... ]
 }
 ```
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `name` | `string` | Yes | Project name |
-| `img` | `string` | No | Project image URL |
-| `web` | `string` | No | Project website |
-| `links` | `array` | No | Related links (GitHub, demo, etc.) |
-| `description` | `string` | Yes | Project description |
-| `list` | `object` | No | Highlights section |
-| `skills` | `array` | No | Skills/technologies used |
+| `name` | `string` | Sí | Nombre del proyecto |
+| `img` | `string` | No | URL de imagen del proyecto |
+| `web` | `string` | No | Sitio web del proyecto |
+| `links` | `array` | No | Enlaces relacionados (GitHub, demo, etc.) |
+| `description` | `string` | Sí | Descripción del proyecto |
+| `list` | `object` | No | Sección de aspectos destacados |
+| `skills` | `array` | No | Habilidades/tecnologías usadas |
 
-## Education Entry
+## Entrada de Educación
 
 ```json
 {
-  "name": "University Name",
-  "degree": "Degree / Program",
+  "name": "Nombre de la Universidad",
+  "degree": "Título / Programa",
   "img": "https://university-logo.com.jpg",
   "date": "MM/YY - MM/YY",
   "links": [ ... ],
   "list": {
-    "title": "education-highlights",
+    "title": "aspectos-destacados",
     "items": [ ... ]
   }
 }
 ```
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `name` | `string` | Yes | Institution name |
-| `degree` | `string` | Yes | Degree or program |
-| `img` | `string` | No | Institution logo |
-| `date` | `string` | Yes | Date range |
-| `links` | `array` | No | Program links |
-| `list` | `object` | No | Highlights section |
+| `name` | `string` | Sí | Nombre de la institución |
+| `degree` | `string` | Sí | Título o programa |
+| `img` | `string` | No | Logo de la institución |
+| `date` | `string` | Sí | Rango de fechas |
+| `links` | `array` | No | Enlaces del programa |
+| `list` | `object` | No | Sección de aspectos destacados |
 
-## Certification Entry
+## Entrada de Certificación
 
 ```json
 {
-  "name": "Certification Name",
+  "name": "Nombre de la Certificación",
   "url": "https://certification-url.com",
   "list": {
-    "title": "what-this-validates",
+    "title": "lo-que-valida",
     "items": [ ... ]
   },
   "skills": [ ... ]
 }
 ```
 
-| Field | Type | Required | Description |
+| Campo | Tipo | Requerido | Descripción |
 |-------|------|----------|-------------|
-| `name` | `string` | Yes | Certification name |
-| `url` | `string` | Yes | Certification URL |
-| `list` | `object` | No | What it validates |
-| `skills` | `array` | No | Related skills |
+| `name` | `string` | Sí | Nombre de la certificación |
+| `url` | `string` | Sí | URL de la certificación |
+| `list` | `object` | No | Lo que valida |
+| `skills` | `array` | No | Habilidades relacionadas |
 
-## Complete Example
+## Ejemplo Completo
 
 ```json
 {
-  "defaultLang": "en",
+  "defaultLang": "es",
   "site": "https://devsync.work",
   "name": "Jane Doe",
   "img": "https://example.com/jane.jpg",
@@ -236,42 +236,42 @@ All fields under language codes (e.g., `en`, `es`, `fr`) are translated per lang
     }
   ],
   "githubUserName": "janedoe",
-  "en": {
-    "description": "Full-stack developer focused on developer experience and performance.",
-    "jobTitle": "Senior Software Engineer",
+  "es": {
+    "description": "Desarrollador full-stack enfocado en experiencia de desarrollador y rendimiento.",
+    "jobTitle": "Ingeniero de Software Senior",
     "status": {
-      "status": "Open to work",
-      "badge": "![Status](https://img.shields.io/badge/Status-Open%20to%20Work-green)"
+      "status": "Abierto a ofertas",
+      "badge": "![Estado](https://img.shields.io/badge/Estado-Abierto%20a%20ofertas-green)"
     },
     "languages": [
       {
-        "name": "English / Spanish",
-        "mdBadge": "![Languages](https://img.shields.io/badge/Languages-English%2C%20Spanish-1f6feb)",
+        "name": "Español / Inglés",
+        "mdBadge": "![Idiomas](https://img.shields.io/badge/Idiomas-Espa%C3%B1ol%2C%20Ingl%C3%A9s-1f6feb)",
         "icon": "https://cdn.simpleicons.org/googletranslate"
       }
     ],
     "experience": [
       {
         "company": "Tech Corp",
-        "position": "Senior Developer",
+        "position": "Desarrollador Senior",
         "img": "https://techcorp.com/logo.jpg",
         "web": "https://techcorp.com",
-        "description": "Leading frontend architecture for core products.",
-        "date": "01/23 - Present",
+        "description": "Liderando arquitectura frontend para productos principales.",
+        "date": "01/23 - Presente",
         "links": [
           {
-            "name": "Company Website",
+            "name": "Sitio Web de la Empresa",
             "url": "https://techcorp.com",
-            "mdBadge": "![Company](https://img.shields.io/badge/Company-Website-0ea5e9)",
+            "mdBadge": "![Empresa](https://img.shields.io/badge/Empresa-SitioWeb-0ea5e9)",
             "icon": "https://cdn.simpleicons.org/googlechrome"
           }
         ],
         "list": {
-          "title": "key-achievements",
+          "title": "logros-clave",
           "items": [
             {
-              "highlight": "Improved performance by 40%",
-              "description": "Reduced bundle size and optimized render cycles."
+              "highlight": "Mejora del rendimiento del 40%",
+              "description": "Reduje el tamaño del bundle y optimicé los ciclos de renderizado."
             }
           ]
         },
@@ -291,13 +291,17 @@ All fields under language codes (e.g., `en`, `es`, `fr`) are translated per lang
 }
 ```
 
-## Validation
+<Aside type="note">
+**URLs de Badges**: Devsync usa badges de shields.io. Puedes personalizar colores y texto, o eliminar los badges completamente si no los necesitas.
+</Aside>
 
-The configuration is validated using Zod. If validation fails, you'll see an error like:
+## Validación
+
+La configuración se valida usando Zod. Si la validación falla, verás un error como:
 
 ```
-Invalid DEVSYNC.json structure
-Missing required profile field
+Estructura de DEVSYNC.json inválida
+Campo de perfil requerida faltante
 ```
 
-Check that all required fields are present and properly formatted.
+Verifica que todos los campos requeridos estén presentes y correctamente formateados.

@@ -1,23 +1,23 @@
 ---
-title: GitHub Actions Guide
-description: Automate your portfolio updates with GitHub Actions workflows.
+title: Guía de GitHub Actions
+description: Automatiza las actualizaciones de tu portafolio con flujos de trabajo de GitHub Actions.
 tableOfContents: true
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 import { Steps } from '@astrojs/starlight/components'
 
-## Overview
+## Resumen
 
-Devsync is designed to work seamlessly with GitHub Actions. You can automatically update your LinkedIn profile, GitHub README, CV, and academics whenever you change `DEVSYNC.json`.
+Devsync está diseñado para funcionar perfectamente con GitHub Actions. Puedes actualizar automáticamente tu perfil de LinkedIn, README de GitHub, CV y académicos cada vez que cambies `DEVSYNC.json`.
 
 <Aside type="tip">
-  The `build` command is primarily intended for CI/CD, but you can run it locally if you have Bun and Puppeteer installed.
+El comando `build` está pensado principalmente para CI/CD, pero puedes ejecutarlo localmente si tienes Bun y Puppeteer instalados.
 </Aside>
 
-## Complete Workflow Example
+## Ejemplo de Flujo Completo
 
-Here's the full workflow that powers the `update-on-devsync-change.yml`:
+Aquí está el flujo completo que impulsa `update-on-devsync-change.yml`:
 
 ```yaml
 name: Update CV, README, LinkedIn & Academics
@@ -74,7 +74,7 @@ jobs:
           commit_message: 'docs: auto-update artifacts from DEVSYNC.json'
 ```
 
-## Workflow Breakdown
+## Desglose del Flujo
 
 ### 1. Trigger
 
@@ -85,7 +85,7 @@ on:
       - 'DEVSYNC.json'
 ```
 
-Triggers only when `DEVSYNC.json` changes, avoiding unnecessary runs.
+Se activa solo cuando `DEVSYNC.json` cambia, evitando ejecuciones innecesarias.
 
 ### 2. Checkout
 
@@ -97,10 +97,10 @@ Triggers only when `DEVSYNC.json` changes, avoiding unnecessary runs.
     fetch-depth: 0
 ```
 
-- `persist-credentials: true` - Allows pushing changes back
-- `fetch-depth: 0` - Gets full history (needed for some Git operations)
+- `persist-credentials: true` - Permite subir cambios de vuelta
+- `fetch-depth: 0` - Obtiene el historial completo (necesario para algunas operaciones de Git)
 
-### 3. Setup Runtimes
+### 3. Configurar Runtimes
 
 ```yaml
 - name: Setup Bun
@@ -114,11 +114,11 @@ Triggers only when `DEVSYNC.json` changes, avoiding unnecessary runs.
     node-version: '22'
 ```
 
-Both Bun and Node.js are required:
-- **Bun** - Runs the CLI and builds the project
-- **Node.js** - Required by Puppeteer for PDF generation
+Tanto Bun como Node.js son requeridos:
+- **Bun** - Ejecuta el CLI y construye el proyecto
+- **Node.js** - Requerido por Puppeteer para generación de PDF
 
-### 4. Install System Dependencies
+### 4. Instalar Dependencias del Sistema
 
 ```yaml
 - name: Install Puppeteer dependencies
@@ -132,37 +132,37 @@ Both Bun and Node.js are required:
       libgdk-pixbuf2.0-0
 ```
 
-These are Chrome/Chromium libraries needed for headless PDF generation.
+Estas son librerías de Chrome/Chromium necesarias para generación de PDF en modo headless.
 
 <Aside type="caution">
-  Don't skip the system dependencies step! Without them, PDF generation will fail with errors like "Chrome not found" or "Cannot start Chrome".
+¡No saltes el paso de dependencias del sistema! Sin ellas, la generación de PDF fallará con errores como "Chrome not found" o "Cannot start Chrome".
 </Aside>
 
-### 5. Install Dependencies
+### 5. Instalar Dependencias
 
 ```yaml
 - name: Install dependencies
   run: bun install
 ```
 
-Installs project dependencies including Puppeteer.
+Instala las dependencias del proyecto incluyendo Puppeteer.
 
-### 6. Run Build
+### 6. Ejecutar Build
 
 ```yaml
 - name: Update artifacts
   run: bunx @jannael/devsync build
 ```
 
-This command:
-1. Validates `DEVSYNC.json`
-2. Builds CV for each language
-3. Creates LinkedIn profile
-4. Creates GitHub profile
-5. Creates academics profile
-6. Generates PDFs
+Este comando:
+1. Valida `DEVSYNC.json`
+2. Construye el CV para cada idioma
+3. Crea el perfil de LinkedIn
+4. Crea el perfil de GitHub
+5. Crea el perfil académico
+6. Genera PDFs
 
-### 7. Push Changes
+### 7. Subir Cambios
 
 ```yaml
 - name: Push changes
@@ -171,23 +171,23 @@ This command:
     commit_message: 'docs: auto-update artifacts from DEVSYNC.json'
 ```
 
-Automatically commits and pushes generated files back to the repository.
+Automáticamente confirma y sube los archivos generados de vuelta al repositorio.
 
-## Customization Examples
+## Ejemplos de Personalización
 
-### Add Notification on Success
+### Agregar Notificación de Éxito
 
 ```yaml
 - name: Notify on success
   if: success()
   run: |
     echo "Build completed successfully!"
-    # Add Discord/Slack notification here
+    # Agrega notificación de Discord/Slack aquí
 ```
 
-### Cache Dependencies
+### Caché de Dependencias
 
-Speed up builds by caching Bun dependencies:
+Acelera builds cacheando dependencias de Bun:
 
 ```yaml
 - name: Cache Bun dependencies
@@ -199,7 +199,7 @@ Speed up builds by caching Bun dependencies:
       ${{ runner.os }}-bun-
 ```
 
-### Multiple Jobs (Parallel)
+### Múltiples Trabajos (Paralelo)
 
 ```yaml
 jobs:
@@ -219,51 +219,51 @@ jobs:
         run: echo "Deploy..."
 ```
 
-## Security Considerations
+## Consideraciones de Seguridad
 
-### Permissions
+### Permisos
 
 ```yaml
 permissions:
-  contents: write  # Required to push changes
+  contents: write # Requerido para subir cambios
 ```
 
-Only grant the minimum permissions needed. For Devsync, `contents: write` is required to commit generated files.
+Solo otorga los permisos mínimos necesarios. Para Devsync, `contents: write` es necesario para confirmar archivos generados.
 
 ### Secrets
 
-If your workflow needs secrets (e.g., deploy tokens):
+Si tu flujo necesita secrets (ej. tokens de deploy):
 
 ```yaml
 env:
   DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 ```
 
-Store secrets in repository settings → Secrets → Actions.
+Almacena secrets en configuración del repositorio → Secrets → Actions.
 
-## Troubleshooting
+## Solución de Problemas
 
-### Workflow Not Triggering
+### El Flujo No Se Activa
 
-- Check that `DEVSYNC.json` is in the root directory
-- Verify the path pattern matches exactly
-- Check Actions tab for disabled workflows
+- Verifica que `DEVSYNC.json` esté en el directorio raíz
+- Verifica que el patrón de ruta coincida exactamente
+- Revisa la pestaña Actions por flujos deshabilitados
 
-### Build Fails
+### Build Falla
 
-Common issues:
+Problemas comunes:
 
-1. **Permission denied** - Check `permissions: contents: write`
-2. **Build fails**: If you are using a custom template, ensure that all necessary system dependencies are installed within the workflow.
+1. **Permiso denegado** - Verifica `permissions: contents: write`
+2. **Build falla**: Si usas una plantilla personalizada, asegúrate de que todas las dependencias del sistema estén instaladas en el flujo.
 
-### PDF Generation Fails
+### Generación de PDF Falla
 
-- Verify all Chrome dependencies are installed
-- Check that `node-version: '22'` is set
-- Ensure `fetch-depth: 0` in checkout step
+- Verifica que todas las dependencias de Chrome estén instaladas
+- Verifica que `node-version: '22'` esté configurado
+- Asegúrate de que `fetch-depth: 0` en el paso de checkout
 
-## Next Steps
+## Siguientes Pasos
 
-- See [Configuration Reference](/configuration/) for `DEVSYNC.json` fields
-- Check [Troubleshooting](/troubleshooting/) for common issues
-- Learn about [Create Template](/how-it-works/create-template/) for custom setups
+- Mira [Referencia de Configuración](/es/configuration/) para campos de `DEVSYNC.json`
+- Revisa [Solución de Problemas](/es/troubleshooting/) para problemas comunes
+- Aprende sobre [Crear Plantilla](/es/how-it-works/create-template/) para configuraciones personalizadas

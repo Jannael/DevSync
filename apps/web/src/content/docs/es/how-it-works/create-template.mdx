@@ -1,14 +1,14 @@
 ---
-title: "How the Create Template Command Works"
-description: "Learn about the create-template command and how it works."
+title: "Cómo Funciona el Comando Create Template"
+description: "Aprende sobre el comando create-template y cómo funciona."
 tableOfContents: false
 ---
 import { FileTree } from '@astrojs/starlight/components'
 import { Aside } from '@astrojs/starlight/components'
 
-## Create Template Command
+## Comando Create Template
 
-The `create-template` command generates a complete Devsync template structure that you can customize for your portfolio or distribute to others.
+El comando `create-template` genera una estructura completa de plantilla de Devsync que puedes personalizar para tu portafolio o distribuir a otros.
 
 <FileTree>
 
@@ -32,15 +32,15 @@ The `create-template` command generates a complete Devsync template structure th
 
 </FileTree>
 
-### File Usage
+### Uso de Archivos
 
-- **`.agents/skills/devsync-portfolio/`**: Agent skill that helps AI understand how to operate the template and build portfolios from prompts.
-- **`.github/workflows/update-on-devsync-change.yml`**: GitHub Action that automatically updates your portfolio files whenever `DEVSYNC.json` is modified.
-- **`src/devsync/devsync-validator.ts`**: Zod validator for the `DEVSYNC.json` file.
-- **`src/devsync/devsync.ts`**: Wrapper that simplifies using Devsync files within your project.
-- **`src/devsync/fields-translations.ts`**: Translation file for localized content.
-- **`public/poster-[theme]-mode.webp`**: Preview images used to display your portfolio on the Devsync website.
+- **`.agents/skills/devsync-portfolio/`**: Agente skill que ayuda a la IA a entender cómo operar la plantilla y construir portafolios desde prompts.
+- **`.github/workflows/update-on-devsync-change.yml`**: GitHub Action que actualiza automáticamente tus archivos de portafolio cada vez que `DEVSYNC.json` se modifica.
+- **`src/devsync/devsync-validator.ts`**: Validador Zod para el archivo `DEVSYNC.json`.
+- **`src/devsync/devsync.ts`**: Wrapper que simplifica usar archivos de Devsync dentro de tu proyecto.
+- **`src/devsync/fields-translations.ts`**: Archivo de traducción para contenido localizado.
+- **`public/poster-[theme]-mode.webp`**: Imágenes de vista previa usadas para mostrar tu portafolio en el sitio web de Devsync.
 
 <Aside type="tip">
-You don't need to create all these files manually. Run `bunx @jannael/devsync create-template` to generate the complete structure.
+No necesitas crear todos estos archivos manualmente. Ejecuta `bunx @jannael/devsync create-template` para generar la estructura completa.
 </Aside>

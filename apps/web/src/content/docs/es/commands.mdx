@@ -1,48 +1,48 @@
 ---
-title: Commands
-description: All available Devsync CLI commands and what they do.
+title: Comandos
+description: Todos los comandos disponibles de Devsync CLI y qué hacen.
 tableOfContents: false
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { Aside } from '@astrojs/starlight/components'
 
-<Aside type="note"> 
+<Aside type="note">
 
-The `build` command is meant to be run on a GitHub Action, but you can run it locally if you have all the dependencies installed.
+El comando `build` está diseñado para ejecutarse en una GitHub Action, pero puedes ejecutarlo localmente si tienes todas las dependencias instaladas.
 
 </Aside>
 
-## Available Commands
+## Comandos Disponibles
 
 <CardGrid>
-  <Card title="init" icon="rocket">
+<Card title="init" icon="rocket">
 
-    Copy the default portfolio template to your current folder.
+Copia la plantilla de portafolio predeterminada a tu carpeta actual.
 
-    ```sh
-    bunx @jannael/devsync init
-    ```
+```sh
+bunx @jannael/devsync init
+```
 
-  </Card>
+</Card>
 
-  <Card title="build" icon="setting">
+<Card title="build" icon="setting">
 
-    Build `linkedin.md`, your `GitHub Profile`, `academics`, and generate a PDF from your `CV` component.
+Construye `linkedin.md`, tu `Perfil de GitHub`, `académicos`, y genera un PDF desde tu componente `CV`.
 
-    ```sh
-    bunx @jannael/devsync build
-    ```
+```sh
+bunx @jannael/devsync build
+```
 
-  </Card>
+</Card>
 
-  <Card title="create-template" icon="document">
+<Card title="create-template" icon="document">
 
-    Create a new custom template for Devsync.
+Crea una nueva plantilla personalizada para Devsync.
 
-    ```sh
-    bunx @jannael/devsync create-template
-    ```
+```sh
+bunx @jannael/devsync create-template
+```
 
-  </Card>
+</Card>
 </CardGrid>

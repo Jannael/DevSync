@@ -28,5 +28,12 @@
       "@/*": ["./apps/cli/*"],
       "@devsync/core": ["./apps/@core/src/devsync/devsync"]
     }
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/**",
+    "apps/**/node_modules/**",
+    "dist",
+    ".astro"
+  ]
 }

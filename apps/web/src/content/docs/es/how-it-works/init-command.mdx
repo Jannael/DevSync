@@ -1,44 +1,44 @@
 ---
-title: "How the Init Command Works"
-description: "Learn about the init command and how it works."
+title: "Cómo Funciona el Comando Init"
+description: "Aprende sobre el comando init y cómo funciona."
 tableOfContents: false
 ---
 import {Steps} from '@astrojs/starlight/components'
 import { Aside } from '@astrojs/starlight/components'
 
-## Init Command
+## Comando Init
 
-The `init` command copies a Devsync template to your current directory, setting up everything you need to start building your portfolio.
+El comando `init` copia una plantilla de Devsync a tu directorio actual, configurando todo lo que necesitas para comenzar a construir tu portafolio.
 
 <Steps>
 
-1. **Check for template flag**: First, it checks if the `--template` flag is provided. If it is, the command splits the string by `/` and cleans it up.
+1. **Verificar bandera de plantilla**: Primero, verifica si la bandera `--template` está proporcionada. Si lo está, el comando divide la cadena por `/` y la limpia.
 
-2. **Clone the repository**: If the `--template` flag is not provided, it clones the default template: `https://github.com/jannael/devsync-default-template`.
+2. **Clonar el repositorio**: Si la bandera `--template` no está proporcionada, clona la plantilla predeterminada: `https://github.com/jannael/devsync-default-template`.
 
-3. **Clean Git history**: Deletes the `.git` directory to ensure a clean Git history, separate from the template's history.
+3. **Limpiar historial de Git**: Elimina el directorio `.git` para asegurar un historial de Git limpio, separado del historial de la plantilla.
 
-4. **Initialize new repository**: Initializes a new Git repository and makes the first commit, allowing you to add your own remote origin.
+4. **Inicializar nuevo repositorio**: Inicializa un nuevo repositorio de Git y hace el primer commit, permitiéndote agregar tu propio remote origin.
 
 </Steps>
 
 <Aside type="tip">
-After running `init`, follow the on-screen instructions to create your repository and push your changes.
+Después de ejecutar `init`, sigue las instrucciones en pantalla para crear tu repositorio y subir tus cambios.
 </Aside>
 
-## What Gets Created
+## Qué Se Crea
 
-After running `init`, you'll have:
+Después de ejecutar `init`, tendrás:
 
-- `DEVSYNC.json` - Your portfolio configuration
-- Template source files - Your portfolio code
-- GitHub Actions workflow - Auto-updates on `DEVSYNC.json` changes
-- Agent skills - AI helper for portfolio operations
+- `DEVSYNC.json` - Tu configuración de portafolio
+- Archivos fuente de la plantilla - Tu código de portafolio
+- Flujo de GitHub Actions - Actualizaciones automáticas en cambios de `DEVSYNC.json`
+- Agent skills - Ayudante de IA para operaciones de portafolio
 
-## Next Steps
+## Siguientes Pasos
 
-1. Create a GitHub repository with your username
-2. Add remote origin: `git remote add origin https://github.com/[username]/[username].git`
-3. Push your changes: `git push -u origin main`
-4. Fill in `DEVSYNC.json` with your information
-5. Push to see your portfolio update automatically
+1. Crea un repositorio de GitHub con tu nombre de usuario
+2. Agrega remote origin: `git remote add origin https://github.com/[username]/[username].git`
+3. Sube tus cambios: `git push -u origin main`
+4. Rellena `DEVSYNC.json` con tu información
+5. Sube para ver tu portafolio actualizarse automáticamente

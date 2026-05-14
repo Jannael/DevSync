@@ -1,23 +1,23 @@
 ---
-title: Troubleshooting
-description: Common issues and solutions when using Devsync.
+title: Solución de Problemas
+description: Problemas comunes y soluciones al usar Devsync.
 tableOfContents: true
 ---
 
 import { Aside } from '@astrojs/starlight/components'
 
-## Installation Issues
+## Problemas de Instalación
 
-### Puppeteer Install Fails (Local)
+### Instalación de Puppeteer Falla (Local)
 
-**Error:** `Error: Cannot find module 'puppeteer'` or installation hangs
+**Error:** `Error: Cannot find module 'puppeteer'` o la instalación se cuelga
 
-**Cause:** Missing system dependencies or network issues
+**Causa:** Dependencias del sistema faltantes o problemas de red
 
-**Solution:**
+**Solución:**
 
 ```bash
-# Install Chrome dependencies (Linux/WSL)
+# Instalar dependencias de Chrome (Linux/WSL)
 sudo apt-get update
 sudo apt-get install -y \
   libx11-6 libxcomposite1 libxcursor1 libxdamage1 libxext6 \
@@ -28,47 +28,47 @@ sudo apt-get install -y \
 ```
 
 <Aside type="note">
-On macOS, Puppeteer usually works out of the box. On Windows, ensure you have the latest Visual C++ Redistributable installed.
+En macOS, Puppeteer generalmente funciona sin configuración adicional. En Windows, asegúrate de tener lo último en Visual C++ Redistributable instalado.
 </Aside>
 
-### Bun Not Found (Local)
+### Bun No Encontrado (Local)
 
 **Error:** `bash: bun: command not found`
 
-**Solution:**
+**Solución:**
 
 ```bash
-# Install Bun
+# Instalar Bun
 curl -fsSL https://bun.sh/install | bash
 
-# Or with npm
+# O con npm
 npm install -g bun
 ```
 
-Verify installation:
+Verifica la instalación:
 
 ```bash
 bun --version
 ```
 
-## Build Command Issues (Local)
+## Problemas del Comando Build (Local)
 
-### Chrome Not Found (PDF Generation)
+### Chrome No Encontrado (Generación de PDF)
 
-**Error:** `Failed to launch the browser process` or `Chrome not found`
+**Error:** `Failed to launch the browser process` o `Chrome not found`
 
-**Cause:** Puppeteer can't find Chrome/Chromium
+**Causa:** Puppeteer no puede encontrar Chrome/Chromium
 
-**Solution:**
+**Solución:**
 
-1. Install Chrome dependencies (see Puppeteer section above)
-2. Set Puppeteer skip download in `.env`:
+1. Instala las dependencias de Chrome (ver sección Puppeteer arriba)
+2. Establece Puppeteer skip download en `.env`:
 
 ```bash
 PUPPETEER_SKIP_DOWNLOAD=true
 ```
 
-3. Ensure system Chrome/Chromium is installed:
+3. Asegúrate de que Chrome/Chromium del sistema esté instalado:
 
 ```bash
 # Ubuntu/Debian
@@ -78,110 +78,109 @@ sudo apt-get install chromium-browser
 brew install --cask google-chrome
 ```
 
-### DEVSYNC.json Validation Errors
+### Errores de Validación de DEVSYNC.json
 
-**Error:** `Invalid DEVSYNC.json structure` or `Missing required profile field`
+**Error:** `Invalid DEVSYNC.json structure` o `Missing required profile field`
 
-**Cause:** Schema validation failed
+**Causa:** Validación de esquema falló
 
-**Solution:**
+**Solución:**
 
-1. Check that all required fields are present:
+1. Verifica que todos los campos requeridos estén presentes:
    - `defaultLang`
    - `site`
    - `name`
    - `img`
    - `githubUserName`
 
-2. Verify JSON syntax (no trailing commas, proper quotes)
+2. Verifica la sintaxis JSON (sin comas finales, comillas apropiadas)
 
-3. Check field types match expected values
+3. Verifica que los tipos de campo coincidan con los valores esperados
 
-Example invalid vs valid:
+Ejemplo inválido vs válido:
 
 ```json
-// ❌ Invalid - missing quotes
+// ❌ Inválido - faltan comillas
 {
-  name: John Doe,  // Should be "name": "John Doe"
-  "site": https://example.com  // Should be "https://example.com"
+  name: John Doe, // Debería ser "name": "John Doe"
+  "site": https://example.com // Debería ser "https://example.com"
 }
 
-// ✅ Valid
+// ✅ Válido
 {
   "name": "John Doe",
   "site": "https://example.com"
 }
 ```
 
-### PNPM create-template does not work
+### PNPM create-template no funciona
 
-`pnpm` has strict security rules for script execution that might prevent `create-template` from working out of the box. I recommend using `bunx` instead. Since `bunx` only uses built-in Bun features to copy the `@core` folder, there are no security concerns.
+`pnpm` tiene reglas de seguridad estrictas para ejecución de scripts que podrían prevenir que `create-template` funcione sin configuración adicional. Recomiendo usar `bunx` en su lugar. Como `bunx` solo usa características incorporadas de Bun para copiar la carpeta `@core`, no hay problemas de seguridad.
 
+## Problemas de Git
 
-## Git Issues
+### Permiso Denegado al Subir
 
-### Permission Denied When Pushing
+**Error:** `remote: Permission denied` o `fatal: could not read Username`
 
-**Error:** `remote: Permission denied` or `fatal: could not read Username`
+**Causa:** Credenciales de GitHub faltantes o incorrectas
 
-**Cause:** Missing or incorrect GitHub credentials
+**Solución:**
 
-**Solution:**
-
-For GitHub Actions:
+Para GitHub Actions:
 
 ```yaml
 permissions:
   contents: write
 ```
 
-For local Git:
+Para Git local:
 
 ```bash
-# Check remote URL
+# Verificar remote URL
 git remote -v
 
-# Re-authenticate
+# Re-autenticar
 git credential-cache exit
 git push
 ```
 
-## Template Issues
+## Problemas de Plantillas
 
-### Template Not Found
+### Plantilla No Encontrada
 
-**Error:** `Template DEVSYNC.json not found` or `Failed to clone repository`
+**Error:** `Template DEVSYNC.json not found` o `Failed to clone repository`
 
-**Cause:** Invalid template URL or repository doesn't exist
+**Causa:** URL de plantilla inválida o el repositorio no existe
 
-**Solution:**
+**Solución:**
 
-1. Verify template URL is correct:
+1. Verifica que la URL de la plantilla sea correcta:
 
 ```bash
-# Should be: https://github.com/[owner]/[repo]
+# Debería ser: https://github.com/[owner]/[repo]
 bunx @jannael/devsync init --template @jannael/my-template
 ```
 
-2. Check repository exists and is public
+2. Verifica que el repositorio exista y sea público
 
-3. Use default template if unsure:
+3. Usa la plantilla predeterminada si no estás seguro:
 
 ```bash
 bunx @jannael/devsync init
 ```
 
-## PDF Generation Issues
+## Problemas de Generación de PDF
 
-### PDF Not Generated
+### PDF No Generado
 
-**Error:** PDF file missing from output
+**Error:** Falta archivo PDF en la salida
 
-**Cause:** HTML to PDF conversion failed
+**Causa:** Conversión HTML a PDF falló
 
-**Solution:**
+**Solución:**
 
-1. Check that `package.json` has correct path:
+1. Verifica que `package.json` tenga la ruta correcta:
 
 ```json
 {
@@ -191,47 +190,47 @@ bunx @jannael/devsync init
 }
 ```
 
-2. Verify HTML file exists at that path
+2. Verifica que el archivo HTML exista en esa ruta
 
-3. Check build command actually generates the HTML
+3. Verifica que el comando build realmente genere el HTML
 
-### PDF Quality Issues
+### Problemas de Calidad de PDF
 
-**Problem:** PDF looks cut off or misformatted
+**Problema:** El PDF se ve cortado o mal formateado
 
-**Solution:**
+**Solución:**
 
-1. Ensure HTML has proper viewport meta tag
-2. Check CSS doesn't have fixed widths that exceed page size
-3. Test PDF generation locally first
+1. Asegúrate de que el HTML tenga la etiqueta meta viewport apropiada
+2. Verifica que el CSS no tenga anchos fijos que excedan el tamaño de página
+3. Prueba la generación de PDF localmente primero
 
-## GitHub Actions Issues
+## Problemas de GitHub Actions
 
-### Workflow Not Triggering
+### El Flujo No Se Activa
 
-**Problem:** Push to `DEVSYNC.json` but workflow doesn't run
+**Problema:** Push a `DEVSYNC.json` pero el flujo no se ejecuta
 
-**Solution:**
+**Solución:**
 
-1. Check Actions tab - workflow might be disabled
-2. Verify `DEVSYNC.json` is in root (not subdirectory)
-3. Check workflow file path: `.github/workflows/*.yml`
-4. Verify YAML syntax:
+1. Revisa la pestaña Actions - el flujo podría estar deshabilitado
+2. Verifica que `DEVSYNC.json` esté en la raíz (no en subdirectorio)
+3. Verifica la ruta del archivo de flujo: `.github/workflows/*.yml`
+4. Verifica la sintaxis YAML:
 
 ```yaml
 on:
   push:
     paths:
-      - 'DEVSYNC.json'  # Exact match required
+      - 'DEVSYNC.json' # Coincidencia exacta requerida
 ```
 
-### Job Fails on Ubuntu
+### El Trabajo Falla en Ubuntu
 
-**Error:** Various errors on `ubuntu-latest` runner
+**Error:** Varios errores en el runner `ubuntu-latest`
 
-**Solution:**
+**Solución:**
 
-Add all required dependencies:
+Agrega todas las dependencias requeridas:
 
 ```yaml
 - name: Install dependencies
@@ -240,15 +239,15 @@ Add all required dependencies:
     sudo apt-get install -y libx11-6 libnss3 libgtk-3-0t64 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxtst6 libxrandr2 libpangocairo-1.0-0 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdbus-1-3 libdrm2 libgbm1 libgdk-pixbuf2.0-0 libasound2t64
 ```
 
-## Performance Issues
+## Problemas de Rendimiento
 
-### Slow Build Times
+### Tiempos de Build Lentos
 
-**Problem:** Build takes >5 minutes
+**Problema:** Build toma >5 minutos
 
-**Solution:**
+**Solución:**
 
-1. Cache dependencies:
+1. Dependencias en caché:
 
 ```yaml
 - name: Cache Bun dependencies
@@ -258,28 +257,28 @@ Add all required dependencies:
     key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
 ```
 
-2. Use specific Bun version instead of `latest`
+2. Usa una versión específica de Bun en lugar de `latest`
 
-3. Reduce image sizes in `DEVSYNC.json`
+3. Reduce tamaños de imagen en `DEVSYNC.json`
 
-## Common Error Messages
+## Mensajes de Error Comunes
 
-| Error | Cause | Solution |
+| Error | Causa | Solución |
 |-------|-------|----------|
-| `ENOENT: no such file or directory` | File path doesn't exist | Check paths in config |
-| `EACCES: permission denied` | File permissions issue | Check file permissions |
-| `ETIMEDOUT` | Network timeout | Check network, retry |
-| `Invalid URL` | Malformed URL in config | Fix URL format |
-| `ZodError` | Validation failed | Check field types/values |
+| `ENOENT: no such file or directory` | Ruta de archivo no existe | Verifica rutas en config |
+| `EACCES: permission denied` | Problema de permisos de archivo | Verifica permisos de archivo |
+| `ETIMEDOUT` | Tiempo de red agotado | Verifica red, reintenta |
+| `Invalid URL` | URL malformada en config | Corrige formato de URL |
+| `ZodError` | Validación falló | Verifica tipos/valores de campo |
 
-## Getting Help
+## Obteniendo Ayuda
 
-If your issue isn't listed here:
+Si tu problema no está listado aquí:
 
-1. Check existing [GitHub Issues](https://github.com/jannael/devsync/issues)
-2. Review [Configuration Reference](/configuration/)
-3. Check [GitHub Actions Guide](/github-actions/)
-4. Create a new issue with:
-   - Error message
-   - Your `DEVSYNC.json` (remove sensitive data)
-   - Steps to reproduce
+1. Revisa [GitHub Issues](https://github.com/jannael/devsync/issues) existentes
+2. Revisa [Referencia de Configuración](/es/configuration/)
+3. Revisa [Guía de GitHub Actions](/es/github-actions/)
+4. Crea un nuevo issue con:
+   - Mensaje de error
+   - Tu `DEVSYNC.json` (elimina datos sensibles)
+   - Pasos para reproducir

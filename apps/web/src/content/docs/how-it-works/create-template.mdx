@@ -1,0 +1,40 @@
+---
+title: "How the Create Template Command Works"
+description: "Learn about the create-template command and how it works."
+---
+import { FileTree } from '@astrojs/starlight/components'
+
+## Create Template Command
+The `create-template` command performs the following steps:
+
+This command copies the necessary files from the local source to generate a complete template.
+
+<FileTree>
+
+- .agents
+  - skills
+    - devsync-portfolio
+      - SKILL.md
+- .github
+  - workflows
+    - update-on-devsync-change.yml
+- public
+  - poster-dark-mode.webp
+  - poster-light-mode.webp
+- src
+  - devsync
+    - devsync-validator.ts
+    - devsync.ts
+    - fields-translations.ts
+- DEVSYNC.json
+- package.json
+</FileTree>
+
+### File Usage
+
+- `agents.md`: An agent skill that helps AI understand how to operate and use this template.
+- `update-on-devsync-change.yml`: A GitHub Action that automatically updates your portfolio files whenever `DEVSYNC.json` is modified.
+- `devsync-validator.ts`: A validator for `DEVSYNC.json` file.
+- `devsync.ts`: A wrapper that simplifies using Devsync files within your project.
+- `fields-translations.ts`: A translation file for localized content.
+- `poster-[theme]-mode.webp`: A preview image used to display your portfolio on Devsync website.

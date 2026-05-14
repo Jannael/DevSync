@@ -34,6 +34,7 @@
     "**/node_modules/**",
     "apps/**/node_modules/**",
     "dist",
-    ".astro"
+    "**/*.astro",
+    "apps/web/**"
   ]
 }

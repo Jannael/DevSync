@@ -7,6 +7,8 @@ import {Steps} from '@astrojs/starlight/components'
 import { FileTree } from '@astrojs/starlight/components';
 import { Aside } from '@astrojs/starlight/components';
 
+Devsync templates do not require a specific framework as long as they compile to HTML. And let's be honest—if you're considering SSR (Server-Side Rendering) for a portfolio, is everything okay at home?
+
 <Aside type="note"> 
 
 If you already have a portfolio, you can migrate it to use `Devsync` by following this guide; however, you will need to install `zod` manually.
@@ -50,19 +52,19 @@ If you already have a portfolio, you can migrate it to use `Devsync` by followin
     - `update-on-devsync-change.yml`: This is a GitHub Action that automatically updates your `GitHub Profile`, `LinkedIn`, `CV`, and `academics` whenever you update the `DEVSYNC.json` file.
     - `devsync.ts`: This file exports everything necessary to use the template within your project.
 
-3. Create your portfolio or refactor your current portfolio to use `Devsync`.
+3. Create your portfolio or refactor your current portfolio to use `Devsync`, you can use .
 
 4. Add the `devsync` configuration to your `package.json`:
 
-```json
-  "devsync": {
-    "pathToCompiledCV": "./dist/[lang]/cv/index.html"
-  },
-```
-
-`Devsync` generates the CV PDF from pure HTML, so ensure this path points to the HTML file containing your CV.
-
-If you are using internationalization for your template, the `[lang]` placeholder will be replaced with the language codes defined in `DEVSYNC.json`. If you do not need this feature, simply remove `[lang]` from the path and point it directly to your CV file.
+    ```json
+      "devsync": {
+        "pathToCompiledCV": "./dist/[lang]/cv/index.html"
+      },
+    ```
+    
+    `Devsync` generates the CV PDF from pure HTML, so ensure this path points to the HTML file containing your CV.
+    
+    If you are using internationalization for your template, the `[lang]` placeholder will be replaced with the language codes defined in `DEVSYNC.json`. If you do not need this feature, simply remove `[lang]` from the path and point it directly to your CV file.
 
 </Steps>
 

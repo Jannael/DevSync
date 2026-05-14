@@ -1,0 +1,20 @@
+---
+title: "How the init command works"
+description: "Learn about the init command and how it works."
+---
+import {Steps} from '@astrojs/starlight/components'
+
+## Init command
+this command does the next steps:
+
+<Steps>
+
+1. first it checks if the `--template` flag is provided. if the flag is provided will split the string by '/' and clean it up.
+
+2. clone repository, when `--template` flag is not provided will always clone the default template https://github.com/jannael/devsync-default-template
+
+3. delete .git directory, this is because we don't want to have the same git history as the template.
+
+4. init a new git repository, and make the first commit. so the user can add the remote origin.
+
+</Steps>

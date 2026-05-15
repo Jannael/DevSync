@@ -9,11 +9,11 @@
   --color-brand-muted: #e5e5e5;
 
   /* ── Accent (primary action color) ──────────────────────────────── */
-  --color-accent: #6d28d9;
-  --color-accent-hover: #5b21b6;
-  --color-accent-active: #4c1d95;
-  --color-accent-subtle: #ede9fe;
-  --color-accent-muted: #ddd6fe;
+  --color-accent: #22c55e;
+  --color-accent-hover: #16a34a;
+  --color-accent-active: #15803d;
+  --color-accent-subtle: #f0fdf4;
+  --color-accent-muted: #dcfce7;
   --color-accent-foreground: #ffffff;
 
   /* ── Secondary accent ───────────────────────────────────────────── */
@@ -47,22 +47,22 @@
   --color-text-muted: #a3a3a3;
   --color-text-disabled: #d4d4d4;
   --color-text-inverse: #fafafa;
-  --color-text-link: #6d28d9;
-  --color-text-link-hover: #5b21b6;
+  --color-text-link: #22c55e;
+  --color-text-link-hover: #16a34a;
 
   /* ── Borders ────────────────────────────────────────────────────── */
   --color-border: #e5e5e5;
   --color-border-subtle: #f0f0f0;
   --color-border-strong: #d4d4d4;
   --color-border-muted: #f5f5f5;
-  --color-border-focus: #6d28d9;
+  --color-border-focus: #22c55e;
   --color-border-error: #ef4444;
   --color-border-success: #22c55e;
   --color-border-warning: #f59e0b;
   --color-border-info: #0ea5e9;
 
   /* ── Rings / Focus ──────────────────────────────────────────────── */
-  --color-ring: rgba(109, 40, 217, 0.35);
+  --color-ring: rgba(34, 197, 94, 0.35);
   --color-ring-offset: #ffffff;
   --color-ring-error: rgba(239, 68, 68, 0.35);
   --color-ring-success: rgba(34, 197, 94, 0.35);
@@ -94,9 +94,9 @@
   --color-btn-danger-foreground: #ffffff;
 
   /* ── Buttons — Accent ───────────────────────────────────────────── */
-  --color-btn-accent: #6d28d9;
-  --color-btn-accent-hover: #5b21b6;
-  --color-btn-accent-active: #4c1d95;
+  --color-btn-accent: #22c55e;
+  --color-btn-accent-hover: #16a34a;
+  --color-btn-accent-active: #15803d;
   --color-btn-accent-foreground: #ffffff;
 
   /* ── Status — Success ───────────────────────────────────────────── */
@@ -131,7 +131,7 @@
   --color-code-bg: #f5f5f5;
   --color-code-text: #1e1e1e;
   --color-code-border: #e5e5e5;
-  --color-code-keyword: #6d28d9;
+  --color-code-keyword: #22c55e;
   --color-code-string: #16a34a;
   --color-code-comment: #a3a3a3;
   --color-code-function: #0ea5e9;
@@ -144,7 +144,7 @@
   --color-input-bg: #ffffff;
   --color-input-border: #d4d4d4;
   --color-input-border-hover: #a3a3a3;
-  --color-input-border-focus: #6d28d9;
+  --color-input-border-focus: #22c55e;
   --color-input-placeholder: #a3a3a3;
   --color-input-text: #111111;
   --color-input-disabled-bg: #f5f5f5;
@@ -155,8 +155,8 @@
   /* ── Badges / Tags ──────────────────────────────────────────────── */
   --color-badge-neutral: #f5f5f5;
   --color-badge-neutral-text: #525252;
-  --color-badge-accent: #ede9fe;
-  --color-badge-accent-text: #6d28d9;
+  --color-badge-accent: #f0fdf4;
+  --color-badge-accent-text: #22c55e;
   --color-badge-success: #f0fdf4;
   --color-badge-success-text: #15803d;
   --color-badge-warning: #fffbeb;
@@ -180,7 +180,7 @@
   --color-shadow-xl: rgba(0, 0, 0, 0.16);
   --color-shadow-2xl: rgba(0, 0, 0, 0.24);
   --color-shadow-inner: rgba(0, 0, 0, 0.05);
-  --color-shadow-accent: rgba(109, 40, 217, 0.2);
+  --color-shadow-accent: rgba(34, 197, 94, 0.2);
   --color-shadow-error: rgba(239, 68, 68, 0.2);
   --color-shadow-success: rgba(34, 197, 94, 0.2);
 
@@ -205,11 +205,11 @@
   --color-nav-hover: #f5f5f5;
 
   /* ── Selection ──────────────────────────────────────────────────── */
-  --color-selection-bg: rgba(109, 40, 217, 0.15);
+  --color-selection-bg: rgba(34, 197, 94, 0.15);
   --color-selection-text: #111111;
 
   /* ── Gradient stops ─────────────────────────────────────────────── */
-  --color-gradient-start: #6d28d9;
+  --color-gradient-start: #22c55e;
   --color-gradient-mid: #0ea5e9;
   --color-gradient-end: #22c55e;
   --color-gradient-warm-start: #f59e0b;
@@ -249,11 +249,11 @@
   --color-brand-muted: #262626;
 
   /* ── Accent ─────────────────────────────────────────────────────── */
-  --color-accent: #a78bfa;
-  --color-accent-hover: #c4b5fd;
-  --color-accent-active: #8b5cf6;
-  --color-accent-subtle: #1e1533;
-  --color-accent-muted: #2d2145;
+  --color-accent: #4ade80;
+  --color-accent-hover: #86efac;
+  --color-accent-active: #22c55e;
+  --color-accent-subtle: #052e16;
+  --color-accent-muted: #14532d;
   --color-accent-foreground: #0a0a0a;
 
   /* ── Secondary accent ───────────────────────────────────────────── */
@@ -287,22 +287,22 @@
   --color-text-muted: #525252;
   --color-text-disabled: #404040;
   --color-text-inverse: #111111;
-  --color-text-link: #a78bfa;
-  --color-text-link-hover: #c4b5fd;
+  --color-text-link: #4ade80;
+  --color-text-link-hover: #86efac;
 
   /* ── Borders ────────────────────────────────────────────────────── */
   --color-border: #262626;
   --color-border-subtle: #1a1a1a;
   --color-border-strong: #404040;
   --color-border-muted: #1f1f1f;
-  --color-border-focus: #a78bfa;
+  --color-border-focus: #4ade80;
   --color-border-error: #f87171;
   --color-border-success: #4ade80;
   --color-border-warning: #fbbf24;
   --color-border-info: #38bdf8;
 
   /* ── Rings / Focus ──────────────────────────────────────────────── */
-  --color-ring: rgba(167, 139, 250, 0.35);
+  --color-ring: rgba(74, 222, 128, 0.35);
   --color-ring-offset: #0a0a0a;
   --color-ring-error: rgba(248, 113, 113, 0.35);
   --color-ring-success: rgba(74, 222, 128, 0.35);
@@ -334,9 +334,9 @@
   --color-btn-danger-foreground: #ffffff;
 
   /* ── Buttons — Accent ───────────────────────────────────────────── */
-  --color-btn-accent: #a78bfa;
-  --color-btn-accent-hover: #c4b5fd;
-  --color-btn-accent-active: #8b5cf6;
+  --color-btn-accent: #4ade80;
+  --color-btn-accent-hover: #86efac;
+  --color-btn-accent-active: #22c55e;
   --color-btn-accent-foreground: #0a0a0a;
 
   /* ── Status — Success ───────────────────────────────────────────── */
@@ -371,7 +371,7 @@
   --color-code-bg: #141414;
   --color-code-text: #e5e5e5;
   --color-code-border: #262626;
-  --color-code-keyword: #c4b5fd;
+  --color-code-keyword: #86efac;
   --color-code-string: #4ade80;
   --color-code-comment: #525252;
   --color-code-function: #38bdf8;
@@ -384,7 +384,7 @@
   --color-input-bg: #141414;
   --color-input-border: #303030;
   --color-input-border-hover: #525252;
-  --color-input-border-focus: #a78bfa;
+  --color-input-border-focus: #4ade80;
   --color-input-placeholder: #525252;
   --color-input-text: #f5f5f5;
   --color-input-disabled-bg: #1a1a1a;
@@ -395,8 +395,8 @@
   /* ── Badges / Tags ──────────────────────────────────────────────── */
   --color-badge-neutral: #262626;
   --color-badge-neutral-text: #a3a3a3;
-  --color-badge-accent: #2d2145;
-  --color-badge-accent-text: #c4b5fd;
+  --color-badge-accent: #14532d;
+  --color-badge-accent-text: #86efac;
   --color-badge-success: #052e16;
   --color-badge-success-text: #bbf7d0;
   --color-badge-warning: #422d09;
@@ -420,7 +420,7 @@
   --color-shadow-xl: rgba(0, 0, 0, 0.6);
   --color-shadow-2xl: rgba(0, 0, 0, 0.75);
   --color-shadow-inner: rgba(0, 0, 0, 0.25);
-  --color-shadow-accent: rgba(167, 139, 250, 0.15);
+  --color-shadow-accent: rgba(74, 222, 128, 0.15);
   --color-shadow-error: rgba(248, 113, 113, 0.15);
   --color-shadow-success: rgba(74, 222, 128, 0.15);
 
@@ -445,11 +445,11 @@
   --color-nav-hover: #1a1a1a;
 
   /* ── Selection ──────────────────────────────────────────────────── */
-  --color-selection-bg: rgba(167, 139, 250, 0.2);
+  --color-selection-bg: rgba(74, 222, 128, 0.2);
   --color-selection-text: #f5f5f5;
 
   /* ── Gradient stops ─────────────────────────────────────────────── */
-  --color-gradient-start: #a78bfa;
+  --color-gradient-start: #4ade80;
   --color-gradient-mid: #38bdf8;
   --color-gradient-end: #4ade80;
   --color-gradient-warm-start: #fbbf24;

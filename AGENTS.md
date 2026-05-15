@@ -2,17 +2,17 @@
 
 ## Build / Lint / Test Commands
 
-| Command | Description |
+| Command                 | Description                      |
 | ----------------------- | -------------------------------- |
-| `bun install` | Install dependencies |
-| `bun run build` | Build CLI with Bun |
-| `bun run lint` | Run oxlint (ignores *.js files) |
-| `bun run lint:fix` | Auto-fix lint issues |
-| `bun run fmt` | Format with Prettier |
-| `bun run fmt:check` | Check formatting without writing |
-| `bun test` | Run all tests (vitest) |
-| `bun test <path>` | Run single test file |
-| `bun test -t <pattern>` | Run tests matching pattern |
+| `bun install`           | Install dependencies             |
+| `bun run build`         | Build CLI with Bun               |
+| `bun run lint`          | Run oxlint (ignores \*.js files) |
+| `bun run lint:fix`      | Auto-fix lint issues             |
+| `bun run fmt`           | Format with Prettier             |
+| `bun run fmt:check`     | Check formatting without writing |
+| `bun test`              | Run all tests (vitest)           |
+| `bun test <path>`       | Run single test file             |
+| `bun test -t <pattern>` | Run tests matching pattern       |
 
 **Running a single test:** `bun test test/cli/utils/run-bun-command.test.ts`
 

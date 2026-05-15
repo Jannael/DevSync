@@ -6,12 +6,7 @@ interface Props {
   delay?: number
 }
 
-const {
-  lines,
-  scrambleChars = '█▓▒░─═┼┬┴┤├┴┬┼╔╦╗╠╬╣╚╩╝║╬',
-  batchSize = 5,
-  delay = 1,
-} = Astro.props
+const { lines, scrambleChars = '█▓▒░─═┼┬┴┤├┴┬┼╔╦╗╠╬╣╚╩╝║╬', batchSize = 5, delay = 1 } = Astro.props
 ---
 
 <pre class="ascii-scramble" id="asciiArt"></pre>
@@ -19,10 +14,10 @@ const {
 <script define:vars={{ lines, scrambleChars, batchSize, delay }}>
   const container = document.getElementById('asciiArt')
 
-  const maxLen = Math.max(...lines.map(line => line.length))
-  const paddedLines = lines.map(line => line.padEnd(maxLen, ' '))
+  const maxLen = Math.max(...lines.map((line) => line.length))
+  const paddedLines = lines.map((line) => line.padEnd(maxLen, ' '))
 
-  let displayLines = paddedLines.map(line =>
+  let displayLines = paddedLines.map((line) =>
     line.split('').map(() => scrambleChars[Math.floor(Math.random() * scrambleChars.length)])
   )
 
@@ -38,7 +33,7 @@ const {
   }
 
   function updateDisplay() {
-    container.textContent = displayLines.map(line => line.join('')).join('\n')
+    container.textContent = displayLines.map((line) => line.join('')).join('\n')
   }
 
   let currentBatchCount = 0
@@ -70,6 +65,8 @@ const {
     line-height: 1.2;
     white-space: pre;
     color: #00ff88;
-    text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+    text-shadow:
+      0 0 10px #00ff88,
+      0 0 20px #00ff88;
   }
 </style>

@@ -1,41 +1,17 @@
 ---
-import AsciiScramble from "@/components/AsciiScramble.astro"
+import AsciiScramble from '@/components/AsciiScramble.astro'
+import Layout from '@/layouts/Layout.astro'
 
 const asciiArtLines = [
-  "██████╗ ███████╗██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗",
-  "██╔══██╗██╔════╝██║   ██║██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝",
-  "██║  ██║█████╗  ██║   ██║███████╗ ╚████╔╝ ██╔██╗ ██║██║     ",
-  "██║  ██║██╔══╝  ╚██╗ ██╔╝╚════██║  ╚██╔╝  ██║╚██╗██║██║     ",
-  "██████╔╝███████╗ ╚████╔╝ ███████║   ██║   ██║ ╚████║╚██████╗",
-  "╚═════╝ ╚══════╝  ╚═══╝  ╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝"
+  '██████╗ ███████╗██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗',
+  '██╔══██╗██╔════╝██║   ██║██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝',
+  '██║  ██║█████╗  ██║   ██║███████╗ ╚████╔╝ ██╔██╗ ██║██║     ',
+  '██║  ██║██╔══╝  ╚██╗ ██╔╝╚════██║  ╚██╔╝  ██║╚██╗██║██║     ',
+  '██████╔╝███████╗ ╚████╔╝ ███████║   ██║   ██║ ╚████║╚██████╗',
+  '╚═════╝ ╚══════╝  ╚═══╝  ╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝',
 ]
 ---
 
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Devsync</title>
-  <meta name="description" content="Devsync — Build your developer portfolio from the terminal." />
-  <style>
-    .starfield-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: #0a0a0f;
-      overflow: hidden;
-      margin: 0;
-    }
-
-    body {
-      margin: 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="starfield-container">
-    <AsciiScramble lines={asciiArtLines} />
-  </div>
-</body>
-</html>
+<Layout>
+  <AsciiScramble lines={asciiArtLines} />
+</Layout>

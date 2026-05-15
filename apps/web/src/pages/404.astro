@@ -29,7 +29,7 @@ const t = getTranslation(lang)
       <!-- ASCII Art Container with Glassmorphism -->
       <div class="mb-12 transition-transform duration-700 hover:scale-105">
         <div
-          class="bg-surface-raised/40 border-border-subtle dark:shadow-accent/5 rounded-3xl border p-8 shadow-2xl backdrop-blur-md md:p-12"
+          class="p-8 md:p-12"
         >
           <pre class="ascii-art">{magnifyinfASCII.join('\n')}</pre>
         </div>
@@ -51,19 +51,6 @@ const t = getTranslation(lang)
             class="text-btn-primary-foreground bg-btn-primary hover:bg-btn-primary-hover shadow-btn-primary/10 group relative inline-flex items-center justify-center rounded-xl px-8 py-4 font-bold shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <span class="relative flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline
-                  points="9 22 9 12 15 12 15 22"></polyline></svg
-              >
               {t['Go to Home']}
             </span>
           </a>
@@ -74,19 +61,6 @@ const t = getTranslation(lang)
           >
             <span class="flex items-center gap-2">
               {t['Getting Started']}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="transition-transform group-hover:translate-x-1"
-                ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
-              >
             </span>
           </a>
         </div>
@@ -102,9 +76,6 @@ const t = getTranslation(lang)
     line-height: 1.1;
     white-space: pre;
     color: var(--color-accent);
-    text-shadow:
-      0 0 5px var(--color-accent),
-      0 0 10px var(--color-accent);
     display: block;
     margin: 0 auto;
     background: transparent;

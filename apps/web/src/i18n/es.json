@@ -1,5 +1,9 @@
 {
   "hello world": "hola mundo",
   "Synchronization tool...": "Herramienta de sincronización para desarrolladores",
-  "Start Now": "Iniciar Ahora"
+  "Start Now": "Iniciar Ahora",
+  "Page not found": "Página no encontrada",
+  "The page you are looking for does not exist.": "La página que buscas no existe.",
+  "Go to Home": "Ir al Inicio",
+  "Getting Started": "Comenzar"
 }

@@ -4,7 +4,7 @@ import { devsyncASCII } from '@/devsync-ascii'
 import { getTranslation } from '@/i18n/translation'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
-const lang = Astro.params.lang ?? 'en'
+const lang = Astro.currentLocale ?? 'en'
 const t = getTranslation(lang)
 ---
 

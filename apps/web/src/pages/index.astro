@@ -2,6 +2,12 @@
 import AsciiScramble from '@/components/ascii-scramble.astro'
 import Layout from '@/layouts/layout.astro'
 
+import en from '@/i18n/en.json'
+import es from '@/i18n/es.json'
+
+const lang = Astro.params.lang ?? 'en'
+const t = lang === 'es' ? es : en
+
 const asciiArtLines = [
   '██████╗ ███████╗██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗',
   '██╔══██╗██╔════╝██║   ██║██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝',
@@ -13,5 +19,6 @@ const asciiArtLines = [
 ---
 
 <Layout>
+  <h1 class="text-text mb-8 mt-10 text-center text-4xl font-bold">{t['hello world']}</h1>
   <AsciiScramble lines={asciiArtLines} />
 </Layout>

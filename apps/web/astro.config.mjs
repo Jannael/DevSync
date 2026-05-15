@@ -66,20 +66,16 @@ export default defineConfig({
         },
       ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/jannael/devsync' }],
-      defaultLocale: 'root',
-      locales: {
-        root: {
-          label: 'English',
-          lang: 'en',
-        },
-        es: {
-          label: 'Español',
-          lang: 'es',
-        },
-      },
     }),
   ],
 
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,0 +1,12 @@
+---
+import astroConfig from '../../../astro.config.mjs'
+import Page from '@/pages/index.astro'
+
+export function getStaticPaths() {
+  return astroConfig.i18n?.locales.map((lang) => ({
+    params: { lang },
+  }))
+}
+---
+
+<Page />

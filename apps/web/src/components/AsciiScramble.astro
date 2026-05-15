@@ -1,0 +1,75 @@
+---
+interface Props {
+  lines: string[]
+  scrambleChars?: string
+  batchSize?: number
+  delay?: number
+}
+
+const {
+  lines,
+  scrambleChars = '█▓▒░─═┼┬┴┤├┴┬┼╔╦╗╠╬╣╚╩╝║╬',
+  batchSize = 5,
+  delay = 1,
+} = Astro.props
+---
+
+<pre class="ascii-scramble" id="asciiArt"></pre>
+
+<script define:vars={{ lines, scrambleChars, batchSize, delay }}>
+  const container = document.getElementById('asciiArt')
+
+  const maxLen = Math.max(...lines.map(line => line.length))
+  const paddedLines = lines.map(line => line.padEnd(maxLen, ' '))
+
+  let displayLines = paddedLines.map(line =>
+    line.split('').map(() => scrambleChars[Math.floor(Math.random() * scrambleChars.length)])
+  )
+
+  const totalChars = paddedLines.reduce((sum, line) => sum + line.length, 0)
+  let revealedCount = 0
+  const revealTotal = totalChars
+
+  function getRandomPosition() {
+    const lineIdx = Math.floor(Math.random() * paddedLines.length)
+    const line = paddedLines[lineIdx]
+    const colIdx = Math.floor(Math.random() * line.length)
+    return { lineIdx, colIdx, char: line[colIdx] }
+  }
+
+  function updateDisplay() {
+    container.textContent = displayLines.map(line => line.join('')).join('\n')
+  }
+
+  let currentBatchCount = 0
+
+  function animate() {
+    if (revealedCount < revealTotal) {
+      while (currentBatchCount < batchSize && revealedCount < revealTotal) {
+        const { lineIdx, colIdx, char } = getRandomPosition()
+        if (displayLines[lineIdx][colIdx] !== char) {
+          displayLines[lineIdx][colIdx] = char
+          revealedCount++
+        }
+        currentBatchCount++
+      }
+      currentBatchCount = 0
+      updateDisplay()
+      setTimeout(animate, 0)
+    }
+  }
+
+  updateDisplay()
+  setTimeout(animate, delay)
+</script>
+
+<style>
+  .ascii-scramble {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: pre;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+  }
+</style>

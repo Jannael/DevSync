@@ -9,6 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Devsync documentation',
+      disable404Route: true,
       head: [
         {
           tag: 'link',

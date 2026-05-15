@@ -1,12 +1,12 @@
 {
-  "hello world": "hello world",
-  "Synchronization tool for developers": "Synchronization tool for developers",
+  "hello world": "Hello World",
+  "Synchronization tool for developers": "The synchronization tool for developers",
   "Resume. Portfolio. GitHub profile.": "Resume. Portfolio. GitHub profile.",
   "Generate your professional resume...": "Generate your professional resume, portfolio, academic history, and GitHub profile — all from a single configuration file.",
   "Start Now": "Start Now",
   "Read the Docs": "Read the Docs",
   "Page not found": "Page not found",
   "The page you are looking for does not exist.": "The page you are looking for does not exist.",
-  "Go to Home": "Go to Home",
+  "Go to Home": "Back to Home",
   "Getting Started": "Getting Started"
 }

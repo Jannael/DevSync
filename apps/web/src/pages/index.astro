@@ -1,14 +1,8 @@
 ---
-import AsciiScramble from '@/components/ascii-scramble.astro'
 import Layout from '@/layouts/layout.astro'
-import { devsyncASCII } from '@/devsync-ascii'
-import { getTranslation } from "@/i18n/translation"
-
-const lang = Astro.params.lang ?? 'en'
-const t = getTranslation(lang)
+import Hero from '@/sections/hero.astro'
 ---
 
 <Layout>
-  <h1 class="text-text mb-8 mt-10 text-center text-4xl font-bold">{t['hello world']}</h1>
-  <AsciiScramble lines={devsyncASCII} />
+  <Hero />
 </Layout>

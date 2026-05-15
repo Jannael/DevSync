@@ -1,0 +1,19 @@
+---
+import AsciiScramble from '@/components/ascii-scramble.astro'
+import { devsyncASCII } from '@/devsync-ascii'
+import { getTranslation } from '@/i18n/translation'
+
+const lang = Astro.params.lang ?? 'en'
+const t = getTranslation(lang)
+---
+
+<section class="flex flex-col items-center gap-6 py-16 px-8">
+  <AsciiScramble lines={devsyncASCII} />
+  <p class="max-w-[600px] text-center text-text-secondary">{t['Synchronization tool...']}</p>
+  <a
+    href={lang === 'es' ? '/es/getting-started/' : '/getting-started/'}
+    class="inline-block px-8 py-3 bg-btn-primary text-btn-primary-foreground rounded-md font-semibold transition-colors hover:bg-btn-primary-hover"
+  >
+    {t['Start Now']}
+  </a>
+</section>

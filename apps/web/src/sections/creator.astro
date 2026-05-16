@@ -1,5 +1,6 @@
 ---
 import GitHub from '@/assets/github-svg.astro'
+import { frogASCII } from '@/assets/frog-ascii'
 import { getTranslation } from '@/i18n/translation'
 
 const lang = Astro.currentLocale ?? 'en'
@@ -31,25 +32,9 @@ const paragraphs = t['creator description'].split('\n\n')
       </div>
 
       <!-- Terminal body -->
-      <div class="flex flex-col gap-6 p-5 sm:flex-row sm:gap-8 sm:p-8">
-        <!-- Left: Avatar + ASCII -->
-        <div class="flex flex-col items-center gap-4 sm:w-48 sm:shrink-0">
-          <img
-            src="https://avatars.githubusercontent.com/u/177653963?v=4"
-            alt="jannael's GitHub avatar"
-            class="ring-accent/20 h-20 w-20 rounded-full object-cover ring-2 sm:h-24 sm:w-24"
-            loading="lazy"
-          />
-          <div class="text-accent hidden sm:block">
-            <pre
-              class="font-mono text-[0.35rem] leading-[1.05]">
-{`   __
-  / /_
- / __ \\
-/_/ /_/
-`}
-            </pre>
-          </div>
+      <div class="flex flex-col gap-6 p-5 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
+        <!-- Left: GitHub Link + Frog ASCII -->
+        <div class="flex flex-col items-center gap-4 sm:w-56 sm:shrink-0">
           <a
             href="https://github.com/jannael"
             target="_blank"
@@ -59,9 +44,13 @@ const paragraphs = t['creator description'].split('\n\n')
             <span>@jannael</span>
             <GitHub class="h-4 w-4" />
           </a>
+          <div class="text-accent flex w-full justify-center">
+            <pre
+              class="whitespace-pre font-mono text-[0.3rem] leading-[1.05]">
+              {frogASCII.join('\n')}
+            </pre>
+          </div>
         </div>
-
-        <!-- Right: Content -->
         <div class="flex flex-col gap-4">
           <h2 id="creator-title" class="creator-title text-text text-lg font-semibold sm:text-xl">
             {t['The Creator']}
@@ -102,7 +91,7 @@ const paragraphs = t['creator description'].split('\n\n')
 </script>
 
 <style>
-  /* ── Entrance animations ── */
+  /* ── Entrance animations ─ */
   .creator-card {
     opacity: 0;
     transform: translateY(20px);

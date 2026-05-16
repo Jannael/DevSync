@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css'
 import '@fontsource-variable/bitter/wght.css'
+import MouseASCIITrail from '@/components/mouse-ascii-trail.astro'
 
 interface Props {
   title?: string
@@ -150,6 +151,7 @@ const structuredData = {
   </head>
   <body class="bg-bg">
     <slot />
+    <MouseASCIITrail />
   </body>
 
   <style is:global>

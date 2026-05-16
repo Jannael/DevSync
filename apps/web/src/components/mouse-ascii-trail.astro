@@ -1,0 +1,97 @@
+<div id="ascii-trail" class="pointer-events-none fixed inset-0 z-50"></div>
+
+<script>
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')!
+  const asciiChars = ['·', '•', '○', '◦', '∘']
+  const particles: Particle[] = []
+  const particleCount = 1
+  const fadeRate = 0.03
+  const fontSize = 12
+
+  function resize() {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+  }
+
+  resize()
+  window.addEventListener('resize', resize)
+
+  class Particle {
+    x: number
+    y: number
+    char: string
+    opacity: number
+    size: number
+    velocity: { x: number; y: number }
+    scale: number
+
+    constructor(x: number, y: number) {
+      this.x = x
+      this.y = y
+      this.char = asciiChars[Math.floor(Math.random() * asciiChars.length)]
+      this.opacity = 0.6
+      this.size = fontSize + Math.random() * 4
+      this.scale = 1
+      this.velocity = {
+        x: (Math.random() - 0.5) * 0.3,
+        y: (Math.random() - 0.5) * 0.3,
+      }
+    }
+
+    update() {
+      this.x += this.velocity.x
+      this.y += this.velocity.y
+      this.opacity -= fadeRate
+      this.scale = this.opacity
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+      ctx.save()
+      ctx.globalAlpha = this.opacity
+      ctx.font = `${this.size * this.scale}px monospace`
+      ctx.shadowColor = '#22c55e'
+      ctx.shadowBlur = 12
+      ctx.fillStyle = '#22c55e'
+      ctx.fillText(this.char, this.x, this.y)
+      ctx.restore()
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const particle = particles[i]
+      particle.update()
+      particle.draw(ctx)
+
+      if (particle.opacity <= 0) {
+        particles.splice(i, 1)
+      }
+    }
+
+    requestAnimationFrame(animate)
+  }
+
+  animate()
+
+  document.addEventListener(
+    'mousemove',
+    (e) => {
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle(e.clientX, e.clientY))
+      }
+    },
+    { passive: true }
+  )
+
+  document.getElementById('ascii-trail')?.appendChild(canvas)
+</script>
+
+<style>
+  #ascii-trail {
+    pointer-events: none;
+    z-index: 9999;
+  }
+</style>

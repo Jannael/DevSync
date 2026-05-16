@@ -9,7 +9,7 @@ const currentPath = Astro.url.pathname
   <label for="lang-select" class="sr-only">Select language</label>
   <select
     id="lang-select"
-    class="border-border bg-surface text-text hover:border-accent focus:border-accent focus:ring-accent/20 cursor-pointer rounded-lg border px-4 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2"
+    class="border-border bg-surface text-text hover:border-accent focus:border-accent focus:ring-accent/20 cursor-pointer rounded-lg border px-2 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 sm:px-4 sm:py-2 sm:text-sm"
   >
     {
       Object.keys(translations).map((lang) => (

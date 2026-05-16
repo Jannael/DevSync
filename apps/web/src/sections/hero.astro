@@ -12,10 +12,12 @@ const t = getTranslation(lang)
 ---
 
 <section
-  class="hero relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24"
+  class="hero relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
   aria-labelledby="hero-title"
 >
-  <header class="fixed top-0 z-40 m-auto flex w-full max-w-5xl items-center justify-end gap-5 pt-5">
+  <header
+    class="fixed top-0 z-40 m-auto flex w-full max-w-5xl items-center justify-end gap-3 px-4 pt-4 sm:gap-5 sm:px-6 sm:pt-5"
+  >
     <LanguageSelector />
     <NavTheme />
   </header>
@@ -30,39 +32,44 @@ const t = getTranslation(lang)
 
   <div class="relative z-10 flex w-full max-w-4xl flex-col items-center text-center">
     <!-- ASCII Logo with scramble animation -->
-    <figure class="hero-ascii mb-10 text-xl" aria-label="Devsync logo in ASCII art">
+    <figure
+      class="hero-ascii mb-6 text-xs sm:mb-10 sm:text-xl"
+      aria-label="Devsync logo in ASCII art"
+    >
       <AsciiScramble lines={devsyncASCII} />
     </figure>
 
     <!-- Tagline -->
-    <p class="hero-tagline text-accent mb-16 text-sm font-semibold uppercase tracking-[0.3em]">
+    <p
+      class="hero-tagline text-accent mb-8 text-xs font-semibold uppercase tracking-[0.2em] sm:mb-16 sm:text-sm sm:tracking-[0.3em]"
+    >
       <small>{t['Resume. Portfolio. GitHub profile.']}</small>
     </p>
 
     <!-- Main headline -->
     <h1
       id="hero-title"
-      class="hero-title text-text mb-6 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl"
+      class="hero-title text-text mb-4 text-xl font-semibold tracking-tight sm:mb-6 sm:text-2xl md:text-4xl lg:text-5xl"
     >
       {t['Synchronization tool for developers']}
     </h1>
 
     <!-- Description -->
     <p
-      class="hero-description text-text-secondary mx-auto mb-16 max-w-2xl text-lg leading-relaxed md:text-xl"
+      class="hero-description text-text-secondary mx-auto mb-8 max-w-2xl text-base leading-relaxed sm:mb-16 sm:text-lg md:text-xl"
     >
       {t['Generate your professional resume...']}
     </p>
 
     <!-- CTAs -->
     <div
-      class="hero-ctas flex flex-col items-center justify-center gap-4 sm:flex-row"
+      class="hero-ctas flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row sm:gap-4"
       role="group"
       aria-label="Call to action buttons"
     >
       <a
         href={getRelativeLocaleUrl(lang, '/getting-started/')}
-        class="text-btn-primary-foreground bg-btn-primary hover:bg-btn-primary-hover group inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-bold shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+        class="text-btn-primary-foreground bg-btn-primary hover:bg-btn-primary-hover group inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
       >
         {t['Start Now']}
       </a>
@@ -72,11 +79,18 @@ const t = getTranslation(lang)
 
 <style>
   .hero-glow {
-    width: 600px;
-    height: 600px;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(circle, var(--color-accent) 0%, transparent 70%);
     opacity: 0.04;
     filter: blur(80px);
+  }
+
+  @media (min-width: 640px) {
+    .hero-glow {
+      width: 600px;
+      height: 600px;
+    }
   }
 
   :global(.dark) .hero-glow {

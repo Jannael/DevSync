@@ -5,11 +5,11 @@ const currentLang = Astro.currentLocale ?? 'en'
 const currentPath = Astro.url.pathname
 ---
 
-<div class="language-selector">
+<div role="group" aria-label="Language selection" class="language-selector">
+  <label for="lang-select" class="sr-only">Select language</label>
   <select
     id="lang-select"
     class="border-border bg-surface text-text hover:border-accent focus:border-accent focus:ring-accent/20 cursor-pointer rounded-lg border px-4 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2"
-    aria-label="Select language"
   >
     {
       Object.keys(translations).map((lang) => (

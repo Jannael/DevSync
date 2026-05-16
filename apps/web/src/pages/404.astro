@@ -11,14 +11,16 @@ const t = getTranslation(lang)
 ---
 
 <Layout title="404 - Not Found">
-  <section
+  <main
     class="bg-bg relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24"
+    id="main-content"
   >
     <BackgroundGrid />
 
     <!-- Large decorative "404" in background -->
     <div
       class="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center"
+      aria-hidden="true"
     >
       <span class="text-text text-[25vw] font-black leading-none opacity-[0.02] dark:opacity-[0.03]"
         >404</span
@@ -27,11 +29,13 @@ const t = getTranslation(lang)
 
     <div class="relative z-10 flex w-full max-w-2xl flex-col items-center text-center">
       <!-- ASCII Art Container with Glassmorphism -->
-      <div class="mb-12 transition-transform duration-700 hover:scale-105">
+      <figure class="mb-12 transition-transform duration-700 hover:scale-105">
         <div class="p-8 md:p-12">
-          <pre class="ascii-art">{magnifyinfASCII.join('\n')}</pre>
+          <pre
+            class="ascii-art"
+            aria-label="Magnifying glass icon">{magnifyinfASCII.join('\n')}</pre>
         </div>
-      </div>
+      </figure>
 
       <!-- Content with entrance animations -->
       <div class="animate-in fade-in slide-in-from-bottom-4 fill-mode-both space-y-6 duration-1000">
@@ -43,7 +47,10 @@ const t = getTranslation(lang)
           {t['The page you are looking for does not exist.']}
         </p>
 
-        <div class="flex flex-col items-center justify-center gap-4 pt-8 sm:flex-row">
+        <nav
+          aria-label="404 navigation"
+          class="flex flex-col items-center justify-center gap-4 pt-8 sm:flex-row"
+        >
           <a
             href={getRelativeLocaleUrl(lang, '/')}
             class="text-btn-primary-foreground bg-btn-primary hover:bg-btn-primary-hover shadow-btn-primary/10 group relative inline-flex items-center justify-center rounded-xl px-8 py-4 font-bold shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
@@ -61,10 +68,10 @@ const t = getTranslation(lang)
               {t['Getting Started']}
             </span>
           </a>
-        </div>
+        </nav>
       </div>
     </div>
-  </section>
+  </main>
 </Layout>
 
 <style>

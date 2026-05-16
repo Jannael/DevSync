@@ -40,8 +40,8 @@ const paragraphs = t['why description'].split('\n\n')
       </figure>
 
       <p class="why-description">{paragraphs[0]}</p>
-      <p class="mt-4">{paragraphs[1]}</p>
-      <p class="mt-4">{paragraphs[2]}</p>
+      <p class="why-description-2 mt-4">{paragraphs[1]}</p>
+      <p class="why-description-3 mt-4">{paragraphs[2]}</p>
     </div>
   </div>
 </section>
@@ -97,6 +97,24 @@ const paragraphs = t['why description'].split('\n\n')
 
   .why.animate .why-description {
     animation: why-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+
+  .why-description-2 {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .why.animate .why-description-2 {
+    animation: why-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+  }
+
+  .why-description-3 {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .why.animate .why-description-3 {
+    animation: why-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
   }
 
   @keyframes why-fade-up {

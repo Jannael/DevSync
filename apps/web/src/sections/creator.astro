@@ -57,7 +57,7 @@ const paragraphs = t['creator description'].split('\n\n')
           </h2>
           <div class="creator-content text-text-secondary text-base leading-relaxed sm:text-lg">
             <p class="creator-description">{paragraphs[0]}</p>
-            <p class="mt-4">{paragraphs[1]}</p>
+            <p class="creator-description-2 mt-4">{paragraphs[1]}</p>
           </div>
         </div>
       </div>
@@ -108,6 +108,15 @@ const paragraphs = t['creator description'].split('\n\n')
 
   .creator.animate .creator-description {
     animation: creator-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+
+  .creator-description-2 {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .creator.animate .creator-description-2 {
+    animation: creator-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
   }
 
   @keyframes creator-fade-up {

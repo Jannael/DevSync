@@ -1,6 +1,7 @@
 ---
 import AsciiScramble from '@/components/ascii-scramble.astro'
 import BackgroundGrid from '@/components/background-grid.astro'
+import NavTheme from '@/components/nav-theme.astro'
 import { devsyncASCII } from '@/devsync-ascii'
 import { getTranslation } from '@/i18n/translation'
 import { getRelativeLocaleUrl } from 'astro:i18n'
@@ -12,6 +13,7 @@ const t = getTranslation(lang)
 <section
   class="hero relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24"
 >
+  <NavTheme />
   <BackgroundGrid />
 
   <!-- Radial glow behind ASCII -->
@@ -22,7 +24,7 @@ const t = getTranslation(lang)
 
   <div class="relative z-10 flex w-full max-w-4xl flex-col items-center text-center">
     <!-- ASCII Logo with scramble animation -->
-    <div class="hero-ascii mb-10">
+    <div class="hero-ascii mb-10 text-xl">
       <AsciiScramble lines={devsyncASCII} />
     </div>
 

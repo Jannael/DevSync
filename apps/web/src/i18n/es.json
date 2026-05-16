@@ -27,5 +27,10 @@
   "Why?": "¿Por qué?",
   "why description": "La mayoría de los desarrolladores pierden horas manteniendo currículums, portafolios y perfiles de GitHub por separado. Devsync soluciona esto generando todo desde una única fuente de verdad. Un archivo, infinitas salidas. No más copiar y pegar, no más información desactualizada.\n\nTu carrera evoluciona constantemente. Nuevos proyectos, nuevas habilidades, nuevas certificaciones. Mantener cada plataforma actualizada es un trabajo de tiempo completo. Devsync automatiza esto leyendo tu DEVSYNC.json y produciendo salidas profesionales y pulidas en cada canal que importa.\n\nConcéntrate en lo que mejor haces: construir. Deja que Devsync se encargue del resto. Desde currículums compatibles con ATS hasta sitios de portafolio impresionantes, todo se mantiene en perfecta armonía sin esfuerzo manual.",
   "The Creator": "El Creador",
-  "creator description": "Devsync empezó como un script personal para resolver un problema que todo desarrollador conoce: actualizar la misma información en cinco plataformas distintas. Currículum, portafolio, GitHub, LinkedIn, registros académicos — distintos formatos, mismo contenido, repetición infinita.\n\nLo construí primero para mí. Luego me di cuenta de que podía ayudar a otros. Así que lo hice open source. Sin paywalls, sin cuentas, sin fricción. Solo un archivo que genera todo lo que necesitas."
+  "creator description": "Devsync empezó como un script personal para resolver un problema que todo desarrollador conoce: actualizar la misma información en cinco plataformas distintas. Currículum, portafolio, GitHub, LinkedIn, registros académicos — distintos formatos, mismo contenido, repetición infinita.\n\nLo construí primero para mí. Luego me di cuenta de que podía ayudar a otros. Así que lo hice open source. Sin paywalls, sin cuentas, sin fricción. Solo un archivo que genera todo lo que necesitas.",
+  "Built For Developers": "Hecho para desarrolladores",
+  "One file. Infinite outputs.": "Un archivo. Salidas infinitas.",
+  "GitHub": "GitHub",
+  "Docs": "Documentación",
+  "Issues": "Reportes"
 }

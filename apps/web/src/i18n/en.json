@@ -27,5 +27,10 @@
   "Why?": "Why?",
   "why description": "Most developers waste hours maintaining separate resumes, portfolios, and GitHub profiles. Devsync solves this by generating everything from a single source of truth. One file, infinite outputs. No more copy-pasting, no more out-of-sync information.\n\nYour career evolves constantly. New projects, new skills, new certifications. Keeping every platform updated is a full-time job. Devsync automates this by reading your DEVSYNC.json and producing polished, professional outputs across every channel that matters.\n\nFocus on what you do best — building. Let Devsync handle the rest. From ATS-friendly resumes to stunning portfolio sites, everything stays in perfect harmony with zero manual effort.",
   "The Creator": "The Creator",
-  "creator description": "Devsync started as a personal script to solve a problem every developer knows: updating the same information across five different platforms. Resume, portfolio, GitHub, LinkedIn, academic records — different formats, same content, endless repetition.\n\nI built it for myself first. Then I realized this could help others too. So I open-sourced it. No paywalls, no accounts, no friction. Just one file that generates everything you need."
+  "creator description": "Devsync started as a personal script to solve a problem every developer knows: updating the same information across five different platforms. Resume, portfolio, GitHub, LinkedIn, academic records — different formats, same content, endless repetition.\n\nI built it for myself first. Then I realized this could help others too. So I open-sourced it. No paywalls, no accounts, no friction. Just one file that generates everything you need.",
+  "Built For Developers": "Built for developers",
+  "One file. Infinite outputs.": "One file. Infinite outputs.",
+  "GitHub": "GitHub",
+  "Docs": "Docs",
+  "Issues": "Issues"
 }

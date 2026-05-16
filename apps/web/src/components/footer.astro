@@ -1,0 +1,103 @@
+---
+import { getTranslation } from '@/i18n/translation'
+
+const lang = Astro.currentLocale ?? 'en'
+const t = getTranslation(lang)
+
+const asciiArrow = ['  ?', ' ??', '?????', ' ??', '  ?', '  |', '  |']
+---
+
+<footer
+  class="footer border-border-subtle bg-surface relative mt-24 border-t px-6 py-16 sm:px-12 sm:py-24"
+>
+  <div class="mx-auto max-w-4xl">
+    <!-- Footer Content -->
+    <div class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-8">
+      <!-- Left: Brand -->
+      <div class="footer-brand text-center sm:text-left">
+        <p class="text-text-secondary font-mono text-sm">
+          {t['Built For Developers']}
+        </p>
+        <p class="text-text-muted mt-1 font-mono text-xs">
+          {t['One file. Infinite outputs.']}
+        </p>
+      </div>
+
+      <!-- Right: Links -->
+      <nav class="footer-links flex items-center gap-6" aria-label="Footer navigation">
+        <a
+          href="https://github.com/jannael/devsync"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-text-secondary hover:text-accent font-mono text-sm transition-colors duration-200"
+        >
+          {t['GitHub']}
+        </a>
+        <a
+          href="/getting-started/"
+          class="text-text-secondary hover:text-accent font-mono text-sm transition-colors duration-200"
+        >
+          {t['Docs']}
+        </a>
+        <a
+          href="https://github.com/jannael/devsync/issues"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-text-secondary hover:text-accent font-mono text-sm transition-colors duration-200"
+        >
+          {t['Issues']}
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom ASCII Border -->
+    <div class="mt-8 text-center" aria-hidden="true">
+      <pre
+        class="footer-ascii text-accent whitespace-pre font-mono text-[10px] leading-none opacity-30 [text-shadow:0_0_4px_var(--color-accent)] dark:opacity-20">{`?──?──?──?──?──?──?──?──?──?──?──?──?──?──?──?──?──?──?──?`}</pre>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .terminal-output {
+    opacity: 0;
+    animation: footer-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  }
+
+  .ascii-decor {
+    opacity: 0;
+    animation: footer-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  }
+
+  .footer-brand {
+    opacity: 0;
+    animation: footer-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+
+  .footer-links {
+    opacity: 0;
+    animation: footer-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  }
+
+  .footer-ascii {
+    opacity: 0;
+    animation: footer-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
+  }
+
+  @keyframes footer-fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-output,
+    .ascii-decor,
+    .footer-brand,
+    .footer-links,
+    .footer-ascii {
+      opacity: 1;
+      animation: none;
+    }
+  }
+</style>

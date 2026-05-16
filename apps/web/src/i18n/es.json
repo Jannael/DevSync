@@ -8,5 +8,20 @@
   "Page not found": "Página no encontrada",
   "The page you are looking for does not exist.": "La página que buscas no existe.",
   "Go to Home": "Volver al inicio",
-  "Getting Started": "Primeros pasos"
+  "Getting Started": "Primeros pasos",
+  "Everything you need": "Todo lo que necesitas",
+  "One config file": "Un solo archivo de configuración",
+  "Generate your resume, portfolio, and profiles from a single DEVSYNC.json file.": "Genera tu currículum, portafolio y perfiles desde un único archivo DEVSYNC.json.",
+  "Professional Resume": "Currículum profesional",
+  "Clean, ATS-friendly resumes with customizable templates.": "Currículums limpios y compatibles con ATS con plantillas personalizables.",
+  "Portfolio Site": "Sitio de portafolio",
+  "Beautiful portfolio pages that showcase your work.": "Páginas de portafolio que muestran tu trabajo.",
+  "GitHub Profile": "Perfil de GitHub",
+  "Beautiful github profile page by default.": "Perfil de github bonita por defecto.",
+  "Academic History": "Historial académico",
+  "Update your certification and education records in one place and show them everywhere.": "Actualiza tus registros de certificaciones y educación en un solo sitio y muéstralo en todos lados.",
+  "LinkedIn Profile": "Perfil de LinkedIn",
+  "Generate a polished LinkedIn-ready profile summary.": "Genera un resumen de perfil listo para LinkedIn.",
+  "PDF Export": "Exportar a PDF",
+  "Download your resume as a PDF.": "Descarga tu currículum en PDF."
 }

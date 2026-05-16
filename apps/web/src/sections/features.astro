@@ -1,0 +1,194 @@
+---
+import { boyWithBooksASCII } from '@/assets/boy-with-books-ascii'
+import { checkAscii } from '@/assets/check-ascii'
+import { getTranslation } from '@/i18n/translation'
+
+const lang = Astro.currentLocale ?? 'en'
+const t = getTranslation(lang)
+
+interface Feature {
+  icon: string
+  title: string
+  description: string
+}
+
+const features: Feature[] = [
+  {
+    icon: checkAscii,
+    title: t['Professional Resume'],
+    description: t['Clean, ATS-friendly resumes with customizable templates.'],
+  },
+  {
+    icon: checkAscii,
+    title: t['Portfolio Site'],
+    description: t['Beautiful portfolio pages that showcase your work.'],
+  },
+  {
+    icon: checkAscii,
+    title: t['GitHub Profile'],
+    description: t['Beautiful github profile page by default.'],
+  },
+  {
+    icon: checkAscii,
+    title: t['Academic History'],
+    description:
+      t['Update your certification and education records in one place and show them everywhere.'],
+  },
+  {
+    icon: checkAscii,
+    title: t['LinkedIn Profile'],
+    description: t['Generate a polished LinkedIn-ready profile summary.'],
+  },
+  {
+    icon: checkAscii,
+    title: t['PDF Export'],
+    description: t['Download your resume as a PDF.'],
+  },
+]
+---
+
+<section
+  id="features-section"
+  class="features relative flex flex-col items-center justify-center overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
+  aria-labelledby="features-title"
+>
+  <div class="relative z-10 flex w-full max-w-5xl flex-col items-center">
+    <!-- Section header -->
+    <div class="mb-12 flex flex-col items-center text-center sm:mb-16">
+      <h2
+        id="features-title"
+        class="features-title text-text mb-4 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl"
+      >
+        {t['Everything you need']}
+      </h2>
+      <p class="features-subtitle text-text-secondary mx-auto max-w-xl text-base sm:text-lg">
+        {t['Generate your resume, portfolio, and profiles from a single DEVSYNC.json file.']}
+      </p>
+    </div>
+
+    <!-- Features grid -->
+    <div
+      class="features-grid grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      role="list"
+    >
+      {
+        features.map((feature, index) => (
+          <div
+            class="feature-card border-border bg-surface hover:border-accent group rounded-xl border p-6 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
+            role="listitem"
+            style={`animation-delay: ${0.1 * index}s`}
+          >
+            <div class="flex items-start gap-3">
+              <span
+                class="feature-icon text-accent shrink-0 font-mono text-sm leading-none"
+                aria-hidden="true"
+              >
+                {feature.icon}
+              </span>
+              <div class="flex flex-col gap-1">
+                <h3 class="feature-title text-text text-sm font-semibold sm:text-base">
+                  {feature.title}
+                </h3>
+                <p class="feature-description text-text-secondary text-xs leading-relaxed sm:text-sm">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- ASCII illustration -->
+    <figure
+      class="features-ascii text-accent mt-16 opacity-40 sm:mt-24"
+      aria-label="Developer with books ASCII art"
+    >
+      <pre
+        class="font-mono text-[0.5rem] leading-[1.1] sm:text-xs">
+        {boyWithBooksASCII.join('\n')}
+      </pre>
+    </figure>
+  </div>
+</section>
+
+<script>
+  function setupObserver() {
+    const section = document.getElementById('features-section')
+    if (!section) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            section.classList.add('animate')
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(section)
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupObserver)
+  } else {
+    setupObserver()
+  }
+</script>
+
+<style>
+  /* ── Entrance animations (only when .animate is added) ── */
+  .features-title,
+  .features-subtitle {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .features.animate .features-title,
+  .features.animate .features-subtitle {
+    animation: features-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .features.animate .features-title {
+    animation-delay: 0s;
+  }
+
+  .features.animate .features-subtitle {
+    animation-delay: 0.15s;
+  }
+
+  .feature-card {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .features.animate .feature-card {
+    animation: features-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .features-ascii {
+    opacity: 0;
+  }
+
+  .features.animate .features-ascii {
+    animation: features-fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+  }
+
+  @keyframes features-fade-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes features-fade-in {
+    to {
+      opacity: 0.4;
+    }
+  }
+
+  :global(.dark) .features-ascii {
+    text-shadow: 0 0 10px var(--color-shadow-accent);
+  }
+</style>

@@ -8,5 +8,20 @@
   "Page not found": "Page not found",
   "The page you are looking for does not exist.": "The page you are looking for does not exist.",
   "Go to Home": "Back to Home",
-  "Getting Started": "Getting Started"
+  "Getting Started": "Getting Started",
+  "Everything you need": "Everything you need",
+  "One config file": "One config file",
+  "Generate your resume, portfolio, and profiles from a single DEVSYNC.json file.": "Generate your resume, portfolio, and profiles from a single DEVSYNC.json file.",
+  "Professional Resume": "Professional Resume",
+  "Clean, ATS-friendly resumes with customizable templates.": "Clean, ATS-friendly resumes with customizable templates.",
+  "Portfolio Site": "Portfolio Site",
+  "Beautiful portfolio pages that showcase your work.": "Beautiful portfolio pages that showcase your work.",
+  "GitHub Profile": "GitHub Profile",
+  "Beautiful github profile page by default.": "Beautiful github profile page by default.",
+  "Academic History": "Academic History",
+  "Update your certification and education records in one place and show them everywhere.": "Update your certification and education records in one place and show them everywhere.",
+  "LinkedIn Profile": "LinkedIn Profile",
+  "Generate a polished LinkedIn-ready profile summary.": "Generate a polished LinkedIn-ready profile summary.",
+  "PDF Export": "PDF Export",
+  "Download your resume as a PDF.": "Download your resume as a PDF."
 }

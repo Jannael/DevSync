@@ -50,3 +50,15 @@ Runs `lint:fix` + `fmt` on staged `*.{ts,tsx,js,jsx,astro}`
 - TypeScript `noEmit: true` (bundler workflow)
 - Oxlint ignores `*.js` files
 - Astro web uses Starlight + Tailwind v4
+
+## Web (apps/web)
+
+**Styling: Tailwind only.** Do not mix `<style>` blocks with Tailwind classes.
+
+`<style>` is only allowed for CSS that has no Tailwind equivalent:
+
+- `text-shadow`
+- `@keyframes` with staggered animation delays
+- Combined transforms (e.g. `skewY(-2deg) rotate(-1deg)`)
+
+Everything else — colors, spacing, layout, opacity, blur, borders, transitions — must use Tailwind classes, including arbitrary values (e.g. `opacity-[0.04]`, `blur-[80px]`).

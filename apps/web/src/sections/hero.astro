@@ -1,6 +1,7 @@
 ---
 import AsciiScramble from '@/components/ascii-scramble.astro'
 import BackgroundGrid from '@/components/background-grid.astro'
+import LanguageSelector from '@/components/language-selector.astro'
 import NavTheme from '@/components/nav-theme.astro'
 import { devsyncASCII } from '@/devsync-ascii'
 import { getTranslation } from '@/i18n/translation'
@@ -13,7 +14,10 @@ const t = getTranslation(lang)
 <section
   class="hero relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24"
 >
-  <NavTheme />
+  <header class="fixed top-0 z-40 m-auto flex w-full max-w-5xl items-center justify-end gap-5 pt-5">
+    <LanguageSelector />
+    <NavTheme />
+  </header>
   <BackgroundGrid />
 
   <!-- Radial glow behind ASCII -->

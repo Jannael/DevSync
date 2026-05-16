@@ -1,0 +1,59 @@
+---
+import { translations } from '@/i18n/translation'
+
+const currentLang = Astro.currentLocale ?? 'en'
+const currentPath = Astro.url.pathname
+---
+
+<div class="language-selector">
+  <select
+    id="lang-select"
+    class="border-border bg-surface text-text hover:border-accent focus:border-accent focus:ring-accent/20 cursor-pointer rounded-lg border px-4 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2"
+    aria-label="Select language"
+  >
+    {
+      Object.keys(translations).map((lang) => (
+        <option value={lang} selected={lang === currentLang}>
+          {lang.toUpperCase()}
+        </option>
+      ))
+    }
+  </select>
+</div>
+
+<style>
+  #lang-select {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+    box-shadow: var(--color-shadow-sm);
+  }
+
+  #lang-select:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-surface-raised);
+  }
+
+  #lang-select:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-ring);
+  }
+
+  #lang-select option {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  const select = document.getElementById('lang-select') as HTMLSelectElement
+  if (select) {
+    select.addEventListener('change', (e) => {
+      const newLang = (e.target as HTMLSelectElement).value
+      const currentPath = window.location.pathname
+      const pathWithoutLang = currentPath.replace(/^\/(en|es)/, '')
+      window.location.href = `/${newLang}${pathWithoutLang || '/'}`
+    })
+  }
+</script>

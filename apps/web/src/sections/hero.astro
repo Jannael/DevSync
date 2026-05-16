@@ -25,7 +25,7 @@ const t = getTranslation(lang)
 
   <!-- Radial glow behind ASCII -->
   <div
-    class="hero-glow pointer-events-none absolute left-1/2 top-1/3 z-0 -translate-x-1/2 -translate-y-1/2"
+    class="hero-glow pointer-events-none absolute left-1/2 top-1/3 z-0 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 opacity-[0.04] blur-[80px] sm:h-[600px] sm:w-[600px] dark:opacity-[0.06]"
     aria-hidden="true"
   >
   </div>
@@ -79,22 +79,7 @@ const t = getTranslation(lang)
 
 <style>
   .hero-glow {
-    width: 300px;
-    height: 300px;
     background: radial-gradient(circle, var(--color-accent) 0%, transparent 70%);
-    opacity: 0.04;
-    filter: blur(80px);
-  }
-
-  @media (min-width: 640px) {
-    .hero-glow {
-      width: 600px;
-      height: 600px;
-    }
-  }
-
-  :global(.dark) .hero-glow {
-    opacity: 0.06;
   }
 
   /* ── Entrance animations ────────────────────────────── */

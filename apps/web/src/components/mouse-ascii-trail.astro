@@ -1,4 +1,4 @@
-<div id="ascii-trail" class="pointer-events-none fixed inset-0 z-50" aria-hidden="true"></div>
+<div id="ascii-trail" class="pointer-events-none fixed inset-0 z-[9999]" aria-hidden="true"></div>
 
 <script>
   const canvas = document.createElement('canvas')
@@ -88,10 +88,3 @@
 
   document.getElementById('ascii-trail')?.appendChild(canvas)
 </script>
-
-<style>
-  #ascii-trail {
-    pointer-events: none;
-    z-index: 9999;
-  }
-</style>

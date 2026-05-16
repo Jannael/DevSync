@@ -1,7 +1,7 @@
 ---
 const chars = ['─', '═', '┄', '┈', '┉', '╴', '╶']
-const width = 300
-const lines = 3
+const width = 250
+const lines = 5
 
 function generateSeparator() {
   const result: string[] = []
@@ -20,12 +20,12 @@ function generateSeparator() {
 const separatorASCII = generateSeparator()
 ---
 
-<div class="w-full py-8" aria-hidden="true">
+<div class="w-full overflow-hidden py-8" aria-hidden="true">
   <div
     class="ascii-separator transform-[skewY(-2deg)_rotate(-1deg)] mx-auto w-screen max-w-none origin-center"
   >
     <pre
-      class="text-accent whitespace-pre text-center font-mono text-xs leading-[1.2] opacity-30 [text-shadow:0_0_8px_var(--color-accent)] dark:opacity-40">{separatorASCII}</pre>
+      class="text-accent whitespace-pre text-center font-mono text-xs leading-[1.2] [text-shadow:0_0_8px_var(--color-accent)] dark:opacity-40">{separatorASCII}</pre>
   </div>
 </div>
 

@@ -6,10 +6,10 @@ interface Props {
   delay?: number
 }
 
-const { lines, scrambleChars = '█▓▒░─═┼┬┴┤├┴┬┼╔╦╗╠╬╣╚╩╝║╬', batchSize = 5, delay = 1 } = Astro.props
+const { lines, scrambleChars = '█▓▒░─═┬┴┤├┴┬┼╔╦╗╠╬╣╚╩╝║╬', batchSize = 5, delay = 1 } = Astro.props
 ---
 
-<pre class="ascii-scramble" id="asciiArt"></pre>
+<pre class="ascii-scramble text-accent" id="asciiArt"></pre>
 
 <script define:vars={{ lines, scrambleChars, batchSize, delay }}>
   const container = document.getElementById('asciiArt')
@@ -64,7 +64,6 @@ const { lines, scrambleChars = '█▓▒░─═┼┬┴┤├┴┬┼╔╦
     font-size: inherit;
     line-height: 1.2;
     white-space: pre;
-    color: var(--color-accent);
     text-shadow:
       0 0 10px var(--color-shadow-accent),
       0 0 20px var(--color-shadow-accent);

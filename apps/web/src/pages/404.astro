@@ -32,7 +32,7 @@ const t = getTranslation(lang)
       <figure class="mb-12 transition-transform duration-700 hover:scale-105">
         <div class="p-8 md:p-12">
           <pre
-            class="ascii-art"
+            class="ascii-art text-accent bg-transparent"
             aria-label="Magnifying glass icon">{magnifyinfASCII.join('\n')}</pre>
         </div>
       </figure>
@@ -80,10 +80,8 @@ const t = getTranslation(lang)
     font-size: 12px;
     line-height: 1.1;
     white-space: pre;
-    color: var(--color-accent);
     display: block;
     margin: 0 auto;
-    background: transparent;
   }
 
   @keyframes fade-in {

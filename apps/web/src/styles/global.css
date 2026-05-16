@@ -503,3 +503,9 @@
 .skip-link:focus {
   top: 0;
 }
+
+/* ── Dark mode native select options ─────────────────── */
+.dark select option {
+  background: var(--color-bg);
+  color: var(--color-text);
+}

@@ -23,5 +23,7 @@
   "LinkedIn Profile": "Perfil de LinkedIn",
   "Generate a polished LinkedIn-ready profile summary.": "Genera un resumen de perfil listo para LinkedIn.",
   "PDF Export": "Exportar a PDF",
-  "Download your resume as a PDF.": "Descarga tu currículum en PDF."
+  "Download your resume as a PDF.": "Descarga tu currículum en PDF.",
+  "Why?": "¿Por qué?",
+  "why description": "La mayoría de los desarrolladores pierden horas manteniendo currículums, portafolios y perfiles de GitHub por separado. Devsync soluciona esto generando todo desde una única fuente de verdad. Un archivo, infinitas salidas. No más copiar y pegar, no más información desactualizada.\n\nTu carrera evoluciona constantemente. Nuevos proyectos, nuevas habilidades, nuevas certificaciones. Mantener cada plataforma actualizada es un trabajo de tiempo completo. Devsync automatiza esto leyendo tu DEVSYNC.json y produciendo salidas profesionales y pulidas en cada canal que importa.\n\nConcéntrate en lo que mejor haces: construir. Deja que Devsync se encargue del resto. Desde currículums compatibles con ATS hasta sitios de portafolio impresionantes, todo se mantiene en perfecta armonía sin esfuerzo manual."
 }

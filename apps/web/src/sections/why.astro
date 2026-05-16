@@ -1,0 +1,88 @@
+---
+import { getTranslation } from '@/i18n/translation'
+
+const lang = Astro.currentLocale ?? 'en'
+const t = getTranslation(lang)
+
+const paragraphs = t['why description'].split('\n\n')
+---
+
+<section
+  id="why-section"
+  class="why relative flex flex-col items-center justify-center overflow-hidden px-4 py-16 sm:px-6 sm:py-24"
+  aria-labelledby="why-title"
+>
+  <div class="relative z-10 flex w-full max-w-4xl flex-col items-center">
+    <!-- Section header -->
+    <div class="mb-12 flex flex-col items-center text-center sm:mb-16">
+      <h2
+        id="why-title"
+        class="why-title text-text mb-4 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl"
+      >
+        {t['Why?']}
+      </h2>
+    </div>
+
+    <!-- Content -->
+    <div
+      class="why-content text-text-secondary mx-auto max-w-2xl text-balance px-10 text-base leading-relaxed sm:text-lg"
+    >
+      <p class="why-description">{paragraphs[0]}</p>
+      <p class="mt-6">{paragraphs[1]}</p>
+      <p class="mt-6">{paragraphs[2]}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupObserver() {
+    const section = document.getElementById('why-section')
+    if (!section) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            section.classList.add('animate')
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(section)
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupObserver)
+  } else {
+    setupObserver()
+  }
+</script>
+
+<style>
+  /* ── Entrance animations ── */
+  .why-title {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .why.animate .why-title {
+    animation: why-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .why-description {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .why.animate .why-description {
+    animation: why-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+
+  @keyframes why-fade-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

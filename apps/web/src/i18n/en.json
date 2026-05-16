@@ -23,5 +23,7 @@
   "LinkedIn Profile": "LinkedIn Profile",
   "Generate a polished LinkedIn-ready profile summary.": "Generate a polished LinkedIn-ready profile summary.",
   "PDF Export": "PDF Export",
-  "Download your resume as a PDF.": "Download your resume as a PDF."
+  "Download your resume as a PDF.": "Download your resume as a PDF.",
+  "Why?": "Why?",
+  "why description": "Most developers waste hours maintaining separate resumes, portfolios, and GitHub profiles. Devsync solves this by generating everything from a single source of truth. One file, infinite outputs. No more copy-pasting, no more out-of-sync information.\n\nYour career evolves constantly. New projects, new skills, new certifications. Keeping every platform updated is a full-time job. Devsync automates this by reading your DEVSYNC.json and producing polished, professional outputs across every channel that matters.\n\nFocus on what you do best — building. Let Devsync handle the rest. From ATS-friendly resumes to stunning portfolio sites, everything stays in perfect harmony with zero manual effort."
 }

@@ -101,7 +101,7 @@ const features: Feature[] = [
 
     <!-- ASCII illustration -->
     <figure
-      class="features-ascii text-accent mt-16 opacity-40 sm:mt-24"
+      class="features-ascii text-accent mt-16 sm:mt-24"
       aria-label="Developer with books ASCII art"
     >
       <pre
@@ -184,11 +184,12 @@ const features: Feature[] = [
 
   @keyframes features-fade-in {
     to {
-      opacity: 0.4;
+      opacity: 1;
     }
   }
 
   :global(.dark) .features-ascii {
+    opacity: 0.4;
     text-shadow: 0 0 10px var(--color-shadow-accent);
   }
 </style>

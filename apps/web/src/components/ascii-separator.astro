@@ -1,0 +1,57 @@
+---
+const chars = ['─', '═', '┄', '┈', '┉', '╴', '╶']
+const width = 300
+const lines = 3
+
+function generateSeparator() {
+  const result: string[] = []
+
+  for (let i = 0; i < lines; i++) {
+    const line = Array.from(
+      { length: width },
+      () => chars[Math.floor(Math.random() * chars.length)]
+    ).join('')
+    result.push(line)
+  }
+
+  return result.join('\n')
+}
+
+const separatorASCII = generateSeparator()
+---
+
+<div class="ascii-separator-wrapper" aria-hidden="true">
+  <div class="ascii-separator">
+    <pre>{separatorASCII}</pre>
+  </div>
+</div>
+
+<style>
+  .ascii-separator-wrapper {
+    width: 100vw;
+    overflow: hidden;
+    padding: 2rem 0;
+  }
+
+  .ascii-separator {
+    transform: skewY(-2deg) rotate(-1deg);
+    transform-origin: center;
+  }
+
+  .ascii-separator pre {
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--color-accent);
+    opacity: 0.3;
+    text-align: center;
+    margin: 0;
+    white-space: pre;
+    overflow: hidden;
+    text-shadow: 0 0 8px var(--color-accent);
+  }
+
+  :global(.dark) .ascii-separator pre {
+    opacity: 0.4;
+  }
+</style>

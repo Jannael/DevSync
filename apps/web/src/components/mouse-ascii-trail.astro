@@ -18,10 +18,14 @@
   let mouseY = -9999
   const radius = 200
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX
-    mouseY = e.clientY
-  }, { passive: true })
+  document.addEventListener(
+    'mousemove',
+    (e) => {
+      mouseX = e.clientX
+      mouseY = e.clientY
+    },
+    { passive: true }
+  )
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
